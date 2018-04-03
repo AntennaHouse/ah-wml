@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<property name="ah.wml.plugin.folder" value="com.antennahouse.wml"/>
+	<property name="ah.wml.dir" value="plugins"/>
+	
+	<!-- Set property not to copy image unless ${copy.image.to.output.folder} = "yes" -->
+	<condition property="preprocess.copy-image.skip" value="true">
+		<equals arg1="${transtype}" arg2="ah.wml" casesensitive="false"/>
+	</condition>
+	
+	<condition property="preprocess.copy-html.skip" value="true">
+		<equals arg1="${transtype}" arg2="ah.wml" casesensitive="false"/>
+	</condition>
+	
+	<!-- Set property not to process chunking -->
+	<condition property="preprocess.chunk.skip">
+		<equals arg1="${transtype}" arg2="ah.wml" casesensitive="false"/>
+	</condition>
+	
+	<target name="dita2ah.wml" depends="build-init, preprocess, ah.wml.image-metadata, map2ah.wml, topic2ah.wml"/> 
+	
+	<target name="ah.wml.image-metadata" description="Read image metadata">
+		<pipeline message="Read image metadata." taskname="image-metadata" tempdir="${dita.temp.dir}">
+			<module class="org.dita.dost.module.ImageMetadataModule">
+				<param name="outputdir" location="${output.dir}"/>
+			</module>
+		</pipeline>
+	</target>
+	
+	<target name="topic2ah.wml" if="noMap" depends="preprocess">
+		<echo message="[ah.wml] This plugin does not support topic formatting. Use map or bookmap!"/>
+	</target>
+	
+	<target name="map2ah.wml" unless="noMap" depends="preprocess">
+		<!-- Call Java TopicMerge -->
+		<echo message="Start generating merged middle file."/>
+		<dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
+		<pipeline message="topicmerge" 
+			inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}"
+			tempdir="${dita.temp.dir.fullpath}">
+			<module class="org.dita.dost.module.TopicMergeModule">
+				<param name="output" location="${dita.temp.dir.fullpath}${file.separator}${dita.map.filename.root}_MERGED.xml"></param>
+			</module>
+		</pipeline>
+		
+		<!-- Merged middle file to .docx -->
+		<ant dir="${dita.dir}${file.separator}${ah.wml.dir}${file.separator}${ah.wml.plugin.folder}" target="merged2wml">
+			<property name="caller.basedir" value="${basedir}"/>
+		</ant>
+	</target>
+</project>
+

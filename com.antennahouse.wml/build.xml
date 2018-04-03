@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<!-- Notes:
+    2014-01-02
+    Changed for I18n Index Library plug-in integration.
+    If you don't install I18n Index Library plug-in, there is no consideration needed for it.
+    - Default value for property use.i18n.index.lib is "no".
+      If you use I18n Index Library, set this property explicitly to "yes" in DITA-OT command-line.
+      -Duse.i18n.index.lib=yes
+      If I18n Index Library is not installed in DITA-OT, do not set property use.i18n.index.lib to "yes". 
+    - If I18n Index Library plug-in is installed, following property are passed from [DITA-OT]/build.xml.
+      com.antennahouse.i18n.home
+      com.antennahouse.i18n_index.plugin.lib
+  -->
+<project name="com.antennahouse.wml.build"  basedir=".">
+	<import file="build_transform.xml"/>
+	
+	<!-- Define property again for supress preprocess -->
+	<basename property="dita.input.filename" file="${args.input}"/>
+	<pathconvert property="dita.map.filename.root">
+		<path path="${dita.input.filename}"/>
+		<chainedmapper>
+			<mapper type="flatten"/>
+			<mapper type="regexp" from="^(.+)(\..+?)$$" to="\1"/>
+		</chainedmapper>
+	</pathconvert>
+	<dirname property="user.input.dir" file="${args.input}"/>
+	
+	<!-- debug -->
+	<property name="add.chapter.number.prefix.to.topic.title" value="yes"/>
+	<makeurl property="dita.temp.dir.url" file="${dita.temp.dir}"/>
+	
+	<!-- Set property -->
+	<property name="merged.file" value="${dita.map.filename.root}_MERGED.xml" />
+	<property name="xsl.dir" value="${basedir}${file.separator}xsl"/>
+	<property name="use.saxon.transform" value="no"/>
+	<property name="template.file.path" location="${basedir}/template/template.docx"/>
+	<property name="output.docx" value="${dita.map.filename.root}.docx"/>
+	
+	<!-- Debug merged middle file -->
+	<property name="debug.merged" value="no"/>
+	<property name="debug.table" value="no"/>
+	
+	<xmlcatalog id="dita.catalog">
+		<catalogpath path="${dita.dir}/catalog-dita.xml"/>
+	</xmlcatalog>
+	
+	<property name="output.pdf" value="${dita.map.filename.root}.pdf"/>
+
+	<condition property="image.in.output.folder" value="no">
+		<isset property="preprocess.copy-image.skip"/>
+	</condition>
+	<condition property="image.in.output.folder" value="yes">
+		<not>
+			<isset property="preprocess.copy-image.skip"/>
+		</not>
+	</condition>
+	<condition property="output.crop.region" value="no">
+		<equals arg1="${use.saxon.transform}" arg2="yes"/> 
+	</condition>
+	
+	<property name="output.type" value="web"/>
+	
+	<!-- Make absolute path for temporary directory -->
+	<available property="build.temp.dir" value="${dita.temp.dir}" file="${dita.temp.dir}" type="dir"/>
+	<condition property="build.temp.dir" value="${caller.basedir}${file.separator}${dita.temp.dir}">
+		<not>
+			<isset property="build.temp.dir"/>
+		</not>
+	</condition>
+	
+	<!-- Make URL for input directory -->
+	<makeurl property="user.input.dir.url" file="${user.input.dir}"/>
+	
+	<!-- Make URL for output directory -->
+	<makeurl property="output.dir.url" file="${output.dir}"/>
+
+	<!-- Make URL for plugin directory -->
+	<makeurl property="plugin.dir.url" file="${basedir}"/>
+	
+	<!-- Main target -->
+	<target name="merged2wml" depends="copy.docx.template,merged2wml.impl,docx.copy.media,docx.copy.common.graphic,docx.package"/>
+	
+	<target name="copy.docx.template">
+		<unzip src="${template.file.path}" dest="${dita.temp.dir}/template">
+			<patternset>
+				<exclude name="**/.DS_Store"/>
+				<exclude name="__MACOSX/**"/>
+			</patternset>
+		</unzip>
+		<copy todir="${dita.temp.dir}/docx" overwrite="true">
+			<fileset dir="${dita.temp.dir}/template"/>
+		</copy>
+	</target>
+	
+	<target name="merged2wml.impl">
+		<echo message="dita.temp.dir=${dita.temp.dir} build.temp.dir=${build.temp.dir}"/>
+		<echo message="dita.dir=${dita.dir}"/>
+		<echo message="basedir=${basedir}"/>
+		<echo message="outputFile=${dita.map.output.dir}${file.separator}${output.docx}"/>
+		<!--antcall target="build.disp.property"/-->
+		<antcall target="transform.merged2wml.impl">
+			<param name="prmInputFile"  value="${build.temp.dir}${file.separator}${merged.file}"/>
+			<param name="prmOutputFile" value="${dita.map.output.dir}${file.separator}${output.docx}"/>
+		</antcall>
+	</target>
+
+	<target name="docx.copy.media">
+		<copy todir="${dita.temp.dir}/docx/word/media">
+			<dita-fileset format="image"/>
+		</copy>
+	</target>
+
+	<target name="docx.copy.common.graphic">
+		<copy todir="${dita.temp.dir}/docx/word/media">
+			<fileset dir="${basedir}/common-graphic">
+				<include name="**/*.*"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="docx.package">
+		<property name="outputFile" location="${dita.map.output.dir}/${dita.map.filename.root}.docx"/>
+		<delete file="${outputFile}"/>
+		<zip zipfile="${outputFile}">
+			<fileset dir="${dita.temp.dir}/docx"/>
+		</zip>
+	</target>
+	
+</project>

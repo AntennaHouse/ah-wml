@@ -1,0 +1,409 @@
+<?xml version="1.0"?>
+<!-- Build file for merged middle file to WML (.docx) transformation
+     Revision History
+     - Newly created. 
+       2015-05-25 t.makita
+     [Parameter] 
+     prmInputFile:  Merged middle file path
+     prmOutputFile: .docx file path
+  -->
+<project name="build.transform" xmlns:dita="http://dita-ot.sourceforge.net">
+    
+    <!-- Genarate .docx from merged middle fiel.
+         Parameter：prmInputFile⇒Path of merged middle file
+                    prmOutputFile⇒Path of output PDF file
+      -->
+    <target name="build.project.class.path">
+        <path id="project.class.path">
+            <pathelement path="${java.class.path}"/>
+        </path>
+    </target>
+
+    <target name="transform.merged2wml.impl">
+        <property name="converted.merged.file1" value="${dita.map.filename.root}_CONVERTED_1.xml" />
+        <property name="converted.merged.file2" value="${dita.map.filename.root}_CONVERTED_2.xml" />
+        <property name="converted.merged.file3" value="${dita.map.filename.root}_CONVERTED_3.xml" />
+        <property name="merged.final.output.file" value="${dita.temp.dir}${file.separator}${converted.merged.file3}"/>
+        <makeurl property="template.dir.url" file="${dita.temp.dir}/template"/>
+        <makeurl property="user.input.dir.url" file="${user.input.dir}"/>
+        <makeurl property="merged.final.output.url" file="${merged.final.output.file}" validate="no"/>
+
+        <antcall target="convert.merged.file">
+            <param name="prmInputFile" value="${prmInputFile}"/>
+            <param name="prmOutputFile" value="${merged.final.output.file}"/>
+        </antcall>
+
+        <antcall target="generate.docx.file">
+            <param name="prmInputFile" value="${merged.final.output.file}"/>
+        </antcall>
+
+    </target>
+
+    <target name="convert.merged.file">
+
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${prmInputFile}"/>
+            <param name="prmOutputFile" value="${build.temp.dir}${file.separator}${converted.merged.file1}"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_convmerged_shell.xsl"/>
+        </antcall>
+        
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${build.temp.dir}${file.separator}${converted.merged.file1}"/>
+            <param name="prmOutputFile" value="${build.temp.dir}${file.separator}${converted.merged.file2}"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_convmerged2_shell.xsl"/>
+        </antcall>
+
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${build.temp.dir}${file.separator}${converted.merged.file2}"/>
+            <param name="prmOutputFile" value="${prmOutputFile}"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_convmerged3_shell.xsl"/>
+        </antcall>
+        
+    </target>
+
+    <target name="generate.docx.file">
+        <echo message="core.xml"/>
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${prmInputFile}"/>
+            <param name="prmOutputFile" value="${dita.temp.dir}/docx/docProps/core.xml"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_core_shell.xsl"/>
+        </antcall>
+        
+        <echo message="theme1.xml"/>
+        <antcall target="transform.dir.common">
+            <param name="prmInputDir" value="${dita.temp.dir}/template/word/theme"/>
+            <param name="prmOutputDir" value="${dita.temp.dir}/docx/word/theme"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_theme_shell.xsl"/>
+        </antcall>
+        
+        <echo message="custom.xml"/>
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${prmInputFile}"/>
+            <param name="prmOutputFile" value="${dita.temp.dir}/docx/docProps/custom.xml"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_custom.xsl"/>
+        </antcall>
+        
+        <echo message="document.xml"/>
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${prmInputFile}"/>
+            <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/document.xml"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_doc_shell.xsl"/>
+        </antcall>
+        
+        <!--
+        <property name="comments.xsl" location="${xsl.dir}/dita2wml_comments.xsl"/>
+        <xslt style="${comments.xsl}" in="${prmInputFile}" out="${dita.temp.dir}/docx/word/comments.xml" force="true">
+            <param name="template.dir" expression="${dotx.dir.uri}"/>
+            <xmlcatalog refid="dita.catalog"/>
+        </xslt>
+        -->
+
+        <echo message="styles.xml"/>
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${dita.temp.dir}/template/word/styles.xml"/>
+            <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/styles.xml"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_styles_shell.xsl"/>
+        </antcall>
+
+        <echo message="numbering.xml"/>
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${dita.temp.dir}/template/word/numbering.xml"/>
+            <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/numbering.xml"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_numbering_shell.xsl"/>
+        </antcall>
+        
+        <echo message="footnote.xml"/>
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${prmInputFile}"/>
+            <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/footnotes.xml"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_footnote_shell.xsl"/>
+        </antcall>
+        
+        <echo message="document.xml.rels"/>
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${prmInputFile}"/>
+            <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/_rels/document.xml.rels"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_doc_xml_rels_shell.xsl"/>
+        </antcall>
+
+        <echo message="[Content_Types].xml"/>
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${dita.temp.dir}/template/[Content_Types].xml"/>
+            <param name="prmOutputFile" value="${dita.temp.dir}/docx/[Content_Types].xml"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_content_types_shell.xsl"/>
+        </antcall>
+        
+        <!--
+        <makeurl property="clean.input.file.uri" file="${clean.input.file}"/>
+        <xslt style="${xsl.dir}/[Content_Types].xsl" in="${dita.temp.dir}/dotx/[Content_Types].xml" out="${dita.temp.dir}/docx/[Content_Types].xml" force="true">
+            <param name="input.uri" expression="${clean.input.file.uri}"/>
+            <xmlcatalog refid="dita.catalog"/>
+        </xslt>
+        -->
+    </target>
+
+    <!-- Common XSLT  processing -->
+    <target name="transform.common">
+        <antcall target="transform.common.jaxp">
+            <param name="prmInputFile" value="${prmInputFile}"/>
+            <param name="prmOutputFile" value="${prmOutputFile}"/>
+            <param name="prmStylesheetFile" value="${prmStylesheetFile}"/>
+        </antcall>
+    </target>
+
+    <target name="transform.common.jaxp" depends="build.project.class.path"
+        unless="${use.saxon.transform}">
+        <echo message="Stylesheet=${prmStylesheetFile}"/>
+        <echo message="user.input.dir=${user.input.dir}"/>
+        <property name="classpath" refid="project.class.path"/>
+        <!--echo message="classpath=${classpath}"/-->
+        <echo message="template.dir.url=${template.dir.url}"/>
+        <xslt processor="trax" in="${prmInputFile}" out="${prmOutputFile}"
+            style="${prmStylesheetFile}" classpathref="project.class.path" force="true">
+            <factory name="net.sf.saxon.TransformerFactoryImpl">
+                <attribute name="http://saxon.sf.net/feature/timing" value="true"/>
+                <!--Assert-->
+                <attribute name="http://saxon.sf.net/feature/enableAssertions" value="true"/>
+                <!-- Trace -->
+                <!--attribute name="http://saxon.sf.net/feature/traceListenerClass" value="net.sf.saxon.trace.XSLTTraceListener"/-->
+            </factory>
+            <param name="PRM_STYLE_DEF_FILE" expression="${style.def.file}" if="style.def.file"/>
+            <param name="PRM_INCLUDE_FRONTMATTER_TO_TOC" expression="${include.frontmatter.to.toc}"
+                if="include.frontmatter.to.toc"/>
+            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TOPIC_TITLE" expression="${add.chapter.number.prefix.to.topic.title}"
+                if="add.numbering.title.prefix"/>
+            <param name="PRM_ADD_PART_OR_CHAPTER_TO_TITLE" expression="${add.part.or.chapter.to.title}"
+                if="add.part.or.chapter.to.title"/>
+            <param name="PRM_ASSUME_SORTAS_PINYIN" expression="${assume.sortas.pinyin}"
+                if="assume.sortas.pinyin"/>
+            <param name="PRM_LANG" expression="${xml.lang}" if="xml.lang"/>
+            <param name="PRM_MAKE_SEE_LINK" expression="${make.see.link}" if="make.see.link"/>
+            <param name="PRM_OUTPUT_DRAFT_COMMENT" expression="${output.draft.comment}"
+                if="output.draft.comment"/>
+            <param name="PRM_OUTPUT_REQUIRED_CLEANUP" expression="${output.required.cleanup}"
+                if="output.required.cleanup"/>
+            <param name="PRM_USE_OID" expression="${use.oid}" if="use.oid"/>
+            <param name="PRM_FORMAT_DL_AS_BLOCK" expression="${format.dl.as.block}"
+                if="format.dl.as.block"/>
+            <param name="PRM_DEBUG_STYLE" expression="${debug.style}"
+                if="debug.style"/>
+            <!--param name="PRM_APPLY_TOC_ATTR" expression="${apply.toc.attr}" if="apply.toc.attr"/-->
+            <!--param name="PRM_ONLINE_PDF" expression="${online.pdf}" if="online.pdf"/-->
+            <param name="PRM_SORT_GLOSSENTRY" expression="${sort.glossentry}"
+                if="output.start.message"/>
+            <param name="PRM_OUTPUT_START_MESSAGE" expression="${output.start.message}"
+                if="output.start.message"/>
+            <param name="PRM_AUTO_SCALE_DOWN_TO_FIT" expression="${auto.scale.down.to.fit}"
+                if="auto.scale.down.to.fit"/>
+            <param name="PRM_MAKE_TOC_FOR_MAP" expression="${make.toc.for.map}"
+                if="make.toc.for.map"/>
+            <param name="PRM_MAKE_INDEX_FOR_MAP" expression="${make.index.for.map}"
+                if="make.index.for.map"/>
+            <param name="PRM_MAKE_ALT_TEXT" expression="${make.alt.text}" if="make.alt.text"/>
+            <param name="PRM_PAPER_SIZE" expression="${paper.size}" if="paper.size"/>
+            <param name="PRM_IMAGE_IN_OUTPUT_FOLDER" expression="${image.in.output.folder}"
+                if="image.in.output.folder"/>
+            <param name="PRM_OUTPUT_CROP_REGION" expression="${output.crop.region}"
+                if="output.crop.region"/>
+            <param name="PRM_OUTPUT_TYPE" expression="${output.type}"
+                if="output.type"/>
+            <param name="PRM_EXCLUDE_COVER_FROM_COUNTING_PAGE" expression="${exclude.cover.from.counting.page}"
+                if="exclude.cover.from.counting.page"/>
+            <param name="PRM_NUMBER_EQUATION_BLOCK_UNCONDITIONALLY" expression="${number.equation.block.unconditionally}"
+                if="number.equation.block.unconditionally"/>
+            <param name="PRM_EXCLUDE_AUTO_NUMBERING_FROM_EQUATION_FIGURE" expression="${exclude.auto.numbering.from.equation.figure}"
+                if="exclude.auto.numbering.from.equation.figure"/>
+            <param name="PRM_ASSUME_EQUATION_NUMBER_AS_AUTO" expression="${assume.equation.number.as.auto}"
+                if="assume.equation.number.as.auto"/>
+            <param name="PRM_USE_I18N_INDEX_LIB" expression="${use.i18n.index.lib}"
+                if="use.i18n.index.lib"/>
+            <param name="PRM_MAP_DIR_URL" expression="${user.input.dir.url}" if="user.input.dir.url"/>
+            <param name="PRM_OUTPUT_DIR_URL" expression="${output.dir.url}" if="output.dir.url"/>
+            <param name="PRM_INPUT_MAP_NAME" expression="${dita.map.filename.root}" if="dita.map.filename.root"/>
+            <param name="PRM_DEBUG_INDEX_SORT_RESULT" expression="${debug.index.sort.result}" if="debug.index.sort.result"/>
+            <param name="PRM_OUTPUT_INDEX" expression="${output.index}" if="output.index"/>
+            <param name="PRM_OT_VERSION" expression="${otversion}" if="otversion"/>
+            <param name="PRM_TEMPLATE_DIR_URL" expression="${template.dir.url}" if="template.dir.url"/>
+            <param name="PRM_DEBUG_MERGED" expression="${debug.merged}" if="debug.merged"/>
+            <param name="PRM_DEBUG_TABLE" expression="${debug.table}" if="debug.table"/>
+            <param name="PRM_MERGED_FINAL_OUTPUT_URL" expression="${merged.final.output.url}" if="merged.final.output.url"/>
+            <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
+            <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
+            <dita:extension id="com.antennahouse.pdf5.ml.param" behavior="org.dita.dost.platform.InsertAction"/>
+            <xmlcatalog refid="dita.catalog"/>
+        </xslt>
+    </target>
+
+    <target name="transform.common.jaxp.trace" depends="build.project.class.path"
+        unless="${use.saxon.transform}">
+        <echo message="Stylesheet=${prmStylesheetFile}"/>
+        <echo message="user.input.dir=${user.input.dir}"/>
+        <!--property name="classpath" refid="project.class.path"/-->
+        <echo message="classpath=${classpath}"/>
+        <echo message="template.dir.url=${template.dir.url}"/>
+        <xslt processor="trax" in="${prmInputFile}" out="${prmOutputFile}"
+            style="${prmStylesheetFile}" classpathref="project.class.path" force="true">
+            <factory name="net.sf.saxon.TransformerFactoryImpl">
+                <attribute name="http://saxon.sf.net/feature/timing" value="true"/>
+                <!-- Trace -->
+                <attribute name="http://saxon.sf.net/feature/traceListenerClass" value="net.sf.saxon.trace.XSLTTraceListener"/>
+            </factory>
+            <param name="PRM_STYLE_DEF_FILE" expression="${style.def.file}" if="style.def.file"/>
+            <param name="PRM_INCLUDE_FRONTMATTER_TO_TOC" expression="${include.frontmatter.to.toc}"
+                if="include.frontmatter.to.toc"/>
+            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TOPIC_TITLE" expression="${add.chapter.number.prefix.to.topic.title}"
+                if="add.numbering.title.prefix"/>
+            <param name="PRM_ADD_PART_TO_TITLE" expression="${add.part.to.title}"
+                if="add.part.to.title"/>
+            <param name="PRM_ASSUME_SORTAS_PINYIN" expression="${assume.sortas.pinyin}"
+                if="assume.sortas.pinyin"/>
+            <param name="PRM_LANG" expression="${xml.lang}" if="xml.lang"/>
+            <param name="PRM_MAKE_SEE_LINK" expression="${make.see.link}" if="make.see.link"/>
+            <param name="PRM_OUTPUT_DRAFT_COMMENT" expression="${output.draft.comment}"
+                if="output.draft.comment"/>
+            <param name="PRM_OUTPUT_REQUIRED_CLEANUP" expression="${output.required.cleanup}"
+                if="output.required.cleanup"/>
+            <param name="PRM_USE_OID" expression="${use.oid}" if="use.oid"/>
+            <param name="PRM_FORMAT_DL_AS_BLOCK" expression="${format.dl.as.block}"
+                if="format.dl.as.block"/>
+            <param name="PRM_DEBUG_STYLE" expression="${debug.style}"
+                if="debug.style"/>
+            <!--param name="PRM_APPLY_TOC_ATTR" expression="${apply.toc.attr}" if="apply.toc.attr"/-->
+            <!--param name="PRM_ONLINE_PDF" expression="${online.pdf}" if="online.pdf"/-->
+            <param name="PRM_SORT_GLOSSENTRY" expression="${sort.glossentry}"
+                if="output.start.message"/>
+            <param name="PRM_OUTPUT_START_MESSAGE" expression="${output.start.message}"
+                if="output.start.message"/>
+            <param name="PRM_AUTO_SCALE_DOWN_TO_FIT" expression="${auto.scale.down.to.fit}"
+                if="auto.scale.down.to.fit"/>
+            <param name="PRM_MAKE_TOC_FOR_MAP" expression="${make.toc.for.map}"
+                if="make.toc.for.map"/>
+            <param name="PRM_MAKE_INDEX_FOR_MAP" expression="${make.index.for.map}"
+                if="make.index.for.map"/>
+            <param name="PRM_MAKE_ALT_TEXT" expression="${make.alt.text}" if="make.alt.text"/>
+            <param name="PRM_PAPER_SIZE" expression="${paper.size}" if="paper.size"/>
+            <param name="PRM_IMAGE_IN_OUTPUT_FOLDER" expression="${image.in.output.folder}"
+                if="image.in.output.folder"/>
+            <param name="PRM_OUTPUT_CROP_REGION" expression="${output.crop.region}"
+                if="output.crop.region"/>
+            <param name="PRM_OUTPUT_TYPE" expression="${output.type}"
+                if="output.type"/>
+            <param name="PRM_EXCLUDE_COVER_FROM_COUNTING_PAGE" expression="${exclude.cover.from.counting.page}"
+                if="exclude.cover.from.counting.page"/>
+            <param name="PRM_NUMBER_EQUATION_BLOCK_UNCONDITIONALLY" expression="${number.equation.block.unconditionally}"
+                if="number.equation.block.unconditionally"/>
+            <param name="PRM_EXCLUDE_AUTO_NUMBERING_FROM_EQUATION_FIGURE" expression="${exclude.auto.numbering.from.equation.figure}"
+                if="exclude.auto.numbering.from.equation.figure"/>
+            <param name="PRM_ASSUME_EQUATION_NUMBER_AS_AUTO" expression="${assume.equation.number.as.auto}"
+                if="assume.equation.number.as.auto"/>
+            <param name="PRM_USE_I18N_INDEX_LIB" expression="${use.i18n.index.lib}"
+                if="use.i18n.index.lib"/>
+            <param name="PRM_MAP_DIR_URL" expression="${user.input.dir.url}" if="user.input.dir.url"/>
+            <param name="PRM_OUTPUT_DIR_URL" expression="${output.dir.url}" if="output.dir.url"/>
+            <param name="PRM_INPUT_MAP_NAME" expression="${dita.map.filename.root}" if="dita.map.filename.root"/>
+            <param name="PRM_DEBUG_INDEX_SORT_RESULT" expression="${debug.index.sort.result}" if="debug.index.sort.result"/>
+            <param name="PRM_OUTPUT_INDEX" expression="${output.index}" if="output.index"/>
+            <param name="PRM_OT_VERSION" expression="${otversion}" if="otversion"/>
+            <param name="PRM_TEMPLATE_DIR_URL" expression="${template.dir.url}" if="template.dir.url"/>
+            <param name="PRM_DEBUG_MERGED" expression="${debug.merged}" if="debug.merged"/>
+            <param name="PRM_DEBUG_TABLE" expression="${debug.table}" if="debug.table"/>
+            <param name="PRM_MERGED_FINAL_OUTPUT_URL" expression="${merged.final.output.url}" if="merged.final.output.url"/>
+            <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
+            <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
+            <dita:extension id="com.antennahouse.pdf5.ml.param" behavior="org.dita.dost.platform.InsertAction"/>
+            <xmlcatalog refid="dita.catalog"/>
+        </xslt>
+    </target>
+
+    <!-- Common XSLT processing for directory-->
+    <target name="transform.dir.common">
+        <antcall target="transform.dir.common.jaxp">
+            <param name="prmInputDir" value="${prmInputDir}"/>
+            <param name="prmOutputDir" value="${prmOutputDir}"/>
+            <param name="prmStylesheetFile" value="${prmStylesheetFile}"/>
+        </antcall>
+    </target>
+    
+    <target name="transform.dir.common.jaxp" depends="build.project.class.path">
+        <echo message="Input dir=${prmInputDir}"/>
+        <echo message="Output dir=${prmOutputDir}"/>
+        <echo message="Stylesheet=${prmStylesheetFile}"/>
+        <property name="classpath" refid="project.class.path"/>
+        <xslt processor="trax" basedir="${prmInputDir}" destdir="${prmOutputDir}"
+            style="${prmStylesheetFile}" includes="*.xml" extension=".xml" classpathref="project.class.path" force="true"
+            filenameparameter="PRM_FILE_NAME" filedirparameter="PRM_FILE_DIR">
+            <factory name="net.sf.saxon.TransformerFactoryImpl">
+                <attribute name="http://saxon.sf.net/feature/timing" value="true"/>
+                <!--Assert-->
+                <attribute name="http://saxon.sf.net/feature/enableAssertions" value="true"/>
+                <!-- Trace -->
+                <!--attribute name="http://saxon.sf.net/feature/traceListenerClass" value="net.sf.saxon.trace.XSLTTraceListener"/-->
+            </factory>
+            <param name="PRM_STYLE_DEF_FILE" expression="${style.def.file}" if="style.def.file"/>
+            <param name="PRM_INCLUDE_FRONTMATTER_TO_TOC" expression="${include.frontmatter.to.toc}"
+                if="include.frontmatter.to.toc"/>
+            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TOPIC_TITLE" expression="${add.chapter.number.prefix.to.topic.title}"
+                if="add.numbering.title.prefix"/>
+            <param name="PRM_ADD_PART_OR_CHAPTER_TO_TITLE" expression="${add.part.or.chapter.to.title}"
+                if="add.part.or.chapter.to.title"/>
+            <param name="PRM_ASSUME_SORTAS_PINYIN" expression="${assume.sortas.pinyin}"
+                if="assume.sortas.pinyin"/>
+            <param name="PRM_LANG" expression="${xml.lang}" if="xml.lang"/>
+            <param name="PRM_MAKE_SEE_LINK" expression="${make.see.link}" if="make.see.link"/>
+            <param name="PRM_OUTPUT_DRAFT_COMMENT" expression="${output.draft.comment}"
+                if="output.draft.comment"/>
+            <param name="PRM_OUTPUT_REQUIRED_CLEANUP" expression="${output.required.cleanup}"
+                if="output.required.cleanup"/>
+            <param name="PRM_USE_OID" expression="${use.oid}" if="use.oid"/>
+            <param name="PRM_FORMAT_DL_AS_BLOCK" expression="${format.dl.as.block}"
+                if="format.dl.as.block"/>
+            <param name="PRM_DEBUG_STYLE" expression="${debug.style}"
+                if="debug.style"/>
+            <!--param name="PRM_APPLY_TOC_ATTR" expression="${apply.toc.attr}" if="apply.toc.attr"/-->
+            <!--param name="PRM_ONLINE_PDF" expression="${online.pdf}" if="online.pdf"/-->
+            <param name="PRM_SORT_GLOSSENTRY" expression="${sort.glossentry}"
+                if="output.start.message"/>
+            <param name="PRM_OUTPUT_START_MESSAGE" expression="${output.start.message}"
+                if="output.start.message"/>
+            <param name="PRM_AUTO_SCALE_DOWN_TO_FIT" expression="${auto.scale.down.to.fit}"
+                if="auto.scale.down.to.fit"/>
+            <param name="PRM_MAKE_TOC_FOR_MAP" expression="${make.toc.for.map}"
+                if="make.toc.for.map"/>
+            <param name="PRM_MAKE_INDEX_FOR_MAP" expression="${make.index.for.map}"
+                if="make.index.for.map"/>
+            <param name="PRM_MAKE_ALT_TEXT" expression="${make.alt.text}" if="make.alt.text"/>
+            <param name="PRM_PAPER_SIZE" expression="${paper.size}" if="paper.size"/>
+            <param name="PRM_IMAGE_IN_OUTPUT_FOLDER" expression="${image.in.output.folder}"
+                if="image.in.output.folder"/>
+            <param name="PRM_OUTPUT_CROP_REGION" expression="${output.crop.region}"
+                if="output.crop.region"/>
+            <param name="PRM_OUTPUT_TYPE" expression="${output.type}"
+                if="output.type"/>
+            <param name="PRM_EXCLUDE_COVER_FROM_COUNTING_PAGE" expression="${exclude.cover.from.counting.page}"
+                if="exclude.cover.from.counting.page"/>
+            <param name="PRM_NUMBER_EQUATION_BLOCK_UNCONDITIONALLY" expression="${number.equation.block.unconditionally}"
+                if="number.equation.block.unconditionally"/>
+            <param name="PRM_EXCLUDE_AUTO_NUMBERING_FROM_EQUATION_FIGURE" expression="${exclude.auto.numbering.from.equation.figure}"
+                if="exclude.auto.numbering.from.equation.figure"/>
+            <param name="PRM_ASSUME_EQUATION_NUMBER_AS_AUTO" expression="${assume.equation.number.as.auto}"
+                if="assume.equation.number.as.auto"/>
+            <param name="PRM_USE_I18N_INDEX_LIB" expression="${use.i18n.index.lib}"
+                if="use.i18n.index.lib"/>
+            <param name="PRM_MAP_DIR_URL" expression="${user.input.dir.url}" if="user.input.dir.url"/>
+            <param name="PRM_OUTPUT_DIR_URL" expression="${output.dir.url}" if="output.dir.url"/>
+            <param name="PRM_INPUT_MAP_NAME" expression="${dita.map.filename.root}" if="dita.map.filename.root"/>
+            <param name="PRM_DEBUG_INDEX_SORT_RESULT" expression="${debug.index.sort.result}" if="debug.index.sort.result"/>
+            <param name="PRM_OUTPUT_INDEX" expression="${output.index}" if="output.index"/>
+            <param name="PRM_OT_VERSION" expression="${otversion}" if="otversion"/>
+            <param name="PRM_TEMPLATE_DIR_URL" expression="${template.dir.url}" if="template.dir.url"/>
+            <param name="PRM_DEBUG_MERGED" expression="${debug.merged}" if="debug.merged"/>
+            <param name="PRM_DEBUG_TABLE" expression="${debug.table}" if="debug.table"/>
+            <param name="PRM_MERGED_FINAL_OUTPUT_URL" expression="${merged.final.output.url}" if="merged.final.output.url"/>
+            <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
+            <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
+            <dita:extension id="com.antennahouse.wml.param" behavior="org.dita.dost.platform.InsertAction"/>
+            <xmlcatalog refid="dita.catalog"/>
+        </xslt>
+    </target>
+
+</project>
