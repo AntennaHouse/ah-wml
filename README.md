@@ -12,7 +12,7 @@ AH-WML is the [DITA-OT](http://dita-ot.org) plug-in that generates Microsoft Wor
 
 * Supported images: GIF, PNG, JPEG, TIFF, EMF 
 * CALS table rendering
-* Standard DITA elements, <p>, <ul>, <ol>, <dl>, <pre>
+* Standard DITA elements, &lt;p&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;dl&gt;, &lt;pre&gt;
 
 ## Example ##
 
