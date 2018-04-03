@@ -2,7 +2,7 @@
 
 AH-WML is the [DITA-OT](http://dita-ot.org) plug-in that generates Microsoft Word Document (.docx) from DITA instances .
 
-## Reqirements ##
+## Requirements ##
 
 * DITA-OT 2.3 or later.
 * Saxon-PE or EE 9.8
