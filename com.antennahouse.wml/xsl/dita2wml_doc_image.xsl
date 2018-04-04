@@ -24,7 +24,8 @@ URL : http://www.antennahouse.co.jp/
      function:	Inline image element processing
      param:		none
      return:	w:r
-     note:      
+     note:      This template also called form block image processing.
+                If it is block level image, adjust the image size to fit the body domain.
      -->
     <xsl:template match="*[contains(@class,' topic/image ')]" name="processImageInline" as="element(w:r)?">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
@@ -40,6 +41,19 @@ URL : http://www.antennahouse.co.jp/
         <xsl:variable name="shapeId" as="xs:string" select="xs:string(map:get($shapeIdMap,$shapeIdKey))"/>
         <xsl:choose>
             <xsl:when test="($imageSize[1] gt 0) and ($imageSize[2] gt 0)">
+                <xsl:variable name="adjustedImageSize" as="xs:integer+">
+                    <xsl:choose>
+                        <xsl:when test="string(@placement) eq 'break'">
+                            <xsl:call-template name="ahf:adjustImageSize">
+                                <xsl:with-param name="prmImage" select="."/>
+                                <xsl:with-param name="prmImageSize" select="$imageSize"/>
+                            </xsl:call-template>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="$imageSize"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
                 <w:r>
                     <xsl:if test="exists($prmRunProps)">
                         <w:rPr>
@@ -141,6 +155,22 @@ URL : http://www.antennahouse.co.jp/
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+
+    <!-- 
+     function:	adjust a image size considering the body text domain width
+     param:		prmImageSize, 
+     return:	image size (width, height) in EMU
+     note:		references tunnel parameter $prmIndentLevel, $prmExtraIndent
+     -->
+    <xsl:template name="ahf:adjustImageSize" as="xs:integer+">
+        <xsl:param name="prmImage" required="yes" as="element()"/>
+        <xsl:param name="prmImageSize" required="yes" as="xs:integer+" />
+        <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:variable name="isInTableCell" as="xs:boolean" select="exists($prmImage/ancestor::*[ahf:seqContains(@class,(' topic/entry ',' topic/stentry '))])"/>
+    </xsl:template>
+
+
 
     <!-- 
      function:	Block image element processing
