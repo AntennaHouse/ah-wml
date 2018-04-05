@@ -116,6 +116,7 @@ E-mail : info@antennahouse.com
         ' topic/title ',
         (:' topic/desc ',:)
         (:' topic/dd ',:)
+        ' topic/dt ',
         ' topic/sli '
         )"/>
     
