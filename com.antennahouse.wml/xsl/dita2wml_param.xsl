@@ -318,7 +318,8 @@ E-mail : info@antennahouse.com
         </xsl:choose>
     </xsl:variable>
     <xsl:variable name="pListIndentSizeInTwip" as="xs:integer" select="ahf:toTwip($pListIndentSize)"/>
-
+    <xsl:variable name="pListIndentSizeInEmu" as="xs:integer" select="ahf:toEmu($pListIndentSize)"/>
+    
     <!-- List base indent size -->
     <xsl:param name="PRM_LIST_BASE_INDENT_SIZE" required="no" as="xs:string" select="''"/>
     <xsl:variable name="pListBaseIndentSize" as="xs:string">
@@ -332,7 +333,8 @@ E-mail : info@antennahouse.com
         </xsl:choose>
     </xsl:variable>
     <xsl:variable name="pListBaseIndentSizeInTwip" as="xs:integer" select="ahf:toTwip($pListBaseIndentSize)"/>
-
+    <xsl:variable name="pListBaseIndentSizeInEmu" as="xs:integer" select="ahf:toEmu($pListBaseIndentSize)"/>
+    
     <!-- Merged final middle file URL -->
     <xsl:param name="PRM_MERGED_FINAL_OUTPUT_URL" required="yes" as="xs:anyURI"/>
     <xsl:variable name="pMergedFinalOutputUrl" as="xs:string" select="xs:string($PRM_MERGED_FINAL_OUTPUT_URL)"/>
