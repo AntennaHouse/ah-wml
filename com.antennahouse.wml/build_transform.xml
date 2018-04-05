@@ -149,7 +149,7 @@
         </antcall>
     </target>
 
-    <target name="transform.common.jaxp" depends="build.project.class.path" unless="${use.saxon.transform}">
+    <target name="transform.common.jaxp" depends="build.project.class.path">
         <echo message="Stylesheet=${prmStylesheetFile}"/>
         <echo message="user.input.dir=${user.input.dir}"/>
         <property name="classpath" refid="project.class.path"/>
@@ -209,7 +209,7 @@
         </xslt>
     </target>
 
-    <target name="transform.common.jaxp.trace" depends="build.project.class.path" unless="${use.saxon.transform}">
+    <target name="transform.common.jaxp.trace" depends="build.project.class.path">
         <echo message="Stylesheet=${prmStylesheetFile}"/>
         <echo message="user.input.dir=${user.input.dir}"/>
         <!--property name="classpath" refid="project.class.path"/-->

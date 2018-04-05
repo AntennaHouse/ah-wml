@@ -21,13 +21,14 @@ URL : http://www.antennahouse.co.jp/
       ============================================
     -->
     <!-- units -->
-    <xsl:variable name="cUnitPc" select="'pc'" as="xs:string"/>
-    <xsl:variable name="cUnitPt" select="'pt'" as="xs:string"/>
-    <xsl:variable name="cUnitPx" select="'px'" as="xs:string"/>
-    <xsl:variable name="cUnitIn" select="'in'" as="xs:string"/>
-    <xsl:variable name="cUnitCm" select="'cm'" as="xs:string"/>
-    <xsl:variable name="cUnitMm" select="'mm'" as="xs:string"/>
-    <xsl:variable name="cUnitEm" select="'em'" as="xs:string"/>
+    <xsl:variable name="cUnitPc"   select="'pc'" as="xs:string"/>
+    <xsl:variable name="cUnitPt"   select="'pt'" as="xs:string"/>
+    <xsl:variable name="cUnitPx"   select="'px'" as="xs:string"/>
+    <xsl:variable name="cUnitIn"   select="'in'" as="xs:string"/>
+    <xsl:variable name="cUnitCm"   select="'cm'" as="xs:string"/>
+    <xsl:variable name="cUnitMm"   select="'mm'" as="xs:string"/>
+    <xsl:variable name="cUnitEm"   select="'em'" as="xs:string"/>
+    <xsl:variable name="cUnitTwip" select="'twip'" as="xs:string"/>
     
     <!-- Ratios -->
     <xsl:variable name="cPtPerPc" as="xs:integer" select="12"/>
@@ -39,7 +40,8 @@ URL : http://www.antennahouse.co.jp/
     <xsl:variable name="cTwipPerPt" as="xs:integer" select="20"/>
     <xsl:variable name="cEmuPerPt" as="xs:integer" select="12700"/>
     <xsl:variable name="cEmuPerIn" as="xs:integer" select="914400"/>
-
+    <xsl:variable name="cEmuPerTwip" as="xs:integer" select="635"/>
+    
     <!--
     function:   Check length pattern
     param:      prmUnitVal any numeric value with length unit
@@ -195,6 +197,7 @@ URL : http://www.antennahouse.co.jp/
                 1px is calculated using 96dpi
                 1in = 72pt
                 1cm = 2.54in
+                1twip = 20pt
     -->
     <xsl:function name="ahf:toEmu" as="xs:integer" visibility="public">
         <xsl:param name="prmUnitValue" as="xs:string"/>
@@ -217,6 +220,9 @@ URL : http://www.antennahouse.co.jp/
                 </xsl:when>
                 <xsl:when test="ends-with($prmUnitValue,$cUnitMm)">
                     <xsl:sequence select="xs:integer(xs:double(substring($prmUnitValue, 1, string-length($prmUnitValue) - string-length($cUnitMm))) div $cMmPerCm div $cCmPerIn * $cPtPerIn * $cEmuPerPt)"/>
+                </xsl:when>
+                <xsl:when test="ends-with($prmUnitValue,$cUnitTwip)">
+                    <xsl:sequence select="xs:integer(xs:double(substring($prmUnitValue, 1, string-length($prmUnitValue) - string-length($cUnitTwip)))  * $cEmuPerTwip)"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:call-template name="warningContinue">

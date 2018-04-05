@@ -24,7 +24,8 @@ URL : http://www.antennahouse.co.jp/
      function:	Inline image element processing
      param:		none
      return:	w:r
-     note:      
+     note:      This template also called form block image processing.
+                If it is block level image, adjust the image size to fit the body domain.
      -->
     <xsl:template match="*[contains(@class,' topic/image ')]" name="processImageInline" as="element(w:r)?">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
@@ -40,6 +41,19 @@ URL : http://www.antennahouse.co.jp/
         <xsl:variable name="shapeId" as="xs:string" select="xs:string(map:get($shapeIdMap,$shapeIdKey))"/>
         <xsl:choose>
             <xsl:when test="($imageSize[1] gt 0) and ($imageSize[2] gt 0)">
+                <xsl:variable name="adjustImageSize" as="xs:integer+">
+                    <xsl:choose>
+                        <xsl:when test="string(@placement) eq 'break'">
+                            <xsl:call-template name="ahf:adjustImageSize">
+                                <xsl:with-param name="prmImage" select="."/>
+                                <xsl:with-param name="prmImageSize" select="$imageSize"/>
+                            </xsl:call-template>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="$imageSize"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
                 <w:r>
                     <xsl:if test="exists($prmRunProps)">
                         <w:rPr>
@@ -49,7 +63,7 @@ URL : http://www.antennahouse.co.jp/
                     <xsl:call-template name="getWmlObjectReplacing">
                         <xsl:with-param name="prmObjName" select="'wmlImage'"/>
                         <xsl:with-param name="prmSrc" select="('%width','%height','%id','%name','%desc','%rid')"/>
-                        <xsl:with-param name="prmDst" select="(string($imageSize[1]),string($imageSize[2]),$shapeId,$imageFileName,$imageFileName,concat($rIdPrefix,$imageId))"/>
+                        <xsl:with-param name="prmDst" select="(string($adjustImageSize[1]),string($adjustImageSize[2]),$shapeId,$imageFileName,$imageFileName,concat($rIdPrefix,$imageId))"/>
                     </xsl:call-template>
                 </w:r>
             </xsl:when>
@@ -137,6 +151,42 @@ URL : http://www.antennahouse.co.jp/
                         <xsl:variable name="imageHeightEmu" as="xs:integer" select="xs:integer($orgImageHeightEmu * $ratio)"/>
                         <xsl:sequence select="($attImageWidthEmu,$imageHeightEmu)"/>
                     </xsl:when>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <!-- 
+     function:	adjust a image size considering the body text domain width
+     param:		prmImageSize, 
+     return:	image size (width, height) in EMU
+     note:		references tunnel parameter $prmIndentLevel, $prmExtraIndent
+                If the image is in a table cell, we cannot do anything because column width is hard to know.
+     -->
+    <xsl:template name="ahf:adjustImageSize" as="xs:integer+">
+        <xsl:param name="prmImage" required="yes" as="element()"/>
+        <xsl:param name="prmImageSize" required="yes" as="xs:integer+" />
+        <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:variable name="isInTableCell" as="xs:boolean" select="exists($prmImage/ancestor::*[ahf:seqContains(@class,(' topic/entry ',' topic/stentry '))])"/>
+        <xsl:choose>
+            <xsl:when test="$isInTableCell">
+                <xsl:sequence select="$prmImageSize"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <!--xsl:message select="'image=',ahf:getHistoryStr($prmImage),'$prmImageSize=',$prmImageSize,' $prmIndentLevel=',$prmIndentLevel,' $prmExtraIndent=',$prmExtraIndent"/-->
+                <xsl:variable name="paperBodyWidth" as="xs:integer" select="ahf:toEmu($pPaperBodyWidth)"/>
+                <xsl:variable name="inheritedIndentSize" as="xs:integer" select="ahf:getIndentFromIndentLevelInEmu($prmIndentLevel,$prmExtraIndent)"/>
+                <xsl:variable name="remainBodyWidth" as="xs:integer" select="$paperBodyWidth - $inheritedIndentSize"/>
+                <!--xsl:message select="'$paperBodyWidth=',$paperBodyWidth,' $inheritedIndentSize=',$inheritedIndentSize,' $remainBodySize=',$remainBodyWidth"/-->
+                <xsl:choose>
+                    <xsl:when test="$prmImageSize[1] gt $remainBodyWidth">
+                        <!--xsl:message select="'result=',($remainBodyWidth, xs:integer($prmImageSize[2] * $remainBodyWidth div $prmImageSize[1]))"/-->
+                        <xsl:sequence select="($remainBodyWidth, xs:integer($prmImageSize[2] * $remainBodyWidth div $prmImageSize[1]))"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:sequence select="$prmImageSize"/>
+                    </xsl:otherwise>
                 </xsl:choose>
             </xsl:otherwise>
         </xsl:choose>
