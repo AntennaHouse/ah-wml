@@ -1840,8 +1840,8 @@
         <xsl:try>
             <xsl:variable name="xPathResult" as="xs:string">
                 <xsl:evaluate xpath="$prmXPath">
-                    <xsl:with-param name="PaperWidth"       select="$pPaperWidth"/>
-                    <xsl:with-param name="PaperHeight"      select="$pPaperHeight"/>
+                    <xsl:with-param name="PaperWidth"        select="$pPaperWidth"/>
+                    <xsl:with-param name="PaperHeight"       select="$pPaperHeight"/>
                     <xsl:with-param name="PaperMarginTop"    select="$pPaperMarginTop"/>
                     <xsl:with-param name="PaperMarginRight"  select="$pPaperMarginRight"/>
                     <xsl:with-param name="PaperMarginBottom" select="$pPaperMarginBottom"/>
@@ -1849,6 +1849,7 @@
                     <xsl:with-param name="PaperBodyWidth"    select="$pPaperBodyWidth"/>
                     <xsl:with-param name="PaperHeaderHeight" select="$pPaperHeaderHeight"/>
                     <xsl:with-param name="PaperFooterHeight" select="$pPaperFooterHeight"/>
+                    <xsl:with-param name="PaperColumnGap   " select="$pPaperColumnGap"/>
                 </xsl:evaluate>
             </xsl:variable>
             <xsl:sequence select="$xPathResult"/>

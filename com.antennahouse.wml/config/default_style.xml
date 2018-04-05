@@ -96,6 +96,7 @@ URL : http://www.antennahouse.com/
         <variable name="Paper_Margin_Inner" output-type="print-color print-mono">35mm</variable>
         <variable name="Paper_Header_Height">20mm</variable>
         <variable name="Paper_Footer_Height">20mm</variable>
+        <variable name="Paper_Column_Gap">10mm</variable>
         
         <variable name="Paper_Margin_Left_For_Left_Page">$Paper_Margin_Outer</variable>
         <variable name="Paper_Margin_Left_For_Right_Page">$Paper_Margin_Inner</variable>
@@ -1071,7 +1072,7 @@ URL : http://www.antennahouse.com/
                 <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
                 <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginBottom)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
                     w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
-                <w:cols w:num="2" w:sep="1" w:space="425"/>
+                <w:cols w:num="2" w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
                 <!--w:docGrid w:type="linesAndChars" w:linePitch="360"/-->
             </w:sectPr>
         </wml-object>
@@ -1082,7 +1083,7 @@ URL : http://www.antennahouse.com/
                 <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
                 <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginBottom)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
                     w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
-                <w:cols w:sep="1" w:space="720"/>
+                <w:cols w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
                 <!--w:docGrid w:type="linesAndChars" w:linePitch="360"/-->
             </w:sectPr>
         </wml-object>

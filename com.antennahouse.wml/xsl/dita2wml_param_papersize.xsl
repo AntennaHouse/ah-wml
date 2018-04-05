@@ -44,19 +44,21 @@ E-mail : info@antennahouse.com
     </xsl:variable>
 
     <!-- Margin -->
-    <xsl:variable name="cPaperMarginTopDefault" as="xs:string" select="ahf:getVarValue('Paper_Margin_Top')"/>
-    <xsl:variable name="cPaperMarginRightDefault" as="xs:string" select="ahf:getVarValue('Paper_Margin_Outer')"/>
+    <xsl:variable name="cPaperMarginTopDefault"    as="xs:string" select="ahf:getVarValue('Paper_Margin_Top')"/>
+    <xsl:variable name="cPaperMarginRightDefault"  as="xs:string" select="ahf:getVarValue('Paper_Margin_Outer')"/>
     <xsl:variable name="cPaperMarginBottomDefault" as="xs:string" select="ahf:getVarValue('Paper_Margin_Bottom')"/>
-    <xsl:variable name="cPaperMarginLeftDefault" as="xs:string" select="ahf:getVarValue('Paper_Margin_Inner')"/>
+    <xsl:variable name="cPaperMarginLeftDefault"   as="xs:string" select="ahf:getVarValue('Paper_Margin_Inner')"/>
     <xsl:variable name="cPaperHeaderHeightDefault" as="xs:string" select="ahf:getVarValue('Paper_Header_Height')"/>
     <xsl:variable name="cPaperFooterHeightDefault" as="xs:string" select="ahf:getVarValue('Paper_Footer_Height')"/>
-
+    <xsl:variable name="cPaperColumnGapDefault"    as="xs:string" select="ahf:getVarValue('Paper_Column_Gap')"/>
+    
     <xsl:param name="PRM_PAPER_MARGIN_TOP"    required="no" as="xs:string" select="$cPaperMarginTopDefault"/>
     <xsl:param name="PRM_PAPER_MARGIN_RIGHT"  required="no" as="xs:string" select="$cPaperMarginRightDefault"/>
     <xsl:param name="PRM_PAPER_MARGIN_BOTTOM" required="no" as="xs:string" select="$cPaperMarginBottomDefault"/>
     <xsl:param name="PRM_PAPER_MARGIN_LEFT"   required="no" as="xs:string" select="$cPaperMarginRightDefault"/>
     <xsl:param name="PRM_PAPER_HEADER_HEIGHT" required="no" as="xs:string" select="$cPaperHeaderHeightDefault"/>
     <xsl:param name="PRM_PAPER_FOOTER_HEIGHT" required="no" as="xs:string" select="$cPaperFooterHeightDefault"/>
+    <xsl:param name="PRM_PAPER_COLUMN_GAP"    required="no" as="xs:string" select="$cPaperColumnGapDefault"/>
     
     <xsl:variable name="pPaperMarginTop" as="xs:string">
         <xsl:choose>
@@ -120,6 +122,17 @@ E-mail : info@antennahouse.com
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="$cPaperFooterHeightDefault"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="pPaperColumnGap" as="xs:string">
+        <xsl:choose>
+            <xsl:when test="ahf:isUnitValue($PRM_PAPER_COLUMN_GAP)">
+                <xsl:sequence select="$PRM_PAPER_COLUMN_GAP"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$cPaperColumnGapDefault"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
