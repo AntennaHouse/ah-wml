@@ -61,7 +61,7 @@ URL : http://www.antennahouse.co.jp/
         <xsl:variable name="shapeIdKey" as="xs:string" select="ahf:generateId(.)"/>
         <xsl:variable name="shapeId" as="xs:string" select="xs:string(map:get($shapeIdMap,$shapeIdKey))"/>
         
-        <xsl:variable name="iconWidthInTwip" as="xs:string">
+        <xsl:variable name="iconWidthInEmu" as="xs:string">
             <xsl:variable name="iconWidth" as="xs:string">
                 <xsl:call-template name="getVarValueWithLang">
                     <xsl:with-param name="prmVarName" select="'Note_Icon_Width'"/>
@@ -70,7 +70,7 @@ URL : http://www.antennahouse.co.jp/
             <xsl:sequence select="string(ahf:toEmu($iconWidth))"/>
         </xsl:variable>
         
-        <xsl:variable name="iconHeightInTwip" as="xs:string">
+        <xsl:variable name="iconHeightInEmu" as="xs:string">
             <xsl:variable name="iconHeight" as="xs:string">
                 <xsl:call-template name="getVarValueWithLang">
                     <xsl:with-param name="prmVarName" select="'Note_Icon_Height'"/>
@@ -83,7 +83,7 @@ URL : http://www.antennahouse.co.jp/
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlNoteImage'"/>
                 <xsl:with-param name="prmSrc" select="('%width','%height','%id','%name','%desc','%rid')"/>
-                <xsl:with-param name="prmDst" select="($iconWidthInTwip,$iconHeightInTwip,$shapeId,string(@type),string(@type),concat($rIdPrefix,$iconFileId))"/>
+                <xsl:with-param name="prmDst" select="($iconWidthInEmu,$iconHeightInEmu,$shapeId,string(@type),string(@type),concat($rIdPrefix,$iconFileId))"/>
             </xsl:call-template>
         </xsl:variable>
 
