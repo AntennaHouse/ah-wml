@@ -58,7 +58,7 @@
 	
 	<xsl:variable name="styleDefFileUri" as="xs:string">
 		<xsl:variable name="tempStyleDefFileUri" select="concat($basePluginUri,$styleDefFile)" as="xs:string"/>
-		<xsl:if test="$pDebug">
+		<xsl:if test="$pDebugStyle">
 			<xsl:message select="'Plug-in URI=',$basePluginUri"/>
 			<xsl:message select="'styleDefFile=',$styleDefFile"/>
 			<xsl:message select="'tempStyleDefFileUri=',$tempStyleDefFileUri"/>
