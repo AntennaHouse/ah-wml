@@ -40,9 +40,9 @@ URL : http://www.antennahouse.co.jp/
     note:       
     -->
     <xsl:template match="/">
-        <xsl:call-template name="styleDump"/>
-        <xsl:message select="concat('$cTopicTitleStyleName=','''',$cTopicTitleStyleName,'''')"/>
-        <w:document mc:Ignorable="w14 w15 wp14">
+        <!--xsl:call-template name="styleDump"/-->
+        <!--xsl:message select="concat('$cTopicTitleStyleName=','''',$cTopicTitleStyleName,'''')"/-->
+        <w:document>
             <w:body>
                 <!-- Make cover -->
                 <!--xsl:call-template name="genCover"/-->

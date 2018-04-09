@@ -127,7 +127,7 @@ URL : http://www.antennahouse.co.jp/
         </xsl:variable>
         
         <!-- Tab itself
-             Tab is not inserted if note extists in table because the right edge calculation is difficult.
+             Tab is not inserted if note exists in table because the right edge calculation is difficult.
           -->
         <xsl:variable name="tab" as="node()">
             <xsl:choose>
