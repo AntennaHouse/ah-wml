@@ -245,7 +245,18 @@ URL : http://www.antennahouse.co.jp/
         <xsl:param name="prmUnitValue" as="xs:string"/>
         <xsl:sequence select="string(ahf:toEmu($prmUnitValue))"/>        
     </xsl:function>
-    
+
+    <!-- 
+     function:	Get line height ratio based 1 line as 240
+     param:		prmRatio
+     return:	xs:string
+     note:		
+     -->
+    <xsl:function name="ahf:toLineHeightStr" as="xs:string" visibility="public">
+        <xsl:param name="prmRatio" as="xs:string"/>
+        <xsl:sequence select="string(xs:integer((240 * xs:double($prmRatio))))"/>        
+    </xsl:function>
+
     <!-- 
      function:	Get numeric part of numeric property
      param:		prmProperty
