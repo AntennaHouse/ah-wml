@@ -70,6 +70,8 @@ E-mail : info@antennahouse.com
 
     <!-- Block elements or wrapper elements where text child node and block elements are allowed.
          Stylesheet must generate <p> from child text node and inline elements sequence.
+         hazard-d domain is specialized from 'li". But it is not mixed content element.
+         Rather they are set of inline elements.
      -->
     <xsl:variable name="mixedContentElementClasses" as="xs:string+" select="
         (
@@ -95,6 +97,13 @@ E-mail : info@antennahouse.com
         ' topic/required-cleanup '
         )"/>
     
+    <xsl:variable name="mixedContentElementClassesException" as="xs:string+" select="
+        (
+        ' hazard-d/typeofhazard ',
+        ' hazard-d/consequence ',
+        ' hazard-d/howtoavoid '
+        )"/>
+    
     <!-- 
      function:	Return $prmElem/@class has value in $mixedContentElementClasses
      param:		$prmElem
@@ -105,7 +114,8 @@ E-mail : info@antennahouse.com
         <xsl:param name="prmElem" as="element()"/>
         <xsl:variable name="class" as="xs:string" select="string($prmElem/@class)"/>
         <xsl:variable name="isOneOfMixedContentElement" as="xs:boolean" select="some $c in $mixedContentElementClasses satisfies contains($class,$c)"/>
-        <xsl:sequence select="$isOneOfMixedContentElement"/>
+        <xsl:variable name="isOneOfMixedContentElementException" as="xs:boolean" select="some $c in $mixedContentElementClassesException satisfies contains($class,$c)"/>
+        <xsl:sequence select="$isOneOfMixedContentElement and not($isOneOfMixedContentElementException)"/>
     </xsl:function>
 
     <!-- Inline container elements where text child node and inline elements are allowed.
@@ -117,7 +127,10 @@ E-mail : info@antennahouse.com
         (:' topic/desc ',:)
         (:' topic/dd ',:)
         ' topic/dt ',
-        ' topic/sli '
+        ' topic/sli ',
+        ' hazard-d/typeofhazard ',
+        ' hazard-d/consequence ',
+        ' hazard-d/howtoavoid '
         )"/>
     
     <!-- 
