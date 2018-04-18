@@ -36,7 +36,7 @@ URL : http://www.antennahouse.co.jp/
      return:	style id string
      note:		w:aliases/@w:val can contain multiple aliases style names by delimiting with ",".
      -->
-  <xsl:function name="ahf:getStyleIdFromName" as="xs:string">
+  <xsl:function name="ahf:getStyleIdFromName" as="xs:string" visibility="public">
     <xsl:param name="prmStyleName" as="xs:string"/>
     <xsl:choose>
       <xsl:when
