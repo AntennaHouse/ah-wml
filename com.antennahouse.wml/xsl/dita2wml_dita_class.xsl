@@ -99,6 +99,7 @@ E-mail : info@antennahouse.com
     
     <xsl:variable name="mixedContentElementClassesException" as="xs:string+" select="
         (
+        ' hazard-d/hazardstatement ',
         ' hazard-d/typeofhazard ',
         ' hazard-d/consequence ',
         ' hazard-d/howtoavoid '
