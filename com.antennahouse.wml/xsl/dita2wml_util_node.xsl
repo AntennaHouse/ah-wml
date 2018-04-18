@@ -105,6 +105,52 @@ URL : http://www.antennahouse.co.jp/
         <xsl:variable name="unusedNodes" as="node()*" select="ahf:getLeadingUnusedNodes($prmNode) | ahf:getTrailingUnusedNodes($prmNode)"/>
         <xsl:sequence select="$prmNode except $unusedNodes"/>
     </xsl:function>
+    
+    <!-- 
+     function:	Judge empty element
+     param:		prmElem
+     return:	xs:boolean
+     note:		
+     -->
+    <xsl:function name="ahf:isEmptyElement" as="xs:boolean">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="empty($prmElem/node())">
+                <xsl:sequence select="true()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="every $node in $prmElem/node() satisfies ahf:isRedundantNode($node)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
+    <xsl:function name="ahf:isRedundantNode" as="xs:boolean">
+        <xsl:param name="prmNode" as="node()"/>
+        <xsl:choose>
+            <xsl:when test="$prmNode/self::comment()">
+                <xsl:sequence select="true()"/>
+            </xsl:when>
+            <xsl:when test="$prmNode/self::processing-instruction()">
+                <xsl:sequence select="true()"/>
+            </xsl:when>
+            <xsl:when test="$prmNode/self::text()">
+                <xsl:choose>
+                    <xsl:when test="not(string(normalize-space($prmNode)))">
+                        <xsl:sequence select="true()"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:sequence select="false()"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:when test="$prmNode/self::element()">
+                <xsl:sequence select="false()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="true()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
 
     <!-- end of stylesheet -->
 </xsl:stylesheet>
