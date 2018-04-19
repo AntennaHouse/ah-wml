@@ -15,7 +15,8 @@
       -->
     <target name="build.project.class.path">
         <path id="project.class.path">
-            <pathelement path="${dost.class.path}"/>
+            <pathelement path="${java.class.path}"/>
+            <pathelement path="${dita.plugin.com.antennahouse.wml.dir}${file.separator}lib${file.separator}xsltutil.jar"/>
         </path>
     </target>
 
@@ -155,7 +156,7 @@
         <echo message="Stylesheet=${prmStylesheetFile}"/>
         <echo message="user.input.dir=${user.input.dir}"/>
         <property name="classpath" refid="project.class.path"/>
-        <!--echo message="classpath=${classpath}"/-->
+        <echo message="classpath=${classpath}"/>
         <echo message="template.dir.url=${template.dir.url}"/>
         <xslt processor="trax" in="${prmInputFile}" out="${prmOutputFile}"
             style="${prmStylesheetFile}" classpathref="project.class.path" force="true">
@@ -237,7 +238,7 @@
         <echo message="Stylesheet=${prmStylesheetFile}"/>
         <echo message="user.input.dir=${user.input.dir}"/>
         <!--property name="classpath" refid="project.class.path"/-->
-        <echo message="classpath=${classpath}"/>
+        <!--echo message="classpath=${classpath}"/-->
         <echo message="template.dir.url=${template.dir.url}"/>
         <xslt processor="trax" in="${prmInputFile}" out="${prmOutputFile}"
             style="${prmStylesheetFile}" classpathref="project.class.path" force="true">
