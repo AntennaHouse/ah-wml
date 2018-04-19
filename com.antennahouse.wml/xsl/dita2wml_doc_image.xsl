@@ -17,7 +17,9 @@ URL : http://www.antennahouse.co.jp/
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-    exclude-result-prefixes="xs ahf dita-ot map"
+    xmlns:graphicUtil="java:com.antennahouse.xsltutil.GraphicUtil"
+    extension-element-prefixes="graphicUtil"
+    exclude-result-prefixes="xs ahf dita-ot map graphicUtil"
     version="3.0">
 
     <!-- 
@@ -85,20 +87,22 @@ URL : http://www.antennahouse.co.jp/
      -->
     <xsl:template name="ahf:getImageSizeInEmu" as="xs:integer+">
         <xsl:param name="prmImage" as="element()" required="yes"/>
-        <xsl:variable name="defaultDpi" as="xs:integer">
-            <xsl:call-template name="getVarValueAsInteger">
-                <xsl:with-param name="prmVarName" select="'Default_Image_Dpi'"/>
+        <xsl:variable name="imageInfo" as="item()+">
+            <xsl:call-template name="ahf:getImageSizeInfo">
+                <xsl:with-param name="prmImage" select="$prmImage"/>
+                <xsl:with-param name="prmMapDirUrl" select="xs:anyURI($pMapDirUrl)"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="orgImageWidth" as="xs:integer" select="if (string($prmImage/@dita-ot:image-width) castable as xs:integer) then xs:integer($prmImage/@dita-ot:image-width) else 0"/>
-        <xsl:variable name="orgImageHeight" as="xs:integer" select="if (string($prmImage/@dita-ot:image-height) castable as xs:integer) then xs:integer($prmImage/@dita-ot:image-height) else 0"/>
-        <xsl:variable name="horizontalDpi" as="xs:integer" select="if (string($prmImage/@dita-ot:horizontal-dpi) castable as xs:integer) then xs:integer($prmImage/@dita-ot:horizontal-dpi) else $defaultDpi"/>
-        <xsl:variable name="verticalDpi" as="xs:integer" select="if (string($prmImage/@dita-ot:vertical-dpi) castable as xs:integer) then xs:integer($prmImage/@dita-ot:vertical-dpi) else $defaultDpi"/>
-        <xsl:variable name="scale" as="xs:double" select="if (string($prmImage/@scale)) then (xs:integer($prmImage/@scale) div 100) else 1"/>
+
+        <xsl:variable name="orgImageWidth" as="xs:integer" select="xs:integer($imageInfo[1])"/>
+        <xsl:variable name="orgImageHeight" as="xs:integer" select="xs:integer($imageInfo[2])"/>
+        <xsl:variable name="horizontalDpi" as="xs:integer" select="xs:integer($imageInfo[3])"/>
+        <xsl:variable name="verticalDpi" as="xs:integer" select="xs:integer($imageInfo[4])"/>
+        <xsl:variable name="scale" as="xs:double" select="xs:double($imageInfo[5])"/>
         
         <xsl:choose>
             <xsl:when test="($orgImageWidth eq 0) or ($orgImageHeight eq 0)">
-                <xsl:sequence select="(0,0)"/>
+                <xsl:sequence select="(0, 0)"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:variable name="fpRegExp" as="xs:string" select="'^([\d]+?\.{1}?[\d]+?|[\d]+?)$'"/>
@@ -155,6 +159,72 @@ URL : http://www.antennahouse.co.jp/
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+
+    <!-- 
+     function:	retrun image size information:
+                Width and height in pixel, both dimension resolution, scale
+     param:		prmImage image element
+                prmMapDirUrl base map directory
+     return:	image size information (width, height in pixel, resolution of both axes, scale)
+     note:		Call lib/xstutil.jar for getting EMF information because it is not supported in Java.
+     -->
+    <xsl:template name="ahf:getImageSizeInfo" as="item()+">
+        <xsl:param name="prmImage" as="element()" required="yes"/>
+        <xsl:param name="prmMapDirUrl" as="xs:anyURI" required="yes"/>
+        <xsl:variable name="href" as="xs:string" select="string($prmImage/@href)"/>
+        <xsl:variable name="defaultDpi" as="xs:integer">
+            <xsl:call-template name="getVarValueAsInteger">
+                <xsl:with-param name="prmVarName" select="'Default_Image_Dpi'"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="orgImageWidth" as="xs:integer" select="if (string($prmImage/@dita-ot:image-width) castable as xs:integer) then xs:integer($prmImage/@dita-ot:image-width) else 0"/>
+        <xsl:variable name="orgImageHeight" as="xs:integer" select="if (string($prmImage/@dita-ot:image-height) castable as xs:integer) then xs:integer($prmImage/@dita-ot:image-height) else 0"/>
+        <xsl:variable name="horizontalDpi" as="xs:integer" select="if (string($prmImage/@dita-ot:horizontal-dpi) castable as xs:integer) then xs:integer($prmImage/@dita-ot:horizontal-dpi) else $defaultDpi"/>
+        <xsl:variable name="verticalDpi" as="xs:integer" select="if (string($prmImage/@dita-ot:vertical-dpi) castable as xs:integer) then xs:integer($prmImage/@dita-ot:vertical-dpi) else $defaultDpi"/>
+        <xsl:variable name="scale" as="xs:double" select="if (string($prmImage/@scale)) then (xs:integer($prmImage/@scale) div 100) else 1"/>
+        
+        <xsl:choose>
+            <xsl:when test="($orgImageWidth gt 0) and ($orgImageHeight gt 0)">
+                <xsl:sequence select="($orgImageWidth,$orgImageHeight,$horizontalDpi,$verticalDpi,$scale)"/>
+            </xsl:when>
+            <xsl:when test="ends-with(lower-case($href),'.emf')">
+                <xsl:variable name="url" as="xs:anyURI" select="ahf:getUriFromHref($href,xs:anyURI($pMapDirUrl))"/>
+                <xsl:variable name="emfInfo" as="xs:string" select="graphicUtil:getImageSize($pMapDirUrl,$href)"/>
+                <xsl:variable name="emfInfoSeq" as="item()+" select="tokenize($emfInfo)"/>
+                <xsl:sequence select="($emfInfoSeq[1],$emfInfoSeq[2],$emfInfoSeq[3],$emfInfoSeq[4],$scale)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="(0,0,$horizontalDpi,$verticalDpi,$scale)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <!-- 
+     function:	Make URL from href
+     param:		prmHref : @href value
+                prmBase : Base URL
+     return:	xs:string
+     note:		
+     -->
+    <xsl:function name="ahf:getUriFromHref" as="xs:anyURI">
+        <xsl:param name="prmHref" as="xs:string"/>
+        <xsl:param name="prmBaseUrl" as="xs:anyURI"/>
+        <xsl:variable name="hrefRevised" as="xs:string" select="translate($prmHref,'\','/')"/>
+        <xsl:choose>
+            <xsl:when test="starts-with($prmHref,'/')">
+                <xsl:sequence select="xs:anyURI(concat('file:/',$prmHref))"/>
+            </xsl:when>
+            <xsl:when test="matches($hrefRevised,'^[a-zA-Z]{1}:/')">
+                <xsl:sequence select="xs:anyURI(concat('file:/',$prmHref))"/>
+            </xsl:when>
+            <xsl:when test="matches($hrefRevised,'^(\S+)://([^:/]+)(:(\d+))?(/[^#\s]*)(#(\S+))?')">
+                <xsl:sequence select="xs:anyURI($prmHref)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="xs:anyURI(concat($prmBaseUrl,$prmHref))"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
 
     <!-- 
      function:	adjust a image size considering the body text domain width

@@ -170,11 +170,11 @@ E-mail : info@antennahouse.com
         as="xs:boolean"/>
 
 
-    <!-- Map directory
+    <!-- Map directory URL
          2012-11-11 t.makita
      -->
-    <!--xsl:param name="PRM_MAP_DIR_URL" required="yes" as="xs:string"/>
-    <xsl:variable name="pMapDirUrl" as="xs:string" select="$PRM_MAP_DIR_URL"/-->
+    <xsl:param name="PRM_MAP_DIR_URL" required="yes" as="xs:string"/>
+    <xsl:variable name="pMapDirUrl" as="xs:string" select="$PRM_MAP_DIR_URL"/>
 
     <!-- DITA-OT version
          2014-11-02 t.makita
