@@ -15,11 +15,11 @@
       -->
     <target name="build.project.class.path">
         <path id="project.class.path">
-            <pathelement path="${java.class.path}"/>
+            <pathelement path="${dost.class.path}"/>
         </path>
     </target>
 
-    <target name="transform.merged2wml.impl">
+    <target name="transform.merged2wml.impl" depends="build.project.class.path">
         <property name="converted.merged.file1" value="${dita.map.filename.root}_CONVERTED_1.xml" />
         <property name="converted.merged.file2" value="${dita.map.filename.root}_CONVERTED_2.xml" />
         <property name="converted.merged.file3" value="${dita.map.filename.root}_CONVERTED_3.xml" />
@@ -151,8 +151,7 @@
         </antcall>
     </target>
 
-    <target name="transform.common.jaxp" depends="build.project.class.path"
-        unless="${use.saxon.transform}">
+    <target name="transform.common.jaxp">
         <echo message="Stylesheet=${prmStylesheetFile}"/>
         <echo message="user.input.dir=${user.input.dir}"/>
         <property name="classpath" refid="project.class.path"/>
@@ -234,8 +233,7 @@
         </xslt>
     </target>
 
-    <target name="transform.common.jaxp.trace" depends="build.project.class.path"
-        unless="${use.saxon.transform}">
+    <target name="transform.common.jaxp.trace">
         <echo message="Stylesheet=${prmStylesheetFile}"/>
         <echo message="user.input.dir=${user.input.dir}"/>
         <!--property name="classpath" refid="project.class.path"/-->
