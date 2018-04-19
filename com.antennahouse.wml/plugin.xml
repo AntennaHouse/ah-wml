@@ -3,6 +3,7 @@
 	<feature extension="dita.conductor.transtype.check" value="ah.wml" type="docx"/>
 	<feature extension="dita.conductor.target.relative" value="integrator.xml" type="file"/>
 	<feature extension="dita.transtype.print" value="ah.wml"/>
+	<feature extension="dita.conductor.lib.import" file="lib/xsltutil.jar"/>
 	<template file="build_transform_template.xml"/>
 </plugin>
 
