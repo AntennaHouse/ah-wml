@@ -13,7 +13,7 @@
       -->
     <target name="build.project.class.path">
         <path id="project.class.path">
-            <pathelement path="${java.class.path}"/>
+            <pathelement path="${dost.class.path}"/>
         </path>
     </target>
 
