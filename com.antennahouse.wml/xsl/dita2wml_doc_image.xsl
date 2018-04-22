@@ -189,7 +189,8 @@ URL : http://www.antennahouse.co.jp/
             </xsl:when>
             <xsl:when test="ends-with(lower-case($href),'.emf')">
                 <xsl:variable name="url" as="xs:anyURI" select="ahf:getUriFromHref($href,xs:anyURI($pMapDirUrl))"/>
-                <xsl:variable name="emfInfo" as="xs:string" select="graphicUtil:getImageSize($pMapDirUrl,$href)"/>
+                <!--xsl:message select="'$href=',$href,'$pMapDirUrl=',$pMapDirUrl,'$url=',$url"></xsl:message-->
+                <xsl:variable name="emfInfo" as="xs:string" select="graphicUtil:getImageSizeByUri($url)"/>
                 <xsl:variable name="emfInfoSeq" as="item()+" select="tokenize($emfInfo)"/>
                 <xsl:sequence select="($emfInfoSeq[1],$emfInfoSeq[2],$emfInfoSeq[3],$emfInfoSeq[4],$scale)"/>
             </xsl:when>
