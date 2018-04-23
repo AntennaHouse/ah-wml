@@ -213,16 +213,16 @@ URL : http://www.antennahouse.co.jp/
         <xsl:variable name="hrefRevised" as="xs:string" select="translate($prmHref,'\','/')"/>
         <xsl:choose>
             <xsl:when test="starts-with($prmHref,'/')">
-                <xsl:sequence select="xs:anyURI(concat('file:/',$prmHref))"/>
+                <xsl:sequence select="xs:anyURI(concat('file:/',$hrefRevised))"/>
             </xsl:when>
             <xsl:when test="matches($hrefRevised,'^[a-zA-Z]{1}:/')">
-                <xsl:sequence select="xs:anyURI(concat('file:/',$prmHref))"/>
+                <xsl:sequence select="xs:anyURI(concat('file:/',$hrefRevised))"/>
             </xsl:when>
             <xsl:when test="matches($hrefRevised,'^(\S+)://([^:/]+)(:(\d+))?(/[^#\s]*)(#(\S+))?')">
-                <xsl:sequence select="xs:anyURI($prmHref)"/>
+                <xsl:sequence select="xs:anyURI($hrefRevised)"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:sequence select="xs:anyURI(concat($prmBaseUrl,$prmHref))"/>
+                <xsl:sequence select="xs:anyURI(concat($prmBaseUrl,$hrefRevised))"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
