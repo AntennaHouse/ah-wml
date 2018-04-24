@@ -92,9 +92,9 @@ URL : http://www.antennahouse.co.jp/
     function:   Adjust the list indent size 
     param:      prmIsList
     return:     
-    note:       
+    note:       Rewrite indent only when $PRM_ADOPT_FIXED_LIST_INDENT = 'yes'
     -->
-    <xsl:template match="w:abstractNum/w:lvl/w:pPr/w:ind">
+    <xsl:template match="w:abstractNum/w:lvl/w:pPr/w:ind[$pAdoptFixedListIndent]">
         <xsl:param name="prmIsList" tunnel="yes" required="no" as="xs:boolean" select="false()"/>
         <xsl:choose>
             <xsl:when test="$prmIsList">
