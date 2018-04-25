@@ -22,6 +22,7 @@ E-mail : info@antennahouse.com
     <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 
     <!--
+    function:   general template for styles.xml
     param:      none
     return:     self and descendant node
     note:       
