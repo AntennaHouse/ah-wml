@@ -631,7 +631,7 @@ URL : http://www.antennahouse.com/
         </wml-object>
         
         <!-- Theme font: Serif -->
-        <wml-object name="wmlThemeMajorFont">
+        <wml-object name="wmlThemeMinorFont">
             <a:latin panose="020F0502020204030204" typeface="Times New Roman"/>
             <a:ea typeface=""/>
             <a:cs typeface=""/>
@@ -667,7 +667,7 @@ URL : http://www.antennahouse.com/
             <a:font script="Geor" typeface="Sylfaen"/>
         </wml-object>
         
-        <wml-object name="wmlThemeMinorFont">
+        <wml-object name="wmlThemeMajorFont">
             <a:latin panose="020F0302020204030204" typeface="Arial"/>
             <a:ea typeface=""/>
             <a:cs typeface=""/>
