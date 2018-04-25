@@ -498,7 +498,13 @@ URL : http://www.antennahouse.com/
         <variable name="Part_Count_Format">1</variable>
         <variable name="Chapter_Count_Format">1</variable>
         <variable name="Appendix_Count_Format">A</variable>
-        
+
+        <!-- Hazard statement -->
+        <variable name="HazardStatementSignalWordFontSize">15pt</variable>
+        <variable name="HazardStatementSignalWordBaselineShift">-7pt</variable>
+        <variable name="HazardStatementIconRelativeRatio">0.9</variable>
+        <variable name="HazardStatementIconBaselineShift">-7pt</variable>
+        <variable name="HazardSymbolWidth">10mm</variable>
         
     </variables>
     
@@ -1086,6 +1092,158 @@ URL : http://www.antennahouse.com/
                 <w:cols w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
                 <!--w:docGrid w:type="linesAndChars" w:linePitch="360"/-->
             </w:sectPr>
+        </wml-object>
+        
+        <!-- Hazardstatement table -->
+        <variable name="HazardStatementTableStyleName">Table Grid</variable>
+        <variable name="HazardStatementTableBeforeSpace">12pt</variable>
+        <variable name="HazardSymbolCellWidth">15.18mm</variable><!--861,7406 -->
+        <variable name="HazardStatementTitleRowHeight">7.7mm</variable><!-- 437 -->
+        <variable name="HazardStatementTitleShading">pct30</variable><!-- pct30 -->
+        <variable name="HazardStatementTitleLineHeightRatio">1.0</variable>
+        <variable name="HazardStatementSignalWordFontSize">15pt</variable><!-- 30 -->
+        
+        <wml-object name="wmlHazardStatementTable">
+            <w:p>
+                <w:pPr>
+                    <w:keepNext/>
+                    <w:spacing w:line="{ahf:toTwipStr('$HazardStatementTableBeforeSpace')}" w:lineRule="exact"/>
+                </w:pPr>
+            </w:p>
+            <w:tbl>
+                <w:tblPr>
+                    <w:tblStyle w:val="{ahf:getStyleIdFromName('$HazardStatementTableStyleName')}"/>
+                    <w:tblW w:w="0" w:type="auto"/>
+                    <w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="1"
+                        w:lastColumn="0" w:noHBand="0" w:noVBand="1"/>
+                </w:tblPr>
+                <w:tblGrid>
+                    <w:gridCol w:w="%pic-cell-width"/>
+                    <w:gridCol w:w="%message-panel-cell-width"/>
+                </w:tblGrid>
+                <w:tr>
+                    <w:trPr>
+                        <w:trHeight w:val="{ahf:toTwipStr('$HazardStatementTitleRowHeight')}"/>
+                        <w:tblHeader/>
+                    </w:trPr>
+                    <w:tc>
+                        <w:tcPr>
+                            <w:tcW w:w="0" w:type="auto"/>
+                            <w:gridSpan w:val="2"/>
+                            <w:shd w:val="$HazardStatementTitleShading" w:color="auto" w:fill="auto"/>
+                            <w:tcMar>
+                                <w:top w:w="0" w:type="dxa"/>
+                                <w:bottom w:w="0" w:type="dxa"/>
+                            </w:tcMar>
+                        </w:tcPr>
+                        <w:p>
+                            <w:pPr>
+                                <w:snapToGrid w:val="0"/>
+                                <w:spacing w:line="{ahf:toLineHeightStr('$HazardStatementTitleLineHeightRatio')}" w:lineRule="auto"/>
+                                <w:jc w:val="center"/>
+                            </w:pPr>
+                            <w:r>
+                                <w:rPr>
+                                    <w:noProof/>
+                                    <w:position w:val="{ahf:toHalfPointStr('$HazardStatementIconBaselineShift')}"/>
+                                </w:rPr>
+                                <ahr:icon-image/>
+                            </w:r>
+                            <w:r>
+                                <w:t>&#x2002;</w:t>
+                            </w:r>
+                            <w:r>
+                                <w:rPr>
+                                    <w:sz w:val="{ahf:toHalfPointStr('$HazardStatementSignalWordFontSize')}"/>
+                                    <w:szCs w:val="{ahf:toHalfPointStr('$HazardStatementSignalWordFontSize')}"/>
+                                    <w:position
+                                        w:val="{ahf:toHalfPointStr('$HazardStatementSignalWordBaselineShift')}"/>
+                                </w:rPr>
+                                <w:t>%signal-word</w:t>
+                            </w:r>
+                        </w:p>
+                    </w:tc>
+                </w:tr>
+                <ahr:rows/>
+            </w:tbl>
+            
+        </wml-object>
+        
+        <!-- Hazardstatement row -->
+        <variable name="HazardStatementRowTcMarTB">1mm</variable>
+        <variable name="HazardStatementRowTcMarLR">2mm</variable>
+        
+        <wml-object name="wmlHazardStatementRow">
+            <w:tr>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="0" w:type="auto"/>
+                        <w:tcBorders>
+                            <w:right w:val="nil"/>
+                        </w:tcBorders>
+                        <w:tcMar>
+                            <w:top w:w="{ahf:toTwipStr('$HazardStatementRowTcMarTB')}" w:type="dxa"/>
+                            <w:start w:w="{ahf:toTwipStr('$HazardStatementRowTcMarLR')}" w:type="dxa"/>
+                            <w:bottom w:w="{ahf:toTwipStr('$HazardStatementRowTcMarTB')}" w:type="dxa"/>
+                            <w:end w:w="{ahf:toTwipStr('$HazardStatementRowTcMarLR')}" w:type="dxa"/>
+                        </w:tcMar>
+                        <w:vAlign w:val="center"/>
+                    </w:tcPr>
+                    <w:p>
+                        <ahr:icon-image/>
+                    </w:p>
+                </w:tc>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="0" w:type="auto"/>
+                        <w:tcBorders>
+                            <w:left w:val="nil"/>
+                        </w:tcBorders>
+                        <w:tcMar>
+                            <w:top w:w="{ahf:toTwipStr('$HazardStatementRowTcMarTB')}" w:type="dxa"/>
+                            <w:start w:w="{ahf:toTwipStr('$HazardStatementRowTcMarLR')}" w:type="dxa"/>
+                            <w:bottom w:w="{ahf:toTwipStr('$HazardStatementRowTcMarTB')}" w:type="dxa"/>
+                            <w:end w:w="{ahf:toTwipStr('$HazardStatementRowTcMarLR')}" w:type="dxa"/>
+                        </w:tcMar>
+                    </w:tcPr>
+                    <ahr:messagepanel/>
+                </w:tc>
+            </w:tr>
+        </wml-object>
+        
+        <!-- Hazardstatement row without hazardsymbol-->
+        <wml-object name="wmlHazardStatementRowWoHs">
+            <w:tr>
+                <w:tc>
+                    <w:tcPr>
+                        <w:tcW w:w="0" w:type="auto"/>
+                        <w:gridSpan w:val="2"/>
+                        <w:tcMar>
+                            <w:top w:w="{ahf:toTwipStr('$HazardStatementRowTcMarTB')}" w:type="dxa"/>
+                            <w:start w:w="{ahf:toTwipStr('$HazardStatementRowTcMarLR')}" w:type="dxa"/>
+                            <w:bottom w:w="{ahf:toTwipStr('$HazardStatementRowTcMarTB')}" w:type="dxa"/>
+                            <w:end w:w="{ahf:toTwipStr('$HazardStatementRowTcMarLR')}" w:type="dxa"/>
+                        </w:tcMar>
+                    </w:tcPr>
+                    <ahr:messagepanel/>
+                </w:tc>
+            </w:tr>
+        </wml-object>
+        
+        <!-- Message panel elements: typeofhazard, consequence, howtoavoid -->
+        <variable name="MessagePanelElementsLineHeightRatio">1.0</variable>
+        <wml-object name="wmlMessgaPanelChildElement">
+            <w:p>
+                <w:pPr>
+                    <w:pStyle w:val="$Ul_Style_Name"/>
+                    <w:numPr>
+                        <w:ilvl w:val="0"/>
+                        <w:numId w:val="%num-id"/>
+                    </w:numPr>
+                    <w:spacing w:line="%line-height-ratio" w:lineRule="auto"/>
+                </w:pPr>
+                <ahr:panelChild/>
+            </w:p>
         </wml-object>
         
     </wml-objects>

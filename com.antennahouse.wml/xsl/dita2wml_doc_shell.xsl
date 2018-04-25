@@ -57,6 +57,7 @@ URL : http://www.antennahouse.co.jp/
     <xsl:include href="dita2wml_doc_id.xsl"/>
     <xsl:include href="dita2wml_doc_equation_domain_util.xsl"/>
     <xsl:include href="dita2wml_doc_specialization_elements.xsl"/>
+    <xsl:include href="dita2wml_doc_hazardstatement.xsl"/>
     
     <xsl:include href="dita2wml_dita_class.xsl"/>
 
