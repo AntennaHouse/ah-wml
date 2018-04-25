@@ -62,7 +62,9 @@ URL : http://www.antennahouse.co.jp/
                             <w:ilvl w:val="{string(ahf:getIlvlFromListLevel($prmListLevel))}"/>
                             <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>
                         </w:numPr>
-                        <xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
+                        <xsl:if test="not($pAdoptFixedListIndent)">
+                            <xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
+                        </xsl:if>
                         <xsl:copy-of select="ahf:getAlignAttrElem($prmTcAttr/@align)"/>
                     </w:pPr>
                 </xsl:when>

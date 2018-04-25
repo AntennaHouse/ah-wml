@@ -335,6 +335,10 @@ E-mail : info@antennahouse.com
     <xsl:variable name="pListBaseIndentSizeInTwip" as="xs:integer" select="ahf:toTwip($pListBaseIndentSize)"/>
     <xsl:variable name="pListBaseIndentSizeInEmu" as="xs:integer" select="ahf:toEmu($pListBaseIndentSize)"/>
     
+    <!-- Adopt fixed list indent -->
+    <xsl:param name="PRM_ADOPT_FIXED_LIST_INDENT" required="no" as="xs:string" select="$cNo"/>
+    <xsl:variable name="pAdoptFixedListIndent" as="xs:boolean" select="$PRM_ADOPT_FIXED_LIST_INDENT eq $cYes"/>
+    
     <!-- Merged final middle file URL -->
     <xsl:param name="PRM_MERGED_FINAL_OUTPUT_URL" required="yes" as="xs:anyURI"/>
     <xsl:variable name="pMergedFinalOutputUrl" as="xs:string" select="xs:string($PRM_MERGED_FINAL_OUTPUT_URL)"/>

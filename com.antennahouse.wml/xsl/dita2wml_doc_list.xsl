@@ -13,22 +13,7 @@ URL : http://www.antennahouse.co.jp/
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" 
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:o="urn:schemas-microsoft-com:office:office" 
-    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" 
-    xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" 
-    xmlns:v="urn:schemas-microsoft-com:vml" 
-    xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" 
-    xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" 
-    xmlns:w10="urn:schemas-microsoft-com:office:word" 
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
-    xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" 
-    xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" 
-    xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" 
-    xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" 
-    xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" 
-    xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     exclude-result-prefixes="xs ahf"
     version="3.0">
@@ -48,6 +33,7 @@ URL : http://www.antennahouse.co.jp/
      -->
     <xsl:template match="*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:variable name="id" as="xs:string" select="ahf:genHistoryId(.)"/>
         <xsl:variable name="occurenceNumber" as="xs:integer?" select="index-of($listId,$id)"/>
         <xsl:assert test="exists($occurenceNumber)" select="'[ol/ul] id=',$id,' does not exits in $listId=',$listId"/>
@@ -55,7 +41,32 @@ URL : http://www.antennahouse.co.jp/
         <xsl:apply-templates select="*">
             <xsl:with-param name="prmListOccurenceNumber" tunnel="yes" select="$occurenceNumber"/>
             <xsl:with-param name="prmListLevel" tunnel="yes" select="$listLevel"/>
-            <xsl:with-param name="prmIndentLevel" tunnel="yes" select="$prmIndentLevel + 1"/>
+            <xsl:with-param name="prmIndentLevel" tunnel="yes" select="if ($pAdoptFixedListIndent) then ($prmIndentLevel + 1) else $prmIndentLevel"/>
+            <xsl:with-param name="prmExtraIndent" tunnel="yes">
+                <xsl:choose>
+                    <xsl:when test="$pAdoptFixedListIndent">
+                        <xsl:sequence select="$prmExtraIndent"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="styleName" as="xs:string">
+                            <xsl:call-template name="getVarValue">
+                                <xsl:with-param name="prmVarName">
+                                    <xsl:choose>
+                                        <xsl:when test="contains(@class,' topic/ol ')">
+                                            <xsl:sequence select="'Ol_Style_Name'"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:sequence select="'Ul_Style_Name'"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:variable>
+                        <xsl:variable name="hangingInTwip" as="xs:integer" select="ahf:getHangingFromStyleNameAndLevel($styleName,$listLevel)"/>
+                        <xsl:sequence select="$hangingInTwip + $prmExtraIndent"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
         </xsl:apply-templates>
     </xsl:template>
     

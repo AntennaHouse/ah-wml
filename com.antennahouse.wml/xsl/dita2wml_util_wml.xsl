@@ -25,7 +25,20 @@ URL : http://www.antennahouse.co.jp/
 
   <!-- numbering.xml document -->
   <xsl:variable name="templateNumberingDoc" as="document-node()?" select="doc(string($pTemplateNumbering))"/>
-
+  
+  <!-- base style font size (in half point) -->
+  <xsl:variable name="baseStyleFontSize" as="xs:integer">
+    <xsl:variable name="baseStyleElem" as="element()" select="$templateStyleDoc/w:style[string(@w:type) eq 'paragraph'][string(@w:default) eq '1']"/>
+    <xsl:choose>
+      <xsl:when test="$baseStyleElem/w:rPr/w:sz/@w:val">
+        <xsl:sequence select="xs:integer($baseStyleElem/w:rPr/w:sz/@w:val)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="21"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
   <!-- document.xml document -->
   <xsl:variable name="templateDocumentDoc" as="document-node()?"
     select="doc(string($pTemplateDocument))"/>
@@ -194,15 +207,38 @@ URL : http://www.antennahouse.co.jp/
   <!-- 
      function:	Get hanging-indent from style name and list level
      param:		prmStyleName, prmListLevel
-     return:	w:hanging value
+     return:	w:hanging value in twip
      note:		
      -->
   <xsl:function name="ahf:getHangingFromStyleNameAndLevel" as="xs:integer">
     <xsl:param name="prmStyleName" as="xs:string"/>
     <xsl:param name="prmListLevel" as="xs:integer"/>
     <xsl:variable name="absNumId" as="xs:string" select="ahf:getAbstractNumIdFromStyleName($prmStyleName)"/>
-    <xsl:variable name="hanging" as="xs:string" select="string($templateNumberingDoc/w:numbering/w:abstractNum[string(@w:abstractNumId) eq $absNumId]/w:lvl[xs:integer(@w:ilvl) eq ($prmListLevel - 1)]/w:pPr/w:ind/@w:hanging)"/>
-    <xsl:sequence select="if ($hanging castable as xs:integer) then xs:integer($hanging) else 0"/>
+    <xsl:variable name="w:abstractNum" as="element()" select="$templateNumberingDoc/w:numbering/w:abstractNum[string(@w:abstractNumId) eq $absNumId]"/>
+    <xsl:variable name="w:lvl" as="element()?">
+      <xsl:choose>
+        <xsl:when test="$w:abstractNum/w:multiLevelType/@w:val/string(.) eq 'singleLevel'">
+          <xsl:sequence select="$w:abstractNum/w:lvl[string(@w:ilvl) eq '0']"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:sequence select="$w:abstractNum/w:lvl[string(@w:ilvl) eq string(($prmListLevel - 1))]"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="hanging" as="xs:string?" select="$w:lvl/w:pPr/w:ind/@w:hanging/string(.)"/>
+    <xsl:variable name="hangingChars" as="xs:string?" select="$w:lvl/w:pPr/w:ind/@w:hangingChars/string(.)"/>
+    <xsl:choose>
+      <xsl:when test="string($hangingChars)">
+        <xsl:variable name="hangingInPt" select="concat(string((xs:integer($hangingChars) div 100) * ($baseStyleFontSize div 2)),'pt')"/>
+        <xsl:sequence select="ahf:toTwip($hangingInPt)"/>
+      </xsl:when>
+      <xsl:when test="string($hanging)">
+        <xsl:sequence select="xs:integer($hanging)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="0"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:function>
 
   <!-- 
