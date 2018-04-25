@@ -11,22 +11,7 @@ E-mail : info@antennahouse.com
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" 
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:o="urn:schemas-microsoft-com:office:office" 
-    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" 
-    xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" 
-    xmlns:v="urn:schemas-microsoft-com:vml" 
-    xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" 
-    xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" 
-    xmlns:w10="urn:schemas-microsoft-com:office:word" 
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
-    xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" 
-    xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" 
-    xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" 
-    xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" 
-    xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" 
-    xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" 
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     exclude-result-prefixes="xs ahf"
     version="3.0">
@@ -37,38 +22,34 @@ E-mail : info@antennahouse.com
     <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 
     <!--
-    function:   w:styles genral template
     param:      none
     return:     self and descendant node
     note:       
     -->
-    <xsl:template match="*">
+    <xsl:template match="node()">
         <xsl:copy>
-            <xsl:copy-of select="@*"/>
+            <xsl:apply-templates select="@*"/>
             <xsl:apply-templates/>
         </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="@*">
+        <xsl:copy/>
     </xsl:template>
     
     <!--
-    function:   w:styles template
+    function:   default run property
     param:      none
-    return:     w:styles
-    note:       Add one style
+    return:     w:rPrDefault
+    note:       
     -->
-    <xsl:template match="w:styles">
+    <xsl:template match="/w:styles/w:docDefaults/w:rPrDefault">
         <xsl:copy>
-            <xsl:copy-of select="@*"/>
-            <xsl:apply-templates/>
-            <!-- Make note rule line style -->
-            <xsl:variable name="bodyRightEdgeTwip" as="xs:integer" select="ahf:toTwip($pPaperWidth) - ahf:toTwip($pPaperMarginLeft) - ahf:toTwip($pPaperMarginRight)"/>
-            <xsl:variable name="normalStyleId" as="xs:string" select="ahf:getStyleIdFromName('Normal')"/>
-            <!--xsl:call-template name="getWmlObjectReplacing">
-                <xsl:with-param name="prmObjName" select="'wmlNoteLineStyle'"/>
-                <xsl:with-param name="prmSrc" select="('%based-on','%next-style')"/>
-                <xsl:with-param name="prmDst" select="($normalStyleId,$normalStyleId)"/>
-            </xsl:call-template-->
+            <xsl:apply-templates select="@*"/>
+            <xsl:call-template name="getWmlObject">
+                <xsl:with-param name="prmObjName" select="'wmlInlineDefault'"/>
+            </xsl:call-template>
         </xsl:copy>
     </xsl:template>
-    
 
 </xsl:stylesheet>

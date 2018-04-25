@@ -702,6 +702,15 @@ URL : http://www.antennahouse.com/
             <a:font script="Uigh" typeface="Microsoft Uighur"/>
             <a:font script="Geor" typeface="Sylfaen"/>
         </wml-object>        
+        
+        <!-- Default run (inline) property -->
+        <wml-object name="wmlInlineDefault">
+            <w:rPr>
+                <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsiaTheme="minorEastAsia"
+                    w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi"/>
+                <w:lang w:val="en-US" w:eastAsia="ja-JP" w:bidi="ar-SA"/>
+            </w:rPr>
+        </wml-object>
 
         <!-- Image -->
         <wml-object name="wmlImage">
