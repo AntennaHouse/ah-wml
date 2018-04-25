@@ -500,6 +500,9 @@ URL : http://www.antennahouse.com/
         <variable name="Appendix_Count_Format">A</variable>
 
         <!-- Hazard statement -->
+        <variable name="HazardStatementIcon">caution.png</variable>
+        <variable name="HazardStatementIconWidth">71.6mm</variable>
+        <variable name="HazardStatementIconHeight">63.1mm</variable>
         <variable name="HazardStatementSignalWordFontSize">15pt</variable>
         <variable name="HazardStatementSignalWordBaselineShift">-7pt</variable>
         <variable name="HazardStatementIconRelativeRatio">0.9</variable>
