@@ -1150,6 +1150,7 @@ URL : http://www.antennahouse.com/
                         </w:tcPr>
                         <w:p>
                             <w:pPr>
+                                <w:pStyle w:val="Title"/>
                                 <w:snapToGrid w:val="0"/>
                                 <w:spacing w:line="{ahf:toLineHeightStr('$HazardStatementTitleLineHeightRatio')}" w:lineRule="auto"/>
                                 <w:jc w:val="center"/>
@@ -1183,7 +1184,7 @@ URL : http://www.antennahouse.com/
         
         <!-- Hazardstatement row -->
         <variable name="HazardStatementRowTcMarTB">1mm</variable>
-        <variable name="HazardStatementRowTcMarLR">2mm</variable>
+        <variable name="HazardStatementRowTcMarLR">1mm</variable>
         
         <wml-object name="wmlHazardStatementRow">
             <w:tr>
