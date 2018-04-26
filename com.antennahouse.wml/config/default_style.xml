@@ -13,6 +13,7 @@ URL : http://www.antennahouse.com/
 <style-definition 
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
     xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+    xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
     xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
     xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
     xmlns:ahr="http://www.antennahouse.com/names/XSLT/Document/Function/Replace"
@@ -1257,6 +1258,196 @@ URL : http://www.antennahouse.com/
                 </w:pPr>
                 <ahr:panelChild/>
             </w:p>
+        </wml-object>
+        
+        <wml-object name="wmlFloatFig">
+            <w:drawing>
+                <wp:anchor distT="0" distB="0"
+                    distL="114300" distR="114300" simplePos="0"
+                    relativeHeight="1" behindDoc="0" locked="0" layoutInCell="1"
+                    allowOverlap="1">
+                    <wp:simplePos x="0" y="0"/>
+                    <wp:positionH relativeFrom="column">
+                        <wp:posOffset>2585085</wp:posOffset>
+                    </wp:positionH>
+                    <wp:positionV relativeFrom="paragraph">
+                        <wp:posOffset>0</wp:posOffset>
+                    </wp:positionV>
+                    <wp:extent cx="2765425" cy="2057400"/>
+                    <wp:effectExtent l="0" t="0" r="0" b="0"/>
+                    <!--wp:effectExtent l="0" t="0" r="15875" b="19050"/-->
+                    <wp:wrapSquare wrapText="bothSides"/>
+                    <wp:docPr id="1" name="Text Box 1"/>
+                    <wp:cNvGraphicFramePr/>
+                    <a:graphic
+                        xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+                        <a:graphicData
+                            uri="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">
+                            <wps:wsp>
+                                <wps:cNvSpPr txBox="1"/>
+                                <wps:spPr>
+                                    <a:xfrm>
+                                        <a:off x="0" y="0"/>
+                                        <a:ext cx="2765425" cy="2057400"/>
+                                    </a:xfrm>
+                                    <a:prstGeom prst="rect">
+                                        <a:avLst/>
+                                    </a:prstGeom>
+                                    <a:solidFill>
+                                        <a:schemeClr val="lt1"/>
+                                    </a:solidFill>
+                                    <!--a:ln w="6350">
+                                      <a:solidFill>
+                                      <a:prstClr val="black"/>
+                                      </a:solidFill>
+                                    </a:ln-->
+                                </wps:spPr>
+                                <wps:txbx>
+                                    <w:txbxContent>
+                                        <w:p>
+                                            <w:r>
+                                                <w:rPr>
+                                                    <w:noProof/>
+                                                </w:rPr>
+                                                <w:drawing>
+                                                    <wp:inline distT="0" distB="0" distL="0" distR="0">
+                                                        <wp:extent cx="2529205" cy="1303020"/>
+                                                        <wp:effectExtent l="0" t="0" r="4445" b="0"/>
+                                                        <wp:docPr id="2" name="gdi-model.emf"
+                                                            descr="gdi-model.emf"/>
+                                                        <wp:cNvGraphicFramePr/>
+                                                        <a:graphic
+                                                            xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+                                                            <a:graphicData
+                                                                uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                                                                <pic:pic
+                                                                    xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                                                                    <pic:nvPicPr>
+                                                                        <pic:cNvPr id="10001" name="gdi-model.emf"
+                                                                            descr="gdi-model.emf"/>
+                                                                        <pic:cNvPicPr/>
+                                                                    </pic:nvPicPr>
+                                                                    <pic:blipFill>
+                                                                        <a:blip r:embed="rId8" cstate="print">
+                                                                            <a:extLst>
+                                                                                <a:ext
+                                                                                    uri="{28A0092B-C50C-407E-A947-70E740481C1C}">
+                                                                                    <a14:useLocalDpi
+                                                                                        xmlns:a14="http://schemas.microsoft.com/office/drawing/2010/main"
+                                                                                        val="0"/>
+                                                                                </a:ext>
+                                                                            </a:extLst>
+                                                                        </a:blip>
+                                                                        <a:stretch>
+                                                                            <a:fillRect/>
+                                                                        </a:stretch>
+                                                                    </pic:blipFill>
+                                                                    <pic:spPr>
+                                                                        <a:xfrm>
+                                                                            <a:off x="0" y="0"/>
+                                                                            <a:ext cx="2529205" cy="1303020"/>
+                                                                        </a:xfrm>
+                                                                        <a:prstGeom prst="rect">
+                                                                            <a:avLst/>
+                                                                        </a:prstGeom>
+                                                                    </pic:spPr>
+                                                                </pic:pic>
+                                                            </a:graphicData>
+                                                        </a:graphic>
+                                                    </wp:inline>
+                                                </w:drawing>
+                                            </w:r>
+                                        </w:p>
+                                        <w:p>
+                                            <w:pPr>
+                                                <w:snapToGrid w:val="0"/>
+                                            </w:pPr>
+                                            <w:r>
+                                                <w:rPr>
+                                                    <w:rFonts w:hint="eastAsia"/>
+                                                </w:rPr>
+                                                <w:t>A</w:t>
+                                            </w:r>
+                                            <w:r>
+                                                <w:t>BCDEF</w:t>
+                                            </w:r>
+                                        </w:p>
+                                        <w:p>
+                                            <w:pPr>
+                                                <w:snapToGrid w:val="0"/>
+                                            </w:pPr>
+                                            <w:r>
+                                                <w:rPr>
+                                                    <w:rFonts w:hint="eastAsia"/>
+                                                </w:rPr>
+                                                <w:t>A</w:t>
+                                            </w:r>
+                                            <w:r>
+                                                <w:t>BCDEF</w:t>
+                                            </w:r>
+                                        </w:p>
+                                        <w:tbl>
+                                            <w:tblPr>
+                                                <w:tblStyle w:val="TableGrid"/>
+                                                <w:tblW w:w="0" w:type="auto"/>
+                                                <w:tblLook w:val="04A0" w:firstRow="1"
+                                                    w:lastRow="0" w:firstColumn="1" w:lastColumn="0"
+                                                    w:noHBand="0" w:noVBand="1"/>
+                                            </w:tblPr>
+                                            <w:tblGrid>
+                                                <w:gridCol w:w="4047"/>
+                                            </w:tblGrid>
+                                            <w:tr>
+                                                <w:tc>
+                                                    <w:tcPr>
+                                                        <w:tcW w:w="4062" w:type="dxa"/>
+                                                    </w:tcPr>
+                                                    <w:p>
+                                                        <w:pPr>
+                                                            <w:snapToGrid w:val="0"/>
+                                                            <w:rPr>
+                                                                <w:rFonts w:hint="eastAsia"/>
+                                                            </w:rPr>
+                                                        </w:pPr>
+                                                        <w:r>
+                                                            <w:rPr>
+                                                                <w:rFonts w:hint="eastAsia"/>
+                                                            </w:rPr>
+                                                            <w:t>G</w:t>
+                                                        </w:r>
+                                                        <w:r>
+                                                            <w:t>HIJKL</w:t>
+                                                        </w:r>
+                                                    </w:p>
+                                                </w:tc>
+                                            </w:tr>
+                                        </w:tbl>
+                                        <w:p>
+                                            <w:pPr>
+                                                <w:snapToGrid w:val="0"/>
+                                                <w:rPr>
+                                                    <w:rFonts w:hint="eastAsia"/>
+                                                </w:rPr>
+                                            </w:pPr>
+                                        </w:p>
+                                    </w:txbxContent>
+                                </wps:txbx>
+                                <wps:bodyPr rot="0" spcFirstLastPara="0"
+                                    vertOverflow="overflow" horzOverflow="overflow"
+                                    vert="horz" wrap="square" lIns="91440" tIns="45720"
+                                    rIns="91440" bIns="45720" numCol="1" spcCol="0"
+                                    rtlCol="0" fromWordArt="0" anchor="t" anchorCtr="0"
+                                    forceAA="0" compatLnSpc="1">
+                                    <a:prstTxWarp prst="textNoShape">
+                                        <a:avLst/>
+                                    </a:prstTxWarp>
+                                    <a:noAutofit/>
+                                </wps:bodyPr>
+                            </wps:wsp>
+                        </a:graphicData>
+                    </a:graphic>
+                </wp:anchor>
+            </w:drawing>
         </wml-object>
         
     </wml-objects>
