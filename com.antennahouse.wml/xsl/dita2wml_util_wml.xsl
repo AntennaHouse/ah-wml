@@ -28,7 +28,7 @@ URL : http://www.antennahouse.co.jp/
   
   <!-- base style font size (in half point) -->
   <xsl:variable name="baseStyleFontSize" as="xs:integer">
-    <xsl:variable name="baseStyleElem" as="element()" select="$templateStyleDoc/w:style[string(@w:type) eq 'paragraph'][string(@w:default) eq '1']"/>
+    <xsl:variable name="baseStyleElem" as="element()" select="$templateStyleDoc/w:styles/w:style[string(@w:type) eq 'paragraph'][string(@w:default) eq '1']"/>
     <xsl:choose>
       <xsl:when test="$baseStyleElem/w:rPr/w:sz/@w:val">
         <xsl:sequence select="xs:integer($baseStyleElem/w:rPr/w:sz/@w:val)"/>
@@ -38,6 +38,10 @@ URL : http://www.antennahouse.co.jp/
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
+
+  <!-- base style font size in twip -->
+  <xsl:variable name="baseStyleFontSizeInTwip" as="xs:integer" select="ahf:toTwip(concat(string($baseStyleFontSize div 2),'pt'))"/>
+  <xsl:variable name="baseStyleFontSizeInPt" as="xs:string" select="concat(string($baseStyleFontSize div 2),'pt')"/>
   
   <!-- document.xml document -->
   <xsl:variable name="templateDocumentDoc" as="document-node()?"

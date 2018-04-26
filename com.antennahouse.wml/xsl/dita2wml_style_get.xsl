@@ -1853,6 +1853,8 @@
                     <xsl:with-param name="PaperHeaderHeight" select="$pPaperHeaderHeight"/>
                     <xsl:with-param name="PaperFooterHeight" select="$pPaperFooterHeight"/>
                     <xsl:with-param name="PaperColumnGap   " select="$pPaperColumnGap"/>
+                    <xsl:with-param name="BaseFontSizeInTwip"  select="$baseStyleFontSizeInTwip"/>
+                    <xsl:with-param name="BaseFontSizeInPt"  select="$baseStyleFontSizeInPt"/>
                 </xsl:evaluate>
             </xsl:variable>
             <xsl:sequence select="$xPathResult"/>
