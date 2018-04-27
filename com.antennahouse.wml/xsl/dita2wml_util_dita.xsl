@@ -232,7 +232,7 @@ URL : http://www.antennahouse.co.jp/
     </xsl:function>
 
     <!-- 
-     function:	Get @output class value as xs:string+
+     function:	Get @output class value as xs:string*
      param:		prmElem
      return:	xs:string*
      note:		
