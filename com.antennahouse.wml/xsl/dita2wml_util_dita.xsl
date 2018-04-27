@@ -247,9 +247,9 @@ URL : http://www.antennahouse.co.jp/
      function:	Get @output class value with regex
      param:		prmElem, prmRegEx
      return:	xs:string
-     note:		prmRegEx must have two variable parts using "(" and ")"
+     note:		prmRegEx must have two parts using "(" and ")"
                 The first part is name of variable and second pat is the value of the variable.
-                Ex: outputclass="width60" & regex="(width)(\d+)"
+                Ex: outputclass="width60" & regx="(width)(\d+)"
      -->
     <xsl:function name="ahf:getOutputClassRegx" as="xs:string">
         <xsl:param name="prmElem" as="element()"/>
