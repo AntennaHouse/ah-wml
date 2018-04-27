@@ -1265,7 +1265,7 @@ URL : http://www.antennahouse.com/
         <wml-object name="wmlFloatFig">
             <w:drawing>
                 <wp:anchor distT="0" distB="0"
-                    distL="{ahf:toEmuStr('$FloatFigDistCommon')}" distR="{ahf:toEmuStr('$FloatFigDistCommon')}" simplePos="0"
+                    distL="%dist-l" distR="%dist-r" simplePos="0"
                     relativeHeight="1" behindDoc="0" locked="1" layoutInCell="1"
                     allowOverlap="1">
                     <wp:simplePos x="0" y="0"/>

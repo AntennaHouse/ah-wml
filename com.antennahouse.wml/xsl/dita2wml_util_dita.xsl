@@ -230,6 +230,48 @@ URL : http://www.antennahouse.co.jp/
         <xsl:variable name="topic" as="element()?" select="ahf:getTopicFromTopicRef($prmTopicRef)"/>
         <xsl:sequence select="if (exists($topic)) then ($topic is $prmElem) else false()"/>
     </xsl:function>
+
+    <!-- 
+     function:	Get @output class value as xs:string+
+     param:		prmElem
+     return:	xs:string*
+     note:		
+     -->
+    <xsl:function name="ahf:getOutputClass" as="xs:string*">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:variable name="outputClass" as="xs:string" select="normalize-space(string($prmElem/@outputclass))"/>
+        <xsl:sequence select="tokenize($outputClass,' ')"/>
+    </xsl:function>
+    
+    <!-- 
+     function:	Get @output class value with regex
+     param:		prmElem, prmRegEx
+     return:	xs:string
+     note:		prmRegEx must have two variable parts using "(" and ")"
+                The first part is name of variable and second pat is the value of the variable.
+                Ex: outputclass="width60" & regex="(width)(\d+)"
+     -->
+    <xsl:function name="ahf:getOutputClassRegx" as="xs:string">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:param name="prmRegx" as="xs:string"/>
+        <xsl:variable name="outputClassValues" as="xs:string*" select="ahf:getOutputClass($prmElem)"/>
+        <xsl:variable name="value" as="xs:string*">
+            <xsl:for-each select="$outputClassValues">
+                <xsl:if test="matches(.,$prmRegx)">
+                    <xsl:sequence select="replace(.,$prmRegx,'$2')"/>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:sequence select="if (exists($value)) then $value[last()] else ''"/>
+    </xsl:function>
+
+    <xsl:function name="ahf:getOutputClassRegxWithDefault" as="xs:string">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:param name="prmRegx" as="xs:string"/>
+        <xsl:param name="prmDefault" as="xs:string"/>
+        <xsl:variable name="result" as="xs:string" select="ahf:getOutputClassRegx($prmElem,$prmRegx)"/>
+        <xsl:sequence select="if ($result eq '') then $prmDefault else $result"/>
+    </xsl:function>
     
     <!-- end of stylesheet -->
 </xsl:stylesheet>

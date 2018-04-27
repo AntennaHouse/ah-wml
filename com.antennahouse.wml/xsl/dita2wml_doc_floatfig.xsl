@@ -29,7 +29,21 @@ URL : http://www.antennahouse.co.jp/
      note:      This template also called form block image processing.
                 If it is block level image, adjust the image size to fit the body domain.
      -->
-    <xsl:template match="*[contains(@class,' topic/floatfig ')]" name="processFloatFigInline" as="element(w:r)?">
+    <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]" name="processFloatFigInline" as="element(w:r)?" priority="5">
+        <xsl:param name="prmFloatFig" as="element()" required="no" select="."/>
+        <xsl:variable name="isRight" as="xs:boolean" select="string($prmFloatFig/@float) eq 'right'"/>
+        <xsl:variable name="widthPct" as="xs:integer" select="xs:integer(ahf:getOutputClassRegxWithDefault($prmFloatFig,'(width)(\d.)','50'))"/>
+        <xsl:variable name="distToTextInEmu" as="xs:integer">
+            <xsl:variable name="distToText" as="xs:string">
+                <xsl:call-template name="getVarValue">
+                    <xsl:with-param name="prmVarName" select="'FloatFigDistCommon'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:sequence select="ahf:toEmu($distToText)"/>
+        </xsl:variable>
+        <xsl:variable name="widthInEmu" as="xs:integer" select="xs:integer(round(ahf:toEmu($pPaperBodyWidthInMm) * $widthPct div 100 - $distToTextInEmu))"/>
+        <xsl:variable name="distL" as="xs:integer" select="if ($isRight) then $distToTextInEmu else 0"/>        
+        <xsl:variable name="distR" as="xs:integer" select="if (not($isRight)) then $distToTextInEmu else 0"/>        
     </xsl:template>
 
     <!-- END OF STYLESHEET -->
