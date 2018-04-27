@@ -37,10 +37,15 @@ E-mail : info@antennahouse.com
     <!-- shape id map for document contained objects that generates shape
          key:   id (ahf:generateId)
          value: occurrence number
-         notes: current target elements are image and note
+         notes: current target elements are image, note and floatfig
      -->
     <xsl:variable name="shapeIdMap" as="map(xs:string,xs:integer)">
-        <xsl:variable name="shapeIds" as="xs:string*" select="/descendant::*[ahf:seqContains(@class, (' topic/image ',' topic/note '))]/ahf:generateId(.)"/>
+        <xsl:variable name="shapeIds" as="xs:string*">
+            <!-- image & note -->
+            <xsl:sequence select="/descendant::*[ahf:seqContains(@class, (' topic/image ',' topic/note '))]/ahf:generateId(.)"/>
+            <!-- floatfig -->
+            <xsl:sequence select="/descendant::*[contains(@class, ' topic/floatfig ')]/ahf:generateId(.)"/>
+        </xsl:variable>
         <xsl:map>
             <xsl:for-each select="$shapeIds">
                 <xsl:variable name="key" as="xs:string" select="."/>
