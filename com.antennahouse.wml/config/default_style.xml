@@ -1262,6 +1262,12 @@ URL : http://www.antennahouse.com/
         
         <!-- Floating figure -->
         <variable name="FloatFigDistCommon">3.175mm</variable>
+        <variable name="FloatFigInsetLR">10pt</variable>
+        <variable name="FloatFigInsetTB">5pt</variable>
+        <variable name="FloatFigInsetL">$FloatFigInsetLR</variable>
+        <variable name="FloatFigInsetR">$FloatFigInsetLR</variable>
+        <variable name="FloatFigInsetT">$FloatFigInsetTB</variable>
+        <variable name="FloatFigInsetB">$FloatFigInsetTB</variable>
         <wml-object name="wmlFloatFig">
             <w:drawing>
                 <wp:anchor distT="0" distB="0"
@@ -1297,11 +1303,7 @@ URL : http://www.antennahouse.com/
                                     <a:solidFill>
                                         <a:schemeClr val="lt1"/>
                                     </a:solidFill>
-                                    <!--a:ln w="6350">
-                                      <a:solidFill>
-                                      <a:prstClr val="black"/>
-                                      </a:solidFill>
-                                    </a:ln-->
+                                    <ahr:frame/>
                                 </wps:spPr>
                                 <wps:txbx>
                                     <w:txbxContent>
@@ -1310,8 +1312,8 @@ URL : http://www.antennahouse.com/
                                 </wps:txbx>
                                 <wps:bodyPr rot="0" spcFirstLastPara="0"
                                     vertOverflow="overflow" horzOverflow="overflow"
-                                    vert="horz" wrap="square" lIns="91440" tIns="45720"
-                                    rIns="91440" bIns="45720" numCol="1" spcCol="0"
+                                    vert="horz" wrap="square" lIns="$FloatFigInsetL" tIns="$FloatFigInsetT"
+                                    rIns="$FloatFigInsetR" bIns="$FloatFigInsetB" numCol="1" spcCol="0"
                                     rtlCol="0" fromWordArt="0" anchor="t" anchorCtr="0"
                                     forceAA="0" compatLnSpc="1">
                                     <a:prstTxWarp prst="textNoShape">
@@ -1324,6 +1326,17 @@ URL : http://www.antennahouse.com/
                     </a:graphic>
                 </wp:anchor>
             </w:drawing>
+        </wml-object>
+        
+        <!-- Floatfig frame -->
+        <variable name="FloatFigFrameWidth">0.75pt</variable>
+        <variable name="FloatFigFrameColor">black</variable>
+        <wml-object name="wmlFloatFigFrame">
+            <a:ln w="{ahf:toEmuStr($FloatFigFrameWidth)}">
+              <a:solidFill>
+                  <a:prstClr val="$FloatFigFrameColor"/>
+              </a:solidFill>
+            </a:ln>
         </wml-object>
         
     </wml-objects>

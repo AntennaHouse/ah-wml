@@ -43,7 +43,19 @@ URL : http://www.antennahouse.co.jp/
         </xsl:variable>
         <xsl:variable name="widthInEmu" as="xs:integer" select="xs:integer(round(ahf:toEmu($pPaperBodyWidthInMm) * $widthPct div 100 - $distToTextInEmu))"/>
         <xsl:variable name="distL" as="xs:integer" select="if ($isRight) then $distToTextInEmu else 0"/>        
-        <xsl:variable name="distR" as="xs:integer" select="if (not($isRight)) then $distToTextInEmu else 0"/>        
+        <xsl:variable name="distR" as="xs:integer" select="if (not($isRight)) then $distToTextInEmu else 0"/>
+        <xsl:variable name="frame" as="element()">
+            <xsl:choose>
+                <xsl:when test="string($prmFloatFig/@frame) eq 'all'">
+                    <xsl:call-template name="getWmlObject">
+                        <xsl:with-param name="prmObjName" select="'wmlFloatFigFrame'"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="$cElemNull"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
     </xsl:template>
 
     <!-- END OF STYLESHEET -->
