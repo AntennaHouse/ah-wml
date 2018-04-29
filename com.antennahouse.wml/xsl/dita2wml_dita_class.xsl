@@ -61,6 +61,8 @@ E-mail : info@antennahouse.com
                 <xsl:variable name="isBlockImage" as="xs:boolean" select="contains($class,' topic/image ') and (string($prmNode/@placement) eq 'break')"/>
                 <xsl:variable name="isBlockLevelShortdesc" as="xs:boolean" select="exists($prmNode/self::*[contains(@class,' topic/shortdesc ')][parent::*[contains(@class,' topic/abstract ')]])"/>
                 <xsl:variable name="isPContentDesc" as="xs:boolean" select="$prmNode[contains(@class,' topic/desc ')] and $prmNode/ancestor::*/@class[ahf:seqContains(string(.),(' topic/fig ',' topic/table ',' topic/object '))]"/>
+                <xsl:variable name="isNotFloatFig" as="xs:boolean" select="not($prmNode[contains(@class,' floatfig-d/floatfig ')])"/>
+                <xsl:sequence select="($isOneOfBlockElement or $isBlockImage or $isBlockLevelShortdesc or $isPContentDesc) and $isNotFloatFig"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="false()"/>
