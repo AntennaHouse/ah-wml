@@ -35,7 +35,9 @@ E-mail : info@antennahouse.com
     <xsl:template name="ahf:getRevisedTextMap" as="document-node()">
         <xsl:param name="prmNode" as="node()*"/>
         <xsl:param name="prmInFn" as="xs:boolean" tunnel="yes" required="no" select="false()"/>
+        <xsl:param name="prmInFloatFig" as="xs:boolean" tunnel="yes" required="no" select="false()"/>
         <xsl:variable name="notInFn" as="xs:boolean" select="not($prmInFn)"/>
+        <xsl:variable name="notInFloatFig" as="xs:boolean" select="not($prmInFloatFig)"/>
         <!-- Original text map -->
         <xsl:variable name="textMapOriginal" as="document-node()">
             <xsl:document>
@@ -43,6 +45,7 @@ E-mail : info@antennahouse.com
                     <xsl:variable name="node" as="node()" select="."/>
                     <xsl:for-each select="$node/descendant-or-self::text()
                         [(empty(ancestor::*[contains(@class,' topic/fn ')]) and $notInFn) or $prmInFn]
+                        [(empty(ancestor::*[contains(@class,' floatfig-d/floatfig ')]) and $notInFloatFig) or $prmInFloatFig]
                         [empty(ancestor::*[ahf:seqContains(string(@class),(' topic/data ',' topic/data-about ',' topic/unknown '))])]
                         [empty(ancestor::*[ahf:seqContains(string(@class),(' topic/indexterm ',' indexing-d/index-see ',' indexing-d/index-see-also '))])]
                         [empty(ancestor::*[ahf:seqContains(string(@class),(' topic/image ', ' topic/foreign '))])]

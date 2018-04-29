@@ -50,6 +50,7 @@ E-mail : info@antennahouse.com
      return:	xs:boolean
      note:		abstract/shortdesc is assumed inline level.
                 topic/shortdesc is assumed as block level.
+                floatfig is assumed as inline level.
      -->
     <xsl:function name="ahf:isBlockElement" as="xs:boolean">
         <xsl:param name="prmNode" as="node()"/>
@@ -60,7 +61,6 @@ E-mail : info@antennahouse.com
                 <xsl:variable name="isBlockImage" as="xs:boolean" select="contains($class,' topic/image ') and (string($prmNode/@placement) eq 'break')"/>
                 <xsl:variable name="isBlockLevelShortdesc" as="xs:boolean" select="exists($prmNode/self::*[contains(@class,' topic/shortdesc ')][parent::*[contains(@class,' topic/abstract ')]])"/>
                 <xsl:variable name="isPContentDesc" as="xs:boolean" select="$prmNode[contains(@class,' topic/desc ')] and $prmNode/ancestor::*/@class[ahf:seqContains(string(.),(' topic/fig ',' topic/table ',' topic/object '))]"/>
-                <xsl:sequence select="$isOneOfBlockElement or $isBlockImage or $isBlockLevelShortdesc or $isPContentDesc"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="false()"/>
