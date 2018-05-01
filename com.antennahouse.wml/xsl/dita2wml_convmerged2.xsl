@@ -239,7 +239,7 @@ E-mail : info@antennahouse.com
                                 <xsl:with-param name="prmInFloatFig" tunnel="yes" select="true()"/>
                             </xsl:call-template>
                         </xsl:when>
-                        <xsl:when test="$inlineNode/self::*[ahf:seqContains(string(@class),(' topic/image ',' topic/foreign '))]">
+                        <xsl:when test="$inlineNode/self::*[contains(string(@class),' topic/image ')]">
                             <xsl:call-template name="generalElementProcessing"/>
                         </xsl:when>
                         <xsl:when test="$inlineNode/self::*[ahf:seqContains(string(@class),(' topic/data ',' topic/data-about ',' topic/unknown ',' topic/foreign '))]">
