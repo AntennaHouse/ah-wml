@@ -65,11 +65,13 @@ URL : http://www.antennahouse.co.jp/
                         <xsl:apply-templates select="$child[1]/node()">
                             <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
                             <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
+                            <xsl:with-param name="prmExtraIndent" tunnel="yes" select="0"/>
                         </xsl:apply-templates>
                     </w:p>
                     <xsl:apply-templates select="$child[position() gt 1]">
                         <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
                         <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
+                        <xsl:with-param name="prmExtraIndent" tunnel="yes" select="0"/>
                     </xsl:apply-templates>
                 </w:footnote>
             </xsl:for-each>
