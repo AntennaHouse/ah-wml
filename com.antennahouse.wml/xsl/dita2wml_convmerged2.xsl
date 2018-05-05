@@ -143,9 +143,11 @@ E-mail : info@antennahouse.com
     <xsl:template match="*[ahf:isPContentElement(.)]" name="processInlineContentElement" priority="5">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
-            <xsl:call-template name="ahf:processInline">
-                <xsl:with-param name="prmInline" select="node()"/>
-            </xsl:call-template>
+            <xsl:if test="exists(node())">
+                <xsl:call-template name="ahf:processInline">
+                    <xsl:with-param name="prmInline" select="node()"/>
+                </xsl:call-template>
+            </xsl:if>
         </xsl:copy>
     </xsl:template>
     
@@ -193,13 +195,14 @@ E-mail : info@antennahouse.com
      note:		
      -->
     <xsl:template name="ahf:processInline" as="node()*">
-        <xsl:param name="prmInline" as="node()*" required="yes"/>
+        <xsl:param name="prmInline" as="node()+" required="yes"/>
         <xsl:param name="prmTextMap" as="document-node()?" tunnel="yes" required="no" select="()"/>
         <xsl:variable name="textMap" as="document-node()">
             <xsl:choose>
                 <xsl:when test="empty($prmTextMap)">
                     <xsl:call-template name="ahf:getRevisedTextMap">
                         <xsl:with-param name="prmNode" select="$prmInline"/>
+                        <xsl:with-param name="prmBase" select="$prmInline[1]/parent::*"/>
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
@@ -251,10 +254,12 @@ E-mail : info@antennahouse.com
                         <xsl:otherwise>
                             <xsl:copy>
                                 <xsl:apply-templates select="@*"/>
-                                <xsl:call-template name="ahf:processInline">
-                                    <xsl:with-param name="prmInline" select="$inlineNode/child::node()"/>
-                                    <xsl:with-param name="prmTextMap" tunnel="yes" select="$textMap"/>
-                                </xsl:call-template>
+                                <xsl:if test="$inlineNode/node()">
+                                    <xsl:call-template name="ahf:processInline">
+                                        <xsl:with-param name="prmInline" select="$inlineNode/node()"/>
+                                        <xsl:with-param name="prmTextMap" tunnel="yes" select="$textMap"/>
+                                    </xsl:call-template>
+                                </xsl:if>
                             </xsl:copy>
                         </xsl:otherwise>
                     </xsl:choose>
@@ -283,7 +288,7 @@ E-mail : info@antennahouse.com
                 <xsl:sequence select="$prmText"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="string($prmTextMap/*[string(@id) eq $textId]/@val)"/>
+                <xsl:value-of select="string($prmTextMap/*[tokenize(string(@id),'&#x20;')[1] eq $textId]/@val)"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

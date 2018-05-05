@@ -214,7 +214,7 @@
         <echo message="Stylesheet=${prmStylesheetFile}"/>
         <echo message="user.input.dir=${user.input.dir}"/>
         <!--property name="classpath" refid="project.class.path"/-->
-        <echo message="classpath=${classpath}"/>
+        <!--echo message="classpath=${classpath}"/-->
         <echo message="template.dir.url=${template.dir.url}"/>
         <xslt processor="trax" in="${prmInputFile}" out="${prmOutputFile}" style="${prmStylesheetFile}" classpathref="project.class.path" force="true">
             <factory name="net.sf.saxon.TransformerFactoryImpl">

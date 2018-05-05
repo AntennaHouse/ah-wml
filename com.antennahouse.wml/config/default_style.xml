@@ -1261,6 +1261,7 @@ URL : http://www.antennahouse.com/
         </wml-object>
         
         <!-- Floating figure -->
+        <!--
         <variable name="FloatFigDistCommon">3.175mm</variable>
         <variable name="FloatFigInsetLR">10pt</variable>
         <variable name="FloatFigInsetTB">5pt</variable>
@@ -1327,6 +1328,7 @@ URL : http://www.antennahouse.com/
                 </wp:anchor>
             </w:drawing>
         </wml-object>
+        -->
         
         <!-- Floatfig frame -->
         <variable name="FloatFigFrameWidth">0.75pt</variable>
