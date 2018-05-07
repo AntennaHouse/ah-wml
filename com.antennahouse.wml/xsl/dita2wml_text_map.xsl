@@ -130,7 +130,7 @@ E-mail : info@antennahouse.com
                 </xsl:for-each>
             </xsl:document>
         </xsl:variable>
-        <!-- Genrate revised text -->
+        <!-- Generate revised text -->
         <xsl:variable name="textMapRevised">
             <xsl:document>
                 <xsl:for-each select="$textMapWithLeadingAndTrailingWhitesSaceInfo/*">

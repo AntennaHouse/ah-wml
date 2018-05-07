@@ -275,6 +275,9 @@ E-mail : info@antennahouse.com
      note:		Remove white space by following rule:
                 1. If there is following inline element, preserve trailing white-space as one space.
                 2. If there is preceding inline element, preserve leading white-space as one space.
+                Sometimes text() nodes with all white spaces are combined into one entry. In such a case 
+                $prmTextMap/*/@id is composed from plural ids of text(). This template adopt only the first 
+                text() occurrence to avoid generating unnecessary spaces.  
      -->
     <xsl:template name="ahf:processText" as="text()">
         <xsl:param name="prmText" as="text()" required="yes"/>
