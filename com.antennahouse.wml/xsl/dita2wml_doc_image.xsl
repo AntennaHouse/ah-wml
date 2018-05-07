@@ -229,16 +229,18 @@ URL : http://www.antennahouse.co.jp/
 
     <!-- 
      function:	adjust a image size considering the body text domain width
-     param:		prmImageSize, 
+     param:		prmImage,prmImageSize,prmIndentLevel,prmExtraIndent,prmWidthConstraintInEmu 
      return:	image size (width, height) in EMU
      note:		references tunnel parameter $prmIndentLevel, $prmExtraIndent
                 If the image is in a table cell, we cannot do anything because column width is hard to know.
+                If the image is in floatfig $prmWidthConstraintInEmu is passed not to over the text box size.
      -->
     <xsl:template name="ahf:adjustImageSize" as="xs:integer+">
         <xsl:param name="prmImage" required="yes" as="element()"/>
         <xsl:param name="prmImageSize" required="yes" as="xs:integer+" />
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmWidthConstraintInEmu" tunnel="yes" as="xs:integer?" select="()"/>
         <xsl:variable name="isInTableCell" as="xs:boolean" select="exists($prmImage/ancestor::*[ahf:seqContains(@class,(' topic/entry ',' topic/stentry '))])"/>
         <xsl:choose>
             <xsl:when test="$isInTableCell">
@@ -246,9 +248,9 @@ URL : http://www.antennahouse.co.jp/
             </xsl:when>
             <xsl:otherwise>
                 <!--xsl:message select="'image=',ahf:getHistoryStr($prmImage),'$prmImageSize=',$prmImageSize,' $prmIndentLevel=',$prmIndentLevel,' $prmExtraIndent=',$prmExtraIndent"/-->
-                <xsl:variable name="paperBodyWidth" as="xs:integer" select="ahf:toEmu($pPaperBodyWidth)"/>
+                <xsl:variable name="bodyWidth" as="xs:integer" select="if (empty($prmWidthConstraintInEmu)) then ahf:toEmu($pPaperBodyWidth) else $prmWidthConstraintInEmu"/>
                 <xsl:variable name="inheritedIndentSize" as="xs:integer" select="ahf:getIndentFromIndentLevelInEmu($prmIndentLevel,$prmExtraIndent)"/>
-                <xsl:variable name="remainBodyWidth" as="xs:integer" select="$paperBodyWidth - $inheritedIndentSize"/>
+                <xsl:variable name="remainBodyWidth" as="xs:integer" select="$bodyWidth - $inheritedIndentSize"/>
                 <!--xsl:message select="'$paperBodyWidth=',$paperBodyWidth,' $inheritedIndentSize=',$inheritedIndentSize,' $remainBodySize=',$remainBodyWidth"/-->
                 <xsl:choose>
                     <xsl:when test="$prmImageSize[1] gt $remainBodyWidth">

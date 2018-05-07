@@ -1849,7 +1849,7 @@
                     <xsl:with-param name="PaperMarginRight"  select="$pPaperMarginRight"/>
                     <xsl:with-param name="PaperMarginBottom" select="$pPaperMarginBottom"/>
                     <xsl:with-param name="PaperMarginLeft"   select="$pPaperMarginLeft"/>
-                    <xsl:with-param name="PaperBodyWidth"    select="$pPaperBodyWidthInMm"/>
+                    <xsl:with-param name="PaperBodyWidth"    select="$pPaperBodyWidth"/>
                     <xsl:with-param name="PaperHeaderHeight" select="$pPaperHeaderHeight"/>
                     <xsl:with-param name="PaperFooterHeight" select="$pPaperFooterHeight"/>
                     <xsl:with-param name="PaperColumnGap   " select="$pPaperColumnGap"/>

@@ -56,6 +56,15 @@ URL : http://www.antennahouse.co.jp/
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:variable name="txbxContent" as="document-node()">
+            <xsl:document>
+                <xsl:apply-templates>
+                    <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
+                    <xsl:with-param name="prmExtraIndent" tunnel="yes" select="0"/>
+                    <xsl:with-param name="prmWidthConstraintInEmu" tunnel="yes" as="xs:integer" select="$widthInEmu"/>
+                </xsl:apply-templates>
+            </xsl:document>
+        </xsl:variable>
     </xsl:template>
 
     <!-- END OF STYLESHEET -->
