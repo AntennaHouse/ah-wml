@@ -246,7 +246,7 @@ URL : http://www.antennahouse.co.jp/
             </xsl:when>
             <xsl:otherwise>
                 <!--xsl:message select="'image=',ahf:getHistoryStr($prmImage),'$prmImageSize=',$prmImageSize,' $prmIndentLevel=',$prmIndentLevel,' $prmExtraIndent=',$prmExtraIndent"/-->
-                <xsl:variable name="paperBodyWidth" as="xs:integer" select="ahf:toEmu($pPaperBodyWidthInMm)"/>
+                <xsl:variable name="paperBodyWidth" as="xs:integer" select="ahf:toEmu($pPaperBodyWidth)"/>
                 <xsl:variable name="inheritedIndentSize" as="xs:integer" select="ahf:getIndentFromIndentLevelInEmu($prmIndentLevel,$prmExtraIndent)"/>
                 <xsl:variable name="remainBodyWidth" as="xs:integer" select="$paperBodyWidth - $inheritedIndentSize"/>
                 <!--xsl:message select="'$paperBodyWidth=',$paperBodyWidth,' $inheritedIndentSize=',$inheritedIndentSize,' $remainBodySize=',$remainBodyWidth"/-->

@@ -140,6 +140,6 @@ E-mail : info@antennahouse.com
     <!-- paper related variables used here -->
     <xsl:variable name="pPaperWidth" as="xs:string" select="$cPaperInfo[$paperIndex + 1]"/>
     <xsl:variable name="pPaperHeight" as="xs:string" select="$cPaperInfo[$paperIndex + 2]"/>
-    <xsl:variable name="pPaperBodyWidthInMm" as="xs:string" select="concat(string(ahf:toMm($pPaperWidth) - ahf:toMm($pPaperMarginLeft) - ahf:toMm($pPaperMarginRight)),'mm')"/>
+    <xsl:variable name="pPaperBodyWidth" as="xs:string" select="concat(string(ahf:toMm($pPaperWidth) - ahf:toMm($pPaperMarginLeft) - ahf:toMm($pPaperMarginRight)),'mm')"/>
     
 </xsl:stylesheet>

@@ -80,7 +80,7 @@ URL : http://www.antennahouse.co.jp/
         </xsl:variable>
         
         <!-- Get table width -->
-        <xsl:variable name="tableWidthInTwip" as="xs:integer" select="ahf:toTwip($pPaperBodyWidthInMm)"/>
+        <xsl:variable name="tableWidthInTwip" as="xs:integer" select="ahf:toTwip($pPaperBodyWidth)"/>
         
         <!-- Message panel cell width -->
         <xsl:variable name="messagePanelCellWidthInTwip" as="xs:integer" select="$tableWidthInTwip - $hazardSymbolCellWidthInTwip"/>

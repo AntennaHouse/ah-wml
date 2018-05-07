@@ -41,7 +41,7 @@ URL : http://www.antennahouse.co.jp/
             </xsl:variable>
             <xsl:sequence select="ahf:toEmu($distToText)"/>
         </xsl:variable>
-        <xsl:variable name="widthInEmu" as="xs:integer" select="xs:integer(round(ahf:toEmu($pPaperBodyWidthInMm) * $widthPct div 100 - $distToTextInEmu))"/>
+        <xsl:variable name="widthInEmu" as="xs:integer" select="xs:integer(round(ahf:toEmu($pPaperBodyWidth) * $widthPct div 100 - $distToTextInEmu))"/>
         <xsl:variable name="distL" as="xs:integer" select="if ($isRight) then $distToTextInEmu else 0"/>        
         <xsl:variable name="distR" as="xs:integer" select="if (not($isRight)) then $distToTextInEmu else 0"/>
         <xsl:variable name="frame" as="element()">
