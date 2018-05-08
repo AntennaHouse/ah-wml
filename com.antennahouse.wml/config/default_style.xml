@@ -510,6 +510,10 @@ URL : http://www.antennahouse.com/
         <variable name="HazardStatementIconBaselineShift">-7pt</variable>
         <variable name="HazardSymbolWidth">10mm</variable>
         
+        <!-- floatfig -->
+        <variable name="PHeight">10.5pt</variable>
+        <variable name="PHeightInEmu">{ahf:toEmu('$PHeight')}</variable>
+        
     </variables>
     
     <attribute-sets>

@@ -15,6 +15,7 @@ URL : http://www.antennahouse.co.jp/
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
+    xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
     xmlns:graphicUtil="java:com.antennahouse.xsltutil.GraphicUtil"
@@ -26,8 +27,11 @@ URL : http://www.antennahouse.co.jp/
      function:	floatfig element processing
      param:		none
      return:	w:r
-     note:      This template also called form block image processing.
-                If it is block level image, adjust the image size to fit the body domain.
+     note:      Generate text-box for floatfig.
+                The width of the text-box is 50% of the text body or specified via @outputclass="widthNN".
+                The height of the text-box is hard to calculate because it's depend on the contents.
+                In this template the height is calculated using provisional method counting w:p has fixed height. 
+                (based on the assumption that w:p fits the text-box width.)
      -->
     <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]" name="processFloatFigInline" as="element(w:r)?" priority="5">
         <xsl:param name="prmFloatFig" as="element()" required="no" select="."/>
@@ -41,9 +45,11 @@ URL : http://www.antennahouse.co.jp/
             </xsl:variable>
             <xsl:sequence select="ahf:toEmu($distToText)"/>
         </xsl:variable>
-        <xsl:variable name="widthInEmu" as="xs:integer" select="xs:integer(round(ahf:toEmu($pPaperBodyWidth) * $widthPct div 100 - $distToTextInEmu))"/>
+        <xsl:variable name="paperBodyWidthInEmu" as="xs:integer" select="ahf:toEmu($pPaperBodyWidth)"/>
+        <xsl:variable name="widthInEmu" as="xs:integer" select="xs:integer(round($paperBodyWidthInEmu * $widthPct div 100 - $distToTextInEmu))"/>
         <xsl:variable name="distL" as="xs:integer" select="if ($isRight) then $distToTextInEmu else 0"/>        
         <xsl:variable name="distR" as="xs:integer" select="if (not($isRight)) then $distToTextInEmu else 0"/>
+        <xsl:variable name="posX" as="xs:integer" select="if ($isRight) then $paperBodyWidthInEmu - $widthInEmu else 0"/>
         <xsl:variable name="frame" as="element()">
             <xsl:choose>
                 <xsl:when test="string($prmFloatFig/@frame) eq 'all'">
@@ -65,8 +71,46 @@ URL : http://www.antennahouse.co.jp/
                 </xsl:apply-templates>
             </xsl:document>
         </xsl:variable>
+        <xsl:variable name="heightInEmu" as="xs:integer">
+            <xsl:variable name="pHeightInEmu" as="xs:integer">
+                <xsl:call-template name="getVarValueAsInteger">
+                    <xsl:with-param name="prmVarName" select="'PHeightInEmu'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:variable name="contentHeightsInEmu" as="xs:integer+">
+                <xsl:apply-templates select="$txbxContent/*" mode="MODE_GET_HEIGHT">
+                    <xsl:with-param name="prmPHeightInEmu" tunnel="yes" select="$pHeightInEmu"/>
+                </xsl:apply-templates>
+            </xsl:variable>
+            <xsl:sequence select="sum($contentHeightsInEmu)"/>
+        </xsl:variable>
+        
+        <!-- Generate text-box -->
+        <xsl:call-template name="getWmlObjectReplacing">
+            <xsl:with-param name="prmObjName" select="'wmlFloatFig'"/>
+            <xsl:with-param name="prmSrc" select="('%dist-l','%dist-r','%pos-x','%pos-y','%width','%height','node:txbxContent')"/>
+            <xsl:with-param name="prmDst" select="(string($distL),string($distR),string($posX),'0',string($widthInEmu),string($heightInEmu),$txbxContent)"/>
+        </xsl:call-template>
     </xsl:template>
 
+    <!-- Normal w:p -->
+    <xsl:template match="w:p[empty(w:r[1]/w:drawing/wp:inline/wp:extent/@cy) or exists(w:r[2])]" as="xs:integer" mode="MODE_GET_HEIGHT">
+        <xsl:param name="prmPHeightInEmu" as="xs:integer" tunnel="yes" required="yes"/>
+        <xsl:sequence select="$prmPHeightInEmu"/>
+    </xsl:template>
+    
+    <!-- w:p with block image -->
+    <xsl:template match="w:p[exists(w:r[1]/w:drawing/wp:inline/wp:extent/@cy)][empty(w:r[2])]" as="xs:integer" mode="MODE_GET_HEIGHT">
+        <xsl:param name="prmPHeightInEmu" as="xs:integer" tunnel="yes" required="yes"/>
+        <xsl:sequence select="xs:integer(w:r/w:drawing/wp:inline/wp:extent/@cy/string())"/>
+    </xsl:template>
+    
+    <!-- w:tbl (!) -->
+    <xsl:template match="w:tbl" as="xs:integer" mode="MODE_GET_HEIGHT">
+        <xsl:param name="prmPHeightInEmu" as="xs:integer" tunnel="yes" required="yes"/>
+        <xsl:sequence select="$prmPHeightInEmu * count(w:tr)"/>
+    </xsl:template>
+    
     <!-- END OF STYLESHEET -->
 
 </xsl:stylesheet>
