@@ -45,6 +45,7 @@ E-mail : info@antennahouse.com
             <xsl:sequence select="/descendant::*[ahf:seqContains(@class, (' topic/image ',' topic/note '))]/ahf:generateId(.)"/>
             <!-- floatfig -->
             <xsl:sequence select="/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]/ahf:generateId(.)"/>
+            <xsl:sequence select="/descendant::*[contains(@class,' floatfig-d/floatfig-group ')][string(@float) = ('left','right')]/ahf:generateId(.)"/>
         </xsl:variable>
         <xsl:map>
             <xsl:for-each select="$drawingIds">
