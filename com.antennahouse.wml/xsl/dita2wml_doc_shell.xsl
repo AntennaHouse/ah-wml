@@ -29,7 +29,7 @@ URL : http://www.antennahouse.co.jp/
     <xsl:include href="dita2wml_global_link.xsl"/>
     <xsl:include href="dita2wml_global_bookmark.xsl"/>
     <xsl:include href="dita2wml_global_fn.xsl"/>
-    <xsl:include href="dita2wml_global_shape.xsl"/>
+    <xsl:include href="dita2wml_global_drawing.xsl"/>
     <xsl:include href="dita2wml_param.xsl"/>
     <xsl:include href="dita2wml_param_papersize.xsl"/>
     <xsl:include href="dita2wml_style_get.xsl"/>

@@ -35,6 +35,8 @@ URL : http://www.antennahouse.co.jp/
      -->
     <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]" name="processFloatFigInline" as="element(w:r)?" priority="5">
         <xsl:param name="prmFloatFig" as="element()" required="no" select="."/>
+        <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId($prmFloatFig)"/>
+        <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
         <xsl:variable name="isRight" as="xs:boolean" select="string($prmFloatFig/@float) eq 'right'"/>
         <xsl:variable name="widthPct" as="xs:integer" select="xs:integer(ahf:getOutputClassRegxWithDefault($prmFloatFig,'(width)(\d.)','50'))"/>
         <xsl:variable name="distToTextInEmu" as="xs:integer">
@@ -86,11 +88,13 @@ URL : http://www.antennahouse.co.jp/
         </xsl:variable>
         
         <!-- Generate text-box -->
-        <xsl:call-template name="getWmlObjectReplacing">
-            <xsl:with-param name="prmObjName" select="'wmlFloatFig'"/>
-            <xsl:with-param name="prmSrc" select="('%dist-l','%dist-r','%pos-x','%pos-y','%width','%height','node:txbxContent')"/>
-            <xsl:with-param name="prmDst" select="(string($distL),string($distR),string($posX),'0',string($widthInEmu),string($heightInEmu),$txbxContent)"/>
-        </xsl:call-template>
+        <w:r>
+            <xsl:call-template name="getWmlObjectReplacing">
+                <xsl:with-param name="prmObjName" select="'wmlFloatFig'"/>
+                <xsl:with-param name="prmSrc" select="('%dist-l','%dist-r','%pos-x','%pos-y','%width','%height','%id','node:frame','node:txbxContent')"/>
+                <xsl:with-param name="prmDst" select="(string($distL),string($distR),string($posX),'0',string($widthInEmu),string($heightInEmu),string($drawingId),$frame,$txbxContent)"/>
+            </xsl:call-template>
+        </w:r>
     </xsl:template>
 
     <!-- Normal w:p -->

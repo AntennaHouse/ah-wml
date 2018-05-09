@@ -94,8 +94,8 @@ URL : http://www.antennahouse.co.jp/
         
         <xsl:variable name="iconFileId" as="xs:string" select="string(map:get($commonImageIdMap,$iconFileName))"/>
         
-        <xsl:variable name="shapeIdKey" as="xs:string" select="ahf:generateId(.)"/>
-        <xsl:variable name="shapeId" as="xs:string" select="xs:string(map:get($shapeIdMap,$shapeIdKey))"/>
+        <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId(.)"/>
+        <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
         
         <xsl:variable name="iconImageWidthInEmu" as="xs:integer">
             <xsl:variable name="iconImageWidth" as="xs:string">
@@ -139,7 +139,7 @@ URL : http://www.antennahouse.co.jp/
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlNoteImage'"/>
                 <xsl:with-param name="prmSrc" select="('%width','%height','%id','%name','%desc','%rid')"/>
-                <xsl:with-param name="prmDst" select="(string($hazardStatementIconActualWidthInEmu), string($hazardStatementIconActualHeightInEmu),$shapeId,string(@type),string(@type),concat($rIdPrefix,$iconFileId))"/>
+                <xsl:with-param name="prmDst" select="(string($hazardStatementIconActualWidthInEmu), string($hazardStatementIconActualHeightInEmu),$drawingId,string(@type),string(@type),concat($rIdPrefix,$iconFileId))"/>
             </xsl:call-template>
         </xsl:variable>
         
@@ -280,8 +280,8 @@ URL : http://www.antennahouse.co.jp/
                 <xsl:variable name="imageFileName" as="xs:string" select="ahf:substringAfterLast(ahf:bsToSlash($prmHazardSymbol/@href),'/')"/>
                 <xsl:variable name="imageIdKey" as="xs:string" select="string($prmHazardSymbol/@href)"/>
                 <xsl:variable name="imageId" as="xs:string" select="xs:string(map:get($imageIdMap,$imageIdKey))"/>
-                <xsl:variable name="shapeIdKey" as="xs:string" select="ahf:generateId($prmHazardSymbol)"/>
-                <xsl:variable name="shapeId" as="xs:string" select="xs:string(map:get($shapeIdMap,$shapeIdKey))"/>
+                <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId($prmHazardSymbol)"/>
+                <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
                 <xsl:variable name="proposedHazardSymbolWidthInEmu" as="xs:integer">
                     <xsl:variable name="proposedHazardSymbolWidth" as="xs:string">
                         <xsl:call-template name="getVarValue">
@@ -297,7 +297,7 @@ URL : http://www.antennahouse.co.jp/
                         <xsl:call-template name="getWmlObjectReplacing">
                             <xsl:with-param name="prmObjName" select="'wmlImage'"/>
                             <xsl:with-param name="prmSrc" select="('%width','%height','%id','%name','%desc','%rid')"/>
-                            <xsl:with-param name="prmDst" select="(string($proposedHazardSymbolWidthInEmu),string($hazardSymbolHeightInEmu),$shapeId,$imageFileName,$imageFileName,concat($rIdPrefix,$imageId))"/>
+                            <xsl:with-param name="prmDst" select="(string($proposedHazardSymbolWidthInEmu),string($hazardSymbolHeightInEmu),$drawingId,$imageFileName,$imageFileName,concat($rIdPrefix,$imageId))"/>
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>

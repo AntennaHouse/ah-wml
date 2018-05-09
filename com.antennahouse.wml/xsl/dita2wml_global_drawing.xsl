@@ -16,7 +16,7 @@ E-mail : info@antennahouse.com
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
 >
     <!-- *************************************** 
-            Global Shape Map
+            Global Drawing Map
          ***************************************-->
     
     <!-- w:drawing//wp:docPr/@id must have unique id value in a document.
@@ -27,10 +27,10 @@ E-mail : info@antennahouse.com
           If multiple objects within the same document share the same id attribute value, then the
           document shall be considered non-conformant."
      -->
-    <!-- shape id offset -->
-    <xsl:variable name="shapeIdOffset" as="xs:integer">
+    <!-- drawing id offset -->
+    <xsl:variable name="drawingIdOffset" as="xs:integer">
         <xsl:call-template name="getVarValueAsInteger">
-            <xsl:with-param name="prmVarName" select="'Default_Shape_Id_Offset'"/>
+            <xsl:with-param name="prmVarName" select="'Default_Drawing_Id_Offset'"/>
         </xsl:call-template>
     </xsl:variable>
 
@@ -39,17 +39,17 @@ E-mail : info@antennahouse.com
          value: occurrence number
          notes: current target elements are image, note and floatfig
      -->
-    <xsl:variable name="shapeIdMap" as="map(xs:string,xs:integer)">
-        <xsl:variable name="shapeIds" as="xs:string*">
+    <xsl:variable name="drawingIdMap" as="map(xs:string,xs:integer)">
+        <xsl:variable name="drawingIds" as="xs:string*">
             <!-- image & note -->
             <xsl:sequence select="/descendant::*[ahf:seqContains(@class, (' topic/image ',' topic/note '))]/ahf:generateId(.)"/>
             <!-- floatfig -->
-            <xsl:sequence select="/descendant::*[contains(@class, ' topic/floatfig ')]/ahf:generateId(.)"/>
+            <xsl:sequence select="/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]/ahf:generateId(.)"/>
         </xsl:variable>
         <xsl:map>
-            <xsl:for-each select="$shapeIds">
+            <xsl:for-each select="$drawingIds">
                 <xsl:variable name="key" as="xs:string" select="."/>
-                <xsl:variable name="id" as="xs:integer" select="position() + $shapeIdOffset"/>
+                <xsl:variable name="id" as="xs:integer" select="position() + $drawingIdOffset"/>
                 <xsl:map-entry key="$key" select="$id"/>
             </xsl:for-each>
         </xsl:map>
