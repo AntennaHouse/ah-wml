@@ -254,11 +254,12 @@ URL : http://www.antennahouse.co.jp/
     <xsl:function name="ahf:getOutputClassRegx" as="xs:string">
         <xsl:param name="prmElem" as="element()"/>
         <xsl:param name="prmRegx" as="xs:string"/>
+        <xsl:param name="prmReplace" as="xs:string"/>
         <xsl:variable name="outputClassValues" as="xs:string*" select="ahf:getOutputClass($prmElem)"/>
         <xsl:variable name="value" as="xs:string*">
             <xsl:for-each select="$outputClassValues">
                 <xsl:if test="matches(.,$prmRegx)">
-                    <xsl:sequence select="replace(.,$prmRegx,'$2')"/>
+                    <xsl:sequence select="replace(.,$prmRegx,$prmReplace)"/>
                 </xsl:if>
             </xsl:for-each>
         </xsl:variable>
@@ -268,8 +269,9 @@ URL : http://www.antennahouse.co.jp/
     <xsl:function name="ahf:getOutputClassRegxWithDefault" as="xs:string">
         <xsl:param name="prmElem" as="element()"/>
         <xsl:param name="prmRegx" as="xs:string"/>
+        <xsl:param name="prmReplace" as="xs:string"/>
         <xsl:param name="prmDefault" as="xs:string"/>
-        <xsl:variable name="result" as="xs:string" select="ahf:getOutputClassRegx($prmElem,$prmRegx)"/>
+        <xsl:variable name="result" as="xs:string" select="ahf:getOutputClassRegx($prmElem,$prmRegx,$prmReplace)"/>
         <xsl:sequence select="if ($result eq '') then $prmDefault else $result"/>
     </xsl:function>
     

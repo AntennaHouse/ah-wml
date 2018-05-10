@@ -39,7 +39,7 @@ URL : http://www.antennahouse.co.jp/
         <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId($prmFloatFig)"/>
         <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
         <xsl:variable name="isRight" as="xs:boolean" select="string($prmFloatFig/@float) eq 'right'"/>
-        <xsl:variable name="widthPct" as="xs:integer" select="xs:integer(ahf:getOutputClassRegxWithDefault($prmFloatFig,'(width)(\d.)','50'))"/>
+        <xsl:variable name="widthPct" as="xs:integer" select="xs:integer(ahf:getOutputClassRegxWithDefault($prmFloatFig,'(width)(\d+)(pct)?','$2','50'))"/>
         <xsl:variable name="distToTextInEmu" as="xs:integer">
             <xsl:variable name="distToText" as="xs:string">
                 <xsl:call-template name="getVarValue">
