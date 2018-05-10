@@ -90,6 +90,9 @@ E-mail : info@antennahouse.com
                                     <!-- Generate paragraph from inline -->
                                     <p>
                                         <xsl:copy-of select="$pAttr"/>
+                                        <xsl:if test="position() eq 1">
+                                            <xsl:copy-of select="parent::*/@*"/>
+                                        </xsl:if>
                                         <xsl:call-template name="ahf:processInline">
                                             <xsl:with-param name="prmInline" select="current-group()"/>
                                         </xsl:call-template>

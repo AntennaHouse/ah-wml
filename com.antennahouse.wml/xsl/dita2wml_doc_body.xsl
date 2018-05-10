@@ -28,7 +28,7 @@ URL : http://www.antennahouse.co.jp/
                 prmExtraIndent is used to express twip unit indent that is generated other than list.
                 prmTcAttr is used to control alignment in table cell.
      -->
-    <xsl:template match="*[contains(@class,' topic/p ')]" as="element(w:p)">
+    <xsl:template match="*[contains(@class,' topic/p ')]" as="element(w:p)+">
         <xsl:param name="prmListOccurenceNumber" tunnel="yes" required="no" as="xs:integer?" select="()"/>
         <xsl:param name="prmListLevel" tunnel="yes" required="no" as="xs:integer?" select="()"/>
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
@@ -42,6 +42,10 @@ URL : http://www.antennahouse.co.jp/
                 <xsl:with-param name="prmVarName" select="'P_Style'"/>
             </xsl:call-template>
         </xsl:variable>
+        <xsl:call-template name="ahf:generateDummyP">
+            <xsl:with-param name="prmRegx" select="'(before)(\d+)(p)'"/>
+            <xsl:with-param name="prmReplace" select="'$2'"/>
+        </xsl:call-template>
         <w:p>
             <xsl:choose>
                 <xsl:when test="$isChildOfStepSection">
@@ -103,7 +107,28 @@ URL : http://www.antennahouse.co.jp/
                 </xsl:call-template>
             </xsl:if>
         </w:p>
+        <xsl:call-template name="ahf:generateDummyP">
+            <xsl:with-param name="prmRegx" select="'(after)(\d+)(p)'"/>
+            <xsl:with-param name="prmReplace" select="'$2'"/>
+        </xsl:call-template>
     </xsl:template>
+    
+    <!-- 
+     function:	generate dummy <w:p> for floatfig
+     param:		prmP
+     return:	element(w:p)*
+     note:		
+     -->
+    <xsl:template name="ahf:generateDummyP" as="element(w:p)*">
+        <xsl:param name="prmElem" as="element()" required="no" select="."/>
+        <xsl:param name="prmRegx" as="xs:string" required="yes"/>
+        <xsl:param name="prmReplace" as="xs:string" required="yes"/>
+        <xsl:variable name="pCount" as="xs:integer" select="xs:integer(ahf:getOutputClassRegxWithDefault($prmElem,$prmRegx,$prmReplace,'0'))"/>
+        <xsl:for-each select="1 to $pCount">
+            <w:p/>
+        </xsl:for-each>        
+    </xsl:template>
+    
 
     <!-- 
      function:	div element processing
