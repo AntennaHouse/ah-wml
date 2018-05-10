@@ -82,7 +82,21 @@ URL : http://www.antennahouse.co.jp/
                     <xsl:with-param name="prmElem" select="parent::*"/>
                 </xsl:call-template>
             </xsl:if>
-            <xsl:apply-templates/>
+            <xsl:apply-templates>
+                <xsl:with-param name="prmSpaceBefore" tunnel="yes">
+                    <xsl:choose>
+                        <xsl:when test="$isChildOfStepSection">
+                            <xsl:sequence select="ahf:getSpaceBeforeFromStyleName($pStyle)"/>
+                        </xsl:when>
+                        <xsl:when test="$isFirstChildOfLi">
+                            <xsl:sequence select="ahf:getSpaceBeforeFromStyleName(ahf:getStyleNameFromLi(parent::*))"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="ahf:getSpaceBeforeFromStyleName($pStyle)"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:with-param>
+            </xsl:apply-templates>
             <xsl:if test="$isFirstChildOfLi">
                 <xsl:call-template name="genBookmarkEnd">
                     <xsl:with-param name="prmElem" select="parent::*"/>
