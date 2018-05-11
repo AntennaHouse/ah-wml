@@ -42,7 +42,7 @@ URL : http://www.antennahouse.co.jp/
                 <xsl:with-param name="prmVarName" select="'P_Style'"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:call-template name="ahf:generateDummyP">
+        <xsl:call-template name="ahf:genPFromOutputClass">
             <xsl:with-param name="prmRegx" select="'(before)(\d+)(p)'"/>
             <xsl:with-param name="prmReplace" select="'$2'"/>
         </xsl:call-template>
@@ -107,19 +107,19 @@ URL : http://www.antennahouse.co.jp/
                 </xsl:call-template>
             </xsl:if>
         </w:p>
-        <xsl:call-template name="ahf:generateDummyP">
+        <xsl:call-template name="ahf:genPFromOutputClass">
             <xsl:with-param name="prmRegx" select="'(after)(\d+)(p)'"/>
             <xsl:with-param name="prmReplace" select="'$2'"/>
         </xsl:call-template>
     </xsl:template>
     
     <!-- 
-     function:	generate dummy <w:p> for floatfig
-     param:		prmP
+     function:	generate <w:p> for floatfig position adjusting
+     param:		prmElem (that has @outputclass), prmRegx, prmReplace
      return:	element(w:p)*
-     note:		
+     note:		paragraph count is specified such as @outputclass="beforeNNp" or "afterNNp" where NN is digit
      -->
-    <xsl:template name="ahf:generateDummyP" as="element(w:p)*">
+    <xsl:template name="ahf:genPFromOutputClass" as="element(w:p)*">
         <xsl:param name="prmElem" as="element()" required="no" select="."/>
         <xsl:param name="prmRegx" as="xs:string" required="yes"/>
         <xsl:param name="prmReplace" as="xs:string" required="yes"/>

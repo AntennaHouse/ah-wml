@@ -245,25 +245,22 @@ URL : http://www.antennahouse.co.jp/
     
     <!-- 
      function:	Get @output class value with regex
-     param:		prmElem, prmRegEx
+     param:		prmElem, prmRegx, prmReplace
      return:	xs:string
-     note:		prmRegEx must have two parts using "(" and ")"
-                The first part is name of variable and second pat is the value of the variable.
-                Ex: outputclass="width60" & regx="(width)(\d+)"
+     note:		prmRegEx must have several parts using "(" and ")"
+                Ex: outputclass="width60" & prmRegx="(width)(\d+)" & prmReplace="$2"
      -->
     <xsl:function name="ahf:getOutputClassRegx" as="xs:string">
         <xsl:param name="prmElem" as="element()"/>
         <xsl:param name="prmRegx" as="xs:string"/>
         <xsl:param name="prmReplace" as="xs:string"/>
         <xsl:variable name="outputClassValues" as="xs:string*" select="ahf:getOutputClass($prmElem)"/>
-        <xsl:variable name="value" as="xs:string*">
-            <xsl:for-each select="$outputClassValues">
-                <xsl:if test="matches(.,$prmRegx)">
-                    <xsl:sequence select="replace(.,$prmRegx,$prmReplace)"/>
-                </xsl:if>
+        <xsl:variable name="value" as="xs:string?">
+            <xsl:for-each select="$outputClassValues[matches(.,$prmRegx)][1]">
+                <xsl:sequence select="replace(.,$prmRegx,$prmReplace)"/>
             </xsl:for-each>
         </xsl:variable>
-        <xsl:sequence select="if (exists($value)) then $value[last()] else ''"/>
+        <xsl:sequence select="if (exists($value)) then $value[1] else ''"/>
     </xsl:function>
 
     <xsl:function name="ahf:getOutputClassRegxWithDefault" as="xs:string">
