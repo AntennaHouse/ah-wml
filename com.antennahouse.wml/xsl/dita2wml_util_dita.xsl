@@ -260,7 +260,7 @@ URL : http://www.antennahouse.co.jp/
                 <xsl:sequence select="replace(.,$prmRegx,$prmReplace)"/>
             </xsl:for-each>
         </xsl:variable>
-        <xsl:sequence select="if (exists($value)) then $value[1] else ''"/>
+        <xsl:sequence select="if (exists($value)) then $value else ''"/>
     </xsl:function>
 
     <xsl:function name="ahf:getOutputClassRegxWithDefault" as="xs:string">

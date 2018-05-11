@@ -279,8 +279,8 @@ URL : http://www.antennahouse.co.jp/
   <xsl:function name="ahf:getStyleEntryFromStyleId" as="element(w:style)?">
     <xsl:param name="prmStyleId" as="xs:string"/>
     <xsl:choose>
-      <xsl:when test="$templateStyleDoc/w:styles/w:style/@w:styleId/string(.) eq $prmStyleId">
-        <xsl:sequence select="$templateStyleDoc/w:styles/w:style"/>
+      <xsl:when test="$templateStyleDoc/w:styles/w:style[@w:styleId/string(.) eq $prmStyleId]">
+        <xsl:sequence select="$templateStyleDoc/w:styles/w:style[@w:styleId/string(.) eq $prmStyleId]"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="warningContinue">
@@ -317,8 +317,8 @@ URL : http://www.antennahouse.co.jp/
           <xsl:when test="$styleEntry/w:basedOn/@w:val">
             <xsl:variable name="basedEntry" as="element(w:style)?" select="ahf:getStyleEntryFromStyleId($styleEntry/w:basedOn/@w:val/string(.))"/>
             <xsl:choose>
-              <xsl:when test="exists($styleEntry)">
-                <xsl:sequence select="ahf:getSpaceBeforeFromStyleName($styleEntry/w:name/@w:val/string(.))"/>
+              <xsl:when test="exists($basedEntry)">
+                <xsl:sequence select="ahf:getSpaceBeforeFromStyleName($basedEntry/w:name/@w:val/string(.))"/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:sequence select="'0pt'"/>
