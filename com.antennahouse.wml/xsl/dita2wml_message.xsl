@@ -468,11 +468,19 @@ URL : http://www.antennahouse.co.jp/
     <xsl:variable name="stMes2010">
         <xsl:text>[getStyleIdFromName 2010F] Style does not found in the template .docx. Name='%name'.</xsl:text>
     </xsl:variable>
-
+    
+    <xsl:variable name="stMes2011">
+        <xsl:text>[getStyleEntryFromId 2011F] Style does not found in the template .docx. Id='%id'.</xsl:text>
+    </xsl:variable>
+    
     <xsl:variable name="stMes2012">
         <xsl:text>[getAbstractNumIdFromStyleName 2012F] w:abstractNumId not found from style name:'%name'.</xsl:text>
     </xsl:variable>
 
+    <xsl:variable name="stMes2013">
+        <xsl:text>[getStyleEntryFromName 2012F] Style does not found in the template .docx. Name='%name'.</xsl:text>
+    </xsl:variable>
+    
     <xsl:variable name="stMes2015">
         <xsl:text>[style:variable 2015F] Invalid XPath expression: '%xpath'.</xsl:text>
     </xsl:variable>

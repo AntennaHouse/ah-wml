@@ -9,7 +9,7 @@ URL    : http://www.antennahouse.com/
 E-mail : info@antennahouse.com
 ****************************************************************
 -->
-<xsl:stylesheet version="2.0" 
+<xsl:stylesheet version="3.0" 
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
  xmlns:xs="http://www.w3.org/2001/XMLSchema"
  xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
@@ -32,42 +32,55 @@ E-mail : info@antennahouse.com
                 For instance text nodes in data, data-about, unknown, xref, image, foreign should be omitted from the target.
                 Also some elements such as image, xref, foreign are treated as special inline object.
      -->
+    
+    <xsl:template match="text()" mode="MODE_GEN_TEXT_MAP">
+        <xsl:variable name="text" as="xs:string" select="string(.)"/>
+        <text>
+            <xsl:attribute name="id" select="ahf:genHistoryId(.)"/>
+            <xsl:attribute name="val" select="string(.)"/>
+            <xsl:attribute name="parent" select="name(parent::*)"/>
+        </text>
+    </xsl:template>
+
+    <xsl:template match="*" mode="MODE_GEN_TEXT_MAP">
+        <xsl:apply-templates mode="#current"/>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class,' topic/fn ')]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
+    <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
+    <xsl:template match="*[ahf:seqContains(string(@class),(' topic/data ',' topic/data-about ',' topic/unknown '))]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
+    <xsl:template match="*[ahf:seqContains(string(@class),(' topic/indexterm ',' indexing-d/index-see ',' indexing-d/index-see-also '))]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
+    
+    <xsl:template match="*[contains(@class,' topic/image ')]" priority="5" mode="MODE_GEN_TEXT_MAP">
+        <xsl:call-template name="ahf:genInlineElement"/>
+    </xsl:template>
+    <xsl:template match="*[contains(@class,' topic/foreign ')]" priority="5" mode="MODE_GEN_TEXT_MAP">
+        <xsl:call-template name="ahf:genInlineElement"/>
+    </xsl:template>
+    <xsl:template match="*[contains(string(@class),' topic/xref ')][ahf:isInternalLink(string(@href))]" priority="5" mode="MODE_GEN_TEXT_MAP">
+        <xsl:call-template name="ahf:genInlineElement"/>
+    </xsl:template>
+    
+    <xsl:template name="ahf:genInlineElement">
+        <xsl:param name="prmElem" as="element()" required="no" select="."/>
+        <xsl:element name="{name($prmElem)}">
+            <xsl:attribute name="id" select="ahf:genHistoryId($prmElem)"/>
+            <xsl:attribute name="val" select="'xxxx'"/>
+            <xsl:attribute name="parent" select="name($prmElem/parent::*)"/>
+        </xsl:element>
+    </xsl:template>
+
     <xsl:template name="ahf:getRevisedTextMap" as="document-node()">
-        <xsl:param name="prmNode" as="node()*"/>
+        <xsl:param name="prmNode" as="node()+"/>
+        <xsl:param name="prmBase" as="element()"/>
         <xsl:param name="prmInFn" as="xs:boolean" tunnel="yes" required="no" select="false()"/>
+        <xsl:param name="prmInFloatFig" as="xs:boolean" tunnel="yes" required="no" select="false()"/>
         <xsl:variable name="notInFn" as="xs:boolean" select="not($prmInFn)"/>
+        <xsl:variable name="notInFloatFig" as="xs:boolean" select="not($prmInFloatFig)"/>
         <!-- Original text map -->
         <xsl:variable name="textMapOriginal" as="document-node()">
             <xsl:document>
-                <xsl:for-each select="$prmNode">
-                    <xsl:variable name="node" as="node()" select="."/>
-                    <xsl:for-each select="$node/descendant-or-self::text()
-                        [(empty(ancestor::*[contains(@class,' topic/fn ')]) and $notInFn) or $prmInFn]
-                        [empty(ancestor::*[ahf:seqContains(string(@class),(' topic/data ',' topic/data-about ',' topic/unknown '))])]
-                        [empty(ancestor::*[ahf:seqContains(string(@class),(' topic/indexterm ',' indexing-d/index-see ',' indexing-d/index-see-also '))])]
-                        [empty(ancestor::*[ahf:seqContains(string(@class),(' topic/image ', ' topic/foreign '))])]
-                        [empty(ancestor::*[contains(string(@class),' topic/xref ')][ahf:isInternalLink(string(@href))])]
-                        | $node/descendant-or-self::*[ahf:seqContains(string(@class),(' topic/image ',' topic/foreign '))]
-                        | $node/descendant-or-self::*[contains(string(@class),' topic/xref ')][ahf:isInternalLink(string(@href))]">
-                        <xsl:choose>
-                            <xsl:when test="self::text()">
-                                <xsl:variable name="text" as="xs:string" select="string(.)"/>
-                                <text>
-                                    <xsl:attribute name="id" select="ahf:genHistoryId(.)"/>
-                                    <xsl:attribute name="val" select="string(.)"/>
-                                    <xsl:attribute name="parent" select="name(parent::*)"/>
-                                </text>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:element name="{name()}">
-                                    <xsl:attribute name="id" select="ahf:genHistoryId(.)"/>
-                                    <xsl:attribute name="val" select="'xxxx'"/>
-                                    <xsl:attribute name="parent" select="name(parent::*)"/>
-                                </xsl:element>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:for-each>
-                </xsl:for-each>
+                <xsl:apply-templates select="$prmNode" mode="MODE_GEN_TEXT_MAP"/>
             </xsl:document>
         </xsl:variable>
         <!-- White-space combined text map -->
@@ -117,7 +130,7 @@ E-mail : info@antennahouse.com
                 </xsl:for-each>
             </xsl:document>
         </xsl:variable>
-        <!-- Genrate revised text -->
+        <!-- Generate revised text -->
         <xsl:variable name="textMapRevised">
             <xsl:document>
                 <xsl:for-each select="$textMapWithLeadingAndTrailingWhitesSaceInfo/*">

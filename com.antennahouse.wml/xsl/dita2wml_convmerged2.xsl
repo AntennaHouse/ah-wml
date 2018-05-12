@@ -90,6 +90,9 @@ E-mail : info@antennahouse.com
                                     <!-- Generate paragraph from inline -->
                                     <p>
                                         <xsl:copy-of select="$pAttr"/>
+                                        <xsl:if test="position() eq 1">
+                                            <xsl:copy-of select="parent::*/@*"/>
+                                        </xsl:if>
                                         <xsl:call-template name="ahf:processInline">
                                             <xsl:with-param name="prmInline" select="current-group()"/>
                                         </xsl:call-template>
@@ -143,9 +146,11 @@ E-mail : info@antennahouse.com
     <xsl:template match="*[ahf:isPContentElement(.)]" name="processInlineContentElement" priority="5">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
-            <xsl:call-template name="ahf:processInline">
-                <xsl:with-param name="prmInline" select="node()"/>
-            </xsl:call-template>
+            <xsl:if test="exists(node())">
+                <xsl:call-template name="ahf:processInline">
+                    <xsl:with-param name="prmInline" select="node()"/>
+                </xsl:call-template>
+            </xsl:if>
         </xsl:copy>
     </xsl:template>
     
@@ -193,13 +198,14 @@ E-mail : info@antennahouse.com
      note:		
      -->
     <xsl:template name="ahf:processInline" as="node()*">
-        <xsl:param name="prmInline" as="node()*" required="yes"/>
+        <xsl:param name="prmInline" as="node()+" required="yes"/>
         <xsl:param name="prmTextMap" as="document-node()?" tunnel="yes" required="no" select="()"/>
         <xsl:variable name="textMap" as="document-node()">
             <xsl:choose>
                 <xsl:when test="empty($prmTextMap)">
                     <xsl:call-template name="ahf:getRevisedTextMap">
                         <xsl:with-param name="prmNode" select="$prmInline"/>
+                        <xsl:with-param name="prmBase" select="$prmInline[1]/parent::*"/>
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
@@ -233,7 +239,13 @@ E-mail : info@antennahouse.com
                                 <xsl:with-param name="prmInFn" tunnel="yes" select="true()"/>
                             </xsl:call-template>
                         </xsl:when>
-                        <xsl:when test="$inlineNode/self::*[ahf:seqContains(string(@class),(' topic/image ',' topic/foreign '))]">
+                        <xsl:when test="$inlineNode/self::*[contains(@class,' floatfig-d/floatfig ')]">
+                            <xsl:call-template name="processBlocAndInlineContentElements">
+                                <xsl:with-param name="prmTextMap" tunnel="yes" select="()"/>
+                                <xsl:with-param name="prmInFloatFig" tunnel="yes" select="true()"/>
+                            </xsl:call-template>
+                        </xsl:when>
+                        <xsl:when test="$inlineNode/self::*[contains(string(@class),' topic/image ')]">
                             <xsl:call-template name="generalElementProcessing"/>
                         </xsl:when>
                         <xsl:when test="$inlineNode/self::*[ahf:seqContains(string(@class),(' topic/data ',' topic/data-about ',' topic/unknown ',' topic/foreign '))]">
@@ -245,10 +257,12 @@ E-mail : info@antennahouse.com
                         <xsl:otherwise>
                             <xsl:copy>
                                 <xsl:apply-templates select="@*"/>
-                                <xsl:call-template name="ahf:processInline">
-                                    <xsl:with-param name="prmInline" select="$inlineNode/child::node()"/>
-                                    <xsl:with-param name="prmTextMap" tunnel="yes" select="$textMap"/>
-                                </xsl:call-template>
+                                <xsl:if test="$inlineNode/node()">
+                                    <xsl:call-template name="ahf:processInline">
+                                        <xsl:with-param name="prmInline" select="$inlineNode/node()"/>
+                                        <xsl:with-param name="prmTextMap" tunnel="yes" select="$textMap"/>
+                                    </xsl:call-template>
+                                </xsl:if>
                             </xsl:copy>
                         </xsl:otherwise>
                     </xsl:choose>
@@ -264,6 +278,9 @@ E-mail : info@antennahouse.com
      note:		Remove white space by following rule:
                 1. If there is following inline element, preserve trailing white-space as one space.
                 2. If there is preceding inline element, preserve leading white-space as one space.
+                Sometimes text() nodes with all white spaces are combined into one entry. In such a case 
+                $prmTextMap/*/@id is composed from plural ids of text(). This template adopt only the first 
+                text() occurrence to avoid generating unnecessary spaces.  
      -->
     <xsl:template name="ahf:processText" as="text()">
         <xsl:param name="prmText" as="text()" required="yes"/>
@@ -277,7 +294,7 @@ E-mail : info@antennahouse.com
                 <xsl:sequence select="$prmText"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="string($prmTextMap/*[string(@id) eq $textId]/@val)"/>
+                <xsl:value-of select="string($prmTextMap/*[tokenize(string(@id),'&#x20;')[1] eq $textId]/@val)"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

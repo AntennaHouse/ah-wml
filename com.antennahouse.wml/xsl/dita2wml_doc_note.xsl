@@ -58,8 +58,8 @@ URL : http://www.antennahouse.co.jp/
         
         <xsl:variable name="iconFileId" as="xs:string" select="string(map:get($commonImageIdMap,$iconFileName))"/>
         
-        <xsl:variable name="shapeIdKey" as="xs:string" select="ahf:generateId(.)"/>
-        <xsl:variable name="shapeId" as="xs:string" select="xs:string(map:get($shapeIdMap,$shapeIdKey))"/>
+        <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId(.)"/>
+        <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
         
         <xsl:variable name="iconWidthInEmu" as="xs:string">
             <xsl:variable name="iconWidth" as="xs:string">
@@ -83,7 +83,7 @@ URL : http://www.antennahouse.co.jp/
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlNoteImage'"/>
                 <xsl:with-param name="prmSrc" select="('%width','%height','%id','%name','%desc','%rid')"/>
-                <xsl:with-param name="prmDst" select="($iconWidthInEmu,$iconHeightInEmu,$shapeId,string(@type),string(@type),concat($rIdPrefix,$iconFileId))"/>
+                <xsl:with-param name="prmDst" select="($iconWidthInEmu,$iconHeightInEmu,$drawingId,string(@type),string(@type),concat($rIdPrefix,$iconFileId))"/>
             </xsl:call-template>
         </xsl:variable>
 

@@ -246,6 +246,97 @@ URL : http://www.antennahouse.co.jp/
   </xsl:function>
 
   <!-- 
+     function:	Get style entry from style name
+     param:		prmStyleName
+     return:	element(w:style)?
+     note:		
+     -->
+  <xsl:function name="ahf:getStyleEntryFromStyleName" as="element(w:style)?">
+    <xsl:param name="prmStyleName" as="xs:string"/>
+    <xsl:choose>
+      <xsl:when test="$templateStyleDoc/w:styles/w:style[string(w:name/@w:val) eq $prmStyleName]">
+        <xsl:sequence select="$templateStyleDoc/w:styles/w:style[string(w:name/@w:val) eq $prmStyleName]"/>
+      </xsl:when>
+      <xsl:when test="$templateStyleDoc/w:styles/w:style[$prmStyleName = tokenize(string(w:aliases/@w:val), ',')]">
+        <xsl:sequence
+          select="$templateStyleDoc/w:styles/w:style[$prmStyleName = tokenize(string(w:aliases/@w:val), ',')]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="warningContinue">
+          <xsl:with-param name="prmMes" select="ahf:replace($stMes2013, ('%name'), ($prmStyleName))"/>
+        </xsl:call-template>
+        <xsl:sequence select="()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+  <!-- 
+     function:	Get style entry from style id
+     param:		prmStyleId
+     return:	element(w:style)?
+     note:		
+     -->
+  <xsl:function name="ahf:getStyleEntryFromStyleId" as="element(w:style)?">
+    <xsl:param name="prmStyleId" as="xs:string"/>
+    <xsl:choose>
+      <xsl:when test="$templateStyleDoc/w:styles/w:style[@w:styleId/string(.) eq $prmStyleId]">
+        <xsl:sequence select="$templateStyleDoc/w:styles/w:style[@w:styleId/string(.) eq $prmStyleId]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="warningContinue">
+          <xsl:with-param name="prmMes" select="ahf:replace($stMes2011, ('%id'), ($prmStyleId))"/>
+        </xsl:call-template>
+        <xsl:sequence select="()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+  <!-- 
+     function:	Get space-before from style name
+     param:		prmStyleName
+     return:	unit size in twip
+     note:		
+     -->
+  <xsl:function name="ahf:getSpaceBeforeFromStyleName" as="xs:string">
+    <xsl:param name="prmStyleName" as="xs:string"/>
+    <xsl:variable name="styleEntry" as="element(w:style)?" select="ahf:getStyleEntryFromStyleName($prmStyleName)"/>
+    <xsl:choose>
+      <xsl:when test="exists($styleEntry)">
+        <xsl:choose>
+          <xsl:when test="$styleEntry/w:pPr/w:spacing[empty(@w:beforelines)][empty(@w:beforeAutoSpacing)]/@w:before">
+            <xsl:sequence select="concat(string($styleEntry/w:pPr/w:spacing/@w:before),'twip')"/>
+          </xsl:when>
+          <xsl:when test="$styleEntry/w:pPr/w:spacing[empty(@w:beforeAutoSpacing)]/@w:beforelines">
+            <xsl:assert test="false()" select="'[ahf:getSpaceBeforeFromStyleName] w:spacing/@w:beforelines is specified!'"/>
+            <xsl:sequence select="'0pt'"/>
+          </xsl:when>
+          <xsl:when test="$styleEntry/w:pPr/w:spacing/@w:beforeAutoSpacing">
+            <xsl:assert test="false()" select="'[ahf:getSpaceBeforeFromStyleName] w:spacing/@w:beforeAutoSpacing is specified!'"/>
+            <xsl:sequence select="'0pt'"/>
+          </xsl:when>
+          <xsl:when test="$styleEntry/w:basedOn/@w:val">
+            <xsl:variable name="basedEntry" as="element(w:style)?" select="ahf:getStyleEntryFromStyleId($styleEntry/w:basedOn/@w:val/string(.))"/>
+            <xsl:choose>
+              <xsl:when test="exists($basedEntry)">
+                <xsl:sequence select="ahf:getSpaceBeforeFromStyleName($basedEntry/w:name/@w:val/string(.))"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:sequence select="'0pt'"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:sequence select="'0pt'"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="'0pt'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+  <!-- 
      function:	Get border with from any unit of value
      param:		prmUnitValue
      return:	The size in eighths of a point
