@@ -33,6 +33,14 @@ URL : http://www.antennahouse.co.jp/
                 In this template the height is calculated using provisional method counting w:p has fixed height. 
                 (based on the assumption that w:p fits the text-box width.)
      -->
+    <xsl:template match="*[contains(@class,' task/step ')]/*[contains(@class,' task/info ')][1]//*[contains(@class,' floatfig-d/floatfig ')]" priority="10"/>
+
+    <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')][string(@float) eq 'none']" priority="5">
+        <xsl:for-each select="*[contains(@class,' floatfig-d/floatfig-group ')][string(@float) = ('left','right')]">
+            <xsl:call-template name="processFloatFigInline"/>
+        </xsl:for-each>    
+    </xsl:template>
+    
     <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]" name="processFloatFigInline" as="element(w:r)?" priority="5">
         <xsl:param name="prmFloatFig" as="element()" required="no" select="."/>
         <xsl:param name="prmSpaceBefore" as="xs:string" tunnel="yes" required="no" select="'0pt'"/>

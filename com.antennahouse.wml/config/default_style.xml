@@ -1277,7 +1277,7 @@ URL : http://www.antennahouse.com/
                 <wp:anchor distT="0" distB="0"
                     distL="%dist-l" distR="%dist-r" simplePos="0"
                     relativeHeight="1" behindDoc="0" locked="1" layoutInCell="1"
-                    allowOverlap="0">
+                    allowOverlap="1">
                     <wp:simplePos x="0" y="0"/>
                     <wp:positionH relativeFrom="column">
                         <wp:posOffset>%pos-x</wp:posOffset>

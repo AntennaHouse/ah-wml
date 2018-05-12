@@ -27,7 +27,10 @@ URL : http://www.antennahouse.co.jp/
                 prmIndentLevel is used to count the indent level that list nesting generates.
                 prmExtraIndent is used to express twip unit indent that is generated other than list.
                 prmTcAttr is used to control alignment in table cell.
+                - If <p> is first child of <step> and <step> contains info/floatfig, it is pulled at the start of w:p.
      -->
+    <xsl:template match="*[contains(@class,' task/info ')]/*[contains(@class,' topic/p ')][empty(child::text())][every $e in child::* satisfies exists($e[contains(@class,' floatfig-d/floatfig ')])]" priority="5"/>
+    
     <xsl:template match="*[contains(@class,' topic/p ')]" as="element(w:p)+">
         <xsl:param name="prmListOccurenceNumber" tunnel="yes" required="no" as="xs:integer?" select="()"/>
         <xsl:param name="prmListLevel" tunnel="yes" required="no" as="xs:integer?" select="()"/>
@@ -35,8 +38,10 @@ URL : http://www.antennahouse.co.jp/
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmTcAttr" tunnel="yes" as="element()?" select="()"/>
         <xsl:variable name="isChildOfStepSection" as="xs:boolean" select="exists(parent::*[contains(@class,' task/stepsection ')])"/>
+        <xsl:variable name="isFirstChildOfStep" as="xs:boolean" select="exists(parent::*[contains(@class,' task/step ')]/*[1][. is current()])"/>
         <xsl:variable name="isFirstChildOfLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/*[1][. is current()])"/>
         <xsl:variable name="isChildOfOlLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/parent::*[contains(@class,' topic/ol ')])"/>
+        <xsl:variable name="floatFigs" as="element()*" select="parent::*[contains(@class,' task/step ')]/*[contains(@class,' task/info ')][1]//*[contains(@class,' floatfig-d/floatfig ')]"/>
         <xsl:variable name="pStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
                 <xsl:with-param name="prmVarName" select="'P_Style'"/>
@@ -85,6 +90,11 @@ URL : http://www.antennahouse.co.jp/
                 <xsl:call-template name="genBookmarkStart">
                     <xsl:with-param name="prmElem" select="parent::*"/>
                 </xsl:call-template>
+            </xsl:if>
+            <xsl:if test="exists($floatFigs)">
+                <xsl:for-each select="$floatFigs">
+                    <xsl:call-template name="processFloatFigInline"/>
+                </xsl:for-each>
             </xsl:if>
             <xsl:apply-templates>
                 <xsl:with-param name="prmSpaceBefore" tunnel="yes">
