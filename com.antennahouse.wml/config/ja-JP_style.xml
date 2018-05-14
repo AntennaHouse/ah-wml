@@ -3,7 +3,7 @@
 ************************************************************
 DITA to XSL-FO Style Definition 
 ************************************************************
-File Name : en-US_style.xml
+File Name : ja-JP_style.xml
 ************************************************************
 Copyright © 2009-2018 Antenna House, Inc.
 Antenna House is a trademark of Antenna House, Inc.
@@ -18,7 +18,7 @@ URL : http://www.antennahouse.com/
     xmlns="http://www.antennahouse.com/names/XSLT/Document/Layout">
     
     <variables>
-        <variable name="IndexOptionEtc">\z en-us</variable>
+        <variable name="IndexOptionEtc">\z ja-jp \y</variable>
     </variables>
     
     <attribute-sets>

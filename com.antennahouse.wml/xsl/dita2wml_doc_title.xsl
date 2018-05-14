@@ -61,6 +61,7 @@ URL : http://www.antennahouse.co.jp/
             <xsl:call-template name="genBookmarkStart">
                 <xsl:with-param name="prmElem" select="parent::*"/>
             </xsl:call-template>
+            <xsl:apply-templates select="$prmTopic/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/*[contains(@class,' topic/indexterm ')]"/>
             <xsl:apply-templates/>
             <xsl:call-template name="genBookmarkEnd">
                 <xsl:with-param name="prmElem" select="parent::*"/>
@@ -106,7 +107,50 @@ URL : http://www.antennahouse.co.jp/
         </w:p>
     </xsl:template>
     
-
+    <!-- 
+     function:	topiref title for indexlist, etc
+     param:		prmTopicRef, prmTopicRefLevel
+     return:	w:p
+     note:		
+     -->
+    <xsl:template name="genTopicRefTitle">
+        <xsl:param name="prmTopicRef"       as="element()"  required="yes"/>
+        <xsl:param name="prmTopicRefLevel"  as="xs:integer" required="yes"/>
+        <xsl:param name="prmTitle"          as="xs:string"  required="no" select="''"/>
+        
+        <xsl:variable name="isInFrontmatterOrBackmatter" as="xs:boolean" select="exists($prmTopicRef/ancestor-or-self::*[ahf:seqContains(@class,(' bookmap/frontmatter',' bookmap/backmatter '))])"/>
+        <w:p>
+            <w:pPr>
+                <w:pStyle>
+                    <xsl:attribute name="w:val" select="ahf:getStyleIdFromName(concat('heading ',string($prmTopicRefLevel)))"/>
+                </w:pStyle>
+                <xsl:if test="$pAddChapterNumberPrefixToTopicTitle and not($isInFrontmatterOrBackmatter)">
+                    <w:numPr>
+                        <w:ilvl w:val="{ahf:getIlvlFromTopicLevel($prmTopicRefLevel)}"/>
+                        <w:numId w:val="{$numIdForTopicTitle}"/>
+                    </w:numPr>
+                </xsl:if>
+            </w:pPr>
+            <xsl:choose>
+                <xsl:when test="string($prmTitle)">
+                    <w:r>
+                        <w:t xml:space="preserve"><xsl:value-of select="$prmTitle"/></w:t>
+                    </w:r>
+                </xsl:when>
+                <xsl:when test="$prmTopicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]">
+                    <xsl:apply-templates select="$prmTopicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/node()">
+                        <xsl:with-param name="prmTopicRef" tunnel="yes" select="$prmTopicRef"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:when test="$prmTopicRef/@navtitle">
+                    <w:r>
+                        <w:t xml:space="preserve"><xsl:value-of select="$prmTopicRef/@navtitle"/></w:t>
+                    </w:r>
+                </xsl:when>
+            </xsl:choose>
+        </w:p>
+    </xsl:template>
+    
 
     <!-- 
      function:	Generate prefix of title

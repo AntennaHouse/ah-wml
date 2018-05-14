@@ -939,7 +939,22 @@ URL : http://www.antennahouse.com/
                 <w:fldChar w:fldCharType="end"/>
             </w:r>
         </wml-object>
-
+        
+        <!-- INDEX Field -->
+        <wml-object name="wmlIndexField">
+            <w:r>
+                <w:fldChar w:fldCharType="begin"/>
+            </w:r>
+            <w:r>
+                <w:instrText xml:space="preserve"> INDEX %field-opt </w:instrText>
+            </w:r>
+            <w:r>
+                <w:fldChar w:fldCharType="end"/>
+            </w:r>
+        </wml-object>
+        
+        <variable name="IndexOptionEtc">\z en-us </variable>
+        
         <!-- w:abstractNum for topic/title -->
         <wml-object name="wmlTopicTitleAbstractNum">
             <w:abstractNum w:abstractNumId="$Abstract_NumId_For_Topic_Title">
