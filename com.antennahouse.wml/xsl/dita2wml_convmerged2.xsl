@@ -314,17 +314,19 @@ E-mail : info@antennahouse.com
     <xsl:template name="ahf:processIndexterm" as="element()*">
         <xsl:variable name="indexterm" as="element()" select="."/>
         <xsl:variable name="nestedLastIndextermSeq" as="element()*" 
-            select="$indexterm//*[self::*[contains(@class,$indextermClass)] and empty(*[contains(@class,$indextermClass)]) and empty(ancestor::*[ahf:seqContains(@class,$indextermSeeSeeAsloClassGroup)])]
-                  | $indexterm//*[self::*[ahf:seqContains(@class,$indextermSeeSeeAsloClassGroup)]]"/>
+            select="$indexterm/descendant-or-self::*[self::*[contains(@class,$indextermClass)] and empty(*[contains(@class,$indextermClass)]) and empty(ancestor::*[ahf:seqContains(@class,$indextermSeeSeeAsloClassGroup)])]
+                  | $indexterm/descendant::*[self::*[ahf:seqContains(@class,$indextermSeeSeeAsloClassGroup)]]"/>
         <xsl:for-each select="$nestedLastIndextermSeq">
             <xsl:variable name="last" as="element()" select="."/>
             <xsl:variable name="indextermSeq" as="element()+" select="$last/ancestor-or-self::*[ahf:seqContains(string(@class),$indextermClassGroup)]"/>
             <xsl:for-each select="$indextermSeq[1]">
                 <xsl:copy>
                     <xsl:copy-of select="@*"/>
+                    <xsl:text>"</xsl:text>
                     <xsl:for-each select="$indextermSeq">
                         <xsl:apply-templates select="." mode="MODE_BUILD_INDEXTERM_TEXT"/>
                     </xsl:for-each>
+                    <xsl:text>"</xsl:text>
                 </xsl:copy>
             </xsl:for-each>
         </xsl:for-each>
