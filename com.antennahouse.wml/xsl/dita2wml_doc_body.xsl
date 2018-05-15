@@ -116,6 +116,7 @@ URL : http://www.antennahouse.co.jp/
                     <xsl:with-param name="prmElem" select="parent::*"/>
                 </xsl:call-template>
             </xsl:if>
+            <xsl:call-template name="ahf:genClearTextWrap"/>
         </w:p>
         <xsl:call-template name="ahf:genPFromOutputClass">
             <xsl:with-param name="prmRegx" select="'(after)(\d+)(p)'"/>

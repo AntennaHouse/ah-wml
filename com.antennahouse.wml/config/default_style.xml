@@ -1358,6 +1358,12 @@ URL : http://www.antennahouse.com/
             </a:ln>
         </wml-object>
         
+        <wml-object name="wmlClerTextWrapping">
+            <w:r>
+                <w:br w:type="textWrapping" w:clear="%clear-val"/>
+            </w:r>
+        </wml-object>
+        
     </wml-objects>
 
     <!-- DO NOT REMOVE! Style customize inclusion -->
