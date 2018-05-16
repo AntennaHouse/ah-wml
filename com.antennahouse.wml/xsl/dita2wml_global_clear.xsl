@@ -145,13 +145,27 @@ E-mail : info@antennahouse.com
         <xsl:variable name="clearVal" as="xs:string?" select="map:get($clearElemMap,ahf:generateId($prmElem))"/>
         <xsl:if test="exists($clearVal)">
             <xsl:call-template name="getWmlObjectReplacing">
-                <xsl:with-param name="prmObjName" select="'wmlClerTextWrapping'"/>
+                <xsl:with-param name="prmObjName" select="'wmlClearTextWrapping'"/>
                 <xsl:with-param name="prmSrc" select="('%clear-val')"/>
                 <xsl:with-param name="prmDst" select="if ($clearVal = ('both','')) then 'all' else $clearVal"/>
             </xsl:call-template>
         </xsl:if>
     </xsl:template>
-    
+
+    <xsl:template name="ahf:genClearTextWrapP" as="element(w:p)?">
+        <xsl:param name="prmElem" as="element()" required="no" select="."/>
+        <xsl:message select="'[ahf:genClearTextWrapP] id=',ahf:generateId($prmElem)"/>
+        <xsl:variable name="clearVal" as="xs:string?" select="map:get($clearElemMap,ahf:generateId($prmElem))"/>
+        <xsl:message select="if (exists($clearVal)) then 'Matched!' else 'Unmatched!'"/>
+        <xsl:if test="exists($clearVal)">
+            <xsl:call-template name="getWmlObjectReplacing">
+                <xsl:with-param name="prmObjName" select="'wmlClearTextWrappingP'"/>
+                <xsl:with-param name="prmSrc" select="('%clear-val')"/>
+                <xsl:with-param name="prmDst" select="if ($clearVal = ('both','')) then 'all' else $clearVal"/>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+
     <!--xsl:variable name="mapEntrySeq" as="xs:string+" select="map:for-each($columnMapDebug,function($k, $v){(string($k),$v[1],$v[2],$v[3],$v[4])})"/-->
 
     <!-- 
