@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 **************************************************************
-DITA to XSL-FO Stylesheet
+DITA to WordprocessingML Stylesheet
 Message definition
 **************************************************************
 File Name : dita2fo_message.xsl
