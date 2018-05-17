@@ -175,7 +175,7 @@ E-mail : info@antennahouse.com
      note:		
      -->
     <xsl:template name="ahf:dumpClearElemMap">
-        <xsl:variable name="mapEntrySeq" as="xs:string+" select="map:for-each($clearElemMap,function($k, $v){string($k),string($v)})"/>
+        <xsl:variable name="mapEntrySeq" as="xs:string*" select="map:for-each($clearElemMap,function($k, $v){string($k),string($v)})"/>
         <xsl:result-document href="{concat($pTempDirUrl,'ClearElemMap.xml')}" method="xml" indent="yes">
             <map>
                 <xsl:for-each select="1 to count($mapEntrySeq) div 2">
