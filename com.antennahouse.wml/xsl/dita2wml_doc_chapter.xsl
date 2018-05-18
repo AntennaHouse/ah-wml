@@ -8,7 +8,7 @@ File Name : dita2wml_document_chapter.xsl
 **************************************************************
 Copyright © 2009-2017 Antenna House, Inc. All rights reserved.
 Antenna House is a trademark of Antenna House, Inc.
-URL : http://www.antennahouse.co.jp/
+URL : http://www.antennahouse.com/
 **************************************************************
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
