@@ -78,7 +78,7 @@ URL : http://www.antennahouse.com/
     </xsl:template>
 
     <!-- 
-     function:	retrun image size in EMU using DITA-OT generated image size
+     function:	return image size in EMU using DITA-OT generated image size
      param:		prmImage
      return:	image size (width, height) in EMU
      note:		Current DITA-OT only returns PNG image resolution.
@@ -161,7 +161,7 @@ URL : http://www.antennahouse.com/
     </xsl:template>
 
     <!-- 
-     function:	retrun image size information:
+     function:	return image size information:
                 Width and height in pixel, both dimension resolution, scale
      param:		prmImage image element
                 prmMapDirUrl base map directory
