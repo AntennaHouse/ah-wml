@@ -52,58 +52,20 @@ E-mail : info@antennahouse.com
                 <xsl:variable name="elem" as="element()" select="."/>
                 <xsl:variable name="targetCandidate" as="element()?">
                     <xsl:variable name="precedingElem" as="element()?" select="$elem/preceding-sibling::*[1]"/>
-                    <xsl:variable name="precedingChildElem" select="$precedingElem/*[ahf:isNotFloatFigOnlyElem(.)][last()]"/>
-                    <xsl:choose>
-                        <xsl:when test="$precedingChildElem/self::*[contains(@class,' topic/p ')]">
-                            <xsl:sequence select="$precedingChildElem"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:sequence select="$precedingChildElem/*[last()]"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:sequence select="$precedingElem"/>
                 </xsl:variable>
+                <!--xsl:message select="'$targetCandidate=',$targetCandidate"/-->
                 <xsl:choose>
-                    <xsl:when test="$elem[contains(@class,' task/step ')]">
-                        <xsl:message select="'$targetCandidate=',$targetCandidate"/>
-                        <xsl:choose>
-                            <xsl:when test="empty($targetCandidate)">
-                                <xsl:sequence select="concat('#',string(position()))"/>
-                            </xsl:when>
-                            <xsl:when test="$targetCandidate[contains(@class,' topic/p ')]">
-                                <xsl:sequence select="ahf:generateId($targetCandidate)"/>
-                            </xsl:when>
-                            <xsl:when test="$targetCandidate[contains(@class,' topic/itemgroup ')]">
-                                <xsl:sequence select="ahf:generateId($targetCandidate/*[last()])"/>
-                            </xsl:when>
-                            <xsl:when test="$targetCandidate[contains(@class,' task/choices ')]">
-                                <xsl:sequence select="ahf:generateId($targetCandidate/*[contains(@class,' task/choice ')][last()])"/>
-                            </xsl:when>
-                            <xsl:when test="$targetCandidate[contains(@class,' task/choicetable  ')]">
-                                <xsl:sequence select="ahf:generateId($targetCandidate)"/>
-                            </xsl:when>
-                            <xsl:when test="$targetCandidate[contains(@class,' task/substeps ')]">
-                                <xsl:sequence select="ahf:generateId($targetCandidate/*[contains(@class,' task/substep ')][last()])"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:assert test="false()" select="'[clearElemMap] Invalid step child element=',$targetCandidate/name(.)"/>
-                                <xsl:sequence select="concat('#',string(position()))"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
+                    <xsl:when test="empty($targetCandidate)">
+                        <xsl:sequence select="concat('#',string(position()))"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:choose>
-                            <xsl:when test="$targetCandidate/preceding-sibling::*[1]">
-                                <xsl:sequence select="ahf:generateId($targetCandidate)"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:sequence select="concat('#',string(position()))"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
+                        <xsl:sequence select="ahf:generateId($targetCandidate)"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>
         </xsl:variable>
-
+        
         <xsl:map>
             <xsl:for-each select="$targetElemId">
                 <xsl:variable name="key" as="xs:string" select="."/>
@@ -165,8 +127,28 @@ E-mail : info@antennahouse.com
             </xsl:call-template>
         </xsl:if>
     </xsl:template>
+    
+    <!-- 
+     function:	return that $prmElem is target for generate clear text wrapping: <w:br w:type="textWrapping" w:clear="XXX"/>
+     param:		prmElem
+     return:	xs:boolean
+     note:		
+     -->
+    <xsl:function name="ahf:isClearTextTarget" as="xs:boolean">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:sequence select="exists(map:get($clearElemMap,ahf:generateId($prmElem)))"/>
+    </xsl:function>
 
-    <!--xsl:variable name="mapEntrySeq" as="xs:string+" select="map:for-each($columnMapDebug,function($k, $v){(string($k),$v[1],$v[2],$v[3],$v[4])})"/-->
+    <!-- 
+     function:	generate clear text wrapping
+     param:		prmElem
+     return:	w:p
+     note:		Very important because this template precedes all of other templates.
+     -->
+    <xsl:template match="*[ahf:isClearTextTarget(.)]" priority="50">
+        <xsl:next-match/>
+        <xsl:call-template name="ahf:genClearTextWrapP"/>
+    </xsl:template>
 
     <!-- 
      function:	Dump $clearElemMap
@@ -188,7 +170,5 @@ E-mail : info@antennahouse.com
             </map>
         </xsl:result-document>
     </xsl:template>
-        
-
     
 </xsl:stylesheet>

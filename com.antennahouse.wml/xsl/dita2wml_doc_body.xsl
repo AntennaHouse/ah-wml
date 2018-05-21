@@ -118,7 +118,6 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>
             </xsl:if>
         </w:p>
-        <xsl:call-template name="ahf:genClearTextWrapP"/>
         <xsl:call-template name="ahf:genPFromOutputClass">
             <xsl:with-param name="prmRegx" select="'(after)(\d+)(p)'"/>
             <xsl:with-param name="prmReplace" select="'$2'"/>
