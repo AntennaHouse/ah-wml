@@ -17,7 +17,7 @@ URL : http://www.antennahouse.com/
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     exclude-result-prefixes="xs map ahf"
-    version="2.0">
+    version="3.0">
 
     <!-- 
      function:	hazardstatement processing

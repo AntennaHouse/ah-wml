@@ -15,6 +15,7 @@ E-mail : info@antennahouse.com
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
+    exclude-result-prefixes="xs map ahf"
 >
     <!-- ****************************************************************************** 
            Global Text Wrapping Clear Map
