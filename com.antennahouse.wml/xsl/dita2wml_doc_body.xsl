@@ -8,7 +8,7 @@ File Name : dita2wml_document_body.xsl
 **************************************************************
 Copyright © 2009-2017 Antenna House, Inc. All rights reserved.
 Antenna House is a trademark of Antenna House, Inc.
-URL : http://www.antennahouse.co.jp/
+URL : http://www.antennahouse.com/
 **************************************************************
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -97,7 +97,8 @@ URL : http://www.antennahouse.co.jp/
                 </xsl:for-each>
             </xsl:if>
             <xsl:apply-templates>
-                <xsl:with-param name="prmSpaceBefore" tunnel="yes">
+                <!-- Temorary commented -->
+                <!--xsl:with-param name="prmSpaceBefore" tunnel="yes">
                     <xsl:choose>
                         <xsl:when test="$isChildOfStepSection">
                             <xsl:sequence select="ahf:getSpaceBeforeFromStyleName($pStyle)"/>
@@ -109,7 +110,7 @@ URL : http://www.antennahouse.co.jp/
                             <xsl:sequence select="ahf:getSpaceBeforeFromStyleName($pStyle)"/>
                         </xsl:otherwise>
                     </xsl:choose>
-                </xsl:with-param>
+                </xsl:with-param-->
             </xsl:apply-templates>
             <xsl:if test="$isFirstChildOfLi">
                 <xsl:call-template name="genBookmarkEnd">

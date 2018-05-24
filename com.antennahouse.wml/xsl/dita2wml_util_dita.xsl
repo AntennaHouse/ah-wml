@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 **************************************************************
-DITA to XSL-FO Stylesheet
+DITA to WordprocessingML Stylesheet
 Utility Templates
 **************************************************************
-File Name : dita2fo_dita_util.xsl
+File Name : dita2wml_dita_util.xsl
 **************************************************************
-Copyright © 2009 2014 Antenna House, Inc. All rights reserved.
+Copyright © 2009-2018 Antenna House, Inc. All rights reserved.
 Antenna House is a trademark of Antenna House, Inc.
-URL : http://www.antennahouse.co.jp/
+URL : http://www.antennahouse.com/
 **************************************************************
 -->
 

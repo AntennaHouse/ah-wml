@@ -1358,6 +1358,23 @@ URL : http://www.antennahouse.com/
             </a:ln>
         </wml-object>
         
+        <wml-object name="wmlClearTextWrapping">
+            <w:r>
+                <w:br w:type="textWrapping" w:clear="%clear-val"/>
+            </w:r>
+        </wml-object>
+
+        <wml-object name="wmlClearTextWrappingP">
+            <w:p>
+                <w:pPr>
+                    <w:spacing w:line="{ahf:toTwipStr('10pt')}" w:lineRule="exact"/>
+                </w:pPr>
+                <w:r>
+                    <w:br w:type="textWrapping" w:clear="%clear-val"/>
+                </w:r>
+            </w:p>
+        </wml-object>
+        
     </wml-objects>
 
     <!-- DO NOT REMOVE! Style customize inclusion -->

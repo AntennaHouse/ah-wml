@@ -8,7 +8,7 @@ File Name : dita2wml_document_shell.xsl
 **************************************************************
 Copyright © 2009 2017 Antenna House, Inc. All rights reserved.
 Antenna House is a trademark of Antenna House, Inc.
-URL : http://www.antennahouse.co.jp/
+URL : http://www.antennahouse.com/
 **************************************************************
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -30,6 +30,7 @@ URL : http://www.antennahouse.co.jp/
     <xsl:include href="dita2wml_global_bookmark.xsl"/>
     <xsl:include href="dita2wml_global_fn.xsl"/>
     <xsl:include href="dita2wml_global_drawing.xsl"/>
+    <xsl:include href="dita2wml_global_clear.xsl"/>
     <xsl:include href="dita2wml_param.xsl"/>
     <xsl:include href="dita2wml_param_papersize.xsl"/>
     <xsl:include href="dita2wml_style_get.xsl"/>

@@ -8,7 +8,7 @@ File Name : dita2wml_document_image.xsl
 **************************************************************
 Copyright © 2009-2017 Antenna House, Inc. All rights reserved.
 Antenna House is a trademark of Antenna House, Inc.
-URL : http://www.antennahouse.co.jp/
+URL : http://www.antennahouse.com/
 **************************************************************
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -78,7 +78,7 @@ URL : http://www.antennahouse.co.jp/
     </xsl:template>
 
     <!-- 
-     function:	retrun image size in EMU using DITA-OT generated image size
+     function:	return image size in EMU using DITA-OT generated image size
      param:		prmImage
      return:	image size (width, height) in EMU
      note:		Current DITA-OT only returns PNG image resolution.
@@ -161,7 +161,7 @@ URL : http://www.antennahouse.co.jp/
     </xsl:template>
 
     <!-- 
-     function:	retrun image size information:
+     function:	return image size information:
                 Width and height in pixel, both dimension resolution, scale
      param:		prmImage image element
                 prmMapDirUrl base map directory
