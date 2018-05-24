@@ -15,7 +15,7 @@ E-mail : info@antennahouse.com
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
-    exclude-result-prefixes="map"
+    exclude-result-prefixes="xs ahf map"
 >
     <!-- Bookmark id map for whole document.
      -->
