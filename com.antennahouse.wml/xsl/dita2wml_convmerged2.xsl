@@ -305,17 +305,21 @@ E-mail : info@antennahouse.com
      return:	indexterm
      note:		Remove white-space & construct indexterm that can be easily converted into XE field.
                 1. Nested indexterm element will be combined using ":" as separartor.
-                2. Indexterm may have <index-see> or <index-see-also> elements.
+                2. Also index-sort-as element will be combined using ":" as separator and set into child <index-sort-as> element
+                   only when one of index-sort-as element has effective text.
+                2. Generated indexterm may have <index-see>, <index-see-also> element as a child.
      -->
     <xsl:variable name="indextermClass" as="xs:string" select="' topic/indexterm '"/>
     <xsl:variable name="indextermClassGroup" as="xs:string+" select="(' topic/indexterm ',' indexing-d/index-see ',' indexing-d/index-see-also ')"/>
-    <xsl:variable name="indextermSeeSeeAsloClassGroup" as="xs:string+" select="(' indexing-d/index-see ',' indexing-d/index-see-also ')"/>
+    <xsl:variable name="indextermClassSortAs" as="xs:string+" select="(' indexing-d/index-sort-as ')"/>
+    <xsl:variable name="indextermClassGroupWithSortAs" as="xs:string+" select="($indextermClassGroup,$indextermClassSortAs)"/>
+    <xsl:variable name="indextermSeeSeeAlsoClassGroup" as="xs:string+" select="(' indexing-d/index-see ',' indexing-d/index-see-also ')"/>
 
     <xsl:template name="ahf:processIndexterm" as="element()*">
         <xsl:variable name="indexterm" as="element()" select="."/>
         <xsl:variable name="nestedLastIndextermSeq" as="element()*" 
-            select="$indexterm/descendant-or-self::*[self::*[contains(@class,$indextermClass)] and empty(*[contains(@class,$indextermClass)]) and empty(ancestor::*[ahf:seqContains(@class,$indextermSeeSeeAsloClassGroup)])]
-                  | $indexterm/descendant::*[self::*[ahf:seqContains(@class,$indextermSeeSeeAsloClassGroup)]]"/>
+            select="$indexterm/descendant-or-self::*[self::*[contains(@class,$indextermClass)] and empty(*[ahf:seqContains(@class,$indextermClassGroup)]) and empty(ancestor::*[ahf:seqContains(@class,$indextermSeeSeeAlsoClassGroup)])]
+                  | $indexterm/descendant::*[self::*[ahf:seqContains(@class,$indextermSeeSeeAlsoClassGroup)]]"/>
         <xsl:for-each select="$nestedLastIndextermSeq">
             <xsl:variable name="last" as="element()" select="."/>
             <xsl:variable name="indextermSeq" as="element()+" select="$last/ancestor-or-self::*[ahf:seqContains(string(@class),$indextermClassGroup)]"/>
@@ -323,18 +327,39 @@ E-mail : info@antennahouse.com
                 <xsl:copy>
                     <xsl:copy-of select="@*"/>
                     <xsl:text>"</xsl:text>
-                    <xsl:for-each select="$indextermSeq">
+                    <xsl:for-each select="$indextermSeq[contains(@class,$indextermClass)]">
                         <xsl:apply-templates select="." mode="MODE_BUILD_INDEXTERM_TEXT"/>
                     </xsl:for-each>
                     <xsl:text>"</xsl:text>
+                    <xsl:for-each select="$indextermSeq[ahf:seqContains(@class,$indextermSeeSeeAlsoClassGroup)]">
+                        <xsl:apply-templates select="." mode="MODE_BUILD_INDEXTERM_TEXT"/>
+                    </xsl:for-each>
+                    <xsl:if test="$indextermSeq[exists(*[contains(@class,$indextermClassSortAs)])]">
+                        <xsl:variable name="sortAsSeq" as="xs:string*">
+                            <xsl:for-each select="$indextermSeq[contains(@class,$indextermClass)]">
+                                <xsl:apply-templates select="." mode="MODE_BUILD_SORT_AS"/>
+                            </xsl:for-each>
+                        </xsl:variable>
+                        <xsl:if test="some $sortAs in $sortAsSeq satisfies string($sortAs)">
+                            <xsl:for-each select="($indextermSeq/*[contains(@class,$indextermClassSortAs)])[1]">
+                                <xsl:copy>
+                                    <xsl:copy-of select="@*"/>
+                                    <xsl:text>"</xsl:text>
+                                    <xsl:value-of select="string-join($sortAsSeq,':')"/>
+                                    <xsl:text>"</xsl:text>
+                                </xsl:copy>
+                            </xsl:for-each>
+                        </xsl:if>
+                    </xsl:if>
                 </xsl:copy>
             </xsl:for-each>
         </xsl:for-each>
     </xsl:template>
 
+    <!-- generate text() from indexterm -->
     <xsl:template match="*[contains(@class,$indextermClass)]" mode="MODE_BUILD_INDEXTERM_TEXT">
         <xsl:variable name="indextermTextVal" as="xs:string*">
-            <xsl:apply-templates select="node() except *[ahf:seqContains(@class,$indextermClassGroup)]" mode="MODE_TEXT_ONLY"/>
+            <xsl:apply-templates select="node() except *[ahf:seqContains(@class,$indextermClassGroupWithSortAs)]" mode="MODE_TEXT_ONLY"/>
         </xsl:variable>
         <xsl:variable name="indextermStringVal" as="xs:string" select="normalize-space(string-join($indextermTextVal,''))"/>
         <xsl:if test="parent::*[contains(@class,' topic/indexterm ')] and string($indextermStringVal)">
@@ -343,7 +368,8 @@ E-mail : info@antennahouse.com
         <xsl:value-of select="$indextermStringVal"/>
     </xsl:template>
 
-    <xsl:template match="*[ahf:seqContains(@class,$indextermSeeSeeAsloClassGroup)]" mode="MODE_BUILD_INDEXTERM_TEXT">
+    <!-- index-see, index-see-also element -->
+    <xsl:template match="*[ahf:seqContains(@class,$indextermSeeSeeAlsoClassGroup)]" mode="MODE_BUILD_INDEXTERM_TEXT">
         <xsl:variable name="indextermSeeOrSeeAlsoTextVal" as="xs:string*">
             <xsl:apply-templates select="node()" mode="MODE_TEXT_ONLY"/>
         </xsl:variable>
@@ -352,6 +378,15 @@ E-mail : info@antennahouse.com
             <xsl:copy-of select="@*"/>
             <xsl:value-of select="$indextermSeeOrSeeAlsoStringVal"/>
         </xsl:copy>
+    </xsl:template>
+
+    <!-- index-sort-as element -->
+    <xsl:template match="*[contains(@class,$indextermClass)]" mode="MODE_BUILD_SORT_AS" as="xs:string">
+        <xsl:variable name="sortAsTextVal" as="xs:string*">
+            <xsl:apply-templates select="child::*[contains(@class,$indextermClassSortAs)]/node()" mode="MODE_TEXT_ONLY"/>
+        </xsl:variable>
+        <xsl:variable name="indextermStringVal" as="xs:string" select="string(normalize-space(string-join($sortAsTextVal,'')))"/>
+        <xsl:sequence select="$indextermStringVal"/>
     </xsl:template>
 
 </xsl:stylesheet>
