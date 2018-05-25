@@ -19,20 +19,17 @@ URL : http://www.antennahouse.com/
     version="3.0">
 
     <!-- 
-     function:	index processing
+     function:	toc processing
      param:		none
-     return:	INDEX field
-     note:      Only generate INDEX field.
-                Generating index is done by Word.
+     return:	TOC field
+     note:      Only generate TOC field.
+                Generating toc is done by Word.
      -->
-    <xsl:template match="*[contains(@class,' bookmap/indexlist ')]" name="genIndexField" as="element(w:p)+" priority="5">
+    <xsl:template match="*[contains(@class,' bookmap/toc ')]" name="genTocField" as="element(w:p)+" priority="5">
         
         <xsl:variable name="option" as="xs:string*">
-            <xsl:sequence select="'\c 2'"/>
-            <xsl:sequence select="'\e &quot;, &quot;'"/>
-            <xsl:sequence select="'\h &quot;—A—&quot;'"/>
             <xsl:call-template name="getVarValue">
-                <xsl:with-param name="prmVarName" select="'IndexOptionEtc'"/>
+                <xsl:with-param name="prmVarName" select="'TocOptionEtc'"/>
             </xsl:call-template>
         </xsl:variable>
         
@@ -41,14 +38,14 @@ URL : http://www.antennahouse.com/
             <xsl:with-param name="prmTopicRefLevel"  select="1"/>
             <xsl:with-param name="prmTitle">
                 <xsl:call-template name="getVarValue">
-                    <xsl:with-param name="prmVarName" select="'Index_Title'"/>
+                    <xsl:with-param name="prmVarName" select="'Toc_Title'"/>
                 </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>    
         
         <w:p>
             <xsl:call-template name="getWmlObjectReplacing">
-                <xsl:with-param name="prmObjName" select="'wmlIndexField'"/>
+                <xsl:with-param name="prmObjName" select="'wmlTocField'"/>
                 <xsl:with-param name="prmSrc" select="('%field-opt')"/>
                 <xsl:with-param name="prmDst" select="(string-join($option,' '))"/>
             </xsl:call-template>

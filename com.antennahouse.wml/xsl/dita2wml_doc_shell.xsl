@@ -61,6 +61,7 @@ URL : http://www.antennahouse.com/
     <xsl:include href="dita2wml_doc_hazardstatement.xsl"/>
     <xsl:include href="dita2wml_doc_floatfig.xsl"/>
     <xsl:include href="dita2wml_doc_index.xsl"/>
+    <xsl:include href="dita2wml_doc_toc.xsl"/>
     
     <xsl:include href="dita2wml_dita_class.xsl"/>
 
