@@ -362,7 +362,7 @@
                     prmXmlLang: Language code
                     prmDocType: Document type.
                     prmPaperSize: Paper size.
-         notes:     $glStyleDefs/* has @xml:lang attributes certanly.
+         notes:     $glStyleDefs/* has @xml:lang attributes certainly.
                     ahf:getAttributeSet is used to get style in context free mode and use $map/@xml:lang for $prmXmlLang
                     parameter.
       -->
@@ -496,7 +496,7 @@
                     prmElem: Element in document.
                     prmDocType: document-type
                     prmPaperSize: paper-size
-         note: Call getAttributeSetWithLang internally and cnvert it CSS style.
+         note: Call getAttributeSetWithLang internally and convert it CSS style.
     -->
     <xsl:template name="getAttributeSetAsCssWithLang" as="xs:string">
         <xsl:param name="prmAttrSetName" as="xs:string" required="yes"/>
@@ -526,7 +526,7 @@
          function: Convert attributes to CSS notation
          parameter: prmAttributes: attribute()*
          note: This function does not handle axf namespace attributes
-               because it is intended for instream object.
+               because it is intended for in-stream object.
     -->
     <xsl:function name="ahf:attributeToCss" as="xs:string">
         <xsl:param name="prmAttributes" as="attribute()*"/>
@@ -579,7 +579,7 @@
     <!-- 
          getAttributeSetReplacing template
          function: Get attributes specified by $prmAttrSetName replacing $prmSrc by $prmDst.
-         parameter: prmAttrSetName: attribute-set name (space delimitored)
+         parameter: prmAttrSetName: attribute-set name (space delimited)
                     prmXml:lang: xml:lang
                     prmDocType: document-type
                     prmPaperSize: paper-size
@@ -643,7 +643,7 @@
          function: Get attribute specified by $prmAttrName from attribute-set specified by $prmAttrSetName.
          parameter：prmAttrSetName：An attribute name
                     prmAttrName：Attribute name
-         note: You can specify multiple attribute name in $prmAttrName delimitering by white-space.
+         note: You can specify multiple attribute name in $prmAttrName delimiting by white-space.
       -->
     <xsl:function name="ahf:getAttribute" as="attribute()?">
         <xsl:param name="prmAttrSetName" as="xs:string"/>
@@ -1320,7 +1320,7 @@
     </xsl:template-->
     
     <!-- 
-         getWmlObject tempalte
+         getWmlObject template
          function: Get WordprocessingML object specified by $prmObjName as node()*.
          parameter: prmObjName: Object name
                     prmXmlLang: Target xml:lang
@@ -1835,7 +1835,7 @@
 	 function:	Evaluate given string as XPath expression 
 	 param:		prmXPath
 	 return:	xs:string
-	 note:		If evaluation fails, retrun empty string.
+	 note:		If evaluation fails, return empty string.
 	            Currently there are variable binding between XPath expression and stylesheet: paper layout 
 	 -->
     <xsl:function name="ahf:evaluateStyleXPath" as="xs:string">
@@ -1849,6 +1849,7 @@
                     <xsl:with-param name="PaperMarginRight"  select="$pPaperMarginRight"/>
                     <xsl:with-param name="PaperMarginBottom" select="$pPaperMarginBottom"/>
                     <xsl:with-param name="PaperMarginLeft"   select="$pPaperMarginLeft"/>
+                    <xsl:with-param name="PaperMarginLeftMinus"   select="concat('-1',$pPaperMarginLeft)"/>
                     <xsl:with-param name="PaperBodyWidth"    select="$pPaperBodyWidth"/>
                     <xsl:with-param name="PaperHeaderHeight" select="$pPaperHeaderHeight"/>
                     <xsl:with-param name="PaperFooterHeight" select="$pPaperFooterHeight"/>
