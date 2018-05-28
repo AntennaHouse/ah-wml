@@ -1846,10 +1846,11 @@
                     <xsl:with-param name="PaperWidth"        select="$pPaperWidth"/>
                     <xsl:with-param name="PaperHeight"       select="$pPaperHeight"/>
                     <xsl:with-param name="PaperMarginTop"    select="$pPaperMarginTop"/>
+                    <xsl:with-param name="PaperMarginTopMinus"    select="concat('-',$pPaperMarginTop)"/>
                     <xsl:with-param name="PaperMarginRight"  select="$pPaperMarginRight"/>
                     <xsl:with-param name="PaperMarginBottom" select="$pPaperMarginBottom"/>
                     <xsl:with-param name="PaperMarginLeft"   select="$pPaperMarginLeft"/>
-                    <xsl:with-param name="PaperMarginLeftMinus"   select="concat('-1',$pPaperMarginLeft)"/>
+                    <xsl:with-param name="PaperMarginLeftMinus"   select="concat('-',$pPaperMarginLeft)"/>
                     <xsl:with-param name="PaperBodyWidth"    select="$pPaperBodyWidth"/>
                     <xsl:with-param name="PaperHeaderHeight" select="$pPaperHeaderHeight"/>
                     <xsl:with-param name="PaperFooterHeight" select="$pPaperFooterHeight"/>
