@@ -356,6 +356,31 @@ URL : http://www.antennahouse.com/
     </xsl:template>
 
     <!-- 
+     function:	Get bookmark name
+     param:		prmElem
+     return:	xs:string
+     note:		
+     -->
+    <xsl:function name="ahf:getBookmarkName" as="xs:string">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:variable name="id" as="xs:string" select="generate-id($prmElem)"/>
+        <xsl:variable name="seq" as="xs:integer?" select="map:get($targetElemIdAndNumberMap,$id)"/>
+        <xsl:choose>
+            <xsl:when test="exists($seq)">
+                <xsl:sequence select="ahf:genBookmarkName($seq)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="''"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
+    <xsl:template name="getBookmarkName" as="xs:string">
+        <xsl:param name="prmElem" as="element()" required="no" select="."/>
+        <xsl:copy-of select="ahf:getBookmarkName($prmElem)"/>
+    </xsl:template>
+
+    <!-- 
      function:	xref/desc template
      param:		
      return:	
