@@ -972,6 +972,19 @@ URL : http://www.antennahouse.com/
         </wml-object>
         
         <variable name="IndexOptionEtc">\z en-us </variable>
+
+        <!-- PAGEREF Field -->
+        <wml-object name="wmlPageRefField">
+            <w:r>
+                <w:fldChar w:fldCharType="begin"/>
+            </w:r>
+            <w:r>
+                <w:instrText xml:space="preserve"> PAGEREF %book-mark %field-opt </w:instrText>
+            </w:r>
+            <w:r>
+                <w:fldChar w:fldCharType="end"/>
+            </w:r>
+        </wml-object>
         
         <!-- w:abstractNum for topic/title -->
         <wml-object name="wmlTopicTitleAbstractNum">
