@@ -161,7 +161,7 @@ URL : http://www.antennahouse.com/
 
     <!--
         function: Node replace function
-        param: prmStr,prmSrc,prmDst
+        param: prmStr,prmSrc,prmDst,prmTarget
         return: Result node
         note: This function accespts $prmDst as item()+.
               If $prmDst is not instance of node(), the processing is skipped.
@@ -170,6 +170,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmStr" as="xs:string"/>
         <xsl:param name="prmSrc" as="xs:string+"/>
         <xsl:param name="prmDst" as="item()+"/>
+        <xsl:param name="prmTarget" as="xs:string"/>
         
         <xsl:variable name="firstResult" as="node()*">
             <xsl:choose>
@@ -193,11 +194,11 @@ URL : http://www.antennahouse.com/
                 <xsl:sequence select="if ($firstResult instance of element(_null)) then () else $firstResult "/>
             </xsl:when>
             <xsl:when test="exists($prmSrc[2]) and exists($prmDst[2])">
-                <xsl:sequence select="ahf:extNodeReplace($prmStr,subsequence($prmSrc,2),subsequence($prmDst,2))"/>
+                <xsl:sequence select="ahf:extNodeReplace($prmStr,subsequence($prmSrc,2),subsequence($prmDst,2),$prmTarget)"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="errorExit">
-                    <xsl:with-param name="prmMes" select="ahf:replace($stMes2030,('%param'),($prmStr))"/>
+                    <xsl:with-param name="prmMes" select="ahf:replace($stMes2030,('%param','%target'),($prmStr,$prmTarget))"/>
                 </xsl:call-template>
                 <xsl:sequence select="()"/>
             </xsl:otherwise>

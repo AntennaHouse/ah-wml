@@ -498,7 +498,7 @@ URL : http://www.antennahouse.com/
     </xsl:variable>
 
     <xsl:variable name="stMes2030">
-        <xsl:text>[extNodeReplace 2030F] Parameter '%param' does not match any replacement patterns.</xsl:text>
+        <xsl:text>[extNodeReplace 2030F] Parameter '%param' does not match any replacement patterns. Target='%target'</xsl:text>
     </xsl:variable>
     
     <xsl:variable name="stMes2032">

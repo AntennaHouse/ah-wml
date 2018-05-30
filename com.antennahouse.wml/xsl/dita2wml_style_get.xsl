@@ -1462,6 +1462,7 @@
         <xsl:apply-templates select="$resultObject/*" mode="MODE_REPLACE_WML">
             <xsl:with-param name="prmSrc" tunnel="yes" select="$prmSrc"/>
             <xsl:with-param name="prmDst" tunnel="yes" select="$prmDst"/>
+            <xsl:with-param name="prmObjName" tunnel="yes" select="$prmObjName"/>
         </xsl:apply-templates>
     </xsl:template>
     
@@ -1508,7 +1509,8 @@
     <xsl:template match="ahr:*" mode="MODE_REPLACE_WML" priority="10">
         <xsl:param name="prmSrc" tunnel="yes" as="xs:string+" required="yes"/>
         <xsl:param name="prmDst" tunnel="yes" as="item()+" required="yes"/>
-        <xsl:sequence select="ahf:extNodeReplace(concat('node:',local-name(.)),$prmSrc,$prmDst)"/>
+        <xsl:param name="prmObjName" tunnel="yes" as="xs:string"/>
+        <xsl:sequence select="ahf:extNodeReplace(concat('node:',local-name(.)),$prmSrc,$prmDst,$prmObjName)"/>
     </xsl:template>
     
     <xsl:template match="@*" mode="MODE_REPLACE_WML">
