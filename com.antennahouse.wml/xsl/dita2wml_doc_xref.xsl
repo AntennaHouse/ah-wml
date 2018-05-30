@@ -73,6 +73,7 @@ URL : http://www.antennahouse.com/
                                 <xsl:variable name="title" as="node()*">
                                     <xsl:apply-templates select="$targetElem/*[contains(@class,' topic/title ')]/node()">
                                         <xsl:with-param name="prmSkipBookmark" tunnel="yes" select="true()"/>
+                                        <xsl:with-param name="prmSkipFn"       tunnel="yes" select="true()"/>
                                     </xsl:apply-templates>
                                 </xsl:variable>
                                 <xsl:call-template name="getWmlObjectReplacing">
@@ -87,6 +88,7 @@ URL : http://www.antennahouse.com/
                                 <xsl:variable name="title" as="node()*">
                                     <xsl:apply-templates select="$targetElem/*[contains(@class,' topic/title ')]/node()">
                                         <xsl:with-param name="prmSkipBookmark" tunnel="yes" select="true()"/>
+                                        <xsl:with-param name="prmSkipFn"       tunnel="yes" select="true()"/>
                                     </xsl:apply-templates>
                                 </xsl:variable>
                                 <xsl:call-template name="getWmlObjectReplacing">
@@ -107,6 +109,7 @@ URL : http://www.antennahouse.com/
                                         <xsl:apply-templates select="$targetElem/*[contains(@class,' topic/title ')]/node()">
                                             <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
                                             <xsl:with-param name="prmSkipBookmark" tunnel="yes" select="true()"/>
+                                            <xsl:with-param name="prmSkipFn"       tunnel="yes" select="true()"/>
                                         </xsl:apply-templates>
                                     </xsl:document>
                                 </xsl:variable>
@@ -133,6 +136,7 @@ URL : http://www.antennahouse.com/
                                         <xsl:apply-templates select="$targetElem/*[contains(@class,' topic/title ')]/node()">
                                             <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
                                             <xsl:with-param name="prmSkipBookmark" tunnel="yes" select="true()"/>
+                                            <xsl:with-param name="prmSkipFn"       tunnel="yes" select="true()"/>
                                         </xsl:apply-templates>
                                     </xsl:document>
                                 </xsl:variable>
@@ -173,7 +177,6 @@ URL : http://www.antennahouse.com/
                                             <xsl:number format="{$olFormat}" value="$liNumber"/>
                                         </w:t>
                                     </w:r>
-                                    <xsl:apply-templates select="$targetElem/*[contains(@class,' topic/title ')]"/>
                                 </xsl:variable>
                                 <xsl:call-template name="getWmlObjectReplacing">
                                     <xsl:with-param name="prmObjName" select="'wmlRefField'"/>
