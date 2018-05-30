@@ -973,13 +973,15 @@ URL : http://www.antennahouse.com/
         
         <variable name="IndexOptionEtc">\z en-us </variable>
 
-        <!-- PAGEREF Field -->
+        <!-- PAGEREF Field
+             フィールドの結果の参照先ページはWordが組版しないとわからない．
+          -->
         <wml-object name="wmlPageRefField">
             <w:r>
                 <w:fldChar w:fldCharType="begin"/>
             </w:r>
             <w:r>
-                <w:instrText xml:space="preserve"> PAGEREF %book-mark %field-opt </w:instrText>
+                <w:instrText xml:space="preserve"> PAGEREF "%book-mark" %field-opt </w:instrText>
             </w:r>
             <w:r>
                 <w:fldChar w:fldCharType="end"/>
