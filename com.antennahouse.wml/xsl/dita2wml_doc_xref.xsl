@@ -13,7 +13,6 @@ URL : http://www.antennahouse.com/
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" 
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
@@ -199,7 +198,7 @@ URL : http://www.antennahouse.com/
             <xsl:otherwise>
                 <!-- External link -->
                 <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get($externalLinkIdMap,$href))"/>
-                <w:hyperlink r:id="{$rId}">
+                <w:hyperlink r:id="{$rId}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
                     <xsl:apply-templates>
                         <xsl:with-param name="prmRunProps" tunnel="yes" as="element()*">
                             <w:rStyle w:val="{ahf:getStyleIdFromName('Hyperlink')}"/>
