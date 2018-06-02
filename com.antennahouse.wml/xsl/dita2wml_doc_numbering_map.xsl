@@ -169,18 +169,10 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="topicId" as="xs:string">
             <xsl:choose>
                 <xsl:when test="exists($targetTopic)">
-                    <xsl:variable name="idAttr" as="attribute()">
-                        <xsl:call-template name="ahf:getIdAtt">
-                            <xsl:with-param name="prmElement" select="$targetTopic"/>
-                        </xsl:call-template>
-                    </xsl:variable>
-                    <xsl:sequence select="string($idAttr)"/>
+                    <xsl:sequence select="ahf:generateId($targetTopic)"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:call-template name="ahf:generateId">
-                        <xsl:with-param name="prmElement" select="$topicRef"/>
-                        <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
-                    </xsl:call-template>
+                    <xsl:sequence select="ahf:generateId($topicRef)"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -216,18 +208,10 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="topicId" as="xs:string">
             <xsl:choose>
                 <xsl:when test="exists($targetTopic)">
-                    <xsl:variable name="idAttr" as="attribute()">
-                        <xsl:call-template name="ahf:getIdAtt">
-                            <xsl:with-param name="prmElement" select="$targetTopic"/>
-                        </xsl:call-template>
-                    </xsl:variable>
-                    <xsl:sequence select="string($idAttr)"/>
+                    <xsl:sequence select="ahf:generateId($targetTopic)"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:call-template name="ahf:generateId">
-                        <xsl:with-param name="prmElement" select="$topicRef"/>
-                        <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
-                    </xsl:call-template>
+                    <xsl:sequence select="ahf:generateId($topicRef)"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -421,12 +405,7 @@ URL : http://www.antennahouse.com/
     <xsl:template name="ahf:getTablePrevAmount" as="xs:integer">
         <xsl:param name="prmTopic" as="element()" required="yes"/>
         
-        <xsl:variable name="idAttr" as="attribute()">
-            <xsl:call-template name="ahf:getIdAtt">
-                <xsl:with-param name="prmElement" select="$prmTopic"/>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="id" as="xs:string" select="string($idAttr)"/>
+        <xsl:variable name="id" as="xs:string" select="ahf:generateId($prmTopic)"/>
         <!-- ** DEBUG **
         <xsl:message select="'$tableCountMap=',$tableCountMap"/>
         <xsl:message select="'$tableingMap=',$tableingMap"/>
@@ -441,13 +420,7 @@ URL : http://www.antennahouse.com/
     
     <xsl:template name="ahf:getFigPrevAmount" as="xs:integer">
         <xsl:param name="prmTopic" as="element()" required="yes"/>
-        
-        <xsl:variable name="idAttr" as="attribute()">
-            <xsl:call-template name="ahf:getIdAtt">
-                <xsl:with-param name="prmElement" select="$prmTopic"/>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="id" as="xs:string" select="string($idAttr)"/>
+        <xsl:variable name="id" as="xs:string" select="ahf:generateId($prmTopic)"/>
         <!-- ** DEBUG **
         <xsl:message select="'$figCountMap=',$figCountMap"/>
         <xsl:message select="'$figingMap=',$figingMap"/>
@@ -462,13 +435,7 @@ URL : http://www.antennahouse.com/
 
     <xsl:template name="ahf:getFnPrevAmount" as="xs:integer">
         <xsl:param name="prmTopic" as="element()" required="yes"/>
-        
-        <xsl:variable name="idAttr" as="attribute()">
-            <xsl:call-template name="ahf:getIdAtt">
-                <xsl:with-param name="prmElement" select="$prmTopic"/>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="id" as="xs:string" select="string($idAttr)"/>
+        <xsl:variable name="id" as="xs:string" select="ahf:generateId($prmTopic)"/>
         <!-- ** DEBUG **
         <xsl:message select="'$fnCountMap=',$fnCountMap"/>
         <xsl:message select="'$fningMap=',$fningMap"/>

@@ -13,17 +13,11 @@ URL : http://www.antennahouse.com/
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
-    exclude-result-prefixes="xs ahf"
+    exclude-result-prefixes="xs map ahf"
     version="3.0">
-
-    <!-- ol/ul instance id -->
-    <xsl:variable name="listId" as="xs:string*">
-        <xsl:for-each select="//*[contains(@class, ' topic/ol ') or contains(@class, ' topic/ul ')]">
-            <xsl:sequence select="ahf:genHistoryId(.)"/>
-        </xsl:for-each>
-    </xsl:variable>
 
     <!-- 
      function:	ol/ul element processing
@@ -34,9 +28,9 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
-        <xsl:variable name="id" as="xs:string" select="ahf:genHistoryId(.)"/>
-        <xsl:variable name="occurenceNumber" as="xs:integer?" select="index-of($listId,$id)"/>
-        <xsl:assert test="exists($occurenceNumber)" select="'[ol/ul] id=',$id,' does not exits in $listId=',$listId"/>
+        <xsl:variable name="id" as="xs:string" select="ahf:generateId(.)"/>
+        <xsl:variable name="occurenceNumber" as="xs:integer?" select="map:get($listNumberMap,$id)"/>
+        <xsl:assert test="exists($occurenceNumber)" select="'[ol/ul] id=',$id,' does not exits in $listNumberMap'"/>
         <xsl:variable name="listLevel" as="xs:integer" select="ahf:getListLevel(.)"/>
         <xsl:apply-templates select="*">
             <xsl:with-param name="prmListOccurenceNumber" tunnel="yes" select="$occurenceNumber"/>

@@ -95,18 +95,10 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="topicId" as="xs:string">
             <xsl:choose>
                 <xsl:when test="exists($targetTopic)">
-                    <xsl:variable name="idAttr" as="attribute()">
-                        <xsl:call-template name="ahf:getIdAtt">
-                            <xsl:with-param name="prmElement" select="$targetTopic"/>
-                        </xsl:call-template>
-                    </xsl:variable>
-                    <xsl:sequence select="string($idAttr)"/>
+                    <xsl:sequence select="ahf:generateId($targetTopic)"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:call-template name="ahf:generateId">
-                        <xsl:with-param name="prmElement" select="$topicRef"/>
-                        <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
-                    </xsl:call-template>
+                    <xsl:sequence select="ahf:generateId($topicRef)"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -219,13 +211,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:template name="ahf:getEquationBlockPrevAmount" as="xs:integer">
         <xsl:param name="prmTopic" as="element()" required="yes"/>
-        
-        <xsl:variable name="idAttr" as="attribute()">
-            <xsl:call-template name="ahf:getIdAtt">
-                <xsl:with-param name="prmElement" select="$prmTopic"/>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="id" as="xs:string" select="string($idAttr)"/>
+        <xsl:variable name="id" as="xs:string" select="ahf:generateId($prmTopic)"/>
         <!-- ** DEBUG **
         <xsl:message select="'$equationNumberCountMap=',$equationNumberCountMap"/>
         <xsl:message select="'$equationNumberingMap=',$equationNumberingMap"/>
@@ -236,6 +222,5 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="equationBlockInf" as="element()" select="($equationBlockNumberingMap//*[string(@id) eq $id])[1]"/>
         <xsl:sequence select="xs:integer(string($equationBlockInf/@prev-count))"/>
     </xsl:template>
-    
     
 </xsl:stylesheet>

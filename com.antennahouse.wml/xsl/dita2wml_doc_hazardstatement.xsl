@@ -209,7 +209,7 @@ URL : http://www.antennahouse.com/
         
         <xsl:variable name="panelChildPs" as="document-node()">
             <xsl:variable name="numId" as="xs:string">
-                <xsl:variable name="listOuucrrenceNumber" as="xs:integer" select="index-of($listId,ahf:genHistoryId($prmMessagePanel))"/>
+                <xsl:variable name="listOuucrrenceNumber" as="xs:integer" select="map:get($listNumberMap,ahf:generateId($prmMessagePanel))"/>
                 <xsl:sequence select="ahf:getNumIdFromListOccurenceNumber($listOuucrrenceNumber)"/>
             </xsl:variable>
             <xsl:document>
