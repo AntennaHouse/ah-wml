@@ -18,8 +18,6 @@ URL : http://www.antennahouse.com/
     exclude-result-prefixes="xs ahf"
     version="3.0">
     
-    <xsl:import href="dita2wml_history_id.xsl"/>
-    
     <!-- 
      function:	Generate unique id cosidering multiple topic reference
      param:		prmElement,prmTopicRef
