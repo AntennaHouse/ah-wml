@@ -24,9 +24,9 @@
     >
     <!--============================================
 	     External dependencies:
-	     $documentLang (dita2fo_global.xsl)
-	     $pPaperSize (dita2fo_param.xsl)
-	     $pOutputType (dita2fo_param.xsl)
+	     $documentLang (dita2wml_global.xsl)
+	     $pPaperSize (dita2wml_param.xsl)
+	     $pOutputType (dita2wml_param.xsl)
 	    ============================================-->
     
     <!-- Default parameter
