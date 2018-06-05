@@ -34,6 +34,7 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/p ')]" as="element(w:p)+">
         <xsl:param name="prmListOccurenceNumber" tunnel="yes" required="no" as="xs:integer?" select="()"/>
         <xsl:param name="prmListLevel" tunnel="yes" required="no" as="xs:integer?" select="()"/>
+        <xsl:param name="prmListStyle" tunnel="yes" required="no" as="xs:string?" select="()"/>
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmTcAttr" tunnel="yes" as="element()?" select="()"/>
@@ -66,7 +67,7 @@ URL : http://www.antennahouse.com/
                     <xsl:assert test="exists($prmListLevel)" select="'[ASSERT: topic/p] $prmListLevel is empty!'"/>
                     <xsl:assert test="exists($prmListOccurenceNumber)" select="'[ASSERT: topic/p] $prmListOccurenceNumber is empty!'"/>
                     <w:pPr>
-                        <w:pStyle w:val="{ahf:getStyleIdFromName(ahf:getStyleNameFromLi(parent::*))}"/>
+                        <w:pStyle w:val="{ahf:getStyleIdFromName($prmListStyle)}"/>
                         <w:numPr>
                             <w:ilvl w:val="{string(ahf:getIlvlFromListLevel($prmListLevel))}"/>
                             <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>

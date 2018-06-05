@@ -217,7 +217,7 @@ URL : http://www.antennahouse.com/
   <xsl:function name="ahf:getHangingFromStyleNameAndLevel" as="xs:integer">
     <xsl:param name="prmStyleName" as="xs:string"/>
     <xsl:param name="prmListLevel" as="xs:integer"/>
-    <xsl:variable name="absNumId" as="xs:string" select="ahf:getAbstractNumIdFromStyleName($prmStyleName)"/>
+    <xsl:variable name="absNumId" as="xs:string" select="ahf:getAbstractNumIdFromStyleName(ahf:getStyleIdFromName($prmStyleName))"/>
     <xsl:variable name="w:abstractNum" as="element()" select="$templateNumberingDoc/w:numbering/w:abstractNum[string(@w:abstractNumId) eq $absNumId]"/>
     <xsl:variable name="w:lvl" as="element()?">
       <xsl:choose>

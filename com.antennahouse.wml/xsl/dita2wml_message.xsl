@@ -478,7 +478,7 @@ URL : http://www.antennahouse.com/
     </xsl:variable>
 
     <xsl:variable name="stMes2013">
-        <xsl:text>[getStyleEntryFromName 2012F] Style does not found in the template .docx. Name='%name'.</xsl:text>
+        <xsl:text>[getStyleEntryFromName 2013F] Style does not found in the template .docx. Name='%name'.</xsl:text>
     </xsl:variable>
     
     <xsl:variable name="stMes2015">

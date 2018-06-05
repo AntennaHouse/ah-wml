@@ -159,7 +159,7 @@ URL : http://www.antennahouse.com/
      note:		
      -->
     <xsl:function name="ahf:getFirstPrecedingElemWoWh" as="element()?">
-        <xsl:param name="prmElem" as="element()"/>
+        <xsl:param name="prmElem" as="element()?"/>
         <xsl:variable name="precedingFirstElem" as="element()?" select="$prmElem/preceding-sibling::*[1]"/>
         <xsl:choose>
             <xsl:when test="empty($precedingFirstElem)">
