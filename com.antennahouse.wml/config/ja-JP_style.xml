@@ -18,15 +18,22 @@ URL : http://www.antennahouse.com/
     xmlns="http://www.antennahouse.com/names/XSLT/Document/Layout">
     
     <variables>
+        <variable name="Toc_Title">目次</variable>
+        <variable name="Figure_List_Title">図一覧</variable>
+        <variable name="Table_List_Title">表一覧</variable>
+        <variable name="Abbreviations_List_Title">略語一覧</variable>
+        <variable name="Trademark_List_Title">商標</variable>
+        <variable name="Bibliographic_List_Title">参考文献</variable>
+        <variable name="Glossary_List_Title">用語集</variable>
+        <variable name="Appendices_Title">付録</variable>
+        <variable name="Appendix_Title">付録</variable>
+        <variable name="Index_Title">索引</variable>
+        
         <variable name="IndexOptionEtc">\z ja-jp \y</variable>
     </variables>
     
     <attribute-sets>
     </attribute-sets>
-
-    <formatting-objects>
-
-    </formatting-objects>
     
     <wml-objects>
     </wml-objects>

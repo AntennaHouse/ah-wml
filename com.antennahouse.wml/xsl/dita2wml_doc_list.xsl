@@ -13,17 +13,11 @@ URL : http://www.antennahouse.com/
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
-    exclude-result-prefixes="xs ahf"
+    exclude-result-prefixes="xs map ahf"
     version="3.0">
-
-    <!-- ol/ul instance id -->
-    <xsl:variable name="listId" as="xs:string*">
-        <xsl:for-each select="//*[contains(@class, ' topic/ol ') or contains(@class, ' topic/ul ')]">
-            <xsl:sequence select="ahf:genHistoryId(.)"/>
-        </xsl:for-each>
-    </xsl:variable>
 
     <!-- 
      function:	ol/ul element processing
@@ -34,13 +28,24 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
-        <xsl:variable name="id" as="xs:string" select="ahf:genHistoryId(.)"/>
-        <xsl:variable name="occurenceNumber" as="xs:integer?" select="index-of($listId,$id)"/>
-        <xsl:assert test="exists($occurenceNumber)" select="'[ol/ul] id=',$id,' does not exits in $listId=',$listId"/>
+        <xsl:variable name="listStyle" as="xs:string">
+            <xsl:choose>
+                <xsl:when test="contains(@class,' topic/ol ')">
+                    <xsl:sequence select="$cOlStyleName"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="$cUlStyleName"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="id" as="xs:string" select="ahf:generateId(.)"/>
+        <xsl:variable name="occurenceNumber" as="xs:integer?" select="map:get($listNumberMap,$id)"/>
+        <xsl:assert test="exists($occurenceNumber)" select="'[ol/ul] id=',$id,' does not exits in $listNumberMap'"/>
         <xsl:variable name="listLevel" as="xs:integer" select="ahf:getListLevel(.)"/>
         <xsl:apply-templates select="*">
             <xsl:with-param name="prmListOccurenceNumber" tunnel="yes" select="$occurenceNumber"/>
             <xsl:with-param name="prmListLevel" tunnel="yes" select="$listLevel"/>
+            <xsl:with-param name="prmListStyle" tunnel="yes" select="$listStyle"/>
             <xsl:with-param name="prmIndentLevel" tunnel="yes" select="if ($pAdoptFixedListIndent) then ($prmIndentLevel + 1) else $prmIndentLevel"/>
             <xsl:with-param name="prmExtraIndent" tunnel="yes">
                 <xsl:choose>
@@ -48,21 +53,7 @@ URL : http://www.antennahouse.com/
                         <xsl:sequence select="$prmExtraIndent"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:variable name="styleName" as="xs:string">
-                            <xsl:call-template name="getVarValue">
-                                <xsl:with-param name="prmVarName">
-                                    <xsl:choose>
-                                        <xsl:when test="contains(@class,' topic/ol ')">
-                                            <xsl:sequence select="'Ol_Style_Name'"/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:sequence select="'Ul_Style_Name'"/>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:with-param>
-                            </xsl:call-template>
-                        </xsl:variable>
-                        <xsl:variable name="hangingInTwip" as="xs:integer" select="ahf:getHangingFromStyleNameAndLevel($styleName,$listLevel)"/>
+                        <xsl:variable name="hangingInTwip" as="xs:integer" select="ahf:getHangingFromStyleNameAndLevel($listStyle,$listLevel)"/>
                         <xsl:sequence select="$hangingInTwip + $prmExtraIndent"/>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -82,13 +73,14 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/li ')]">
         <xsl:param name="prmListOccurenceNumber" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmListLevel" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmListStyle" tunnel="yes" required="yes" as="xs:string"/>
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:if test="empty(child::*[1][contains(@class,' topic/p ')])">
             <!-- generate dummmy w:p -->
             <w:p>
                 <w:pPr>
-                    <w:pStyle w:val="{ahf:getStyleNameFromLi(.)}"/>
+                    <w:pStyle w:val="{ahf:getStyleIdFromName($prmListStyle)}"/>
                     <w:numPr>
                         <w:ilvl w:val="{string(ahf:getIlvlFromListLevel($prmListLevel))}"/>
                         <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>

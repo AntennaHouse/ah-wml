@@ -123,7 +123,7 @@ URL : http://www.antennahouse.com/
     -->
     
     <xsl:template name="genDocWnumInstance">
-        <xsl:for-each select="doc($pMergedFinalOutputUrl)//*[contains(@class, ' topic/ol ') or contains(@class, ' topic/ul ')]">
+        <xsl:for-each select="$uniqueListInstances">
             <w:num>
                 <xsl:attribute name="w:numId" select="ahf:getNumIdFromListOccurenceNumber(position())"/>
                 <w:abstractNumId>

@@ -77,6 +77,9 @@ URL : http://www.antennahouse.com/
             Letter,215.9mm,279.4mm,
             Government-Letter,203.2mm,266.7mm, 
             Legal,215.9mm,355.6mm,
+            JIS-B6,128mm,182mm, 
+            JIS-B5,182mm,257mm, 
+            JIS-B4,257mm,364mm,
             B6,125mm,176mm, 
             B5,176mm,250mm, 
             B4,250mm,353mm,
@@ -878,7 +881,7 @@ URL : http://www.antennahouse.com/
                 <w:fldChar w:fldCharType="begin"/>
             </w:r>
             <w:r>
-                <w:instrText xml:space="preserve"> REF %ref-id \h %field-opt </w:instrText>
+                <w:instrText xml:space="preserve"> REF "%ref-id" \h %field-opt </w:instrText>
             </w:r>
             <w:r>
                 <w:fldChar w:fldCharType="separate"/>
@@ -927,6 +930,21 @@ URL : http://www.antennahouse.com/
             </w:r>
         </wml-object>
 
+        <!-- TOC Field -->
+        <wml-object name="wmlTocField">
+            <w:r>
+                <w:fldChar w:fldCharType="begin"/>
+            </w:r>
+            <w:r>
+                <w:instrText xml:space="preserve"> TOC %field-opt </w:instrText>
+            </w:r>
+            <w:r>
+                <w:fldChar w:fldCharType="end"/>
+            </w:r>
+        </wml-object>
+
+        <variable name="TocOptionEtc">\h \o "1-3" </variable>
+        
         <!-- XE Field (Index Entry) -->
         <wml-object name="wmlXeField">
             <w:r>
@@ -954,6 +972,21 @@ URL : http://www.antennahouse.com/
         </wml-object>
         
         <variable name="IndexOptionEtc">\z en-us </variable>
+
+        <!-- PAGEREF Field
+             The reference page will be determined when Word formats a document.
+          -->
+        <wml-object name="wmlPageRefField">
+            <w:r>
+                <w:fldChar w:fldCharType="begin"/>
+            </w:r>
+            <w:r>
+                <w:instrText xml:space="preserve"> PAGEREF "%bookmark" %field-opt </w:instrText>
+            </w:r>
+            <w:r>
+                <w:fldChar w:fldCharType="end"/>
+            </w:r>
+        </wml-object>
         
         <!-- w:abstractNum for topic/title -->
         <wml-object name="wmlTopicTitleAbstractNum">
@@ -1351,7 +1384,7 @@ URL : http://www.antennahouse.com/
         <variable name="FloatFigFrameWidth">0.75pt</variable>
         <variable name="FloatFigFrameColor">black</variable>
         <wml-object name="wmlFloatFigFrame">
-            <a:ln w="{ahf:toEmuStr($FloatFigFrameWidth)}">
+            <a:ln w="{ahf:toEmuStr('$FloatFigFrameWidth')}">
               <a:solidFill>
                   <a:prstClr val="$FloatFigFrameColor"/>
               </a:solidFill>

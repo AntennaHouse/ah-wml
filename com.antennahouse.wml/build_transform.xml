@@ -206,7 +206,8 @@
             <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
             
-	<param name="PRM_RESOURCE_FILE" expression="${bookmap.resource-file}" if="bookmap.resource-file"/>
+    <param name="PRM_RESOURCE_FILE" expression="${bookmap.resource-file}" if="bookmap.resource-file"/>
+    <param name="PRM_OL_FORMAT" expression="${bookmap.olformat}" if="bookmap.olformat"/>
 
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
@@ -266,7 +267,8 @@
             <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
             
-	<param name="PRM_RESOURCE_FILE" expression="${bookmap.resource-file}" if="bookmap.resource-file"/>
+    <param name="PRM_RESOURCE_FILE" expression="${bookmap.resource-file}" if="bookmap.resource-file"/>
+    <param name="PRM_OL_FORMAT" expression="${bookmap.olformat}" if="bookmap.olformat"/>
 
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
@@ -336,7 +338,8 @@
             <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
             
-	<param name="PRM_RESOURCE_FILE" expression="${bookmap.resource-file}" if="bookmap.resource-file"/>
+    <param name="PRM_RESOURCE_FILE" expression="${bookmap.resource-file}" if="bookmap.resource-file"/>
+    <param name="PRM_OL_FORMAT" expression="${bookmap.olformat}" if="bookmap.olformat"/>
 
             <xmlcatalog refid="dita.catalog"/>
         </xslt>

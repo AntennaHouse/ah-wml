@@ -152,5 +152,35 @@ URL : http://www.antennahouse.com/
         </xsl:choose>
     </xsl:function>
 
+    <!-- 
+     function:	Get first preceding elememnt
+     param:		prmElem
+     return:	element()?
+     note:		
+     -->
+    <xsl:function name="ahf:getFirstPrecedingElemWoWh" as="element()?">
+        <xsl:param name="prmElem" as="element()?"/>
+        <xsl:variable name="precedingFirstElem" as="element()?" select="$prmElem/preceding-sibling::*[1]"/>
+        <xsl:choose>
+            <xsl:when test="empty($precedingFirstElem)">
+                <xsl:sequence select="()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="nodesBetween" as="node()*" select="$prmElem/preceding-sibling::node()[. &gt;&gt; $precedingFirstElem]"/>
+                <xsl:choose>
+                    <xsl:when test="empty($nodesBetween)">
+                        <xsl:sequence select="$precedingFirstElem"/>
+                    </xsl:when>
+                    <xsl:when test="every $node in $nodesBetween satisfies ahf:isRedundantNode($node)">
+                        <xsl:sequence select="$precedingFirstElem"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:sequence select="()"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
     <!-- end of stylesheet -->
 </xsl:stylesheet>

@@ -24,8 +24,8 @@
 >
 	<!--============================================
 	     External dependencies:
-	     $PRM_STYLE_DEF_FILE (dita2fo_param.xsl)
-	     $documetLang (dita2fo_global.xsl)
+	     $PRM_STYLE_DEF_FILE (dita2wml_param.xsl)
+	     $documetLang (dita2wml_global.xsl)
 	    ============================================-->
 	<!--============================================
 	     Constants

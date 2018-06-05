@@ -55,7 +55,7 @@ E-mail : info@antennahouse.com
         select="boolean($PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_EQUATION_NUMBER eq $cYes) and $pAddChapterNumberPrefixToTopicTitle" as="xs:boolean"/>
 
     <!-- Document language -->
-    <xsl:param name="PRM_LANG" select="$doubleApos"/>
+    <xsl:param name="PRM_LANG" as="xs:string" required="no" select="$doubleApos"/>
 
     <!-- Output draft-comment -->
     <xsl:param name="PRM_OUTPUT_DRAFT_COMMENT" required="no" as="xs:string" select="$cNo"/>

@@ -21,9 +21,9 @@ E-mail : info@antennahouse.com
      -->
     <!-- Bookmark targets: All xref, link and topicref element that reference internal target -->
     <xsl:variable name="bookmarkTargets" as="xs:string*">
-        <xsl:sequence select="$map//*[contains(@class,' map/topicref ')][starts-with(@href,'#')]/string(@href)"/>
-        <xsl:sequence select="//*[contains(@class,' topic/xref ')][starts-with(@href,'#')]/string(@href)"/>
-        <xsl:sequence select="//*[contains(@class,' topic/link ')][starts-with(@href,'#')]/string(@href)"/>
+        <xsl:sequence select="$map/*[not(contains(@class,' map/reltable '))]/descendant-or-self::*[contains(@class,' map/topicref ')][starts-with(@href,'#')]/string(@href)"/>
+        <xsl:sequence select="$root/*[contains(@class,' topic/topic ')]/descendant::*[contains(@class,' topic/xref ')][starts-with(@href,'#')]/string(@href)"/>
+        <xsl:sequence select="$root/*[contains(@class,' topic/topic ')]/descendant::*[contains(@class,' topic/link ')][starts-with(@href,'#')]/string(@href)"/>
     </xsl:variable>
 
     <xsl:variable name="uniqueBookmarkTargets" as="xs:string*" select="distinct-values($bookmarkTargets)"/>
@@ -63,11 +63,20 @@ E-mail : info@antennahouse.com
         </xsl:map>
     </xsl:variable>
     
-    <xsl:variable name="targetElemsDocSeq" as="element()*" select="//*[generate-id() = $targetIds]"/>
+    <!-- taget-ids with topicref without @href.
+         These topicrefs are needed to make own TOC page
+         (For instance toc entry for indexlist, glossarylist, etc...)
+     -->
+    <xsl:variable name="targetIdsWithNoHref" as="xs:string*">
+        <xsl:sequence select="$targetIds"/>
+        <xsl:sequence select="$map/*[not(contains(@class,' map/reltable '))]/descendant-or-self::*[contains(@class,' map/topicref ')][empty(@href)]/generate-id(.)"/>
+    </xsl:variable>
+    
+    <xsl:variable name="targetElemsDocSeq" as="element()*" select="$root/descendant::*[generate-id() = $targetIdsWithNoHref]"/>
     
     <!-- map: key=generate-id() value=position()
          Used for target elements to generate w:bookMark
-      -->
+     -->
     <xsl:variable name="targetElemIdAndNumberMap" as="map(xs:string,xs:integer)">
         <xsl:map>
             <xsl:for-each select="$targetElemsDocSeq">

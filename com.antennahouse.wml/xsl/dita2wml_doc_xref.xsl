@@ -13,7 +13,6 @@ URL : http://www.antennahouse.com/
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" 
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
@@ -73,6 +72,7 @@ URL : http://www.antennahouse.com/
                                 <xsl:variable name="title" as="node()*">
                                     <xsl:apply-templates select="$targetElem/*[contains(@class,' topic/title ')]/node()">
                                         <xsl:with-param name="prmSkipBookmark" tunnel="yes" select="true()"/>
+                                        <xsl:with-param name="prmSkipFn"       tunnel="yes" select="true()"/>
                                     </xsl:apply-templates>
                                 </xsl:variable>
                                 <xsl:call-template name="getWmlObjectReplacing">
@@ -87,6 +87,7 @@ URL : http://www.antennahouse.com/
                                 <xsl:variable name="title" as="node()*">
                                     <xsl:apply-templates select="$targetElem/*[contains(@class,' topic/title ')]/node()">
                                         <xsl:with-param name="prmSkipBookmark" tunnel="yes" select="true()"/>
+                                        <xsl:with-param name="prmSkipFn"       tunnel="yes" select="true()"/>
                                     </xsl:apply-templates>
                                 </xsl:variable>
                                 <xsl:call-template name="getWmlObjectReplacing">
@@ -107,6 +108,7 @@ URL : http://www.antennahouse.com/
                                         <xsl:apply-templates select="$targetElem/*[contains(@class,' topic/title ')]/node()">
                                             <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
                                             <xsl:with-param name="prmSkipBookmark" tunnel="yes" select="true()"/>
+                                            <xsl:with-param name="prmSkipFn"       tunnel="yes" select="true()"/>
                                         </xsl:apply-templates>
                                     </xsl:document>
                                 </xsl:variable>
@@ -133,6 +135,7 @@ URL : http://www.antennahouse.com/
                                         <xsl:apply-templates select="$targetElem/*[contains(@class,' topic/title ')]/node()">
                                             <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
                                             <xsl:with-param name="prmSkipBookmark" tunnel="yes" select="true()"/>
+                                            <xsl:with-param name="prmSkipFn"       tunnel="yes" select="true()"/>
                                         </xsl:apply-templates>
                                     </xsl:document>
                                 </xsl:variable>
@@ -173,7 +176,6 @@ URL : http://www.antennahouse.com/
                                             <xsl:number format="{$olFormat}" value="$liNumber"/>
                                         </w:t>
                                     </w:r>
-                                    <xsl:apply-templates select="$targetElem/*[contains(@class,' topic/title ')]"/>
                                 </xsl:variable>
                                 <xsl:call-template name="getWmlObjectReplacing">
                                     <xsl:with-param name="prmObjName" select="'wmlRefField'"/>
@@ -196,7 +198,7 @@ URL : http://www.antennahouse.com/
             <xsl:otherwise>
                 <!-- External link -->
                 <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get($externalLinkIdMap,$href))"/>
-                <w:hyperlink r:id="{$rId}">
+                <w:hyperlink r:id="{$rId}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
                     <xsl:apply-templates>
                         <xsl:with-param name="prmRunProps" tunnel="yes" as="element()*">
                             <w:rStyle w:val="{ahf:getStyleIdFromName('Hyperlink')}"/>
@@ -353,6 +355,31 @@ URL : http://www.antennahouse.com/
                 <xsl:sequence select="if (exists($bmEnd)) then $bmEnd else $cElemNull"/>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <!-- 
+     function:	Get bookmark name
+     param:		prmElem
+     return:	xs:string
+     note:		
+     -->
+    <xsl:function name="ahf:getBookmarkName" as="xs:string?">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:variable name="id" as="xs:string" select="generate-id($prmElem)"/>
+        <xsl:variable name="seq" as="xs:integer?" select="map:get($targetElemIdAndNumberMap,$id)"/>
+        <xsl:choose>
+            <xsl:when test="exists($seq)">
+                <xsl:sequence select="ahf:genBookmarkName($seq)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
+    <xsl:template name="getBookmarkName" as="xs:string">
+        <xsl:param name="prmElem" as="element()" required="no" select="."/>
+        <xsl:copy-of select="ahf:getBookmarkName($prmElem)"/>
     </xsl:template>
 
     <!-- 

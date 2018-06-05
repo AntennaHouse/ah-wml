@@ -33,7 +33,7 @@
 	<property name="merged.file" value="${dita.map.filename.root}_MERGED.xml" />
 	<property name="xsl.dir" value="${basedir}${file.separator}xsl"/>
 	<property name="use.saxon.transform" value="no"/>
-	<property name="template.file.path" location="${basedir}/template/template.docx"/>
+	<!--property name="template.file.path" location="${basedir}/template/template.docx"/-->
 	<property name="output.docx" value="${dita.map.filename.root}.docx"/>
 	
 	<!-- Debug merged middle file -->
@@ -78,9 +78,43 @@
 	<makeurl property="plugin.dir.url" file="${basedir}"/>
 	
 	<!-- Main target -->
-	<target name="merged2wml" depends="copy.docx.template,merged2wml.impl,docx.copy.media,docx.copy.common.graphic,docx.package"/>
+	<target name="merged2wml" depends="get.template.docx.path,copy.docx.template,merged2wml.impl,docx.copy.media,docx.copy.common.graphic,docx.package"/>
+	
+	<target name="get.template.docx.path">
+		<property name="input.map.in.temp" value="${dita.temp.dir}${file.separator}${dita.input.filename}"/>
+		<property name="map.property.file" value="${dita.temp.dir}${file.separator}map_property.xml"/>
+		<delete file="${map.property.file}" failonerror="false"/>
+		<property name="map2property.xsl.file" value="${basedir}${file.separator}xsl${file.separator}dita2wml_map_to_xml_property.xsl"/>
+		
+		<xslt processor="trax" in="${input.map.in.temp}" out="${map.property.file}" style="${map2property.xsl.file}" force="true">
+			<param name="PRM_MAP_DIR" expression="${dita.input.dirname}"/>
+			<param name="PRM_TEMP_DIR" expression="${dita.temp.dir}"/>
+			<param name="PRM_XML_LANG" expression="${xml.lang}" if="xml.lang"/>
+			<xmlcatalog refid="dita.catalog"/>
+		</xslt>
+		
+		<xmlproperty file="${map.property.file}" keeproot="true" collapseAttributes="true" semanticAttributes="true"/>
+		
+		<condition property="template.file.path" value="${basedir}${file.separator}template${file.separator}template_${map.xml.lang}.docx">
+			<and>
+				<available file="${basedir}${file.separator}template${file.separator}template_${map.xml.lang}.docx"/>
+				<not>
+					<isset property="template.file.path"/>
+				</not>
+			</and>
+		</condition>
+		<condition property="template.file.path" value="${basedir}${file.separator}template${file.separator}template.docx">
+			<and>
+				<available file="${basedir}${file.separator}template${file.separator}template.docx"/>
+				<not>
+					<isset property="template.file.path"/>
+				</not>
+			</and>
+		</condition>
+	</target>
 	
 	<target name="copy.docx.template">
+		<echo message="template .docx file = ${template.file.path}"/>
 		<unzip src="${template.file.path}" dest="${dita.temp.dir}/template">
 			<patternset>
 				<exclude name="**/.DS_Store"/>
