@@ -1384,7 +1384,7 @@ URL : http://www.antennahouse.com/
         <variable name="FloatFigFrameWidth">0.75pt</variable>
         <variable name="FloatFigFrameColor">black</variable>
         <wml-object name="wmlFloatFigFrame">
-            <a:ln w="{ahf:toEmuStr($FloatFigFrameWidth)}">
+            <a:ln w="{ahf:toEmuStr('$FloatFigFrameWidth')}">
               <a:solidFill>
                   <a:prstClr val="$FloatFigFrameColor"/>
               </a:solidFill>
