@@ -270,7 +270,9 @@ URL : http://www.antennahouse.com/
         
         <xsl:variable name="figPreviousAmount" as="xs:integer">
             <xsl:variable name="topicNodeId" select="ahf:generateId($topicNode)"/>
-            <xsl:sequence select="$figNumberingMap/*[string(@id) eq $topicNodeId]/@prev-count"/>
+            <xsl:variable name="prevCount" as="xs:integer?" select="$figNumberingMap/*[string(@id) eq $topicNodeId]/@prev-count/xs:integer(.)"/>
+            <xsl:assert test="exists($prevCount)" select="concat('[ahf:getFigTitlePrefix] $prevCount is not defined for topic=''',$topicNodeId,'''')"/>
+            <xsl:sequence select="$prevCount"/>
         </xsl:variable>
         
         <xsl:variable name="figCurrentAmount"  as="xs:integer">
