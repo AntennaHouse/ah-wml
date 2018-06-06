@@ -1271,6 +1271,7 @@ URL : http://www.antennahouse.com/
                             <w:bottom w:w="{ahf:toTwipStr('$HazardStatementRowTcMarTB')}" w:type="dxa"/>
                             <w:end w:w="{ahf:toTwipStr('$HazardStatementRowTcMarLR')}" w:type="dxa"/>
                         </w:tcMar>
+                        <w:vAlign w:val="center"/>
                     </w:tcPr>
                     <ahr:messagepanel/>
                 </w:tc>
@@ -1290,6 +1291,7 @@ URL : http://www.antennahouse.com/
                             <w:bottom w:w="{ahf:toTwipStr('$HazardStatementRowTcMarTB')}" w:type="dxa"/>
                             <w:end w:w="{ahf:toTwipStr('$HazardStatementRowTcMarLR')}" w:type="dxa"/>
                         </w:tcMar>
+                        <w:vAlign w:val="center"/>
                     </w:tcPr>
                     <ahr:messagepanel/>
                 </w:tc>
