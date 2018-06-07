@@ -46,7 +46,7 @@ E-mail : info@antennahouse.com
          key:   ahf:generate-id()
          value: @float value
      -->
-    <xsl:variable name="clearElemMap" as="map(xs:string,xs:string)?">
+    <xsl:variable name="clearElemMap" as="map(xs:string,xs:string)">
         <xsl:variable name="targetElemId" as="xs:string*">
             <xsl:for-each select="$cmDistinctClearCandidateElements">
                 <xsl:variable name="elem" as="element()" select="."/>
