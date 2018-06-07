@@ -1162,6 +1162,7 @@ URL : http://www.antennahouse.com/
         <!-- Hazardstatement table -->
         <variable name="HazardStatementTableStyleName">Table Grid</variable>
         <variable name="HazardStatementTableBeforeSpace">12pt</variable>
+        <variable name="HazardStatementTableBorderWidth">1.5pt</variable>
         <variable name="HazardSymbolCellWidth">15.18mm</variable><!--861,7406 -->
         <variable name="HazardStatementTitleRowHeight">7.7mm</variable><!-- 437 -->
         <variable name="HazardStatementTitleShading">pct30</variable><!-- pct30 -->
@@ -1179,6 +1180,14 @@ URL : http://www.antennahouse.com/
                 <w:tblPr>
                     <w:tblStyle w:val="{ahf:getStyleIdFromName('$HazardStatementTableStyleName')}"/>
                     <w:tblW w:w="0" w:type="auto"/>
+                    <w:tblBorders>
+                        <w:top w:val="single" w:sz="{ahf:toBorderWidth('$HazardStatementTableBorderWidth')}" w:space="0" w:color="auto"/>
+                        <w:left w:val="single" w:sz="{ahf:toBorderWidth('$HazardStatementTableBorderWidth')}" w:space="0" w:color="auto"/>
+                        <w:bottom w:val="single" w:sz="{ahf:toBorderWidth('$HazardStatementTableBorderWidth')}" w:space="0" w:color="auto"/>
+                        <w:right w:val="single" w:sz="{ahf:toBorderWidth('$HazardStatementTableBorderWidth')}" w:space="0" w:color="auto"/>
+                        <w:insideH w:val="single" w:sz="{ahf:toBorderWidth('$HazardStatementTableBorderWidth')}" w:space="0" w:color="auto"/>
+                        <w:insideV w:val="single" w:sz="{ahf:toBorderWidth('$HazardStatementTableBorderWidth')}" w:space="0" w:color="auto"/>
+                    </w:tblBorders>
                     <w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="1"
                         w:lastColumn="0" w:noHBand="0" w:noVBand="1"/>
                 </w:tblPr>
@@ -1220,6 +1229,7 @@ URL : http://www.antennahouse.com/
                             </w:r>
                             <w:r>
                                 <w:rPr>
+                                    <w:b/>
                                     <w:sz w:val="{ahf:toHalfPointStr('$HazardStatementSignalWordFontSize')}"/>
                                     <w:szCs w:val="{ahf:toHalfPointStr('$HazardStatementSignalWordFontSize')}"/>
                                     <w:position
