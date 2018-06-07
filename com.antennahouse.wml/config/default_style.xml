@@ -1412,7 +1412,7 @@ URL : http://www.antennahouse.com/
         <wml-object name="wmlClearTextWrappingP">
             <w:p>
                 <w:pPr>
-                    <w:spacing w:line="{ahf:toTwipStr('10pt')}" w:lineRule="exact"/>
+                    <w:spacing w:line="{ahf:toTwipStr('1pt')}" w:lineRule="exact"/>
                 </w:pPr>
                 <w:r>
                     <w:br w:type="textWrapping" w:clear="%clear-val"/>

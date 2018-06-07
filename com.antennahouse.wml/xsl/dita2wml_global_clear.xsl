@@ -144,10 +144,15 @@ E-mail : info@antennahouse.com
      param:		prmElem
      return:	w:p
      note:		Very important because this template precedes all of other templates.
+                If this template is overrided from other plug-in, $prmSkipClear should be true()
+                to prevent multiple clear text wrapping generation.
      -->
     <xsl:template match="*[ahf:isClearTextTarget(.)]" priority="50">
+        <xsl:param name="prmSkipClear" tunnel="yes" required="no" select="false()"/>
         <xsl:next-match/>
-        <xsl:call-template name="ahf:genClearTextWrapP"/>
+        <xsl:if test="not($prmSkipClear)">
+            <xsl:call-template name="ahf:genClearTextWrapP"/>
+        </xsl:if>
     </xsl:template>
 
     <!-- 
