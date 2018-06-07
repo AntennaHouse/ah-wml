@@ -25,23 +25,22 @@ E-mail : info@antennahouse.com
            1. XSL-FO defines @clear attribute for clearing text wrapping.
            2. WordProcessingML defines <w:br w:type="textWrapping" w:clear="all"/>
               for almost the same purpose.
-           3. The diffrence is that:
+           3. The diffrences are:
              - In XSL-FO @clear is specified the FO that should be clear text wrapping.
-             - In WordprocessingML it should be located at the last run before @clear
-               is specified.
+             - In WordprocessingML it should be located at the next of last paragraph before 
+               @clear is specified.
            This module defines map that specified which element should generate
            <w:br w:type="textWrapping" w:clear="XXX"/>
          ******************************************************************************-->
 
-    <!-- Elemets that has @clear or defulted.
+    <!-- Elements that has @clear or defaulted.
      -->
-    <xsl:variable name="elementsThatHasClear" as="element()*">
+    <xsl:variable name="cmClearCandidateElements" as="element()*">
         <xsl:sequence select="$root/descendant::*[string(@clear) = ('both','right','left')]"/>
-    </xsl:variable>
-    <xsl:variable name="stepsThatHaveFloatFig" as="element()*">
         <xsl:sequence select="$root/descendant::*[contains(@class,' task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]"/>
     </xsl:variable>
-    <xsl:variable name="distinctElementsThatHasClear" as="element()*" select="$elementsThatHasClear|$stepsThatHaveFloatFig"/>    
+
+    <xsl:variable name="cmDistinctClearCandidateElements" as="element()*" select="$cmClearCandidateElements|()"/>    
     
     <!-- element id map that should generate <w:br w:type="textWrapping" w:clear="XXX"/>
          key:   ahf:generate-id()
@@ -49,7 +48,7 @@ E-mail : info@antennahouse.com
      -->
     <xsl:variable name="clearElemMap" as="map(xs:string,xs:string)?">
         <xsl:variable name="targetElemId" as="xs:string*">
-            <xsl:for-each select="$distinctElementsThatHasClear">
+            <xsl:for-each select="$cmDistinctClearCandidateElements">
                 <xsl:variable name="elem" as="element()" select="."/>
                 <xsl:variable name="targetCandidate" as="element()?">
                     <xsl:variable name="precedingElem" as="element()?" select="$elem/preceding-sibling::*[1]"/>
@@ -71,7 +70,7 @@ E-mail : info@antennahouse.com
             <xsl:for-each select="$targetElemId">
                 <xsl:variable name="key" as="xs:string" select="."/>
                 <xsl:variable name="pos" as="xs:integer" select="position()"/>
-                <xsl:map-entry key="$key" select="$distinctElementsThatHasClear[$pos]/string(@clear)"/>
+                <xsl:map-entry key="$key" select="$cmDistinctClearCandidateElements[$pos]/string(@clear)"/>
             </xsl:for-each>
         </xsl:map>
     </xsl:variable>
