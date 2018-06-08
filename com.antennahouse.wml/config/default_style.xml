@@ -1325,7 +1325,7 @@ URL : http://www.antennahouse.com/
         </wml-object>
         
         <!-- Floating figure -->
-        <variable name="FloatFigDistCommon">3.175mm</variable>
+        <variable name="FloatFigDistCommon">2mm</variable>
         <variable name="FloatFigInsetLR">0pt</variable><!--10pt-->
         <variable name="FloatFigInsetTB">0pt</variable><!--5pt-->
         <variable name="FloatFigInsetL">$FloatFigInsetLR</variable>
@@ -1334,7 +1334,7 @@ URL : http://www.antennahouse.com/
         <variable name="FloatFigInsetB">$FloatFigInsetTB</variable>
         <wml-object name="wmlFloatFig">
             <w:drawing>
-                <wp:anchor distT="0" distB="0"
+                <wp:anchor distT="0" distB="{ahf:toEmuStr('$FloatFigDistCommon')}"
                     distL="%dist-l" distR="%dist-r" simplePos="0"
                     relativeHeight="1" behindDoc="0" locked="1" layoutInCell="1"
                     allowOverlap="1">
