@@ -39,32 +39,24 @@ E-mail : info@antennahouse.com
          3. section, example, topic that follows floatfig or topicref that follows. 
      -->
     <xsl:variable name="cmClearCandidateElements" as="element()*">
-        <xsl:sequence select="$root/descendant::*[string(@clear) = ('both','right','left')]"/>
-        <xsl:sequence select="$root/descendant::*[contains(@class,' task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]"/>
+        <xsl:sequence select="$root/descendant::*[string(@clear) = ('both','right','left')][ahf:isBlockElement(.)]/preceding-sibling::*[1]"/>
+        <xsl:sequence select="$root/descendant::*[contains(@class,' task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]/preceding-sibling::*[1]"/>
         <xsl:variable name="floatFigs" as="element()*" select="$root/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]"/>
-        <xsl:variable name="targetClass" as="xs:string*" select="(' topic/ topic ',' topic/section ',' topic/example ')"/>
+        <xsl:variable name="targetClass" as="xs:string*" select="(' topic/topic ',' topic/section ',' topic/example ')"/>
         <xsl:variable name="targetElements" as="element()*">
             <xsl:for-each select="$floatFigs">
                 <xsl:variable name="floatFig" as="element()" select="."/>
                 <xsl:variable name="lastParentTopic" as="element()" select="$floatFig/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
-                <xsl:variable name="lastParentTopicDescendant" as="element()*" select="$lastParentTopic/descendant::*"/>
-                <xsl:variable name="targetElemCandidate" as="element()*" select="$floatFig/following::* intersect $lastParentTopicDescendant"/>
-                <xsl:variable name="targetElem" as="element()?" select="$targetElemCandidate[ahf:seqContains(@class,$targetClass)][1]"/>
+                <xsl:variable name="lastParentTopicDescendant" as="element()*" select="$lastParentTopic/descendant-or-self::*"/>
+                <xsl:variable name="targetElemCandidates" as="element()*" select="($floatFig/preceding::* | $floatFig/ancestor::*) intersect $lastParentTopicDescendant"/>
+                <xsl:variable name="targetElem" as="element()?" select="$targetElemCandidates[ahf:seqContains(@class,$targetClass)][last()]"/>
                 <xsl:choose>
                     <xsl:when test="exists($targetElem)">
                         <xsl:sequence select="$targetElem"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:variable name="topicRef" as="element()" select="ahf:getTopicRef($lastParentTopic)"/>
-                        <xsl:variable name="nextTopicRef" as="element()?" select="$topicRef/following::*[contains(@class,' map/topicref ')][ahf:hasTopicRefContent(.)][1]"/>
-                        <xsl:choose>
-                            <xsl:when test="exists($nextTopicRef)">
-                                <xsl:sequence select="$nextTopicRef"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:sequence select="()"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
+                        <xsl:sequence select="$topicRef"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>
@@ -79,28 +71,9 @@ E-mail : info@antennahouse.com
          value: @float value
      -->
     <xsl:variable name="clearElemMap" as="map(xs:string,xs:string)">
-        <xsl:variable name="targetElemId" as="xs:string*">
-            <xsl:for-each select="$cmDistinctClearCandidateElements">
-                <xsl:variable name="elem" as="element()" select="."/>
-                <xsl:variable name="targetCandidate" as="element()?">
-                    <xsl:variable name="precedingElem" as="element()?" select="$elem/preceding-sibling::*[1]"/>
-                    <xsl:sequence select="$precedingElem"/>
-                </xsl:variable>
-                <!--xsl:message select="'$targetCandidate=',$targetCandidate"/-->
-                <xsl:choose>
-                    <xsl:when test="empty($targetCandidate)">
-                        <xsl:sequence select="concat('#',string(position()))"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:sequence select="ahf:generateId($targetCandidate)"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:for-each>
-        </xsl:variable>
-        
         <xsl:map>
-            <xsl:for-each select="$targetElemId">
-                <xsl:variable name="key" as="xs:string" select="."/>
+            <xsl:for-each select="$cmDistinctClearCandidateElements">
+                <xsl:variable name="key" as="xs:string" select="ahf:generateId(.)"/>
                 <xsl:variable name="pos" as="xs:integer" select="position()"/>
                 <xsl:map-entry key="$key" select="$cmDistinctClearCandidateElements[$pos]/string(@clear)"/>
             </xsl:for-each>
