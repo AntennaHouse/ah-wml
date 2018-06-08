@@ -175,7 +175,30 @@ URL : http://www.antennahouse.com/
         </xsl:variable>
         <xsl:sequence select="$topicRefCount"/>
     </xsl:function>
-
+    
+    <!-- 
+     function:	topicref content check function
+     param:		prmTopicRef
+     return:	xs:boolean
+     note:		If topicref has @href for internal topic or topicref has @navtitle or topicmeta/navtitle
+    -->
+    <xsl:function name="ahf:hasTopicRefContent" as="xs:boolean">
+        <xsl:param name="prmTopicRef" as="element()"/>
+        
+        <xsl:variable name="href" select="string($prmTopicRef/@href)" as="xs:string"/>
+        <xsl:choose>
+            <xsl:when test="ahf:isInternalLink($href)">
+                <xsl:sequence select="true()"/>
+            </xsl:when>
+            <xsl:when test="$prmTopicRef/@navtitle or $prmTopicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]">
+                <xsl:sequence select="true()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="false()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
     <!-- 
      function:	get topicref level
      param:		prmTopicRef

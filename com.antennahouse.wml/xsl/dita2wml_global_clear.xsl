@@ -33,11 +33,43 @@ E-mail : info@antennahouse.com
            <w:br w:type="textWrapping" w:clear="XXX"/>
          ******************************************************************************-->
 
-    <!-- Elements that has @clear or defaulted.
+    <!-- Elements that has @clear or clear text wrapping is default.
+         1. Elements that has @clear attribute.
+         2. task/step that has info/floatfig.
+         3. section, example, topic that follows floatfig or topicref that follows. 
      -->
     <xsl:variable name="cmClearCandidateElements" as="element()*">
         <xsl:sequence select="$root/descendant::*[string(@clear) = ('both','right','left')]"/>
         <xsl:sequence select="$root/descendant::*[contains(@class,' task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]"/>
+        <xsl:variable name="floatFigs" as="element()*" select="$root/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]"/>
+        <xsl:variable name="targetClass" as="xs:string*" select="(' topic/ topic ',' topic/section ',' topic/example ')"/>
+        <xsl:variable name="targetElements" as="element()*">
+            <xsl:for-each select="$floatFigs">
+                <xsl:variable name="floatFig" as="element()" select="."/>
+                <xsl:variable name="lastParentTopic" as="element()" select="$floatFig/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
+                <xsl:variable name="lastParentTopicDescendant" as="element()*" select="$lastParentTopic/descendant::*"/>
+                <xsl:variable name="targetElemCandidate" as="element()*" select="$floatFig/following::* intersect $lastParentTopicDescendant"/>
+                <xsl:variable name="targetElem" as="element()?" select="$targetElemCandidate[ahf:seqContains(@class,$targetClass)][1]"/>
+                <xsl:choose>
+                    <xsl:when test="exists($targetElem)">
+                        <xsl:sequence select="$targetElem"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="topicRef" as="element()" select="ahf:getTopicRef($lastParentTopic)"/>
+                        <xsl:variable name="nextTopicRef" as="element()?" select="$topicRef/following::*[contains(@class,' map/topicref ')][ahf:hasTopicRefContent(.)][1]"/>
+                        <xsl:choose>
+                            <xsl:when test="exists($nextTopicRef)">
+                                <xsl:sequence select="$nextTopicRef"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:sequence select="()"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:sequence select="$targetElements"/>
     </xsl:variable>
 
     <xsl:variable name="cmDistinctClearCandidateElements" as="element()*" select="$cmClearCandidateElements|()"/>    
@@ -144,12 +176,14 @@ E-mail : info@antennahouse.com
      param:		prmElem
      return:	w:p
      note:		Very important because this template precedes all of other templates.
-                If this template is overrided from other plug-in, $prmSkipClear should be true()
+                If this template is overridden from other plug-in, $prmSkipClear should be true()
                 to prevent multiple clear text wrapping generation.
      -->
     <xsl:template match="*[ahf:isClearTextTarget(.)]" priority="50">
         <xsl:param name="prmSkipClear" tunnel="yes" required="no" select="false()"/>
-        <xsl:next-match/>
+        <xsl:next-match>
+            <xsl:with-param name="prmSkipClear" tunnel="yes" select="false()"/>
+        </xsl:next-match>
         <xsl:if test="not($prmSkipClear)">
             <xsl:call-template name="ahf:genClearTextWrapP"/>
         </xsl:if>
