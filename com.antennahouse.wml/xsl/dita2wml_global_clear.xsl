@@ -121,9 +121,9 @@ E-mail : info@antennahouse.com
 
     <xsl:template name="ahf:genClearTextWrapP" as="element(w:p)?">
         <xsl:param name="prmElem" as="element()" required="no" select="."/>
-        <xsl:message select="'[ahf:genClearTextWrapP] id=',ahf:generateId($prmElem)"/>
+        <!--xsl:message select="'[ahf:genClearTextWrapP] id=',ahf:generateId($prmElem)"/-->
         <xsl:variable name="clearVal" as="xs:string?" select="map:get($clearElemMap,ahf:generateId($prmElem))"/>
-        <xsl:message select="if (exists($clearVal)) then 'Matched!' else 'Unmatched!'"/>
+        <!--xsl:message select="if (exists($clearVal)) then 'Matched!' else 'Unmatched!'"/-->
         <xsl:if test="exists($clearVal)">
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlClearTextWrappingP'"/>
