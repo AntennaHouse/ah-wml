@@ -1012,7 +1012,6 @@
         </xsl:variable>
         <xsl:sequence select="$varValueAsDouble"/>
     </xsl:template>
-    
 
     <!-- 
          getVarValueAsInteger template
@@ -1066,6 +1065,48 @@
         </xsl:choose>
     </xsl:template>
 
+    <!-- 
+         getVarValueAsBoolean template
+         function: Get variable value specified by $prmVarName, $prmXmlLang, $prmDocType, $prmPaperSize as xs:boolean
+         parameter: prmVarName：Variable name
+                    prmXmlLang: Target xml:lang
+                    prmDocType: Document type
+                    prmPaperSize: Paper size
+         note: 
+      -->
+    <xsl:function name="ahf:getVarValueAsBoolean" as="xs:boolean">
+        <xsl:param name="prmVarName" as="xs:string"/>
+        <xsl:call-template name="getVarValueAsBoolean">
+            <xsl:with-param name="prmVarName" select="$prmVarName"/>
+            <xsl:with-param name="prmXmlLang" select="$defaultXmlLang"/>
+            <xsl:with-param name="prmDocType" select="$defaultDocType"/>
+            <xsl:with-param name="prmPaperSize" select="$defaultPaperSize"/>
+            <xsl:with-param name="prmOutputType" select="$defaultOutputType"/>
+        </xsl:call-template>
+    </xsl:function>
+    
+    <xsl:template name="getVarValueAsBoolean" as="xs:boolean">
+        <xsl:param name="prmVarName" as="xs:string"/>
+        <xsl:param name="prmXmlLang" as="xs:string?" required="no" select="$defaultXmlLang"/>
+        <xsl:param name="prmDocType" as="xs:string?" required="no" select="$defaultDocType"/>
+        <xsl:param name="prmPaperSize" as="xs:string?" required="no" select="$defaultPaperSize"/>
+        <xsl:param name="prmOutputType" as="xs:string?" required="no" select="$defaultOutputType"/>
+        
+        <xsl:variable name="varValue" as="xs:string">
+            <xsl:call-template name="getVarValue">
+                <xsl:with-param name="prmVarName" select="$prmVarName"/>
+                <xsl:with-param name="prmXmlLang" select="$prmXmlLang"/>
+                <xsl:with-param name="prmDocType" select="$prmDocType"/>
+                <xsl:with-param name="prmPaperSize" select="$prmPaperSize"/>
+                <xsl:with-param name="prmOutputType" select="$prmOutputType"/>
+            </xsl:call-template>
+        </xsl:variable>
+        
+        <xsl:sequence select="$varValue = ('1','yes','true')"/>
+        
+    </xsl:template>
+    
+    
     <!-- 
          getVarValueAsStringSequence template
          function: Get variable value specified by $prmVarName, $prmXmlLang, $prmDocType, $prmPaperSize as xs:string*
