@@ -1325,9 +1325,11 @@ URL : http://www.antennahouse.com/
         </wml-object>
         
         <!-- Floating figure -->
+        <variable name="FloatFigSetFrame">no</variable>
         <variable name="FloatFigDistCommon">2mm</variable>
-        <variable name="FloatFigInsetLR">0pt</variable><!--10pt-->
-        <variable name="FloatFigInsetTB">0pt</variable><!--5pt-->
+        <variable name="FloatFigInsetCommon">0pt</variable>
+        <variable name="FloatFigInsetLR">$FloatFigInsetCommon</variable>
+        <variable name="FloatFigInsetTB">$FloatFigInsetCommon</variable>
         <variable name="FloatFigInsetL">$FloatFigInsetLR</variable>
         <variable name="FloatFigInsetR">$FloatFigInsetLR</variable>
         <variable name="FloatFigInsetT">$FloatFigInsetTB</variable>
@@ -1376,8 +1378,8 @@ URL : http://www.antennahouse.com/
                                 </wps:txbx>
                                 <wps:bodyPr rot="0" spcFirstLastPara="0"
                                     vertOverflow="overflow" horzOverflow="overflow"
-                                    vert="horz" wrap="square" lIns="$FloatFigInsetL" tIns="$FloatFigInsetT"
-                                    rIns="$FloatFigInsetR" bIns="$FloatFigInsetB" numCol="1" spcCol="0"
+                                    vert="horz" wrap="square" lIns="{ahf:toEmuStr('$FloatFigInsetL')}" tIns="{ahf:toEmuStr('$FloatFigInsetT')}"
+                                    rIns="{ahf:toEmuStr('$FloatFigInsetR')}" bIns="{ahf:toEmuStr('$FloatFigInsetB')}" numCol="1" spcCol="0"
                                     rtlCol="0" fromWordArt="0" anchor="t" anchorCtr="0"
                                     forceAA="0" compatLnSpc="1">
                                     <a:prstTxWarp prst="textNoShape">
