@@ -56,8 +56,24 @@ URL : http://www.antennahouse.com/
             </xsl:variable>
             <xsl:sequence select="ahf:toEmu($distToText)"/>
         </xsl:variable>
+        <xsl:variable name="insetLeftInEmu" as="xs:integer">
+            <xsl:variable name="insetLeft" as="xs:string">
+                <xsl:call-template name="getVarValue">
+                    <xsl:with-param name="prmVarName" select="'FloatFigInsetL'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:sequence select="ahf:toEmu($insetLeft)"/>
+        </xsl:variable>
+        <xsl:variable name="insetRightInEmu" as="xs:integer">
+            <xsl:variable name="insetRight" as="xs:string">
+                <xsl:call-template name="getVarValue">
+                    <xsl:with-param name="prmVarName" select="'FloatFigInsetR'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:sequence select="ahf:toEmu($insetRight)"/>
+        </xsl:variable>
         <xsl:variable name="paperBodyWidthInEmu" as="xs:integer" select="ahf:toEmu($pPaperBodyWidth)"/>
-        <xsl:variable name="widthInEmu" as="xs:integer" select="xs:integer(round($paperBodyWidthInEmu * $widthPct div 100 - $distToTextInEmu))"/>
+        <xsl:variable name="widthInEmu" as="xs:integer" select="xs:integer(round($paperBodyWidthInEmu * $widthPct div 100 - $distToTextInEmu - $insetLeftInEmu - $insetRightInEmu))"/>
         <xsl:variable name="distL" as="xs:integer" select="if ($isRight) then $distToTextInEmu else 0"/>        
         <xsl:variable name="distR" as="xs:integer" select="if (not($isRight)) then $distToTextInEmu else 0"/>
         <xsl:variable name="posX" as="xs:integer" select="if ($isRight) then $paperBodyWidthInEmu - $widthInEmu else 0"/>
