@@ -62,8 +62,13 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="distR" as="xs:integer" select="if (not($isRight)) then $distToTextInEmu else 0"/>
         <xsl:variable name="posX" as="xs:integer" select="if ($isRight) then $paperBodyWidthInEmu - $widthInEmu else 0"/>
         <xsl:variable name="frame" as="element()">
+            <xsl:variable name="alwaysDrawFrame" as="xs:boolean">
+                <xsl:call-template name="getVarValueAsBoolean">
+                    <xsl:with-param name="prmVarName" select="'FloatFigSetFrame'"/>
+                </xsl:call-template>
+            </xsl:variable>
             <xsl:choose>
-                <xsl:when test="string($prmFloatFig/@frame) eq 'all'">
+                <xsl:when test="(string($prmFloatFig/@frame) eq 'all') or $alwaysDrawFrame">
                     <xsl:call-template name="getWmlObject">
                         <xsl:with-param name="prmObjName" select="'wmlFloatFigFrame'"/>
                     </xsl:call-template>
