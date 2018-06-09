@@ -240,7 +240,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmImageSize" required="yes" as="xs:integer+" />
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
-        <xsl:param name="prmWidthConstraintInEmu" tunnel="yes" as="xs:integer?" select="()"/>
+        <xsl:param name="prmWidthConstraintInEmu" tunnel="yes" required="no" as="xs:integer?" select="()"/>
         <xsl:variable name="isInTableCell" as="xs:boolean" select="exists($prmImage/ancestor::*[ahf:seqContains(@class,(' topic/entry ',' topic/stentry '))])"/>
         <xsl:choose>
             <xsl:when test="$isInTableCell">
