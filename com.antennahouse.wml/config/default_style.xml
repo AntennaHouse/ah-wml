@@ -1161,19 +1161,20 @@ URL : http://www.antennahouse.com/
         
         <!-- Hazardstatement table -->
         <variable name="HazardStatementTableStyleName">Table Grid</variable>
-        <variable name="HazardStatementTableBeforeSpace">12pt</variable>
+        <variable name="HazardStatementTableBeforeSpace">6pt</variable>
+        <variable name="HazardStatementTableBeforePHeight">0.1pt</variable>
         <variable name="HazardStatementTableBorderWidth">1.5pt</variable>
-        <variable name="HazardSymbolCellWidth">15.18mm</variable><!--861,7406 -->
-        <variable name="HazardStatementTitleRowHeight">7.7mm</variable><!-- 437 -->
-        <variable name="HazardStatementTitleShading">pct30</variable><!-- pct30 -->
+        <variable name="HazardSymbolCellWidth">15.18mm</variable>
+        <variable name="HazardStatementTitleRowHeight">7.7mm</variable>
+        <variable name="HazardStatementTitleShading">pct30</variable>
         <variable name="HazardStatementTitleLineHeightRatio">1.0</variable>
-        <variable name="HazardStatementSignalWordFontSize">15pt</variable><!-- 30 -->
+        <variable name="HazardStatementSignalWordFontSize">15pt</variable>
         
         <wml-object name="wmlHazardStatementTable">
             <w:p>
                 <w:pPr>
                     <w:keepNext/>
-                    <w:spacing w:line="{ahf:toTwipStr('$HazardStatementTableBeforeSpace')}" w:lineRule="exact"/>
+                    <w:spacing w:line="{ahf:toTwipStr('$HazardStatementTableBeforePHeight')}" w:lineRule="exact" w:before="{ahf:toTwipStr('$HazardStatementTableBeforeSpace')}"/>
                 </w:pPr>
             </w:p>
             <w:tbl>
@@ -1318,7 +1319,6 @@ URL : http://www.antennahouse.com/
                         <w:ilvl w:val="0"/>
                         <w:numId w:val="%num-id"/>
                     </w:numPr>
-                    <w:spacing w:line="%line-height-ratio" w:lineRule="auto"/>
                 </w:pPr>
                 <ahr:panelChild/>
             </w:p>
