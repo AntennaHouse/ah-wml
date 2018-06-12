@@ -1139,7 +1139,7 @@ URL : http://www.antennahouse.com/
         <!-- 2 column section property-->
         <wml-object name="wmlSect2Col">
             <w:sectPr>
-                <w:type w:val="continuous"/>
+                <w:type w:val="%type"/>
                 <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
                 <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginBottom)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
                     w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
@@ -1149,7 +1149,7 @@ URL : http://www.antennahouse.com/
         
         <wml-object name="wmlSect1Col">
             <w:sectPr>
-                <w:type w:val="continuous"/>
+                <w:type w:val="%type"/>
                 <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
                 <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginBottom)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
                     w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
