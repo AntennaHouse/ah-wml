@@ -1144,7 +1144,6 @@ URL : http://www.antennahouse.com/
                 <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginBottom)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
                     w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
                 <w:cols w:num="2" w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
-                <!--w:docGrid w:type="linesAndChars" w:linePitch="360"/-->
             </w:sectPr>
         </wml-object>
         
@@ -1155,7 +1154,6 @@ URL : http://www.antennahouse.com/
                 <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginBottom)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
                     w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
                 <w:cols w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
-                <!--w:docGrid w:type="linesAndChars" w:linePitch="360"/-->
             </w:sectPr>
         </wml-object>
         
