@@ -1208,6 +1208,7 @@ URL : http://www.antennahouse.com/
                                 <w:top w:w="0" w:type="dxa"/>
                                 <w:bottom w:w="0" w:type="dxa"/>
                             </w:tcMar>
+                            <w:vAlign w:val="center"/>
                         </w:tcPr>
                         <w:p>
                             <w:pPr>
