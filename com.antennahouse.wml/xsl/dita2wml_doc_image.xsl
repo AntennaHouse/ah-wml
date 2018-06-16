@@ -57,9 +57,24 @@ URL : http://www.antennahouse.com/
                     </xsl:choose>
                 </xsl:variable>
                 <w:r>
-                    <xsl:if test="exists($prmRunProps)">
+                    <xsl:variable name="mergedRunProps" as="element()*">
+                        <xsl:choose>
+                            <xsl:when test="string(@placement) eq 'inline'">
+                                <xsl:variable name="inlineImageBaselineShift" as="element()">
+                                    <xsl:call-template name="getWmlObject">
+                                        <xsl:with-param name="prmObjName" select="'wmlInlineImageBaselineShift'"/>
+                                    </xsl:call-template>
+                                </xsl:variable>
+                                <xsl:copy-of select="ahf:mergeRunProps($prmRunProps,$inlineImageBaselineShift)"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:copy-of select="$prmRunProps"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:if test="exists($mergedRunProps)">
                         <w:rPr>
-                            <xsl:copy-of select="$prmRunProps"/>
+                            <xsl:copy-of select="$mergedRunProps"/>
                         </w:rPr>
                     </xsl:if>
                     <xsl:call-template name="getWmlObjectReplacing">

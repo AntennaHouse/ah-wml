@@ -415,6 +415,41 @@ URL : http://www.antennahouse.com/
     <xsl:variable name="b" as="xs:string" select="concat('00',ahf:intToHexString($prmB))"/>
     <xsl:sequence select="concat(substring($r,string-length($r) - 1),substring($g,string-length($g) - 1),substring($b,string-length($b) - 1))"/>
   </xsl:function>
-  
+
+  <!-- 
+     function:	Merge run properties
+     param:		prmRunProps, prmAddingRunProps
+     return:	element()*
+     note:		w:rPr is defined as xsd:choice.
+              Elements in w:rPr can be present in any order but it should be occured only onece.
+              This template merges $prmRunProps with $prmAddingRunProps
+   -->
+  <xsl:function name="ahf:mergeRunProps" as="element()*" visibility="public">
+    <xsl:param name="prmRunProps" as="element()*"/>
+    <xsl:param name="prmAddingRunProps" as="element()*"/>
+    <xsl:choose>
+      <xsl:when test="exists($prmAddingRunProps)">
+        <xsl:variable name="addingRunprop" as="element()" select="$prmAddingRunProps[1]"/>
+        <xsl:variable name="result" as="element()*">
+          <xsl:choose>
+            <xsl:when test="empty($prmRunProps)">
+              <xsl:sequence select="$addingRunprop"/>
+            </xsl:when>
+            <xsl:when test="exists($prmRunProps[name() eq name($addingRunprop)])">
+              <xsl:sequence select="($prmRunProps[name() ne name($addingRunprop)],$addingRunprop)"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:sequence select="$prmRunProps"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:sequence select="ahf:mergeRunProps($result,$prmAddingRunProps[position() gt 1])"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="$prmRunProps"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
   <!-- end of stylesheet -->
 </xsl:stylesheet>
