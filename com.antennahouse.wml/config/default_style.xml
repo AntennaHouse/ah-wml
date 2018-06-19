@@ -761,6 +761,10 @@ URL : http://www.antennahouse.com/
         <wml-object name="wmlInlineImageBaselineShift">
             <w:position w:val="{ahf:toHalfPointStr('$InlineImageBaslineShift')}"/>
         </wml-object>
+        
+        <wml-object name="wmlSingleLineHeight">
+            <w:spacing w:line="240" w:lineRule="auto"/>
+        </wml-object>
 
         <!-- Style for note rule line -->
         <!--wml-object name="wmlNoteLineStyle">

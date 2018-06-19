@@ -293,14 +293,15 @@ URL : http://www.antennahouse.com/
         
         <w:p>
             <xsl:variable name="pPr" as="element()*">
+                <xsl:call-template name="getWmlObject">
+                    <xsl:with-param name="prmObjName" select="'wmlSingleLineHeight'"/>
+                </xsl:call-template>
                 <xsl:sequence select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
                 <xsl:sequence select="ahf:getAlignAttrElem(if (exists(@align)) then @align else $prmTcAttr/@align)"/>
             </xsl:variable>
-            <xsl:if test="exists($pPr)">
-                <w:pPr>
-                    <xsl:copy-of select="$pPr"/>
-                </w:pPr>
-            </xsl:if>
+            <w:pPr>
+                <xsl:copy-of select="$pPr"/>
+            </w:pPr>
             <xsl:next-match/>
         </w:p>
     </xsl:template>
