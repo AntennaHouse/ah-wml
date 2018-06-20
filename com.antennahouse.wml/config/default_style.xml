@@ -981,7 +981,29 @@ URL : http://www.antennahouse.com/
             </w:r>
         </wml-object>
         
+        <variable name="IndexOption">\c 2 \h "A" </variable>
+        
         <variable name="IndexOptionEtc">\z en-us </variable>
+
+        <!-- INDEX With Tab Field
+             Index page is placed right with tab leader
+         -->
+        <wml-object name="wmlIndexFieldWithTab">
+            <w:r>
+                <w:fldChar w:fldCharType="begin"/>
+            </w:r>
+            <w:r>
+                <w:instrText xml:space="preserve"> INDEX \e "</w:instrText>
+            </w:r>
+            <w:r>
+                <w:tab/>
+                <w:instrText xml:space="preserve">" %field-opt</w:instrText>
+            </w:r>
+            <w:r>
+                <w:fldChar w:fldCharType="end"/>
+            </w:r>
+        </wml-object>
+        
 
         <!-- PAGEREF Field
              The reference page will be determined when Word formats a document.
