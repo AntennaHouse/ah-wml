@@ -39,108 +39,112 @@
         </antcall>
 
     </target>
-
-    <target name="convert.merged.file">
-
+    
+    <target name="convert.merged.file" depends="convmerged1,convmerged2,convmerged3"/>
+        
+    <target name="convmerged1">
         <antcall target="transform.common">
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${build.temp.dir}${file.separator}${converted.merged.file1}"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_convmerged_shell.xsl"/>
         </antcall>
-        
+    </target>
+    
+    <target name="convmerged2">
         <antcall target="transform.common">
             <param name="prmInputFile" value="${build.temp.dir}${file.separator}${converted.merged.file1}"/>
             <param name="prmOutputFile" value="${build.temp.dir}${file.separator}${converted.merged.file2}"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_convmerged2_shell.xsl"/>
         </antcall>
-
+    </target>
+    
+    <target name="convmerged3">
         <antcall target="transform.common">
             <param name="prmInputFile" value="${build.temp.dir}${file.separator}${converted.merged.file2}"/>
             <param name="prmOutputFile" value="${prmOutputFile}"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_convmerged3_shell.xsl"/>
         </antcall>
-        
     </target>
 
-    <target name="generate.docx.file">
-        <echo message="core.xml"/>
+    <target name="generate.docx.file" depends="core.xml,theme1.xml,custom.xml,document.xml,styles.xml,numbering.xml,footnote.xml,document.xml.rels,Content_Types.xml"/>
+        
+    <target name="core.xml">
         <antcall target="transform.common">
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/docProps/core.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_core_shell.xsl"/>
         </antcall>
-        
-        <echo message="theme1.xml"/>
+    </target>        
+
+    <target name="theme1.xml">
         <antcall target="transform.dir.common">
             <param name="prmInputDir" value="${dita.temp.dir}/template/word/theme"/>
             <param name="prmOutputDir" value="${dita.temp.dir}/docx/word/theme"/>
             <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_theme_shell.xsl"/>
         </antcall>
-        
+    </target>
+
+    <target name="custom.xml">
         <echo message="custom.xml"/>
         <antcall target="transform.common">
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/docProps/custom.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_custom.xsl"/>
         </antcall>
-        
+    </target>
+
+    <target name="document.xml">
         <echo message="document.xml"/>
         <antcall target="transform.common">
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/document.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_doc_shell.xsl"/>
         </antcall>
-        
-        <!--
-        <property name="comments.xsl" location="${xsl.dir}/dita2wml_comments.xsl"/>
-        <xslt style="${comments.xsl}" in="${prmInputFile}" out="${dita.temp.dir}/docx/word/comments.xml" force="true">
-            <param name="template.dir" expression="${dotx.dir.uri}"/>
-            <xmlcatalog refid="dita.catalog"/>
-        </xslt>
-        -->
+    </target>
 
+    <target name="styles.xml">
         <echo message="styles.xml"/>
         <antcall target="transform.common">
             <param name="prmInputFile" value="${dita.temp.dir}/template/word/styles.xml"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/styles.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_styles_shell.xsl"/>
         </antcall>
+    </target>
 
+    <target name="numbering.xml">
         <echo message="numbering.xml"/>
         <antcall target="transform.common">
             <param name="prmInputFile" value="${dita.temp.dir}/template/word/numbering.xml"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/numbering.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_numbering_shell.xsl"/>
         </antcall>
-        
+    </target>
+
+    <target name="footnote.xml">
         <echo message="footnote.xml"/>
         <antcall target="transform.common">
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/footnotes.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_footnote_shell.xsl"/>
         </antcall>
-        
+    </target>
+
+    <target name="document.xml.rels">
         <echo message="document.xml.rels"/>
         <antcall target="transform.common">
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/_rels/document.xml.rels"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_doc_xml_rels_shell.xsl"/>
         </antcall>
+    </target>
 
+    <target name="Content_Types.xml">
         <echo message="[Content_Types].xml"/>
         <antcall target="transform.common">
             <param name="prmInputFile" value="${dita.temp.dir}/template/[Content_Types].xml"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/[Content_Types].xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_content_types_shell.xsl"/>
         </antcall>
-        
-        <!--
-        <makeurl property="clean.input.file.uri" file="${clean.input.file}"/>
-        <xslt style="${xsl.dir}/[Content_Types].xsl" in="${dita.temp.dir}/dotx/[Content_Types].xml" out="${dita.temp.dir}/docx/[Content_Types].xml" force="true">
-            <param name="input.uri" expression="${clean.input.file.uri}"/>
-            <xmlcatalog refid="dita.catalog"/>
-        </xslt>
-        -->
     </target>
 
     <!-- Common XSLT  processing -->
