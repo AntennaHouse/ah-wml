@@ -234,8 +234,8 @@ URL : http://www.antennahouse.com/
                             <!-- Generate w:p -->
                             <xsl:call-template name="getWmlObjectReplacing">
                                 <xsl:with-param name="prmObjName" select="'wmlMessgaPanelChildElement'"/>
-                                <xsl:with-param name="prmSrc" select="('%num-id','%line-height-ratio','node:panelChild')"/>
-                                <xsl:with-param name="prmDst" select="($numId,ahf:toLineHeightStr($lineHeight),if (empty($childInlines)) then $cElemNull else $childInlines)"/>
+                                <xsl:with-param name="prmSrc" select="('%num-id','node:panelChild')"/>
+                                <xsl:with-param name="prmDst" select="($numId,if (empty($childInlines)) then $cElemNull else $childInlines)"/>
                             </xsl:call-template>
                         </xsl:otherwise>
                     </xsl:choose>

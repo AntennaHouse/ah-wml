@@ -25,53 +25,57 @@ E-mail : info@antennahouse.com
            1. XSL-FO defines @clear attribute for clearing text wrapping.
            2. WordProcessingML defines <w:br w:type="textWrapping" w:clear="all"/>
               for almost the same purpose.
-           3. The diffrence is that:
+           3. The diffrences are:
              - In XSL-FO @clear is specified the FO that should be clear text wrapping.
-             - In WordprocessingML it should be located at the last run before @clear
-               is specified.
+             - In WordprocessingML it should be located at the next of last paragraph before 
+               @clear is specified.
            This module defines map that specified which element should generate
            <w:br w:type="textWrapping" w:clear="XXX"/>
          ******************************************************************************-->
 
-    <!-- Elemets that has @clear or defulted.
+    <!-- Elements that has @clear or clear text wrapping is default.
+         1. Elements that has @clear attribute.
+         2. task/step that has info/floatfig.
+         3. section, example, topic that follows floatfig or topicref that follows. 
      -->
-    <xsl:variable name="elementsThatHasClear" as="element()*">
-        <xsl:sequence select="$root/descendant::*[string(@clear) = ('both','right','left')]"/>
+    <xsl:variable name="cmClearCandidateElements" as="element()*">
+        <xsl:sequence select="$root/descendant::*[string(@clear) = ('both','right','left')][ahf:isBlockElement(.)]/preceding-sibling::*[1]"/>
+        <xsl:sequence select="$root/descendant::*[contains(@class,' task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]/preceding-sibling::*[1]"/>
+        <xsl:variable name="floatFigs" as="element()*" select="$root/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]"/>
+        <xsl:variable name="targetClass" as="xs:string*" select="(' topic/topic ',' topic/section ',' topic/example ')"/>
+        <xsl:variable name="targetElements" as="element()*">
+            <xsl:for-each select="$floatFigs">
+                <xsl:variable name="floatFig" as="element()" select="."/>
+                <xsl:variable name="lastParentTopic" as="element()" select="$floatFig/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
+                <xsl:variable name="lastParentTopicDescendant" as="element()*" select="$lastParentTopic/descendant-or-self::*"/>
+                <xsl:variable name="targetElemCandidates" as="element()*" select="($floatFig/preceding::* | $floatFig/ancestor::*) intersect $lastParentTopicDescendant"/>
+                <xsl:variable name="targetElem" as="element()?" select="$targetElemCandidates[ahf:seqContains(@class,$targetClass)][last()]"/>
+                <xsl:choose>
+                    <xsl:when test="exists($targetElem)">
+                        <xsl:sequence select="$targetElem"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="topicRef" as="element()" select="ahf:getTopicRef($lastParentTopic)"/>
+                        <xsl:sequence select="$topicRef"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:sequence select="$targetElements"/>
     </xsl:variable>
-    <xsl:variable name="stepsThatHaveFloatFig" as="element()*">
-        <xsl:sequence select="$root/descendant::*[contains(@class,' task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]"/>
-    </xsl:variable>
-    <xsl:variable name="distinctElementsThatHasClear" as="element()*" select="$elementsThatHasClear|$stepsThatHaveFloatFig"/>    
+
+    <xsl:variable name="cmDistinctClearCandidateElements" as="element()*" select="$cmClearCandidateElements|()"/>    
     
     <!-- element id map that should generate <w:br w:type="textWrapping" w:clear="XXX"/>
          key:   ahf:generate-id()
          value: @float value
      -->
-    <xsl:variable name="clearElemMap" as="map(xs:string,xs:string)?">
-        <xsl:variable name="targetElemId" as="xs:string*">
-            <xsl:for-each select="$distinctElementsThatHasClear">
-                <xsl:variable name="elem" as="element()" select="."/>
-                <xsl:variable name="targetCandidate" as="element()?">
-                    <xsl:variable name="precedingElem" as="element()?" select="$elem/preceding-sibling::*[1]"/>
-                    <xsl:sequence select="$precedingElem"/>
-                </xsl:variable>
-                <!--xsl:message select="'$targetCandidate=',$targetCandidate"/-->
-                <xsl:choose>
-                    <xsl:when test="empty($targetCandidate)">
-                        <xsl:sequence select="concat('#',string(position()))"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:sequence select="ahf:generateId($targetCandidate)"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:for-each>
-        </xsl:variable>
-        
+    <xsl:variable name="clearElemMap" as="map(xs:string,xs:string)">
         <xsl:map>
-            <xsl:for-each select="$targetElemId">
-                <xsl:variable name="key" as="xs:string" select="."/>
+            <xsl:for-each select="$cmDistinctClearCandidateElements">
+                <xsl:variable name="key" as="xs:string" select="ahf:generateId(.)"/>
                 <xsl:variable name="pos" as="xs:integer" select="position()"/>
-                <xsl:map-entry key="$key" select="$distinctElementsThatHasClear[$pos]/string(@clear)"/>
+                <xsl:map-entry key="$key" select="$cmDistinctClearCandidateElements[$pos]/string(@clear)"/>
             </xsl:for-each>
         </xsl:map>
     </xsl:variable>
@@ -117,9 +121,9 @@ E-mail : info@antennahouse.com
 
     <xsl:template name="ahf:genClearTextWrapP" as="element(w:p)?">
         <xsl:param name="prmElem" as="element()" required="no" select="."/>
-        <xsl:message select="'[ahf:genClearTextWrapP] id=',ahf:generateId($prmElem)"/>
+        <!--xsl:message select="'[ahf:genClearTextWrapP] id=',ahf:generateId($prmElem)"/-->
         <xsl:variable name="clearVal" as="xs:string?" select="map:get($clearElemMap,ahf:generateId($prmElem))"/>
-        <xsl:message select="if (exists($clearVal)) then 'Matched!' else 'Unmatched!'"/>
+        <!--xsl:message select="if (exists($clearVal)) then 'Matched!' else 'Unmatched!'"/-->
         <xsl:if test="exists($clearVal)">
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlClearTextWrappingP'"/>
@@ -145,10 +149,17 @@ E-mail : info@antennahouse.com
      param:		prmElem
      return:	w:p
      note:		Very important because this template precedes all of other templates.
+                If this template is overridden from other plug-in, $prmSkipClear should be true()
+                to prevent multiple clear text wrapping generation.
      -->
     <xsl:template match="*[ahf:isClearTextTarget(.)]" priority="50">
-        <xsl:next-match/>
-        <xsl:call-template name="ahf:genClearTextWrapP"/>
+        <xsl:param name="prmSkipClear" tunnel="yes" required="no" select="false()"/>
+        <xsl:next-match>
+            <xsl:with-param name="prmSkipClear" tunnel="yes" select="false()"/>
+        </xsl:next-match>
+        <xsl:if test="not($prmSkipClear)">
+            <xsl:call-template name="ahf:genClearTextWrapP"/>
+        </xsl:if>
     </xsl:template>
 
     <!-- 

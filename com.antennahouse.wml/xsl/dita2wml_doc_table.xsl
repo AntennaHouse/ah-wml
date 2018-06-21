@@ -356,7 +356,6 @@ URL : http://www.antennahouse.com/
      param:		prmRowAttr
      return:	w:tr
      note:		Passing $prmTcAttr aims to implement @align in paragraph level.
-                [FIX ME!] $prmTcAttr is not refrenced from any template. 
      -->
     <!-- Ignore column spanned entry -->
     <xsl:template match="*[contains(@class,' topic/entry ')][string(@ahf:col-spanned) eq $cYes]" priority="5"/>

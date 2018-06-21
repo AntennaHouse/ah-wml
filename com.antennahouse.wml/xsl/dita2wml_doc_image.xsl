@@ -57,9 +57,24 @@ URL : http://www.antennahouse.com/
                     </xsl:choose>
                 </xsl:variable>
                 <w:r>
-                    <xsl:if test="exists($prmRunProps)">
+                    <xsl:variable name="mergedRunProps" as="element()*">
+                        <xsl:choose>
+                            <xsl:when test="string(@placement) eq 'inline'">
+                                <xsl:variable name="inlineImageBaselineShift" as="element()">
+                                    <xsl:call-template name="getWmlObject">
+                                        <xsl:with-param name="prmObjName" select="'wmlInlineImageBaselineShift'"/>
+                                    </xsl:call-template>
+                                </xsl:variable>
+                                <xsl:copy-of select="ahf:mergeRunProps($prmRunProps,$inlineImageBaselineShift)"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:copy-of select="$prmRunProps"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:if test="exists($mergedRunProps)">
                         <w:rPr>
-                            <xsl:copy-of select="$prmRunProps"/>
+                            <xsl:copy-of select="$mergedRunProps"/>
                         </w:rPr>
                     </xsl:if>
                     <xsl:call-template name="getWmlObjectReplacing">
@@ -240,7 +255,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmImageSize" required="yes" as="xs:integer+" />
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
-        <xsl:param name="prmWidthConstraintInEmu" tunnel="yes" as="xs:integer?" select="()"/>
+        <xsl:param name="prmWidthConstraintInEmu" tunnel="yes" required="no" as="xs:integer?" select="()"/>
         <xsl:variable name="isInTableCell" as="xs:boolean" select="exists($prmImage/ancestor::*[ahf:seqContains(@class,(' topic/entry ',' topic/stentry '))])"/>
         <xsl:choose>
             <xsl:when test="$isInTableCell">
@@ -278,14 +293,15 @@ URL : http://www.antennahouse.com/
         
         <w:p>
             <xsl:variable name="pPr" as="element()*">
+                <xsl:call-template name="getWmlObject">
+                    <xsl:with-param name="prmObjName" select="'wmlSingleLineHeight'"/>
+                </xsl:call-template>
                 <xsl:sequence select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
                 <xsl:sequence select="ahf:getAlignAttrElem(if (exists(@align)) then @align else $prmTcAttr/@align)"/>
             </xsl:variable>
-            <xsl:if test="exists($pPr)">
-                <w:pPr>
-                    <xsl:copy-of select="$pPr"/>
-                </w:pPr>
-            </xsl:if>
+            <w:pPr>
+                <xsl:copy-of select="$pPr"/>
+            </w:pPr>
             <xsl:next-match/>
         </w:p>
     </xsl:template>

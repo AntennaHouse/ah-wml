@@ -56,14 +56,52 @@ URL : http://www.antennahouse.com/
             </xsl:variable>
             <xsl:sequence select="ahf:toEmu($distToText)"/>
         </xsl:variable>
+        <xsl:variable name="insetTopInEmu" as="xs:integer">
+            <xsl:variable name="insetTop" as="xs:string">
+                <xsl:call-template name="getVarValue">
+                    <xsl:with-param name="prmVarName" select="'FloatFigInsetT'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:sequence select="ahf:toEmu($insetTop)"/>
+        </xsl:variable>
+        <xsl:variable name="insetBottomInEmu" as="xs:integer">
+            <xsl:variable name="insetBottom" as="xs:string">
+                <xsl:call-template name="getVarValue">
+                    <xsl:with-param name="prmVarName" select="'FloatFigInsetB'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:sequence select="ahf:toEmu($insetBottom)"/>
+        </xsl:variable>
+        <xsl:variable name="insetLeftInEmu" as="xs:integer">
+            <xsl:variable name="insetLeft" as="xs:string">
+                <xsl:call-template name="getVarValue">
+                    <xsl:with-param name="prmVarName" select="'FloatFigInsetL'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:sequence select="ahf:toEmu($insetLeft)"/>
+        </xsl:variable>
+        <xsl:variable name="insetRightInEmu" as="xs:integer">
+            <xsl:variable name="insetRight" as="xs:string">
+                <xsl:call-template name="getVarValue">
+                    <xsl:with-param name="prmVarName" select="'FloatFigInsetR'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:sequence select="ahf:toEmu($insetRight)"/>
+        </xsl:variable>
         <xsl:variable name="paperBodyWidthInEmu" as="xs:integer" select="ahf:toEmu($pPaperBodyWidth)"/>
         <xsl:variable name="widthInEmu" as="xs:integer" select="xs:integer(round($paperBodyWidthInEmu * $widthPct div 100 - $distToTextInEmu))"/>
+        <xsl:variable name="imageWidthInEmu" as="xs:integer" select="xs:integer(round($paperBodyWidthInEmu * $widthPct div 100 - $distToTextInEmu - $insetLeftInEmu - $insetRightInEmu))"/>
         <xsl:variable name="distL" as="xs:integer" select="if ($isRight) then $distToTextInEmu else 0"/>        
         <xsl:variable name="distR" as="xs:integer" select="if (not($isRight)) then $distToTextInEmu else 0"/>
         <xsl:variable name="posX" as="xs:integer" select="if ($isRight) then $paperBodyWidthInEmu - $widthInEmu else 0"/>
         <xsl:variable name="frame" as="element()">
+            <xsl:variable name="alwaysDrawFrame" as="xs:boolean">
+                <xsl:call-template name="getVarValueAsBoolean">
+                    <xsl:with-param name="prmVarName" select="'FloatFigSetFrame'"/>
+                </xsl:call-template>
+            </xsl:variable>
             <xsl:choose>
-                <xsl:when test="string($prmFloatFig/@frame) eq 'all'">
+                <xsl:when test="(string($prmFloatFig/@frame) eq 'all') or $alwaysDrawFrame">
                     <xsl:call-template name="getWmlObject">
                         <xsl:with-param name="prmObjName" select="'wmlFloatFigFrame'"/>
                     </xsl:call-template>
@@ -78,7 +116,7 @@ URL : http://www.antennahouse.com/
                 <xsl:apply-templates>
                     <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
                     <xsl:with-param name="prmExtraIndent" tunnel="yes" select="0"/>
-                    <xsl:with-param name="prmWidthConstraintInEmu" tunnel="yes" as="xs:integer" select="$widthInEmu"/>
+                    <xsl:with-param name="prmWidthConstraintInEmu" tunnel="yes" as="xs:integer" select="$imageWidthInEmu"/>
                 </xsl:apply-templates>
             </xsl:document>
         </xsl:variable>
@@ -93,7 +131,7 @@ URL : http://www.antennahouse.com/
                     <xsl:with-param name="prmPHeightInEmu" tunnel="yes" select="$pHeightInEmu"/>
                 </xsl:apply-templates>
             </xsl:variable>
-            <xsl:sequence select="sum($contentHeightsInEmu)"/>
+            <xsl:sequence select="sum($contentHeightsInEmu) + $insetTopInEmu + $insetBottomInEmu"/>
         </xsl:variable>
         
         <!-- Generate text-box -->

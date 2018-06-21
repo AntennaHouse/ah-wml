@@ -28,9 +28,9 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' bookmap/indexlist ')]" name="genIndexField" as="element(w:p)+" priority="5">
         
         <xsl:variable name="option" as="xs:string*">
-            <xsl:sequence select="'\c 2'"/>
-            <xsl:sequence select="'\e &quot;, &quot;'"/>
-            <xsl:sequence select="'\h &quot;—A—&quot;'"/>
+            <xsl:call-template name="getVarValue">
+                <xsl:with-param name="prmVarName" select="'IndexOption'"/>
+            </xsl:call-template>
             <xsl:call-template name="getVarValue">
                 <xsl:with-param name="prmVarName" select="'IndexOptionEtc'"/>
             </xsl:call-template>
@@ -48,7 +48,7 @@ URL : http://www.antennahouse.com/
         
         <w:p>
             <xsl:call-template name="getWmlObjectReplacing">
-                <xsl:with-param name="prmObjName" select="'wmlIndexField'"/>
+                <xsl:with-param name="prmObjName" select="'wmlIndexFieldWithTab'"/>
                 <xsl:with-param name="prmSrc" select="('%field-opt')"/>
                 <xsl:with-param name="prmDst" select="(string-join($option,' '))"/>
             </xsl:call-template>

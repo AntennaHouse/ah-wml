@@ -755,6 +755,16 @@ URL : http://www.antennahouse.com/
                 </wp:inline>
             </w:drawing>
         </wml-object>
+        
+        <!-- Inline image baseline shift -->
+        <variable name="InlineImageBaslineShift">-5pt</variable>
+        <wml-object name="wmlInlineImageBaselineShift">
+            <w:position w:val="{ahf:toHalfPointStr('$InlineImageBaslineShift')}"/>
+        </wml-object>
+        
+        <wml-object name="wmlSingleLineHeight">
+            <w:spacing w:line="240" w:lineRule="auto"/>
+        </wml-object>
 
         <!-- Style for note rule line -->
         <!--wml-object name="wmlNoteLineStyle">
@@ -971,7 +981,29 @@ URL : http://www.antennahouse.com/
             </w:r>
         </wml-object>
         
+        <variable name="IndexOption">\c 2 \h "A" </variable>
+        
         <variable name="IndexOptionEtc">\z en-us </variable>
+
+        <!-- INDEX With Tab Field
+             Index page is placed right with tab leader
+         -->
+        <wml-object name="wmlIndexFieldWithTab">
+            <w:r>
+                <w:fldChar w:fldCharType="begin"/>
+            </w:r>
+            <w:r>
+                <w:instrText xml:space="preserve"> INDEX \e "</w:instrText>
+            </w:r>
+            <w:r>
+                <w:tab/>
+                <w:instrText xml:space="preserve">" %field-opt</w:instrText>
+            </w:r>
+            <w:r>
+                <w:fldChar w:fldCharType="end"/>
+            </w:r>
+        </wml-object>
+        
 
         <!-- PAGEREF Field
              The reference page will be determined when Word formats a document.
@@ -1139,46 +1171,54 @@ URL : http://www.antennahouse.com/
         <!-- 2 column section property-->
         <wml-object name="wmlSect2Col">
             <w:sectPr>
-                <w:type w:val="continuous"/>
+                <w:type w:val="%type"/>
                 <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
                 <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginBottom)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
                     w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
                 <w:cols w:num="2" w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
-                <!--w:docGrid w:type="linesAndChars" w:linePitch="360"/-->
             </w:sectPr>
         </wml-object>
         
         <wml-object name="wmlSect1Col">
             <w:sectPr>
-                <w:type w:val="continuous"/>
+                <w:type w:val="%type"/>
                 <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
                 <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginBottom)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
                     w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
                 <w:cols w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
-                <!--w:docGrid w:type="linesAndChars" w:linePitch="360"/-->
             </w:sectPr>
         </wml-object>
         
         <!-- Hazardstatement table -->
         <variable name="HazardStatementTableStyleName">Table Grid</variable>
-        <variable name="HazardStatementTableBeforeSpace">12pt</variable>
-        <variable name="HazardSymbolCellWidth">15.18mm</variable><!--861,7406 -->
-        <variable name="HazardStatementTitleRowHeight">7.7mm</variable><!-- 437 -->
-        <variable name="HazardStatementTitleShading">pct30</variable><!-- pct30 -->
+        <variable name="HazardStatementTableBeforeSpace">6pt</variable>
+        <variable name="HazardStatementTableBeforePHeight">0.1pt</variable>
+        <variable name="HazardStatementTableBorderWidth">1.5pt</variable>
+        <variable name="HazardSymbolCellWidth">15.18mm</variable>
+        <variable name="HazardStatementTitleRowHeight">7.7mm</variable>
+        <variable name="HazardStatementTitleShading">pct30</variable>
         <variable name="HazardStatementTitleLineHeightRatio">1.0</variable>
-        <variable name="HazardStatementSignalWordFontSize">15pt</variable><!-- 30 -->
+        <variable name="HazardStatementSignalWordFontSize">15pt</variable>
         
         <wml-object name="wmlHazardStatementTable">
             <w:p>
                 <w:pPr>
                     <w:keepNext/>
-                    <w:spacing w:line="{ahf:toTwipStr('$HazardStatementTableBeforeSpace')}" w:lineRule="exact"/>
+                    <w:spacing w:line="{ahf:toTwipStr('$HazardStatementTableBeforePHeight')}" w:lineRule="exact" w:before="{ahf:toTwipStr('$HazardStatementTableBeforeSpace')}"/>
                 </w:pPr>
             </w:p>
             <w:tbl>
                 <w:tblPr>
                     <w:tblStyle w:val="{ahf:getStyleIdFromName('$HazardStatementTableStyleName')}"/>
                     <w:tblW w:w="0" w:type="auto"/>
+                    <w:tblBorders>
+                        <w:top w:val="single" w:sz="{ahf:toBorderWidth('$HazardStatementTableBorderWidth')}" w:space="0" w:color="auto"/>
+                        <w:left w:val="single" w:sz="{ahf:toBorderWidth('$HazardStatementTableBorderWidth')}" w:space="0" w:color="auto"/>
+                        <w:bottom w:val="single" w:sz="{ahf:toBorderWidth('$HazardStatementTableBorderWidth')}" w:space="0" w:color="auto"/>
+                        <w:right w:val="single" w:sz="{ahf:toBorderWidth('$HazardStatementTableBorderWidth')}" w:space="0" w:color="auto"/>
+                        <w:insideH w:val="single" w:sz="{ahf:toBorderWidth('$HazardStatementTableBorderWidth')}" w:space="0" w:color="auto"/>
+                        <w:insideV w:val="single" w:sz="{ahf:toBorderWidth('$HazardStatementTableBorderWidth')}" w:space="0" w:color="auto"/>
+                    </w:tblBorders>
                     <w:tblLook w:firstRow="1" w:lastRow="0" w:firstColumn="1"
                         w:lastColumn="0" w:noHBand="0" w:noVBand="1"/>
                 </w:tblPr>
@@ -1200,6 +1240,7 @@ URL : http://www.antennahouse.com/
                                 <w:top w:w="0" w:type="dxa"/>
                                 <w:bottom w:w="0" w:type="dxa"/>
                             </w:tcMar>
+                            <w:vAlign w:val="center"/>
                         </w:tcPr>
                         <w:p>
                             <w:pPr>
@@ -1220,6 +1261,7 @@ URL : http://www.antennahouse.com/
                             </w:r>
                             <w:r>
                                 <w:rPr>
+                                    <w:b/>
                                     <w:sz w:val="{ahf:toHalfPointStr('$HazardStatementSignalWordFontSize')}"/>
                                     <w:szCs w:val="{ahf:toHalfPointStr('$HazardStatementSignalWordFontSize')}"/>
                                     <w:position
@@ -1271,6 +1313,7 @@ URL : http://www.antennahouse.com/
                             <w:bottom w:w="{ahf:toTwipStr('$HazardStatementRowTcMarTB')}" w:type="dxa"/>
                             <w:end w:w="{ahf:toTwipStr('$HazardStatementRowTcMarLR')}" w:type="dxa"/>
                         </w:tcMar>
+                        <w:vAlign w:val="center"/>
                     </w:tcPr>
                     <ahr:messagepanel/>
                 </w:tc>
@@ -1290,6 +1333,7 @@ URL : http://www.antennahouse.com/
                             <w:bottom w:w="{ahf:toTwipStr('$HazardStatementRowTcMarTB')}" w:type="dxa"/>
                             <w:end w:w="{ahf:toTwipStr('$HazardStatementRowTcMarLR')}" w:type="dxa"/>
                         </w:tcMar>
+                        <w:vAlign w:val="center"/>
                     </w:tcPr>
                     <ahr:messagepanel/>
                 </w:tc>
@@ -1306,23 +1350,24 @@ URL : http://www.antennahouse.com/
                         <w:ilvl w:val="0"/>
                         <w:numId w:val="%num-id"/>
                     </w:numPr>
-                    <w:spacing w:line="%line-height-ratio" w:lineRule="auto"/>
                 </w:pPr>
                 <ahr:panelChild/>
             </w:p>
         </wml-object>
         
         <!-- Floating figure -->
-        <variable name="FloatFigDistCommon">3.175mm</variable>
-        <variable name="FloatFigInsetLR">0pt</variable><!--10pt-->
-        <variable name="FloatFigInsetTB">0pt</variable><!--5pt-->
+        <variable name="FloatFigSetFrame">no</variable>
+        <variable name="FloatFigDistCommon">2mm</variable>
+        <variable name="FloatFigInsetCommon">0pt</variable>
+        <variable name="FloatFigInsetLR">$FloatFigInsetCommon</variable>
+        <variable name="FloatFigInsetTB">$FloatFigInsetCommon</variable>
         <variable name="FloatFigInsetL">$FloatFigInsetLR</variable>
         <variable name="FloatFigInsetR">$FloatFigInsetLR</variable>
         <variable name="FloatFigInsetT">$FloatFigInsetTB</variable>
         <variable name="FloatFigInsetB">$FloatFigInsetTB</variable>
         <wml-object name="wmlFloatFig">
             <w:drawing>
-                <wp:anchor distT="0" distB="0"
+                <wp:anchor distT="0" distB="{ahf:toEmuStr('$FloatFigDistCommon')}"
                     distL="%dist-l" distR="%dist-r" simplePos="0"
                     relativeHeight="1" behindDoc="0" locked="1" layoutInCell="1"
                     allowOverlap="1">
@@ -1364,8 +1409,8 @@ URL : http://www.antennahouse.com/
                                 </wps:txbx>
                                 <wps:bodyPr rot="0" spcFirstLastPara="0"
                                     vertOverflow="overflow" horzOverflow="overflow"
-                                    vert="horz" wrap="square" lIns="$FloatFigInsetL" tIns="$FloatFigInsetT"
-                                    rIns="$FloatFigInsetR" bIns="$FloatFigInsetB" numCol="1" spcCol="0"
+                                    vert="horz" wrap="square" lIns="{ahf:toEmuStr('$FloatFigInsetL')}" tIns="{ahf:toEmuStr('$FloatFigInsetT')}"
+                                    rIns="{ahf:toEmuStr('$FloatFigInsetR')}" bIns="{ahf:toEmuStr('$FloatFigInsetB')}" numCol="1" spcCol="0"
                                     rtlCol="0" fromWordArt="0" anchor="t" anchorCtr="0"
                                     forceAA="0" compatLnSpc="1">
                                     <a:prstTxWarp prst="textNoShape">
@@ -1400,7 +1445,7 @@ URL : http://www.antennahouse.com/
         <wml-object name="wmlClearTextWrappingP">
             <w:p>
                 <w:pPr>
-                    <w:spacing w:line="{ahf:toTwipStr('10pt')}" w:lineRule="exact"/>
+                    <w:spacing w:line="{ahf:toTwipStr('1pt')}" w:lineRule="exact"/>
                 </w:pPr>
                 <w:r>
                     <w:br w:type="textWrapping" w:clear="%clear-val"/>
