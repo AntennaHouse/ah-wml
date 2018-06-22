@@ -1453,6 +1453,173 @@ URL : http://www.antennahouse.com/
             </w:p>
         </wml-object>
         
+        <!-- Headers and Footers -->
+        <variable name="HeaderBorderWidth">3pt</variable>
+        <variable name="HeaderBorderColor">46,116,181</variable>
+
+        <wml-object name="wmlHeaderEven">
+            <w:hdr>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                        <w:pBdr>
+                            <w:bottom w:val="single" 
+                                w:sz="{ahf:toBorderWidth('$HeaderBorderWidth')}" 
+                                w:space="1" 
+                                w:color="{ahf:toRgbHexWoS($HeaderBorderColor)}"/>
+                        </w:pBdr>
+                        <w:jc w:val="left"/>
+                    </w:pPr>
+                    <w:r>
+                        <w:fldChar w:fldCharType="begin"/>
+                    </w:r>
+                    <w:r>
+                        <w:instrText xml:space="preserve"> STYLEREF   "heading 1"   \* MERGEFORMAT </w:instrText>
+                    </w:r>
+                    <w:r>
+                        <w:fldChar w:fldCharType="end"/>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                    </w:pPr>
+                </w:p>
+            </w:hdr>
+        </wml-object>
+
+        <wml-object name="wmlHeaderOdd">
+            <w:hdr>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                        <w:pBdr>
+                            <w:bottom w:val="single" 
+                                w:sz="{ahf:toBorderWidth('$HeaderBorderWidth')}" 
+                                w:space="1" 
+                                w:color="{ahf:toRgbHexWoS($HeaderBorderColor)}"/>
+                        </w:pBdr>
+                        <w:wordWrap w:val="0"/>
+                        <w:jc w:val="right"/>
+                    </w:pPr>
+                    <w:r>
+                        <w:fldChar w:fldCharType="begin"/>
+                    </w:r>
+                    <w:r>
+                        <w:instrText xml:space="preserve"> STYLEREF  "heading 1"  \* MERGEFORMAT </w:instrText>
+                    </w:r>
+                    <w:r>
+                        <w:fldChar w:fldCharType="end"/>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                    </w:pPr>
+                </w:p>
+            </w:hdr>
+        </wml-object>
+        
+        <wml-object name="wmlHeaderEvenFm">
+            <w:hdr>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                        <w:pBdr>
+                            <w:bottom w:val="single" 
+                                w:sz="{ahf:toBorderWidth('$HeaderBorderWidth')}" 
+                                w:space="1" 
+                                w:color="{ahf:toRgbHexWoS($HeaderBorderColor)}"/>
+                        </w:pBdr>
+                        <w:jc w:val="left"/>
+                    </w:pPr>
+                    <w:r>
+                        <w:t xml:space="preserve">%title</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                    </w:pPr>
+                </w:p>
+            </w:hdr>
+        </wml-object>
+
+        <wml-object name="wmlHeaderOddFm">
+            <w:hdr>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                        <w:pBdr>
+                            <w:bottom w:val="single" 
+                                w:sz="{ahf:toBorderWidth('$HeaderBorderWidth')}" 
+                                w:space="1" 
+                                w:color="{ahf:toRgbHexWoS($HeaderBorderColor)}"/>
+                        </w:pBdr>
+                        <w:jc w:val="right"/>
+                    </w:pPr>
+                    <w:r>
+                        <w:t xml:space="preserve">%title</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                    </w:pPr>
+                </w:p>
+            </w:hdr>
+        </wml-object>
+        
+        <wml-object name="wmlFooterEven">
+            <w:ftr>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Footer"/>
+                        <w:jc w:val="left"/>
+                    </w:pPr>
+                    <w:r>
+                        <w:fldChar w:fldCharType="begin"/>
+                    </w:r>
+                    <w:r>
+                        <w:instrText>PAGE \* MERGEFORMAT</w:instrText>
+                    </w:r>
+                    <w:r>
+                        <w:fldChar w:fldCharType="end"/>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Footer"/>
+                    </w:pPr>
+                </w:p>
+            </w:ftr>
+        </wml-object>
+        
+        <wml-object name="wmlFooterOdd">
+            <w:ftr>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Footer"/>
+                        <w:jc w:val="right"/>
+                    </w:pPr>
+                    <w:r>
+                        <w:fldChar w:fldCharType="begin"/>
+                    </w:r>
+                    <w:r>
+                        <w:instrText>PAGE \* MERGEFORMAT</w:instrText>
+                    </w:r>
+                    <w:r>
+                        <w:fldChar w:fldCharType="end"/>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Footer"/>
+                    </w:pPr>
+                </w:p>
+            </w:ftr>
+        </wml-object>
+        
     </wml-objects>
 
     <!-- DO NOT REMOVE! Style customize inclusion -->
