@@ -461,7 +461,7 @@ URL : http://www.antennahouse.com/
         <variable name="Default_Image_Id_Offset">10000</variable>
         
         <!-- Default common image relationship offset -->
-        <variable name="Default_Common_Image_Id_Offset">5000</variable>
+        <variable name="Default_Common_Image_Id_Offset">9000</variable>
         
         <!-- Default drawing id offset -->
         <variable name="Default_Drawing_Id_Offset">10000</variable>
