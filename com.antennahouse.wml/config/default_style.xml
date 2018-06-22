@@ -468,6 +468,9 @@ URL : http://www.antennahouse.com/
 
         <!-- Default fn @id value offset in footonote.xml -->
         <variable name="Default_Fn_Id_Offset">2</variable>
+
+        <!-- Default header/footer file relationship offset -->
+        <variable name="Default_Header_Footer_Id_Offset">1000</variable>
         
         <!-- Relationship table namspace -->
         <variable name="Relationship_Table_Namespace">http://schemas.openxmlformats.org/package/2006/relationships</variable>
@@ -1454,6 +1457,36 @@ URL : http://www.antennahouse.com/
         </wml-object>
         
         <!-- Headers and Footers -->
+        <!-- Header/Footer definition seqence
+             1: WML Object Name
+             2: File Name
+             3: w:type of w:footerReference or w:headerReference, 
+             4: usage of header/footer
+                main: for main content
+                frontmatter: for frontmatter content
+                any: both eligible for main & frontmatter content
+             5: header/footer class
+                header: it is header
+                footer: it is footer
+         -->
+        <variable name="HeaderFooterDefinitionSeq" delim="[,\s]+">
+            header-even.xml,wmlHeaderEven,even,main,header,
+            header-odd.xml,wmlHeaderOdd,default,main,header,
+            header-even-fm.xml,wmlHeaderEvenFm,even,frontmatter,header,
+            header-odd-fm.xml,wmlHeaderOddFm,default,frontmatter,header,
+            footer-even.xml,wmlFooterEven,even,any,footer,
+            footer-odd.xml,wmlFooterOdd,default,any,footer
+        </variable>
+        
+        <!-- Header/Footer types in Relationship file (word/_rels/document.xml.rels) -->
+        <variable name="RelationshipTypeHeader">http://schemas.openxmlformats.org/officeDocument/2006/relationships/header</variable>
+        <variable name="RelationshipTypeFooter">http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer</variable>
+
+        <!-- Header/Footer content types in Content Types file (word/[Content_Types].xml) -->
+        <variable name="ContentTypeHeader">application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml</variable>
+        <variable name="ContentTypeFooter">application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml</variable>
+
+        <!-- Header/Footer Contents -->
         <variable name="HeaderBorderWidth">3pt</variable>
         <variable name="HeaderBorderColor">46,116,181</variable>
 
