@@ -215,6 +215,8 @@ URL : http://www.antennahouse.com/
         <variable name="Appendix_Title">Appendix </variable>
         <variable name="Index_Title">Index</variable>
 
+        <variable name="Front_Matter_Title">Forward</variable>
+        <variable name="FrontMatterTitle">$Front_Matter_Title</variable>
         <variable name="Notice_Title">Notice</variable>
         <variable name="Preface_Title">Preface</variable>
 
@@ -1567,7 +1569,7 @@ URL : http://www.antennahouse.com/
                         <w:jc w:val="left"/>
                     </w:pPr>
                     <w:r>
-                        <w:t xml:space="preserve">%title</w:t>
+                        <w:t xml:space="preserve">$FrontMatterTitle</w:t>
                     </w:r>
                 </w:p>
                 <w:p>
@@ -1592,7 +1594,7 @@ URL : http://www.antennahouse.com/
                         <w:jc w:val="right"/>
                     </w:pPr>
                     <w:r>
-                        <w:t xml:space="preserve">%title</w:t>
+                        <w:t xml:space="preserve">$FrontMatterTitle</w:t>
                     </w:r>
                 </w:p>
                 <w:p>

@@ -97,11 +97,11 @@ E-mail : info@antennahouse.com
      return:	ct:Override elements
      note:		Used to generate word/[Content_Types].xml
      -->
-    <xsl:template name="genContentTypeOverride" as="element(ct:Override)+">
-        <xsl:for-each select="1 to count($cmDistinctClearCandidateElements) div $headerFooterDefinitionItemCount">
-            <xsl:variable name="index" as="xs:integer" select="."/>
-            <xsl:variable name="file" as="xs:string" select="$headerFooterDefinitionSeq[($index - 1) * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterFileName]"/>
-            <xsl:variable name="type" as="xs:string" select="$headerFooterDefinitionSeq[($index - 1) * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterType]"/>
+    <xsl:template name="genHeaderFooterContentTypeOverride" as="element(ct:Override)+">
+        <xsl:for-each select="1 to count($headerFooterDefinitionSeq) div $headerFooterDefinitionItemCount">
+            <xsl:variable name="index" as="xs:integer" select=". - 1"/>
+            <xsl:variable name="file" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterFileName]"/>
+            <xsl:variable name="type" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterType]"/>
             <xsl:variable name="typeAttr" as="xs:string" select="if ($type eq $cTypeHeader) then $contentTypeHeader else $contentTypeFooter"/>
             <xsl:element name="Override" namespace="http://schemas.openxmlformats.org/package/2006/content-types">
                 <xsl:attribute name="PartName" select="concat('/word/',$file)"/>
@@ -116,11 +116,11 @@ E-mail : info@antennahouse.com
      return:	rs:Relationship elements
      note:		Used to generate word/_rels/document.xml.rels
      -->
-    <xsl:template name="genHeaderFooterRelationship" as="element(r:Relationship)+">
-        <xsl:for-each select="1 to count($cmDistinctClearCandidateElements) div $headerFooterDefinitionItemCount">
-            <xsl:variable name="index" as="xs:integer" select="."/>
-            <xsl:variable name="file" as="xs:string" select="$headerFooterDefinitionSeq[($index - 1) * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterFileName]"/>
-            <xsl:variable name="type" as="xs:string" select="$headerFooterDefinitionSeq[($index - 1) * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterType]"/>
+    <xsl:template name="genHeaderFooterRelationships" as="element(r:Relationship)+">
+        <xsl:for-each select="1 to count($headerFooterDefinitionSeq) div $headerFooterDefinitionItemCount">
+            <xsl:variable name="index" as="xs:integer" select=". - 1"/>
+            <xsl:variable name="file" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterFileName]"/>
+            <xsl:variable name="type" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterType]"/>
             <xsl:variable name="id" as="xs:integer" select="position() + $headerFooterRidBase"/>
             <xsl:variable name="rid" as="xs:string" select="concat($rIdPrefix,string($id))"/>
             <xsl:variable name="typeAttr" as="xs:string" select="if ($type eq $cTypeHeader) then $relationshipTypeHeader else $relationshipTypeFooter"/>            
@@ -140,11 +140,11 @@ E-mail : info@antennahouse.com
      -->
     <xsl:template name="genHeaderFooterReferenceInSectPr" as="element()+">
         <xsl:param name="prmUsage" as="xs:string" required="no" select="$cHeaderFooterUsageMain"/>
-        <xsl:for-each select="1 to count($cmDistinctClearCandidateElements) div $headerFooterDefinitionItemCount">
-            <xsl:variable name="index" as="xs:integer" select="."/>
-            <xsl:variable name="refType" as="xs:string" select="$headerFooterDefinitionSeq[($index - 1) * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterRefType]"/>
-            <xsl:variable name="type" as="xs:string" select="$headerFooterDefinitionSeq[($index - 1) * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterType]"/>
-            <xsl:variable name="usage" as="xs:string" select="$headerFooterDefinitionSeq[($index - 1) * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterUsage]"/>
+        <xsl:for-each select="1 to count($headerFooterDefinitionSeq) div $headerFooterDefinitionItemCount">
+            <xsl:variable name="index" as="xs:integer" select=". - 1"/>
+            <xsl:variable name="refType" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterRefType]"/>
+            <xsl:variable name="type" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterType]"/>
+            <xsl:variable name="usage" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterUsage]"/>
             <xsl:variable name="id" as="xs:integer" select="position() + $headerFooterRidBase"/>
             <xsl:variable name="rid" as="xs:string" select="concat($rIdPrefix,string($id))"/>
             <xsl:if test="($usage eq $cHeaderFooterUsageAny) or ($usage eq $prmUsage)">
@@ -153,6 +153,27 @@ E-mail : info@antennahouse.com
                     <xsl:attribute name="r:id" select="$rid"/>
                 </xsl:element>
             </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <!-- 
+     function:	Generate Header/Footer File To [temp dir]/docx/word Folder 
+     param:		None
+     return:	None
+     note:		Used to generate header/footer file generation step
+     -->
+    <xsl:template name="genHeaderFooterFiles">
+        <xsl:for-each select="1 to count($headerFooterDefinitionSeq) div $headerFooterDefinitionItemCount">
+            <xsl:variable name="index" as="xs:integer" select=". - 1"/>
+            <xsl:variable name="fileName" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterFileName]"/>
+            <xsl:variable name="wmlObjectName" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterWmlObjectName]"/>
+            <xsl:variable name="type" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterType]"/>
+            <xsl:variable name="usage" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterUsage]"/>
+            <xsl:result-document href="{concat($pTempDirUrl,'/docx/word/',$fileName)}" method="xml" encoding="UTF-8" byte-order-mark="no">
+                <xsl:call-template name="getWmlObject">
+                    <xsl:with-param name="prmObjName" select="$wmlObjectName"/>
+                </xsl:call-template>
+            </xsl:result-document>
         </xsl:for-each>
     </xsl:template>
 
