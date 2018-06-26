@@ -40,7 +40,9 @@ URL : http://www.antenna.co.jp/
     <xsl:variable name="cBreakColumn" as="xs:integer" select="2"/>
     <xsl:variable name="cBreakInfoSeq" as="xs:integer+" select="($cBreakAuto,$cBreakPage,$cBreakColumn)"/>
     
-    <!--xsl:variable name="cBreakInfoSeqInAuthoring" as="xs:string+" select="('auto','page','column')"/-->
+    <!-- Content Key -->
+    <xsl:variable name="cContentFrontmatter" as="xs:integer" select="0"/>
+    <xsl:variable name="cContentMain"        as="xs:integer" select="1"/>
     
     <xsl:variable name="columnMapTreeOrg" as="document-node()">
         <xsl:document>
@@ -72,7 +74,7 @@ URL : http://www.antenna.co.jp/
                     <xsl:attribute name="column" select="$columnInfo[1]"/>
                     <xsl:attribute name="id" select="$columnInfo[2]"/>
                     <xsl:attribute name="break" select="$breakInfo"/>
-                    <xsl:attribute name="maincontent" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
+                    <xsl:attribute name="contentkey" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
                     <xsl:attribute name="xpath" select="ahf:getNodeXPathStr(.)"/>
                     <xsl:attribute name="navtitle" select="string(@navtitle)"/>
                 </topichead>
@@ -95,7 +97,7 @@ URL : http://www.antenna.co.jp/
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:attribute>
-                    <xsl:attribute name="maincontent" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
+                    <xsl:attribute name="contentkey" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
                     <xsl:attribute name="navtitle">
                         <xsl:choose>
                             <xsl:when test="exists(*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')])">
@@ -127,12 +129,12 @@ URL : http://www.antenna.co.jp/
         <xsl:param name="prmIsInFrontMatter" tunnel="yes" required="false" select="false()"/>
         <xsl:variable name="body" as="element()" select="."/>
         <xsl:variable name="columnInfo3" as="item()*" select="ahf:getColumnInfo3($prmTopicRef,$body)"/>
-        <xsl:variable name="spanImage" as="element()*" select="$body/descendant::*[contains(@class,' topic/image ')][string(@placement) eq 'break'][string(@span) eq 'all']"/>
+        <xsl:variable name="spanImage" as="element()*" select="$body/descendant::*[contains(@class,' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]"/>
         <body>
             <xsl:attribute name="column" select="$columnInfo3[1]"/>
             <xsl:attribute name="id" select="$columnInfo3[2]"/>
             <xsl:attribute name="break" select="$cBreakAuto"/>
-            <xsl:attribute name="maincontent" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
+            <xsl:attribute name="contentkey" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
             <xsl:attribute name="xpath" select="ahf:getNodeXPathStr($body)"/>
         </body>
         <xsl:apply-templates select="$spanImage" mode="#current">
@@ -143,7 +145,7 @@ URL : http://www.antenna.co.jp/
                 <xsl:attribute name="column" select="$columnInfo3[1]"/>
                 <xsl:attribute name="id" select="concat(string($columnInfo3[2]),'.end')"/>
                 <xsl:attribute name="break" select="$cBreakAuto"/>
-                <xsl:attribute name="maincontent" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
+                <xsl:attribute name="contentkey" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
                 <xsl:attribute name="xpath" select="ahf:getNodeXPathStr($body)"/>
             </body>
         </xsl:if>
@@ -156,7 +158,7 @@ URL : http://www.antenna.co.jp/
             <xsl:attribute name="column" select="'1'"/>
             <xsl:attribute name="id" select="ahf:generateId(.)"/>
             <xsl:attribute name="break" select="$cBreakAuto"/>
-            <xsl:attribute name="maincontent" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
+            <xsl:attribute name="contentkey" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
             <xsl:attribute name="xpath" select="ahf:getNodeXPathStr(.)"/>
         </image>
     </xsl:template>
@@ -179,7 +181,7 @@ URL : http://www.antenna.co.jp/
             <xsl:attribute name="column" select="'0'"/>
             <xsl:attribute name="id" select="ahf:generateId(.)"/>
             <xsl:attribute name="break" select="$cBreakAuto"/>
-            <xsl:attribute name="maincontent" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
+            <xsl:attribute name="contentkey" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
             <xsl:attribute name="xpath" select="ahf:getNodeXPathStr(.)"/>
         </image>
     </xsl:template>
@@ -209,7 +211,7 @@ URL : http://www.antenna.co.jp/
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
-            <xsl:attribute name="maincontent" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
+            <xsl:attribute name="contentkey" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
             <xsl:attribute name="xpath" select="ahf:getNodeXPathStr($topic)"/>
         </topic>
         <!-- body -->
@@ -233,13 +235,9 @@ URL : http://www.antenna.co.jp/
      note:		Column of topichead is assumed as unknown (0).
                 Chapter is 1 column without no consideration.
      -->
-    <xsl:variable name="cTwoColumn" as="xs:string" select="'2-col'"/>
-    <xsl:variable name="cOneColumn" as="xs:string" select="'1-col'"/>
-    <xsl:variable name="cAutoColumn" as="xs:string" select="'auto'"/>
-    
     <xsl:function name="ahf:getColumnInfo" as="item()+">
         <xsl:param name="prmTopicRef" as="element()"/>
-        <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getOutputClassRegx($prmTopicRef,'(\d+)(-col)','$1')"/>
+        <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopicRef)"/>
         <xsl:variable name="topic" select="ahf:getTopicFromTopicRef($prmTopicRef)" as="element()?"/>
         <xsl:choose>
             <xsl:when test="exists($prmTopicRef/@href) and exists($topic)">
@@ -251,7 +249,7 @@ URL : http://www.antenna.co.jp/
                         <xsl:sequence select="(xs:integer($topicRefColSpec),ahf:generateId($topic),string($topic/@oid)),$topic"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:variable name="topicColSpec" as="xs:string" select="ahf:getOutputClassRegx($topic,'(\d+)(-col)','$1')"/>
+                        <xsl:variable name="topicColSpec" as="xs:string" select="ahf:getColSpecFromElem($topic)"/>
                         <xsl:choose>
                             <xsl:when test="$topicColSpec ne ''">
                                 <xsl:sequence select="(xs:integer($topicColSpec),ahf:generateId($topic),string($topic/@oid),$topic)"/>
@@ -290,13 +288,13 @@ URL : http://www.antenna.co.jp/
     <xsl:function name="ahf:getColumnInfo2" as="item()+">
         <xsl:param name="prmTopicRef" as="element()"/>
         <xsl:param name="prmTopic" as="element()"/>
-        <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getOutputClassRegx($prmTopicRef,'(\d+)(-col)','$1')"/>
+        <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopicRef)"/>
         <xsl:choose>
             <xsl:when test="$topicRefColSpec ne ''">
                 <xsl:sequence select="(xs:integer($topicRefColSpec),ahf:generateId($prmTopic),string($prmTopic/@oid))"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:variable name="topicColSpec" as="xs:string" select="ahf:getOutputClassRegx($prmTopic,'(\d+)(-col)','$1')"/>
+                <xsl:variable name="topicColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopic)"/>
                 <xsl:choose>
                     <xsl:when test="$topicColSpec ne ''">
                         <xsl:sequence select="(xs:integer($topicColSpec),ahf:generateId($prmTopic),string($prmTopic/@oid))"/>
@@ -309,20 +307,20 @@ URL : http://www.antenna.co.jp/
         </xsl:choose>
     </xsl:function>    
     
-    <!-- body用
-         item()[1]: xs:integer カラム数
+    <!-- For body
+         item()[1]: xs:integer column count
          item()[2]: xs:string  id 
      -->
     <xsl:function name="ahf:getColumnInfo3" as="item()*">
         <xsl:param name="prmTopicRef" as="element()"/>
         <xsl:param name="prmBody" as="element()"/>
-        <xsl:variable name="bodyColSpec" as="xs:string" select="ahf:getOutputClassRegx($prmBody,'(\d+)(-col)','$1')"/>
+        <xsl:variable name="bodyColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmBody)"/>
         <xsl:choose>
             <xsl:when test="$bodyColSpec ne ''">
                 <xsl:sequence select="(xs:integer($bodyColSpec),ahf:generateId($prmBody))"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getOutputClassRegx($prmTopicRef,'(\d+)(-col)','$1')"/>
+                <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopicRef)"/>
                 <xsl:choose>
                     <xsl:when test="$topicRefColSpec ne ''">
                         <xsl:sequence select="(xs:integer($topicRefColSpec),ahf:generateId($prmBody))"/>
@@ -336,6 +334,17 @@ URL : http://www.antenna.co.jp/
     </xsl:function>    
 
     <!--
+    function:   Get column spec from element (topicref, topic, body)
+    param:      prmElem 
+    return:     xs:string
+    note:       '' means no specication for column
+    -->
+    <xsl:function name="ahf:getColSpecFromElem" as="xs:string">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:sequence select="ahf:getOutputClassRegx($prmElem,'(\d+)(-col)','$1')"/>
+    </xsl:function>
+
+    <!--
     function:   Get break information for topic & topicref
     param:      prmElem (topic or topicref)
     return:     xs:integer
@@ -343,10 +352,11 @@ URL : http://www.antenna.co.jp/
     -->
     <xsl:function name="ahf:getBreakInfo" as="xs:integer">
         <xsl:param name="prmElem" as="element()?"/>
+        <xsl:variable name="cBreakSpecSeq" as="xs:string+" select="('auto','page','col')"/>
         <xsl:choose>
             <xsl:when test="exists($prmElem)">
-                <xsl:variable name="break" as="xs:string" select="string($prmElem/@break)"/>
-                <xsl:variable name="breakIndex" as="xs:integer?" select="index-of($cBreakInfoSeqInAuthoring,$break)"/>
+                <xsl:variable name="break" as="xs:string" select="ahf:getOutputClassRegx($prmElem,'(break-)(auto|page|col)','$2')"/>
+                <xsl:variable name="breakIndex" as="xs:integer?" select="index-of($cBreakSpecSeq,$break)"/>
                 <xsl:choose>
                     <xsl:when test="$prmElem[ahf:seqContains(@class,(' bookmap/chapter ',' bookmap/toc ',' bookmap/indexlist'))]">
                         <xsl:sequence select="$cBreakPage"/>
@@ -369,7 +379,7 @@ URL : http://www.antenna.co.jp/
     function:   Complement topichead column number
     param:      none
     return:     xsl:document
-    note:       topicheadは直前の段組みの値を引き継ぎます．
+    note:       topichead continues previous column information value.
     -->
     <xsl:variable name="columnMapTreeComplement" as="document-node()">
         <xsl:document>
@@ -384,10 +394,9 @@ URL : http://www.antenna.co.jp/
         <!--xsl:apply-templates mode="#current"/-->
     </xsl:template>
     
-    <!-- topicheadのカラムを補完-->
+    <!-- complement topichead column information-->
     <xsl:template match="topichead" mode="MODE_COMPLEMENT_SPAN_INFO" priority="5">
         <xsl:variable name="topicHead" as="element()" select="."/>
-        <!--xsl:variable name="nearestNonTopicHead" as="element()?" select="root($topicHead)/*/descendant::*[. &lt;&lt; $topicHead][not(image)][string(@column) ne '0'][last()]"/-->
         <xsl:variable name="nearestNonTopicHead" as="element()?" select="($topicHead/preceding-sibling::*[not(self::image)][string(@column) ne '0'])[last()]"/>
         <xsl:variable name="column" as="xs:string" select="if (exists($nearestNonTopicHead)) then $nearestNonTopicHead/@column/string(.) else '1'"/>
         <xsl:copy>
@@ -397,7 +406,7 @@ URL : http://www.antenna.co.jp/
         </xsl:copy>
     </xsl:template>
 
-    <!-- imageのカラムを補完-->
+    <!-- complement image column information -->
     <xsl:template match="image[string(@column) eq '0']" mode="MODE_COMPLEMENT_SPAN_INFO" priority="5">
         <xsl:variable name="image" as="element()" select="."/>
         <xsl:variable name="body" as="element()?" select="$image/parent::body"/>
@@ -471,10 +480,10 @@ URL : http://www.antenna.co.jp/
     function:   Section map
     param:      none
     return:     map(xs:string, xs:integer+)
-    note:       Made from $columnMapTree by grouping column/break change
-                カラム数は1か2のいずれか．これにbreakの情報を追加してキーを作る．
-                breakはcolumnとpageとautoがあるが、columnとそれに続くauto、pageとそれに続くautoというようにグルーピングする．
-                こうしないと余計なセクション属性が挿入されてしまい、カラムブレークの場合は段組みの真ん中の線がカラムブレークした次の先頭段落に引かれなくなってしまう．
+    note:       Made from $columnMapTree by grouping content/column/break key change
+                Column count may be 1 or 2.
+                Break keys are column, page. auto. Group it column with follwoing auto or oage with following auto.
+                This grouping is needed to construct two column layout in Word.
     -->
     <xsl:variable name="sectMap" as="map(xs:string,xs:integer+)">
         <xsl:variable name="sectMapElems" as="element()+" select="$columnMapTreeWithAdjacentInfo/*"/>
@@ -488,24 +497,45 @@ URL : http://www.antenna.co.jp/
             </xsl:document>
         </xsl:variable>
         <xsl:map>
-            <xsl:for-each-group select="$sectMapElemsTree/*" group-adjacent="ahf:genSectGroupKey(.)">
-                <xsl:variable name="sectGroup" as="element()+" select="current-group()"/>
-                <xsl:variable name="sectGroupStart" as="element()" select="$sectGroup[1]"/>
-                <xsl:variable name="sectGroupEnd" as="element()" select="$sectGroup[last()]"/>
-                <xsl:if test="$pDebugSect">
-                    <xsl:message select="'[sectMap] current-grouping-key()=',current-grouping-key()"/>
-                    <xsl:message select="'[sectMap] current-group()=',current-group()"/>
-                </xsl:if>
-                <xsl:variable name="id" select="string($sectGroupEnd/@id)"/>
-                <xsl:variable name="currentColumn" as="xs:integer" select="xs:integer($sectGroupEnd/@column)"/>
-                <xsl:variable name="prevColumn" as="xs:integer" select="xs:integer($sectGroupStart/@prev-column)"/>
-                <xsl:variable name="nextColumn" as="xs:integer" select="xs:integer($sectGroupEnd/@next-column)"/>
-                <xsl:variable name="break" as="xs:integer" select="xs:integer($sectGroupStart/@break)"/>
-                <xsl:map-entry key="$id" select="($prevColumn,$currentColumn,$nextColumn,$break)"/>
+            <xsl:for-each-group select="$sectMapElemsTree/*" group-adjacent="ahf:genSectContentKey(.)">
+                <xsl:variable name="sectContentGroup" as="element()+" select="current-group()"/>
+                <xsl:variable name="sectContentKey" as="xs:string" select="current-grouping-key()"/>
+                <xsl:message select="'[sectMap] current-content-grouping-key()=',$sectContentKey"/>
+                <xsl:for-each-group select="$sectContentGroup" group-adjacent="ahf:genSectGroupKey(.)">
+                    <xsl:variable name="sectGroup" as="element()+" select="current-group()"/>
+                    <xsl:variable name="seqInSectGroup" as="xs:integer" select="position()"/>
+                    <xsl:variable name="sectGroupStart" as="element()" select="$sectGroup[1]"/>
+                    <xsl:variable name="sectGroupEnd" as="element()" select="$sectGroup[last()]"/>
+                    <xsl:if test="$pDebugSect">
+                        <xsl:message select="'[sectMap] current-grouping-key()=',current-grouping-key()"/>
+                        <xsl:message select="'[sectMap] current-group()=',current-group()"/>
+                    </xsl:if>
+                    <xsl:variable name="id" select="string($sectGroupEnd/@id)"/>
+                    <xsl:variable name="currentColumn" as="xs:integer" select="xs:integer($sectGroupEnd/@column)"/>
+                    <xsl:variable name="prevColumn" as="xs:integer" select="xs:integer($sectGroupStart/@prev-column)"/>
+                    <xsl:variable name="nextColumn" as="xs:integer" select="xs:integer($sectGroupEnd/@next-column)"/>
+                    <xsl:variable name="break" as="xs:integer" select="xs:integer($sectGroupStart/@break)"/>
+                    <xsl:variable name="content" as="xs:integer" select="xs:integer($sectContentKey)"/>
+                    <xsl:variable name="seq" as="xs:integer" select="$seqInSectGroup"/>
+                    <xsl:map-entry key="$id" select="($prevColumn,$currentColumn,$nextColumn,$break,$content,$seq)"/>
+                </xsl:for-each-group>
             </xsl:for-each-group>
         </xsl:map>
     </xsl:variable>
 
+    <!--
+    function:   Generate sect content key
+    param:      prmElement
+    return:     xs:string
+    note:       returns content grouping key
+                
+    -->
+    <xsl:function name="ahf:genSectContentKey" as="xs:string">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:variable name="contentKey" as="xs:string" select="$prmElem/@contentkey/string(.)"/>
+        <xsl:sequence select="$contentKey"/>
+    </xsl:function>
+    
     <!--
     function:   Generate sect grouping key
     param:      prmElement
@@ -520,7 +550,7 @@ URL : http://www.antenna.co.jp/
         <xsl:variable name="breakKeyStr" as="xs:string" select="format-integer($breakKey,'00000')"/>
         <xsl:sequence select="concat($columnKeyStr,' ',$breakKeyStr)"/>
     </xsl:function>
-
+    
     <!--
     function:   Generate column grouping key
     param:      prmElement
@@ -551,7 +581,8 @@ URL : http://www.antenna.co.jp/
     function:   Column map
     param:      none
     return:     map(xs:string, xs:integer+)
-    note:       Made from $columnMapTree 
+    note:       Made from $columnMapTree
+                Used to get column information from any element.
     -->
     <xsl:variable name="columnMap" as="map(xs:string,xs:integer+)">
         <xsl:variable name="columnMapElems" as="element()+" select="$columnMapTreeWithAdjacentInfo/*"/>
@@ -601,10 +632,12 @@ URL : http://www.antenna.co.jp/
         </xsl:variable>
         <xsl:result-document href="{concat($pTempDirUrl,'/SectMap.xml')}" encoding="UTF-8" indent="yes">
             <xsl:variable name="dumpData" as="element()+">
-                <xsl:variable name="mapEntrySeq" as="xs:string+" select="map:for-each($sectMap,function($k, $v){(string($k),string($v[1]),string($v[2]),string($v[3]),string($v[4]))})"/>
-                <xsl:for-each select="1 to (xs:integer(count($mapEntrySeq) div 5))">
-                    <xsl:variable name="pos" as="xs:integer" select="(. - 1) * 5 + 1"/>
-                    <entry key="{$mapEntrySeq[$pos]}" prev="{$mapEntrySeq[$pos + 1]}" current="{$mapEntrySeq[$pos + 2]}" next="{$mapEntrySeq[$pos + 3]}" break="{$mapEntrySeq[$pos + 4]}"/>
+                <xsl:variable name="mapEntrySeq" as="xs:string+" 
+                    select="map:for-each($sectMap,function($k, $v){(string($k),string($v[1]),string($v[2]),string($v[3]),string($v[4]),string($v[5]),string($v[6]))})"/>
+                <xsl:for-each select="1 to (xs:integer(count($mapEntrySeq) div 7))">
+                    <xsl:variable name="pos" as="xs:integer" select="(. - 1) * 7 + 1"/>
+                    <entry key="{$mapEntrySeq[$pos]}" prev="{$mapEntrySeq[$pos + 1]}" current="{$mapEntrySeq[$pos + 2]}" next="{$mapEntrySeq[$pos + 3]}" 
+                           break="{$mapEntrySeq[$pos + 4]}" content="{$mapEntrySeq[$pos + 5]}" seq="{$mapEntrySeq[$pos + 6]}"/>
                 </xsl:for-each>
             </xsl:variable>
             <map>

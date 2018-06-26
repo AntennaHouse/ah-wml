@@ -1173,6 +1173,32 @@ URL : http://www.antennahouse.com/
             </w:p>
         </wml-object>
         
+        <!-- w:sectPr
+             param: %type section break type
+                    %col  column count
+         -->
+        <wml-object name="wmlSectPr">
+            <w:sectPr>
+                <ahr:hdrFtrReference/>
+                <w:type w:val="%type"/>
+                <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
+                <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginBottom)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
+                    w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
+                <ahr:pgNumType/>
+                <w:cols w:num="%col" w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
+            </w:sectPr>
+        </wml-object>
+
+        <!-- Page number format -->
+        <wml-object name="wmlPgNumTypeFrontMatter">
+            <w:pgNumType w:start="1" w:fmt="lowerRoman"/>
+        </wml-object>
+
+        <wml-object name="wmlPgNumTypeMain">
+            <w:pgNumType w:start="1" w:fmt="decimal"/>
+        </wml-object>
+        
+
         <!-- 2 column section property-->
         <wml-object name="wmlSect2Col">
             <w:sectPr>
