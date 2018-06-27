@@ -110,7 +110,7 @@ URL : http://www.antennahouse.com/
                                 <xsl:call-template name="getWmlObjectReplacing">
                                     <xsl:with-param name="prmObjName" select="'wmlSectPr'"/>
                                     <xsl:with-param name="prmSrc" select="('node:hdrFtrReference','%type','node:pgNumType','%col')"/>
-                                    <xsl:with-param name="prmDst" select="($hdrFtrReference,$sectTypeContinuous,$pgNumType,string($currentCol))"/>
+                                    <xsl:with-param name="prmDst" select="($hdrFtrReference,$sectType,$pgNumType,string($currentCol))"/>
                                 </xsl:call-template>
                             </xsl:when>
                             <xsl:otherwise>
@@ -119,7 +119,7 @@ URL : http://www.antennahouse.com/
                                         <xsl:call-template name="getWmlObjectReplacing">
                                             <xsl:with-param name="prmObjName" select="'wmlSectPr'"/>
                                             <xsl:with-param name="prmSrc" select="('node:hdrFtrReference','%type','node:pgNumType','%col')"/>
-                                            <xsl:with-param name="prmDst" select="($hdrFtrReference,$sectTypeContinuous,$pgNumType,string($currentCol))"/>
+                                            <xsl:with-param name="prmDst" select="($hdrFtrReference,$sectType,$pgNumType,string($currentCol))"/>
                                         </xsl:call-template>
                                     </w:pPr>
                                 </w:p>

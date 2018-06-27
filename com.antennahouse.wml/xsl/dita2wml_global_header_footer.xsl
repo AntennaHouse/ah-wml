@@ -121,7 +121,7 @@ E-mail : info@antennahouse.com
             <xsl:variable name="index" as="xs:integer" select=". - 1"/>
             <xsl:variable name="file" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterFileName]"/>
             <xsl:variable name="type" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterType]"/>
-            <xsl:variable name="id" as="xs:integer" select="position() + $headerFooterRidBase"/>
+            <xsl:variable name="id" as="xs:integer" select="$index + $headerFooterRidBase"/>
             <xsl:variable name="rid" as="xs:string" select="concat($rIdPrefix,string($id))"/>
             <xsl:variable name="typeAttr" as="xs:string" select="if ($type eq $cTypeHeader) then $relationshipTypeHeader else $relationshipTypeFooter"/>            
             <xsl:element name="Relationship" namespace="http://schemas.openxmlformats.org/package/2006/relationships">
@@ -145,12 +145,12 @@ E-mail : info@antennahouse.com
             <xsl:variable name="refType" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterRefType]"/>
             <xsl:variable name="type" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterType]"/>
             <xsl:variable name="usage" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterUsage]"/>
-            <xsl:variable name="id" as="xs:integer" select="position() + $headerFooterRidBase"/>
+            <xsl:variable name="id" as="xs:integer" select="$index + $headerFooterRidBase"/>
             <xsl:variable name="rid" as="xs:string" select="concat($rIdPrefix,string($id))"/>
             <xsl:if test="($usage eq $cHeaderFooterUsageAny) or ($usage eq $prmUsage)">
                 <xsl:element name="{if ($type eq $cTypeHeader) then 'w:headerReference' else 'w:footerReference'}">
                     <xsl:attribute name="w:type" select="$refType"/>
-                    <xsl:attribute name="r:id" select="$rid"/>
+                    <xsl:attribute name="r:id" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" select="$rid"/>
                 </xsl:element>
             </xsl:if>
         </xsl:for-each>
