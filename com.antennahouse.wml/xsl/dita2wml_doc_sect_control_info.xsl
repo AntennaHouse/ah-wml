@@ -38,6 +38,8 @@ URL : http://www.antenna.co.jp/
     <xsl:variable name="cBreakAuto"   as="xs:integer" select="0"/>
     <xsl:variable name="cBreakPage"   as="xs:integer" select="1"/>
     <xsl:variable name="cBreakColumn" as="xs:integer" select="2"/>
+    <xsl:variable name="cBreakEven"   as="xs:integer" select="3"/>
+    <xsl:variable name="cBreakOdd"    as="xs:integer" select="4"/>
     <xsl:variable name="cBreakInfoSeq" as="xs:integer+" select="($cBreakAuto,$cBreakPage,$cBreakColumn)"/>
     
     <!-- Content Key -->
@@ -358,8 +360,8 @@ URL : http://www.antenna.co.jp/
                 <xsl:variable name="break" as="xs:string" select="ahf:getOutputClassRegx($prmElem,'(break-)(auto|page|col)','$2')"/>
                 <xsl:variable name="breakIndex" as="xs:integer?" select="index-of($cBreakSpecSeq,$break)"/>
                 <xsl:choose>
-                    <xsl:when test="$prmElem[ahf:seqContains(@class,(' bookmap/chapter ',' bookmap/toc ',' bookmap/indexlist'))]">
-                        <xsl:sequence select="$cBreakPage"/>
+                    <xsl:when test="$prmElem[ahf:seqContains(@class,(' bookmap/part ',' bookmap/chapter ',' bookmap/appendix ',' bookmap/toc ',' bookmap/indexlist'))][empty(parent::*[contains(@class,' bookmap/part ')])]">
+                        <xsl:sequence select="ahf:getPageSpecInfo($prmElem)"/>
                     </xsl:when>
                     <xsl:when test="exists($breakIndex)">
                         <xsl:sequence select="$cBreakInfoSeq[$breakIndex]"/>
@@ -371,6 +373,31 @@ URL : http://www.antenna.co.jp/
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="$cBreakAuto"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+    <!--
+    function:   Get page number information for topic & topicref
+    param:      prmElem (topic or topicref)
+    return:     xs:integer
+    note:       
+    -->
+    <xsl:function name="ahf:getPageSpecInfo" as="xs:integer">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:variable name="page" as="xs:string" select="ahf:getOutputClassRegx($prmElem,'(page-number-)(auto|even|odd)','$2')"/>
+        <xsl:choose>
+            <xsl:when test="$page eq 'auto'">
+                <xsl:sequence select="$cBreakPage"/>
+            </xsl:when>
+            <xsl:when test="$page eq 'even'">
+                <xsl:sequence select="$cBreakEven"/>
+            </xsl:when>
+            <xsl:when test="$page eq 'odd'">
+                <xsl:sequence select="$cBreakOdd"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$cBreakPage"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
@@ -573,7 +600,7 @@ URL : http://www.antenna.co.jp/
     -->
     <xsl:function name="ahf:genBreakGroupKey" as="xs:integer">
         <xsl:param name="prmElem" as="element()"/>
-        <xsl:variable name="breakKey" as="xs:integer" select="count(($prmElem|$prmElem/preceding-sibling::*)[xs:integer(string(@break)) = ($cBreakPage,$cBreakColumn)])"/>
+        <xsl:variable name="breakKey" as="xs:integer" select="count(($prmElem|$prmElem/preceding-sibling::*)[xs:integer(string(@break)) = ($cBreakPage,$cBreakColumn,$cBreakEven,$cBreakOdd)])"/>
         <xsl:sequence select="$breakKey"/>
     </xsl:function>
 

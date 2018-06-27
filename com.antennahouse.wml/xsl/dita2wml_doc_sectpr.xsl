@@ -137,8 +137,10 @@ URL : http://www.antennahouse.com/
                 2 (column) ⇒ nextColumn
     -->
     <xsl:variable name="sectTypeContinuous" as="xs:string" select="'continuous'"/>
-    <xsl:variable name="sectTypeNextPageBreak" as="xs:string" select="'nextPage'"/>
-    <xsl:variable name="sectTypeNextColumnBreak" as="xs:string" select="'nextColumn'"/>
+    <xsl:variable name="sectTypeNextPage" as="xs:string" select="'nextPage'"/>
+    <xsl:variable name="sectTypeNextColumn" as="xs:string" select="'nextColumn'"/>
+    <xsl:variable name="sectTypeEvenPage" as="xs:string" select="'evenPage'"/>
+    <xsl:variable name="sectTypeOddPage" as="xs:string" select="'oddPage'"/>
     
     <xsl:function name="ahf:getSectTypeFromBreak" as="xs:string">
         <xsl:param name="prmBreakInfo" as="xs:integer"/>
@@ -147,10 +149,16 @@ URL : http://www.antennahouse.com/
                 <xsl:sequence select="$sectTypeContinuous"/>
             </xsl:when>
             <xsl:when test="$prmBreakInfo eq $cBreakPage">
-                <xsl:sequence select="$sectTypeNextPageBreak"/>
+                <xsl:sequence select="$sectTypeNextPage"/>
             </xsl:when>
             <xsl:when test="$prmBreakInfo eq $cBreakColumn">
-                <xsl:sequence select="$sectTypeNextColumnBreak"/>
+                <xsl:sequence select="$sectTypeNextColumn"/>
+            </xsl:when>
+            <xsl:when test="$prmBreakInfo eq $cBreakEven">
+                <xsl:sequence select="$sectTypeEvenPage"/>
+            </xsl:when>
+            <xsl:when test="$prmBreakInfo eq $cBreakOdd">
+                <xsl:sequence select="$sectTypeOddPage"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:assert test="false()" select="'[ahf:getSectTypeFromBreak] Invalid break type=',$prmBreakInfo"/>
