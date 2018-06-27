@@ -32,10 +32,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:template name="getSectionPropertyElemBefore" as="node()*">
         <xsl:param name="prmElem" as="element()" required="no" select="."/>
-        <xsl:param name="prmTopicRef" as="element()" tunnel="yes" required="yes"/>
         <xsl:comment select="'[getSectionPropertyElemBefore] prmElem=',ahf:generateId($prmElem)"/>
-        <xsl:variable name="isPointedFromTopicRef" as="xs:boolean" select="ahf:isPointedFromTopicref($prmElem,$prmTopicRef)"/>
-        <xsl:variable name="isSameTopicRef" as="xs:boolean" select="$prmTopicRef is $prmElem"/>
         <xsl:variable name="sectInfo" as="xs:integer*" select="map:get($sectMap, ahf:generateId($prmElem))"/>
         <xsl:variable name="prevCol" as="xs:integer?" select="$sectInfo[1]"/>
         <xsl:variable name="currentCol" as="xs:integer?" select="$sectInfo[2]"/>
@@ -103,8 +100,8 @@ URL : http://www.antennahouse.com/
                     <xsl:otherwise>
                         <xsl:variable name="isFirst" as="xs:boolean" select="$seq eq 1"/>
                         <xsl:variable name="isLast" as="xs:boolean" select="$nextCol eq 0"/>
-                        <xsl:variable name="hdrFtrReference" as="element()+" select="ahf:genHdrFtrReference($isFirst,$content)"/>
-                        <xsl:variable name="pgNumType" as="element()" select="ahf:genPgNumType($isFirst,$content)"/>
+                        <xsl:variable name="hdrFtrReference" as="node()" select="ahf:genHdrFtrReference($isFirst,$content)"/>
+                        <xsl:variable name="pgNumType" as="node()" select="ahf:genPgNumType($isFirst,$content)"/>
                         <xsl:choose>
                             <xsl:when test="$isLast">
                                 <xsl:call-template name="getWmlObjectReplacing">
@@ -164,26 +161,28 @@ URL : http://www.antennahouse.com/
     <!-- 
      function:	Generate heder/footer reference
      param:		prmIsFirst, prmContent
-     return:	element()+
+     return:	document-node or <_null/>
      note:		If first section in the content, it is needed to generate w:headerReference, w:footerReference
     -->
-    <xsl:function name="ahf:genHdrFtrReference" as="element()+">
+    <xsl:function name="ahf:genHdrFtrReference" as="node()">
         <xsl:param name="prmIsFirst" as="xs:boolean"/>
         <xsl:param name="prmContent" as="xs:integer"/>
         <xsl:choose>
             <xsl:when test="$prmIsFirst">
-                <xsl:call-template name="genHeaderFooterReferenceInSectPr">
-                    <xsl:with-param name="prmUsage">
-                        <xsl:choose>
-                            <xsl:when test="$prmContent eq $cContentFrontmatter">
-                                <xsl:sequence select="$cHeaderFooterUsageFrontmatter"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:sequence select="$cHeaderFooterUsageMain"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:with-param>
-                </xsl:call-template>
+                <xsl:document>
+                    <xsl:call-template name="genHeaderFooterReferenceInSectPr">
+                        <xsl:with-param name="prmUsage">
+                            <xsl:choose>
+                                <xsl:when test="$prmContent eq $cContentFrontmatter">
+                                    <xsl:sequence select="$cHeaderFooterUsageFrontmatter"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:sequence select="$cHeaderFooterUsageMain"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                </xsl:document>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="$cElemNull"/>
@@ -194,26 +193,28 @@ URL : http://www.antennahouse.com/
     <!-- 
      function:	Generate w:pgNumType of w:sectPr
      param:		prmIsFirst, prmContent
-     return:	element()
+     return:	document-node() or <_null/>
      note:		If first section in the content, it is needed to set w:pgNumType/@fmt,@start
     -->
-    <xsl:function name="ahf:genPgNumType" as="element()">
+    <xsl:function name="ahf:genPgNumType" as="node()">
         <xsl:param name="prmIsFirst" as="xs:boolean"/>
         <xsl:param name="prmContent" as="xs:integer"/>
         <xsl:choose>
             <xsl:when test="$prmIsFirst">
-                <xsl:call-template name="getWmlObject">
-                    <xsl:with-param name="prmObjName">
-                        <xsl:choose>
-                            <xsl:when test="$prmContent eq $cContentFrontmatter">
-                                <xsl:sequence select="'wmlPgNumTypeFrontMatter'"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:sequence select="'wmlPgNumTypeMain'"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:with-param>
-                </xsl:call-template>
+                <xsl:document>
+                    <xsl:call-template name="getWmlObject">
+                        <xsl:with-param name="prmObjName">
+                            <xsl:choose>
+                                <xsl:when test="$prmContent eq $cContentFrontmatter">
+                                    <xsl:sequence select="'wmlPgNumTypeFrontMatter'"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:sequence select="'wmlPgNumTypeMain'"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                </xsl:document>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="$cElemNull"/>
