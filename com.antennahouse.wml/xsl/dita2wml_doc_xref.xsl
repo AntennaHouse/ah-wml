@@ -26,6 +26,7 @@ URL : http://www.antennahouse.com/
      note:		The xref target is already searched in dita2wml_global_bookmark.xsl
      -->
     <xsl:template match="*[contains(@class,' topic/xref ')]">
+        <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="href" as="xs:string" select="string(@href)"/>
         <xsl:variable name="isInternalLink" as="xs:boolean" select="starts-with($href,'#')"/>
         <xsl:choose>
@@ -186,10 +187,27 @@ URL : http://www.antennahouse.com/
                             
                             <!-- Reference to fn -->
                             <xsl:when test="$targetElem[contains(@class,' topic/fn ')]">
-                                
+                                <xsl:variable name="key" as="xs:string" select="ahf:generateId($targetElem)"/>
+                                <xsl:variable name="fnId" as="xs:integer?" select="map:get($fnIdMap,$key)[1]"/>
+                                <xsl:assert test="exists($fnId)" select="'[fn] key=',$key,' does not exists is $fnIdMap key=',ahf:mapKeyDump($fnIdMap)"/>
+                                <w:r>
+                                    <w:rPr>
+                                        <w:rStyle w:val="{ahf:getStyleIdFromName('footnote reference')}"/>
+                                        <xsl:copy-of select="$prmRunProps"/>
+                                    </w:rPr>
+                                    <xsl:choose>
+                                        <xsl:when test="$targetElem/@callout">
+                                            <w:footnoteReference w:customMarkFollows="1" w:id="{string($fnId)}"/>
+                                            <w:t xml:space="preserve"><xsl:value-of select="$targetElem/@callout"/></w:t>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <w:footnoteReference w:id="{string($fnId)}"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </w:r>
                             </xsl:when>
                             <xsl:otherwise>
-                                
+                                <!-- Not Yet Implemented -->
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:otherwise>

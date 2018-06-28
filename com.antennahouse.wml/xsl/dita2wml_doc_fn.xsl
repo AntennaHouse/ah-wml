@@ -29,7 +29,7 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/fn ')]">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:param name="prmSkipFn"   tunnel="yes" required="no" as="xs:boolean" select="false()"/>
-        <xsl:if test="not($prmSkipFn)">
+        <xsl:if test="not($prmSkipFn) and empty(@id)">
             <xsl:variable name="key" as="xs:string" select="ahf:generateId(.)"/>
             <xsl:variable name="fnId" as="xs:integer?" select="map:get($fnIdMap,$key)[1]"/>
             <xsl:assert test="exists($fnId)" select="'[fn] key=',$key,' does not exists is $fnIdMap key=',ahf:mapKeyDump($fnIdMap)"/>
