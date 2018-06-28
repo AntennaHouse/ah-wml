@@ -215,6 +215,8 @@ URL : http://www.antennahouse.com/
         <variable name="Appendix_Title">Appendix </variable>
         <variable name="Index_Title">Index</variable>
 
+        <variable name="Front_Matter_Title">Forward</variable>
+        <variable name="FrontMatterTitle">$Front_Matter_Title</variable>
         <variable name="Notice_Title">Notice</variable>
         <variable name="Preface_Title">Preface</variable>
 
@@ -461,13 +463,16 @@ URL : http://www.antennahouse.com/
         <variable name="Default_Image_Id_Offset">10000</variable>
         
         <!-- Default common image relationship offset -->
-        <variable name="Default_Common_Image_Id_Offset">5000</variable>
+        <variable name="Default_Common_Image_Id_Offset">9000</variable>
         
         <!-- Default drawing id offset -->
         <variable name="Default_Drawing_Id_Offset">10000</variable>
 
         <!-- Default fn @id value offset in footonote.xml -->
         <variable name="Default_Fn_Id_Offset">2</variable>
+
+        <!-- Default header/footer file relationship offset -->
+        <variable name="Default_Header_Footer_Id_Offset">1000</variable>
         
         <!-- Relationship table namspace -->
         <variable name="Relationship_Table_Namespace">http://schemas.openxmlformats.org/package/2006/relationships</variable>
@@ -1168,6 +1173,32 @@ URL : http://www.antennahouse.com/
             </w:p>
         </wml-object>
         
+        <!-- w:sectPr
+             param: %type section break type
+                    %col  column count
+         -->
+        <wml-object name="wmlSectPr">
+            <w:sectPr>
+                <ahr:hdrFtrReference/>
+                <w:type w:val="%type"/>
+                <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
+                <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginBottom)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
+                    w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
+                <ahr:pgNumType/>
+                <w:cols w:num="%col" w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
+            </w:sectPr>
+        </wml-object>
+
+        <!-- Page number format -->
+        <wml-object name="wmlPgNumTypeFrontMatter">
+            <w:pgNumType w:start="1" w:fmt="lowerRoman"/>
+        </wml-object>
+
+        <wml-object name="wmlPgNumTypeMain">
+            <w:pgNumType w:start="1" w:fmt="decimal"/>
+        </wml-object>
+        
+
         <!-- 2 column section property-->
         <wml-object name="wmlSect2Col">
             <w:sectPr>
@@ -1451,6 +1482,203 @@ URL : http://www.antennahouse.com/
                     <w:br w:type="textWrapping" w:clear="%clear-val"/>
                 </w:r>
             </w:p>
+        </wml-object>
+        
+        <!-- Headers and Footers -->
+        <!-- Header/Footer definition seqence
+             1: WML Object Name
+             2: File Name
+             3: w:type of w:footerReference or w:headerReference, 
+             4: usage of header/footer
+                main: for main content
+                frontmatter: for frontmatter content
+                any: both eligible for main & frontmatter content
+             5: header/footer class
+                header: it is header
+                footer: it is footer
+         -->
+        <variable name="HeaderFooterDefinitionSeq" delim="[,\s]+">
+            header-even.xml,wmlHeaderEven,even,main,header,
+            header-odd.xml,wmlHeaderOdd,default,main,header,
+            header-even-fm.xml,wmlHeaderEvenFm,even,frontmatter,header,
+            header-odd-fm.xml,wmlHeaderOddFm,default,frontmatter,header,
+            footer-even.xml,wmlFooterEven,even,any,footer,
+            footer-odd.xml,wmlFooterOdd,default,any,footer
+        </variable>
+        
+        <!-- Header/Footer types in Relationship file (word/_rels/document.xml.rels) -->
+        <variable name="RelationshipTypeHeader">http://schemas.openxmlformats.org/officeDocument/2006/relationships/header</variable>
+        <variable name="RelationshipTypeFooter">http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer</variable>
+
+        <!-- Header/Footer content types in Content Types file (word/[Content_Types].xml) -->
+        <variable name="ContentTypeHeader">application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml</variable>
+        <variable name="ContentTypeFooter">application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml</variable>
+
+        <!-- Header/Footer Contents -->
+        <variable name="HeaderBorderWidth">3pt</variable>
+        <variable name="HeaderBorderColor">46,116,181</variable>
+
+        <wml-object name="wmlHeaderEven">
+            <w:hdr>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                        <w:pBdr>
+                            <w:bottom w:val="single" 
+                                w:sz="{ahf:toBorderWidth('$HeaderBorderWidth')}" 
+                                w:space="1" 
+                                w:color="{ahf:toRgbHexWoS($HeaderBorderColor)}"/>
+                        </w:pBdr>
+                        <w:jc w:val="left"/>
+                    </w:pPr>
+                    <w:r>
+                        <w:fldChar w:fldCharType="begin"/>
+                    </w:r>
+                    <w:r>
+                        <w:instrText xml:space="preserve"> STYLEREF   "heading 1"   \* MERGEFORMAT </w:instrText>
+                    </w:r>
+                    <w:r>
+                        <w:fldChar w:fldCharType="end"/>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                    </w:pPr>
+                </w:p>
+            </w:hdr>
+        </wml-object>
+
+        <wml-object name="wmlHeaderOdd">
+            <w:hdr>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                        <w:pBdr>
+                            <w:bottom w:val="single" 
+                                w:sz="{ahf:toBorderWidth('$HeaderBorderWidth')}" 
+                                w:space="1" 
+                                w:color="{ahf:toRgbHexWoS($HeaderBorderColor)}"/>
+                        </w:pBdr>
+                        <w:wordWrap w:val="0"/>
+                        <w:jc w:val="right"/>
+                    </w:pPr>
+                    <w:r>
+                        <w:fldChar w:fldCharType="begin"/>
+                    </w:r>
+                    <w:r>
+                        <w:instrText xml:space="preserve"> STYLEREF  "heading 1"  \* MERGEFORMAT </w:instrText>
+                    </w:r>
+                    <w:r>
+                        <w:fldChar w:fldCharType="end"/>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                    </w:pPr>
+                </w:p>
+            </w:hdr>
+        </wml-object>
+        
+        <wml-object name="wmlHeaderEvenFm">
+            <w:hdr>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                        <w:pBdr>
+                            <w:bottom w:val="single" 
+                                w:sz="{ahf:toBorderWidth('$HeaderBorderWidth')}" 
+                                w:space="1" 
+                                w:color="{ahf:toRgbHexWoS($HeaderBorderColor)}"/>
+                        </w:pBdr>
+                        <w:jc w:val="left"/>
+                    </w:pPr>
+                    <w:r>
+                        <w:t xml:space="preserve">$FrontMatterTitle</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                    </w:pPr>
+                </w:p>
+            </w:hdr>
+        </wml-object>
+
+        <wml-object name="wmlHeaderOddFm">
+            <w:hdr>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                        <w:pBdr>
+                            <w:bottom w:val="single" 
+                                w:sz="{ahf:toBorderWidth('$HeaderBorderWidth')}" 
+                                w:space="1" 
+                                w:color="{ahf:toRgbHexWoS($HeaderBorderColor)}"/>
+                        </w:pBdr>
+                        <w:jc w:val="right"/>
+                    </w:pPr>
+                    <w:r>
+                        <w:t xml:space="preserve">$FrontMatterTitle</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Header"/>
+                    </w:pPr>
+                </w:p>
+            </w:hdr>
+        </wml-object>
+        
+        <wml-object name="wmlFooterEven">
+            <w:ftr>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Footer"/>
+                        <w:jc w:val="left"/>
+                    </w:pPr>
+                    <w:r>
+                        <w:fldChar w:fldCharType="begin"/>
+                    </w:r>
+                    <w:r>
+                        <w:instrText>PAGE \* MERGEFORMAT</w:instrText>
+                    </w:r>
+                    <w:r>
+                        <w:fldChar w:fldCharType="end"/>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Footer"/>
+                    </w:pPr>
+                </w:p>
+            </w:ftr>
+        </wml-object>
+        
+        <wml-object name="wmlFooterOdd">
+            <w:ftr>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Footer"/>
+                        <w:jc w:val="right"/>
+                    </w:pPr>
+                    <w:r>
+                        <w:fldChar w:fldCharType="begin"/>
+                    </w:r>
+                    <w:r>
+                        <w:instrText>PAGE \* MERGEFORMAT</w:instrText>
+                    </w:r>
+                    <w:r>
+                        <w:fldChar w:fldCharType="end"/>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="Footer"/>
+                    </w:pPr>
+                </w:p>
+            </w:ftr>
         </wml-object>
         
     </wml-objects>

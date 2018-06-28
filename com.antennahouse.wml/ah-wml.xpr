@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="20.0">
+<project version="20.1">
     <meta>
         <filters directoryPatterns="" filePatterns="wpml.xpr" positiveFilePatterns="" showHiddenFiles="false"/>
         <options>
-            <serialized version="20.0" xml:space="preserve">
+            <serialized version="20.1" xml:space="preserve">
                 <serializableOrderedMap>
                     <entry>
                         <String>scenario.associations</String>
@@ -398,6 +398,276 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
+                                    <String>xsl/dita2wml_doc_toc.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_doc_chapter.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_doc_sect_control_info.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_doc_sectpr.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_global_header_footer.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_util_string.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_doc_shell.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_style_get.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_doc_image.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_doc_topic.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_doc_main.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_util_dita.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_output_header_footer_shell.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_output_header_footer_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_output_header_footer_main.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_numbering_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_doc_id.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_global_wml.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_numbering_shell.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_numbering_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>xsl/dita2wml_param.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>dita2wml_doc_shell</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>Validation_scenario</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
                                     <String>xsl/dita2wml_doc_index.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
@@ -473,37 +743,7 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>xsl/dita2wml_doc_shell.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2wml_doc_shell</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
                                     <String>xsl/dita2wml_doc_note.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2wml_doc_shell</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>xsl/dita2wml_doc_image.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -563,52 +803,7 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>xsl/dita2wml_doc_sectpr.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2wml_doc_shell</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>xsl/dita2wml_doc_main.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2wml_doc_shell</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
                                     <String>xsl/dita2wml_param_papersize.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2wml_doc_shell</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>xsl/dita2wml_style_get.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -668,36 +863,6 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>xsl/dita2wml_util_string.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2wml_doc_shell</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>xsl/dita2wml_param.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2wml_doc_shell</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
                                     <String>xsl/dita2wml_doc_list.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
@@ -729,21 +894,6 @@
                             <scenarioAssociation>
                                 <field name="url">
                                     <String>xsl/dita2wml_doc_title.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2wml_doc_shell</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>xsl/dita2wml_global_wml.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -923,21 +1073,6 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>xsl/dita2wml_util_dita.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2wml_doc_shell</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
                                     <String>xsl/dita2wml_doc_fn.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
@@ -969,36 +1104,6 @@
                             <scenarioAssociation>
                                 <field name="url">
                                     <String>xsl/dita2wml_doc_table.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2wml_doc_shell</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>xsl/dita2wml_doc_topic.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2wml_doc_shell</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>xsl/dita2wml_doc_chapter.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -1178,21 +1283,6 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>xsl/dita2wml_doc_id.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2wml_doc_shell</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
                                     <String>xsl/dita2wml_doc_equation_domain_util.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
@@ -1258,21 +1348,6 @@
                                 <field name="scenarioIds">
                                     <list>
                                         <String>dita2wml_core</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>Validation_scenario</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>xsl/dita2wml_numbering_shell.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>dita2wml_numbering_shell</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -1673,6 +1748,49 @@
                                 </field>
                                 <field name="name">
                                     <String>dita2wml_numbering_shell</String>
+                                </field>
+                            </validationScenario>
+                            <validationScenario>
+                                <field name="pairs">
+                                    <list>
+                                        <validationUnit>
+                                            <field name="validationType">
+                                                <validationUnitType>
+                                                    <field name="validationInputType">
+                                                        <String>text/xsl</String>
+                                                    </field>
+                                                </validationUnitType>
+                                            </field>
+                                            <field name="url">
+                                                <String>${pdu}/xsl/dita2wml_output_header_footer_shell.xsl</String>
+                                            </field>
+                                            <field name="validationEngine">
+                                                <validationEngine>
+                                                    <field name="engineType">
+                                                        <String>&lt;Default engine></String>
+                                                    </field>
+                                                    <field name="allowsAutomaticValidation">
+                                                        <Boolean>true</Boolean>
+                                                    </field>
+                                                </validationEngine>
+                                            </field>
+                                            <field name="allowAutomaticValidation">
+                                                <Boolean>true</Boolean>
+                                            </field>
+                                            <field name="extensions">
+                                                <null/>
+                                            </field>
+                                            <field name="validationSchema">
+                                                <null/>
+                                            </field>
+                                        </validationUnit>
+                                    </list>
+                                </field>
+                                <field name="type">
+                                    <String>Validation_scenario</String>
+                                </field>
+                                <field name="name">
+                                    <String>dita2wml_output_header_footer_shell</String>
                                 </field>
                             </validationScenario>
                             <validationScenario>

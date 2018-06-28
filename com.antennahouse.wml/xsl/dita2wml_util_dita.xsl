@@ -267,7 +267,7 @@ URL : http://www.antennahouse.com/
     </xsl:function>
     
     <!-- 
-     function:	Get @output class value with regex
+     function:	Get @outputclass value with regex
      param:		prmElem, prmRegx, prmReplace
      return:	xs:string
      note:		prmRegEx must have several parts using "(" and ")"
@@ -294,6 +294,18 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="result" as="xs:string" select="ahf:getOutputClassRegx($prmElem,$prmRegx,$prmReplace)"/>
         <xsl:sequence select="if ($result eq '') then $prmDefault else $result"/>
     </xsl:function>
-    
+
+    <!-- 
+     function:	Checkt @outputclass value has specified value
+     param:		prmElem, prmValue
+     return:	xs:boolean
+     note:		
+     -->
+    <xsl:function name="ahf:hasOutputclassValue" as="xs:boolean">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:param name="prmValue" as="xs:string"/>
+        <xsl:sequence select="$prmValue = ahf:getOutputClass($prmElem)"/>
+    </xsl:function>
+
     <!-- end of stylesheet -->
 </xsl:stylesheet>

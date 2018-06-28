@@ -22,7 +22,7 @@ URL : http://www.antennahouse.com/
      function:	Topic/shortdesc processing
      param:		prmIndentLevel
      return:	
-     note:		Shortdesc is composed of inlne elements.
+     note:		Shortdesc is composed of inline elements.
      -->
     <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/shortdesc ')][empty(child::node())]" priority="5"/>
     <xsl:template match="*[contains(@class,' topic/abstract ')]/*[contains(@class,' topic/shortdesc ')][empty(child::node())]" priority="5"/>
@@ -70,13 +70,25 @@ URL : http://www.antennahouse.com/
      return:	
      note:		Body contains block elements.
                 So only <xsl:apply-templates> selecting element is needed to process contents.
+                Also as body may have section break opportunity, check section break before and after this element.
      -->
     <xsl:template match="*[contains(@class,' topic/body ')]">
+        <xsl:variable name="body" as="element()" select="."/>
+
+        <!-- Generate section property -->
+        <xsl:call-template name="getSectionPropertyElemBefore"/>
+        
         <xsl:apply-templates select="*">
             <xsl:with-param name="prmListOccurenceNumber" tunnel="yes" select="0"/>
             <xsl:with-param name="prmListLevel" tunnel="yes" select="0"/>
             <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
         </xsl:apply-templates>
+
+        <xsl:variable name="spanImage" as="element()*" select="$body/descendant::*[contains(@class,' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]"/>
+        <xsl:call-template name="getSectionPropertyElemAfter">
+            <xsl:with-param name="prmId" select="if (empty($spanImage)) then () else concat(ahf:generateId(.),'.end')"/>
+        </xsl:call-template>
+        
     </xsl:template>
 
     <!-- 

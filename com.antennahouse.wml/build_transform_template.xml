@@ -66,7 +66,7 @@
         </antcall>
     </target>
 
-    <target name="generate.docx.file" depends="core.xml,theme1.xml,custom.xml,document.xml,styles.xml,numbering.xml,footnote.xml,document.xml.rels,Content_Types.xml"/>
+    <target name="generate.docx.file" depends="core.xml,theme1.xml,custom.xml,header.footer,document.xml,styles.xml,numbering.xml,footnote.xml,document.xml.rels,Content_Types.xml"/>
         
     <target name="core.xml">
         <antcall target="transform.common">
@@ -92,7 +92,15 @@
             <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_custom.xsl"/>
         </antcall>
     </target>
-
+    
+    <target name="header.footer">
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${prmInputFile}"/>
+            <param name="prmOutputFile" value="${dita.temp.dir}/dummy.xml"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_output_header_footer_shell.xsl"/>
+        </antcall>
+    </target>
+    
     <target name="document.xml">
         <echo message="document.xml"/>
         <antcall target="transform.common">

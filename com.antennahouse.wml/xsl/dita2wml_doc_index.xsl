@@ -25,7 +25,7 @@ URL : http://www.antennahouse.com/
      note:      Only generate INDEX field.
                 Generating index is done by Word.
      -->
-    <xsl:template match="*[contains(@class,' bookmap/indexlist ')]" name="genIndexField" as="element(w:p)+" priority="5">
+    <xsl:template match="*[contains(@class,' bookmap/indexlist ')]" name="genIndexField" as="node()+" priority="5">
         
         <xsl:variable name="option" as="xs:string*">
             <xsl:call-template name="getVarValue">
@@ -44,7 +44,10 @@ URL : http://www.antennahouse.com/
                     <xsl:with-param name="prmVarName" select="'Index_Title'"/>
                 </xsl:call-template>
             </xsl:with-param>
-        </xsl:call-template>    
+        </xsl:call-template>
+        
+        <!-- Generate section property -->
+        <xsl:call-template name="getSectionPropertyElemBefore"/>
         
         <w:p>
             <xsl:call-template name="getWmlObjectReplacing">
@@ -53,6 +56,9 @@ URL : http://www.antennahouse.com/
                 <xsl:with-param name="prmDst" select="(string-join($option,' '))"/>
             </xsl:call-template>
         </w:p>
+
+        <xsl:call-template name="getSectionPropertyElemAfter"/>
+        
     </xsl:template>
 
     <!-- ==== END OF STYLESHEET === -->

@@ -3,7 +3,7 @@
 ****************************************************************
 DITA to WordprocessingML Stylesheet
 Module: Making [Content_Types].xml main stylesheet.
-Copyright © 2009-2017 Antenna House, Inc. All rights reserved.
+Copyright © 2009-2018 Antenna House, Inc. All rights reserved.
 Antenna House is a trademark of Antenna House, Inc.
 URL    : http://www.antennahouse.com/
 E-mail : info@antennahouse.com
@@ -47,6 +47,8 @@ E-mail : info@antennahouse.com
                 </xsl:if>
             </xsl:for-each>
             <xsl:apply-templates select="* except ctype:Default"/>
+            <!-- Generate Header/Footer Content Overrides -->
+            <xsl:call-template name="genHeaderFooterContentTypeOverride"/>
         </xsl:copy>
     </xsl:template>
     

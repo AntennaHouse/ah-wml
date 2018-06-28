@@ -39,11 +39,14 @@ URL : http://www.antennahouse.com/
         <xsl:element name="Relationships" namespace="{$rsNs}">
             <xsl:variable name="originalRels" select="$relsDoc/r:Relationships/r:Relationship" as="element()*"/>
             <xsl:copy-of select="$originalRels"/>
+            
+            <!-- Generate Header/Footer Relationships-->
+            <xsl:call-template name="genHeaderFooterRelationships"/>
 
             <!-- Generate common image relationships -->
             <xsl:for-each select="map:keys($commonImageIdMap)">
                 <xsl:variable name="file" as="xs:string" select="."/>
-                <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get($commonImageIdMap,$file))"/>
+                <xsl:variable name="rId" as="xs:string" select="concat($rIdPrefix,map:get($commonImageIdMap,$file))"/>
                 <xsl:call-template name="getWmlObjectReplacing">
                     <xsl:with-param name="prmObjName" select="'wmlImageRelationship'"/>
                     <xsl:with-param name="prmSrc" select="('%id','%target')"/>
@@ -54,7 +57,7 @@ URL : http://www.antennahouse.com/
             <!-- Generate image relationships contained in DITA document -->
             <xsl:for-each select="map:keys($imageIdMap)">
                 <xsl:variable name="href" as="xs:string" select="."/>
-                <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get($imageIdMap,$href))"/>
+                <xsl:variable name="rId" as="xs:string" select="concat($rIdPrefix,map:get($imageIdMap,$href))"/>
                 <xsl:call-template name="getWmlObjectReplacing">
                     <xsl:with-param name="prmObjName" select="'wmlImageRelationship'"/>
                     <xsl:with-param name="prmSrc" select="('%id','%target')"/>
@@ -65,7 +68,7 @@ URL : http://www.antennahouse.com/
             <!-- Generate external link relationships contained in DITA document -->
             <xsl:for-each select="map:keys($externalLinkIdMap)">
                 <xsl:variable name="href" as="xs:string" select="."/>
-                <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get($externalLinkIdMap,$href))"/>
+                <xsl:variable name="rId" as="xs:string" select="concat($rIdPrefix,map:get($externalLinkIdMap,$href))"/>
                 <xsl:call-template name="getWmlObjectReplacing">
                     <xsl:with-param name="prmObjName" select="'wmlExternalLinkRelationship'"/>
                     <xsl:with-param name="prmSrc" select="('%id','%target')"/>

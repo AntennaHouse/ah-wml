@@ -47,9 +47,7 @@ URL : http://www.antennahouse.com/
                         <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')]"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')]">
-                            <xsl:with-param name="prmTopElement" tunnel="yes" select="'map'"/>
-                        </xsl:apply-templates>
+                        <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')]"/>
                     </xsl:otherwise>
                 </xsl:choose>
                 
@@ -58,7 +56,6 @@ URL : http://www.antennahouse.com/
                     <!--xsl:call-template name="genMapIndex"/-->
                 </xsl:if>
                 
-                <xsl:call-template name="genSingleSideSectPr"/>
             </w:body>
         </w:document>        
     </xsl:template>

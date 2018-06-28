@@ -283,6 +283,18 @@ URL : http://www.antennahouse.com/
     <!-- 
      function:	Block image element processing
      param:		none
+     return:	
+     note:      handle column break
+     -->
+    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break'][empty(ancestor::*[ahf:seqContains(string(@class),(' floatfig-d/floatfig ',' floatfig-d/floatfig-group '))][string(@float) = ('left','right')])]" priority="20">
+        <xsl:call-template name="getSectionPropertyElemBefore"/>
+        <xsl:next-match/>
+        <xsl:call-template name="getSectionPropertyElemAfter"/>
+    </xsl:template>
+
+    <!-- 
+     function:	Block image element processing
+     param:		none
      return:	w:p
      note:      
      -->

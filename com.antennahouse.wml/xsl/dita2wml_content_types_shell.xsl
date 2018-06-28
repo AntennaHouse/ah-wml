@@ -3,7 +3,7 @@
 ****************************************************************
 DITA to WordprocessingML Stylesheet
 Module: Making [Content_Types].xml shell stylesheet.
-Copyright © 2009-2017 Antenna House, Inc. All rights reserved.
+Copyright © 2009-2018 Antenna House, Inc. All rights reserved.
 Antenna House is a trademark of Antenna House, Inc.
 URL    : http://www.antennahouse.com/
 E-mail : info@antennahouse.com
@@ -17,6 +17,7 @@ E-mail : info@antennahouse.com
     <xsl:include href="dita2wml_constants.xsl"/>
     <xsl:include href="dita2wml_global_merged.xsl"/>
     <xsl:include href="dita2wml_global_wml.xsl"/>
+    <xsl:include href="dita2wml_global_header_footer.xsl"/>
     <xsl:include href="dita2wml_text_mode.xsl"/>
     <xsl:include href="dita2wml_style_get.xsl"/>
     <xsl:include href="dita2wml_style_set.xsl"/>
