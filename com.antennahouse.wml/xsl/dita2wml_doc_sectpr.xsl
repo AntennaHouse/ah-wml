@@ -28,7 +28,7 @@ URL : http://www.antennahouse.com/
                 getSectionPropertyElemBefore and getSectionPropertyElemAfter
                 should be called before and after the element processing
     -->
-    <!-- getSectionPropertyElemBefore only handles column spanned spanned image
+    <!-- getSectionPropertyElemBefore only handles column spanned image
      -->
     <xsl:template name="getSectionPropertyElemBefore" as="node()*">
         <xsl:param name="prmElem" as="element()" required="no" select="."/>
