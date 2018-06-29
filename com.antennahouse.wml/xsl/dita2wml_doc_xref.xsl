@@ -170,7 +170,7 @@ URL : http://www.antennahouse.com/
                                     </xsl:for-each>
                                 </xsl:variable>
                                 <xsl:variable name="olFormat" as="xs:string" select="ahf:getOlNumberFormat($targetElem,$olNumberFormat)"/>
-                                <xsl:variable name="liNumber" as="xs:integer" select="count($targetElem|$targetElem/preceding-sibling::*[not(contains(@class,' topic/stepsection '))])"/>
+                                <xsl:variable name="liNumber" as="xs:integer" select="count($targetElem|$targetElem/preceding-sibling::*[not(contains(@class,' task/stepsection '))])"/>
                                 <xsl:variable name="targetLi" as="element(w:r)">
                                     <w:r>
                                         <w:t>
