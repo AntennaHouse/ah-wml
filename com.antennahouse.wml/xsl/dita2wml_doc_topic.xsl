@@ -84,10 +84,7 @@ URL : http://www.antennahouse.com/
             <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
         </xsl:apply-templates>
 
-        <xsl:variable name="spanImage" as="element()*" select="$body/descendant::*[contains(@class,' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]"/>
-        <xsl:call-template name="getSectionPropertyElemAfter">
-            <xsl:with-param name="prmId" select="if (empty($spanImage)) then () else concat(ahf:generateId(.),'.end')"/>
-        </xsl:call-template>
+        <xsl:call-template name="getSectionPropertyElemAfter"/>
         
     </xsl:template>
 

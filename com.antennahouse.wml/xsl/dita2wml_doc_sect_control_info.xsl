@@ -142,15 +142,6 @@ URL : http://www.antenna.co.jp/
         <xsl:apply-templates select="$spanImage" mode="#current">
             <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
         </xsl:apply-templates>
-        <xsl:if test="exists($spanImage)">
-            <body>
-                <xsl:attribute name="column" select="$columnInfo3[1]"/>
-                <xsl:attribute name="id" select="concat(string($columnInfo3[2]),'.end')"/>
-                <xsl:attribute name="break" select="$cBreakAuto"/>
-                <xsl:attribute name="contentkey" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
-                <xsl:attribute name="xpath" select="ahf:getNodeXPathStr($body)"/>
-            </body>
-        </xsl:if>
     </xsl:template>
     
     <!-- Image that span columns -->
