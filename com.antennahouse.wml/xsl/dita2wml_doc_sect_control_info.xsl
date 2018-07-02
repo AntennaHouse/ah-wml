@@ -112,10 +112,15 @@ URL : http://www.antenna.co.jp/
                     </xsl:attribute>
                     <xsl:attribute name="href" select="string(@href)"/>
                 </topicref>
-                <!-- body -->
-                <xsl:apply-templates select="$topic/*[contains(@class,' topic/body ')]" mode="#current">
-                    <xsl:with-param name="prmTopicRef" select="."/>
-                </xsl:apply-templates>
+                <!-- body & related-links -->
+                <xsl:if test="ahf:shouldProcessBodyAndRelatdLinks(.)">
+                    <xsl:apply-templates select="$topic/*[contains(@class,' topic/body ')]" mode="#current">
+                        <xsl:with-param name="prmTopicRef" select="."/>
+                    </xsl:apply-templates>
+                    <xsl:apply-templates select="$topic/*[contains(@class,' topic/related-links ')]" mode="#current">
+                        <xsl:with-param name="prmTopicRef" select="."/>
+                    </xsl:apply-templates>
+                </xsl:if>
                 <!-- nested topic-->
                 <xsl:apply-templates select="$topic/*[contains(@class,' topic/topic ')]" mode="#current">
                     <xsl:with-param name="prmTopicRef" select="."/>
@@ -125,6 +130,17 @@ URL : http://www.antenna.co.jp/
         </xsl:choose>
     </xsl:template>
 
+    <!-- 
+     function:	Check the reqirement for process body and related-links
+     param:		prmTopicRef
+     return:	xs:boolean
+     note:		
+     -->
+    <xsl:function name="ahf:shouldProcessBodyAndRelatdLinks" as="xs:boolean">
+        <xsl:param name="prmTopicRef" as="element()"/>
+        <xsl:sequence select="true()"/>
+    </xsl:function>    
+    
     <!-- topic/body -->
     <xsl:template match="*[contains(@class,' topic/body ')]" mode="MODE_MAKE_SECT_INFO">
         <xsl:param name="prmTopicRef" as="element()" required="yes"/>
@@ -142,6 +158,21 @@ URL : http://www.antenna.co.jp/
         <xsl:apply-templates select="$spanImage" mode="#current">
             <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
         </xsl:apply-templates>
+    </xsl:template>
+
+    <!-- topic/related-links -->
+    <xsl:template match="*[contains(@class,' topic/related-links ')]" mode="MODE_MAKE_SECT_INFO">
+        <xsl:param name="prmTopicRef" as="element()" required="yes"/>
+        <xsl:param name="prmIsInFrontMatter" tunnel="yes" required="false" select="false()"/>
+        <xsl:variable name="relatedLinks" as="element()" select="."/>
+        <xsl:variable name="columnInfo4" as="item()*" select="ahf:getColumnInfo4($prmTopicRef,$relatedLinks)"/>
+        <related-links>
+            <xsl:attribute name="column" select="$columnInfo4[1]"/>
+            <xsl:attribute name="id" select="$columnInfo4[2]"/>
+            <xsl:attribute name="break" select="$cBreakAuto"/>
+            <xsl:attribute name="contentkey" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
+            <xsl:attribute name="xpath" select="ahf:getNodeXPathStr($relatedLinks)"/>
+        </related-links>
     </xsl:template>
     
     <!-- Image that span columns -->
@@ -207,10 +238,15 @@ URL : http://www.antenna.co.jp/
             <xsl:attribute name="contentkey" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
             <xsl:attribute name="xpath" select="ahf:getNodeXPathStr($topic)"/>
         </topic>
-        <!-- body -->
-        <xsl:apply-templates select="*[contains(@class,' topic/body ')]" mode="#current">
-            <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
-        </xsl:apply-templates>
+        <!-- body & related-links -->
+        <xsl:if test="ahf:shouldProcessBodyAndRelatdLinks($prmTopicRef)">
+            <xsl:apply-templates select="$topic/*[contains(@class,' topic/body ')]" mode="#current">
+                <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="$topic/*[contains(@class,' topic/related-links ')]" mode="#current">
+                <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
+            </xsl:apply-templates>
+        </xsl:if>
         <!-- More nested topic -->
         <xsl:apply-templates select="*[contains(@class,' topic/topic ')]" mode="#current">
             <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
@@ -325,6 +361,34 @@ URL : http://www.antenna.co.jp/
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>    
+    
+    <!-- For related-links
+         item()[1]: xs:integer column count
+         item()[2]: xs:integer id
+         related-links inherits body column
+     -->
+    <xsl:function name="ahf:getColumnInfo4" as="item()*">
+        <xsl:param name="prmTopicRef" as="element()"/>
+        <xsl:param name="prmRelatdLinks" as="element()"/>
+        <xsl:variable name="body" as="element()?" select="$prmRelatdLinks/preceding-sibling::*[contains(@class,' topic/body ')][1]"/>
+        <xsl:variable name="bodyColSpec" as="xs:string" select="if (exists($body)) then ahf:getColSpecFromElem($body) else ''"/>
+        <xsl:choose>
+            <xsl:when test="$bodyColSpec ne ''">
+                <xsl:sequence select="(xs:integer($bodyColSpec),ahf:generateId($prmRelatdLinks))"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopicRef)"/>
+                <xsl:choose>
+                    <xsl:when test="$topicRefColSpec ne ''">
+                        <xsl:sequence select="(xs:integer($topicRefColSpec),ahf:generateId($prmRelatdLinks))"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:sequence select="(1,ahf:generateId($prmRelatdLinks))"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
 
     <!--
     function:   Get column spec from element (topicref, topic, body)
@@ -468,7 +532,7 @@ URL : http://www.antenna.co.jp/
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="body|topic" mode="MODE_ADD_ADJACENT_INFO">
+    <xsl:template match="body|topic|related-links" mode="MODE_ADD_ADJACENT_INFO">
         <xsl:variable name="elem" as="element()" select="."/>
         <xsl:variable name="prev" as="element()?" select="$elem/preceding-sibling::*[1]"/>
         <xsl:variable name="next" as="element()?" select="$elem/following-sibling::*[1]"/>

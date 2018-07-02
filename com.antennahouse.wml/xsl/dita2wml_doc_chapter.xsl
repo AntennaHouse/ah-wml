@@ -82,7 +82,7 @@ URL : http://www.antennahouse.com/
     
 
     <!-- 
-     function:	Genral topic processing
+     function:	General topic processing
      param:		none
      return:	
      note:		related-links is not implemented yet!
@@ -102,9 +102,9 @@ URL : http://www.antennahouse.com/
         <xsl:call-template name="getSectionPropertyElemAfter"/>
 
         <xsl:apply-templates select="*[contains(@class, ' topic/body ')]"/>
-        <!--xsl:apply-templates select="*[contains(@class, ' topic/related-links ')]"/-->
+        <xsl:apply-templates select="*[contains(@class, ' topic/related-links ')]"/>
 
-        <!-- Nesteed topic processing -->
+        <!-- Nested topic processing -->
         <xsl:apply-templates select="*[contains(@class, ' topic/topic ')]"/>
     </xsl:template>
 
