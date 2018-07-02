@@ -1484,6 +1484,44 @@ URL : http://www.antennahouse.com/
             </w:p>
         </wml-object>
         
+        <!-- Related-links title
+             param: %title title
+          -->
+        <variable name="RelatedLinksFontFamily">major</variable>
+        <wml-object name="wmlRelatedLinksTitle">
+            <w:p>
+                <w:pPr>
+                    <w:pStyle w:val="note-line"/>
+                    <w:tabs>
+                        <w:tab w:val="left" w:pos="940"/>
+                        <w:tab w:val="left" w:pos="8085"/>
+                    </w:tabs>
+                    <w:ind w:left="668"/>
+                </w:pPr>
+                <w:r>
+                    <w:rPr>
+                        <w:rFonts w:asciiTheme="{concat('$TocTitleFontFamily','Ascii')}" w:eastAsia="{concat('$TocTitleFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$TocTitleFontFamily','HAnsi')}" w:cstheme="{concat('$TocTitleFontFamily','Bidi')}"/>
+                        <w:strike/>
+                    </w:rPr>
+                    <w:tab/>
+                </w:r>
+                <w:r>
+                    <w:rPr>
+                        <w:rFonts w:asciiTheme="{concat('$TocTitleFontFamily','Ascii')}" w:eastAsia="{concat('$TocTitleFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$TocTitleFontFamily','HAnsi')}" w:cstheme="{concat('$TocTitleFontFamily','Bidi')}"/>
+                        <w:b/>
+                    </w:rPr>
+                    <w:t>%title</w:t>
+                </w:r>
+                <w:r>
+                    <w:rPr>
+                        <w:rFonts w:asciiTheme="{concat('$TocTitleFontFamily','Ascii')}" w:eastAsia="{concat('$TocTitleFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$TocTitleFontFamily','HAnsi')}" w:cstheme="{concat('$TocTitleFontFamily','Bidi')}"/>
+                        <w:strike/>
+                    </w:rPr>
+                    <w:tab/>
+                </w:r>
+            </w:p>
+        </wml-object>
+        
         <!-- Headers and Footers -->
         <!-- Header/Footer definition seqence
              1: WML Object Name
