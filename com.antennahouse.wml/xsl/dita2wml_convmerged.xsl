@@ -21,6 +21,9 @@ E-mail : info@antennahouse.com
          3. Remove non needed nodes such as comments or processing instructions in topic.
       -->
 
+    <xsl:variable name="root" select="/*[1]" as="element()"/>
+    <xsl:variable name="map" select="$root/*[contains(@class,' map/map ')][1]" as="element()"/>
+    
     <!-- Debug -->
     <xsl:param name="PRM_OMIT_ATT" as="xs:boolean" select="false()"/>
     

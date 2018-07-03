@@ -24,7 +24,15 @@ E-mail : info@antennahouse.com
     <xsl:include href="dita2wml_param.xsl"/>
     <xsl:include href="dita2wml_param_papersize.xsl"/>
     <xsl:include href="dita2wml_util_error.xsl"/>
-    <xsl:include href="dita2wml_util.xsl"/>
+    <xsl:include href="dita2wml_util_datetime.xsl"/>
+    <xsl:include href="dita2wml_util_unit.xsl"/>
+    <xsl:include href="dita2wml_util_string.xsl"/>
+    <xsl:include href="dita2wml_util_wml.xsl"/>
+    <xsl:include href="dita2wml_util_dita.xsl"/>
+    <xsl:include href="dita2wml_doc_sect_control_info.xsl"/>
+    <xsl:include href="dita2wml_history_id.xsl"/>
+    <xsl:include href="dita2wml_doc_id.xsl"/>
+    
     <xsl:include href="dita2wml_core_main.xsl"/>
     
 </xsl:stylesheet>

@@ -79,7 +79,7 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="lineEndPosInTwip" as="xs:integer" select="ahf:getLineEndPosInTwip(.)"/>
 
         <!-- Relatd-links title -->
-        <xsl:variable name="title">
+        <xsl:variable name="title" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
                 <xsl:with-param name="prmVarName" select="'Relatedlink_Title'"/>
             </xsl:call-template>
@@ -182,7 +182,8 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmTopic"        required="yes" as="element()"/>
         <xsl:param name="prmRelatedLinks" required="yes" as="element()"/>
 
-        <xsl:variable name="targetElemNumber" as="xs:integer" select="map:get($targetElemIdAndNumberMap,ahf:generateId($prmTopic))"/>
+        <xsl:variable name="targetElemNumber" as="xs:integer?" select="map:get($targetElemIdAndNumberMap,generate-id($prmTopic))"/>
+        <xsl:assert test="exists($targetElemNumber)" select="'[editLinkInside] Target is not defined',ahf:generateId($prmTopic)"/>
         <xsl:variable name="titleResult" as="element(w:r)*">
             <xsl:variable name="titlePrefix" as="xs:string">
                 <xsl:call-template name="genTitlePrefix">
@@ -203,9 +204,8 @@ URL : http://www.antennahouse.com/
         </xsl:variable>
         <w:p>
             <w:pPr>
-                <w:pStyle w:val="ahf:getStyleIdFromName('related-links')"/>
+                <w:pStyle w:val="{ahf:getStyleIdFromName('related-links')}"/>
             </w:pPr>
-            
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlRefField'"/>
                 <xsl:with-param name="prmSrc" select="('%ref-id','%field-opt','node:field-result')"/>
@@ -225,10 +225,17 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmLinkText" required="yes" as="node()*"/>
         
         <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get($externalLinkIdMap,$prmHref))"/>
-        <w:hyperlink r:id="{$rId}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-            <xsl:copy-of select="$prmLinkText"/>
-        </w:hyperlink>
-        
+        <w:p>
+            <w:pPr>
+                <w:pStyle w:val="{ahf:getStyleIdFromName('related-links')}"/>
+            </w:pPr>
+            <w:r>
+                <w:hyperlink r:id="{$rId}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+                    <xsl:copy-of select="$prmLinkText"/>
+                </w:hyperlink>
+            </w:r>
+        </w:p>
+
     </xsl:template>
     
     <!-- END OF STYLESHEET -->

@@ -18,10 +18,10 @@ URL : http://www.antennahouse.com/
     
     <xsl:include href="dita2wml_constants.xsl"/>
     <xsl:include href="dita2wml_util.xsl"/>
+    <xsl:include href="dita2wml_util_dita.xsl"/>
     <xsl:include href="dita2wml_util_error.xsl"/>
     <xsl:include href="dita2wml_message.xsl"/>
 
-    <xsl:include href="dita2wml_doc_id.xsl"/>
     <xsl:include href="dita2wml_global_wml.xsl"/>
     <xsl:include href="dita2wml_global_merged.xsl"/>
     <xsl:include href="dita2wml_global_list.xsl"/>
@@ -29,7 +29,9 @@ URL : http://www.antennahouse.com/
     <xsl:include href="dita2wml_param_papersize.xsl"/>
     <xsl:include href="dita2wml_style_get.xsl"/>
     <xsl:include href="dita2wml_style_set.xsl"/>
+    <xsl:include href="dita2wml_doc_sect_control_info.xsl"/>
     <xsl:include href="dita2wml_history_id.xsl"/>
+    <xsl:include href="dita2wml_doc_id.xsl"/>
     
     <xsl:include href="dita2wml_numbering_main.xsl"/>
     

@@ -11,6 +11,7 @@ E-mail : info@antennahouse.com
 -->
 <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:include href="dita2wml_constants.xsl"/>
+  <!--
   <xsl:include href="dita2wml_param.xsl"/>
   <xsl:include href="dita2wml_param_papersize.xsl"/>
   <xsl:include href="dita2wml_global.xsl"/>
@@ -27,5 +28,8 @@ E-mail : info@antennahouse.com
   <xsl:include href="dita2wml_text_mode.xsl"/>
   <xsl:include href="dita2wml_style_get.xsl"/>
   <xsl:include href="dita2wml_style_set.xsl"/>
+  -->
+  <xsl:include href="dita2wml_history_id.xsl"/>
+  <xsl:include href="dita2wml_convmerged3.xsl"/>
   <xsl:include href="dita2wml_table_expand.xsl"/>
 </xsl:stylesheet>
