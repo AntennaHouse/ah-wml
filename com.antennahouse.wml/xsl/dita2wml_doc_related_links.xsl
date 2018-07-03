@@ -56,15 +56,62 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmRelatedLinks" required="yes" as="element()"/>
         
         <!-- Make related-link title block -->
-        
+        <xsl:call-template name="makeRelatedLinksTitleLine"/>
+            
         <!-- process link -->
         <xsl:call-template name="processLink">
             <xsl:with-param name="prmRelatedLinks" select="$prmRelatedLinks"/>
         </xsl:call-template>
         
         <!-- Make related-link end block -->
+        <xsl:call-template name="makeRelatedLinksUnderLine"/>
+    </xsl:template>
+
+    <!-- 
+     function:	Make related-links title line
+     param:		
+     return:	w:p
+     note:		Current context is related-links
+     -->
+    <xsl:template name="makeRelatedLinksTitleLine" as="element(w:p)">
+        
+        <!-- Get underline end position -->
+        <xsl:variable name="lineEndPosInTwip" as="xs:integer" select="ahf:getLineEndPosInTwip(.)"/>
+
+        <!-- Relatd-links title -->
+        <xsl:variable name="title">
+            <xsl:call-template name="getVarValueWithLang">
+                <xsl:with-param name="prmVarName" select="'Relatedlink_Title'"/>
+            </xsl:call-template>
+        </xsl:variable>
+
+        <xsl:call-template name="getWmlObjectReplacing">
+            <xsl:with-param name="prmObjName" select="'wmlRelatedLinksTitle'"/>
+            <xsl:with-param name="prmSrc" select="('%title','%end-pos')"/>
+            <xsl:with-param name="prmDst" select="($title,string($lineEndPosInTwip))"/>
+        </xsl:call-template>
+        
     </xsl:template>
     
+    <!-- 
+     function:	Make related-links under line
+     param:		
+     return:	w:p
+     note:		Current context is related-links
+     -->
+    <xsl:template name="makeRelatedLinksUnderLine" as="element(w:p)">
+        
+        <!-- Get underline end position -->
+        <xsl:variable name="lineEndPosInTwip" as="xs:integer" select="ahf:getLineEndPosInTwip(.)"/>
+        
+        <xsl:call-template name="getWmlObjectReplacing">
+            <xsl:with-param name="prmObjName" select="'wmlRelatedLinksUnderLine'"/>
+            <xsl:with-param name="prmSrc" select="('%end-pos')"/>
+            <xsl:with-param name="prmDst" select="(string($lineEndPosInTwip))"/>
+        </xsl:call-template>
+        
+    </xsl:template>
+
     <!-- 
      function:	Process link
      param:		prmRelatedLinks
@@ -74,210 +121,114 @@ URL : http://www.antennahouse.com/
     <xsl:template name="processLink">
         <xsl:param name="prmRelatedLinks" required="yes" as="element()"/>
         
-        <xsl:for-each select="$prmRelatedLinks/descendant::*[contains(@class,' topic/link ')]
-            [ahf:isTargetLink(.)]">
+        <xsl:for-each select="$prmRelatedLinks/descendant::*[contains(@class,' topic/link ')][ahf:isTargetLink(.)]">
             <xsl:variable name="link" select="." as="element()"/>
             <xsl:variable name="href" select="string($link/@href)" as="xs:string"/>
             <xsl:variable name="ohref" select="string($link/@ohref)" as="xs:string"/>
             <xsl:variable name="xtrf"  select="string($link/@xtrf)" as="xs:string"/>
             <xsl:variable name="linktext" as="node()*">
-                <xsl:apply-templates select="$link/linktext" mode="GET_CONTENTS"/>
+                <xsl:call-template name="getContentsRestricted">
+                    <xsl:with-param name="prmElem" select="$link/linktext"/>
+                    <xsl:with-param name="prmRunProps" tunnel="yes" select="()"/>
+                </xsl:call-template>
             </xsl:variable>
             <xsl:variable name="isLinkInside" as="xs:boolean" select="starts-with($href,'#')"/>
-            <!--
-            <xsl:variable name="topicContent" as="element()?" select="if ($isLinkInside) then ahf:getTopicFromLink($link) else ()"/>
-            <xsl:variable name="topicRef" as="element()?" select="if (exists($topicContent)) then ahf:getTopicRef($topicContent) else ()"/>
-            <xsl:variable name="topicTitle" as="element()?" select="if (exists($topicContent)) then $topicContent/child::*[contains(@class,' topic/title ')][1] else ()"/>
-            -->
-            <!--fo:block>
-                <xsl:call-template name="getAttributeSetWithLang">
-                    <xsl:with-param name="prmAttrSetName" select="'atsRelatedLinkBlock'"/>
-                    <xsl:with-param name="prmElem" select="if (exists($topicTitle)) then $topicTitle else $link"/>
-                </xsl:call-template>
-                <fo:inline>
+            <xsl:variable name="topic" as="element()?" select="if ($isLinkInside) then ahf:getTopicFromLink($link) else ()"/>
+            <xsl:variable name="topicRef" as="element()?" select="if (exists($topic)) then ahf:getTopicRef($topic) else ()"/>
+            <xsl:variable name="topicTitle" as="element()?" select="if (exists($topic)) then $topic/child::*[contains(@class,' topic/title ')][1] else ()"/>
+
+            <xsl:choose>
+                <xsl:when test="$isLinkInside">
                     <xsl:choose>
-                        <xsl:when test="$isLinkInside">
-                            <xsl:choose>
-                                <xsl:when test="empty($topicContent)">
-                                    <xsl:call-template name="warningContinue">
-                                        <xsl:with-param name="prmMes"
-                                            select="ahf:replace($stMes062,('%file','%href'),($xtrf,$ohref))"/>
-                                    </xsl:call-template>
-                                </xsl:when>
-                                <xsl:when test="empty($topicRef)">
-                                    <xsl:call-template name="warningContinue">
-                                        <xsl:with-param name="prmMes"
-                                            select="ahf:replace($stMes063,('%file','%href'),($xtrf,$ohref))"/>
-                                    </xsl:call-template>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:call-template name="editLinkInside">
-                                        <xsl:with-param name="prmTopicRef"     select="$topicRef"/>
-                                        <xsl:with-param name="prmTopicContent" select="$topicContent"/>
-                                        <xsl:with-param name="prmRelatedLinks" select="$prmRelatedLinks"/>
-                                    </xsl:call-template>
-                                </xsl:otherwise>
-                            </xsl:choose>
+                        <xsl:when test="empty($topic)">
+                            <xsl:call-template name="warningContinue">
+                                <xsl:with-param name="prmMes"
+                                    select="ahf:replace($stMes062,('%file','%href'),($xtrf,$ohref))"/>
+                            </xsl:call-template>
+                        </xsl:when>
+                        <xsl:when test="empty($topicRef)">
+                            <xsl:call-template name="warningContinue">
+                                <xsl:with-param name="prmMes"
+                                    select="ahf:replace($stMes063,('%file','%href'),($xtrf,$ohref))"/>
+                            </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:call-template name="editLinkOutside">
-                                <xsl:with-param name="prmHref" select="$href"/>
-                                <xsl:with-param name="prmLinktext" select="$linktext"/>
+                            <xsl:call-template name="editLinkInside">
+                                <xsl:with-param name="prmTopicRef"     select="$topicRef"/>
+                                <xsl:with-param name="prmTopic"        select="$topic"/>
+                                <xsl:with-param name="prmRelatedLinks" select="$prmRelatedLinks"/>
                             </xsl:call-template>
                         </xsl:otherwise>
                     </xsl:choose>
-                </fo:inline>
-            </fo:block-->
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="editLinkOutside">
+                        <xsl:with-param name="prmHref" select="$href"/>
+                        <xsl:with-param name="prmLinkText" select="$linktext"/>
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:for-each>
     </xsl:template>
     
     <!-- 
-     function:	Linktext template
-     param:	    
-     return:	linktext contents
-     note:		This template will be never called!
-     -->
-    <xsl:template match="*[contains(@class, ' map/linktext ')] | *[contains(@class, ' topic/linktext ')]">
-        <!--fo:inline>
-            <xsl:call-template name="getAttributeSetWithLang">
-                <xsl:with-param name="prmAttrSetName" select="'atsLinkText'"/>
-            </xsl:call-template>
-            <xsl:call-template name="ahf:getUnivAtts"/>
-            <xsl:apply-templates>
-            </xsl:apply-templates>
-        </fo:inline-->
-    </xsl:template>
-    
-    <!-- 
-     function:	Edit reference line for inside link
+     function:	Edit reference line for internal link to topic
      param:		prmTopicRef, prmTopicContent
      return:	reference line contentes
      note:		
      -->
     <xsl:template name="editLinkInside">
-        <xsl:param name="prmTopicRef" required="yes" as="element()"/>
-        <xsl:param name="prmTopicContent" required="yes" as="element()"/>
+        <xsl:param name="prmTopicRef"     required="yes" as="element()"/>
+        <xsl:param name="prmTopic"        required="yes" as="element()"/>
         <xsl:param name="prmRelatedLinks" required="yes" as="element()"/>
-        
-        <!--xsl:variable name="topicIdAtr" select="ahf:getIdAtts($prmTopicContent,$prmTopicRef,true())" as="attribute()*"/>
-        <xsl:variable name="topicId" select="string($topicIdAtr[1])" as="xs:string"/>
-        <xsl:variable name="titleMode" select="ahf:getTitleMode($prmTopicRef,$prmTopicContent)" as="xs:integer"/>
-        
-        <xsl:variable name="title" as="element()">
-            <xsl:sequence select="$prmTopicContent/child::*[contains(@class, ' topic/title ')][1]"/>
-        </xsl:variable>
-        
-        <xsl:variable name="titleContent" as="node()*">
-            <xsl:apply-templates select="$title" mode="GET_CONTENTS"/>
-        </xsl:variable>
-        
-        <xsl:variable name="titlePrefix" as="xs:string">
-            <xsl:choose>
-                <xsl:when test="$titleMode eq $cSquareBulletTitleMode">
-                    <xsl:call-template name="getVarValueWithLang">
-                        <xsl:with-param name="prmVarName" select="'Level4_Label_Char'"/>
-                        <xsl:with-param name="prmElem" select="$title"/>
-                    </xsl:call-template>
-                </xsl:when>
-                <xsl:when test="$titleMode eq $cRoundBulletTitleMode">
-                    <xsl:call-template name="getVarValueWithLang">
-                        <xsl:with-param name="prmVarName" select="'Level5_Label_Char'"/>
-                        <xsl:with-param name="prmElem" select="$title"/>
-                    </xsl:call-template>
-                </xsl:when>
-                <xsl:when test="$pAddNumberingTitlePrefix">
-                    <xsl:call-template name="genTitlePrefix">
-                        <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
-                    </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="''"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <!-\- Generate FO for link line -\->
-        <xsl:choose>
-            <xsl:when test="($titleMode eq $cSquareBulletTitleMode) or ($titleMode eq $cRoundBulletTitleMode)">
-                <!-\- Link line for square/round bullet item -\->
-                <fo:basic-link internal-destination="{$topicId}">
-                    <fo:inline>
-                        <xsl:attribute name="font-family">
-                            <xsl:call-template name="getVarValueWithLang">
-                                <xsl:with-param name="prmVarName" select="'General_Bullet_Font'"/>
-                                <xsl:with-param name="prmElem" select="$title"/>
-                            </xsl:call-template>
-                        </xsl:attribute>
+
+        <xsl:variable name="targetElemNumber" as="xs:integer" select="map:get($targetElemIdAndNumberMap,ahf:generateId($prmTopic))"/>
+        <xsl:variable name="titleResult" as="element(w:r)*">
+            <xsl:variable name="titlePrefix" as="xs:string">
+                <xsl:call-template name="genTitlePrefix">
+                    <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
+                </xsl:call-template>                                        
+            </xsl:variable>
+            <xsl:if test="$pAddChapterNumberPrefixToTopicTitle and string($titlePrefix)">
+                <w:r>
+                    <w:t>
                         <xsl:value-of select="$titlePrefix"/>
-                    </fo:inline>
-                    <xsl:text>&#x2002;</xsl:text>
-                    <xsl:copy-of select="$titleContent"/>
-                    <xsl:call-template name="getVarValueWithLang">
-                        <xsl:with-param name="prmVarName" select="'Relatedlink_Prefix'"/>
-                        <xsl:with-param name="prmElem" select="$prmRelatedLinks"/>
-                    </xsl:call-template>
-                    <fo:page-number-citation ref-id="{$topicId}"/>
-                    <xsl:call-template name="getVarValueWithLang">
-                        <xsl:with-param name="prmVarName" select="'Relatedlink_Suffix'"/>
-                        <xsl:with-param name="prmElem" select="$prmRelatedLinks"/>
-                    </xsl:call-template>
-                </fo:basic-link>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-\- Link line for normal numbered item -\->
-                <fo:basic-link internal-destination="{$topicId}">
-                    <xsl:value-of select="$titlePrefix"/>
-                    <xsl:if test="string($titlePrefix)">
-                        <xsl:text>&#x2002;</xsl:text>
-                    </xsl:if>
-                    <xsl:copy-of select="$titleContent"/>
-                    <xsl:call-template name="getVarValueWithLang">
-                        <xsl:with-param name="prmVarName" select="'Relatedlink_Prefix'"/>
-                        <xsl:with-param name="prmElem" select="$prmRelatedLinks"/>
-                    </xsl:call-template>
-                    <fo:page-number-citation ref-id="{$topicId}"/>
-                    <xsl:call-template name="getVarValueWithLang">
-                        <xsl:with-param name="prmVarName" select="'Relatedlink_Suffix'"/>
-                        <xsl:with-param name="prmElem" select="$prmRelatedLinks"/>
-                    </xsl:call-template>
-                </fo:basic-link>
-            </xsl:otherwise>
-        </xsl:choose-->
+                    </w:t>
+                </w:r>
+            </xsl:if>
+            <xsl:call-template name="getContentsRestricted">
+                <xsl:with-param name="prmElem" select="$prmTopic/*[contains(@class,' topic/title ')][1]"/> 
+                <xsl:with-param name="prmRunProps" tunnel="yes" select="()"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <w:p>
+            <w:pPr>
+                <w:pStyle w:val="ahf:getStyleIdFromName('related-links')"/>
+            </w:pPr>
+            
+            <xsl:call-template name="getWmlObjectReplacing">
+                <xsl:with-param name="prmObjName" select="'wmlRefField'"/>
+                <xsl:with-param name="prmSrc" select="('%ref-id','%field-opt','node:field-result')"/>
+                <xsl:with-param name="prmDst" select="(ahf:genBookmarkName($targetElemNumber),'\w',$titleResult)"/>
+            </xsl:call-template>
+        </w:p>
     </xsl:template>
-    
     
     <!-- 
      function:	Edit link line for outside link
      param:		prmHref, prmLinktext
      return:	reference line contentes
-     note:		ADD: Link to PDF named destination
-                2010/12/15 t.makita
+     note:		
      -->
     <xsl:template name="editLinkOutside">
         <xsl:param name="prmHref"     required="yes" as="xs:string"/>
-        <xsl:param name="prmLinktext" required="yes" as="node()*"/>
+        <xsl:param name="prmLinkText" required="yes" as="node()*"/>
         
-        <!--xsl:variable name="href" select="lower-case(normalize-space($prmHref))" as="xs:string"/>
-        <xsl:choose>
-            <xsl:when test="$href=$cDeadLinkPDF">
-                <!-\- Evidence of dead link -\->
-                <xsl:attribute name="color">
-                    <xsl:value-of select="$cDeadLinkColor"/>
-                </xsl:attribute>
-                <xsl:copy-of select="$prmLinktext"/>
-            </xsl:when>
-            <xsl:when test="contains(lower-case($href),'.pdf#')">
-                <!-\- Link to PDF named destination -\->
-                <xsl:variable name="tempHref" as="xs:string" select="replace($prmHref,'#','#nameddest=')"/>
-                <fo:basic-link external-destination="{$tempHref}" axf:action-type="gotor">
-                    <xsl:value-of select="$prmLinktext"/>
-                </fo:basic-link>
-            </xsl:when>
-            <xsl:otherwise>
-                <fo:basic-link external-destination="{$prmHref}">
-                    <xsl:copy-of select="$prmLinktext"/>
-                </fo:basic-link>
-            </xsl:otherwise>
-        </xsl:choose-->
+        <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get($externalLinkIdMap,$prmHref))"/>
+        <w:hyperlink r:id="{$rId}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+            <xsl:copy-of select="$prmLinkText"/>
+        </w:hyperlink>
+        
     </xsl:template>
     
     <!-- END OF STYLESHEET -->

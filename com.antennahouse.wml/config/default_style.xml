@@ -221,7 +221,7 @@ URL : http://www.antennahouse.com/
         <variable name="Preface_Title">Preface</variable>
 
         <variable name="Blank_Page_Title">&#x00A0;Blank&#x00A0;Page&#x00A0;</variable>
-        <variable name="Relatedlink_Title">&#x00A0;RELATED&#x00A0;LINKS&#x00A0;</variable>
+        <variable name="Relatedlink_Title">RELATED LINK</variable>
         <variable name="Postnote_Title">&#x00A0;NOTES&#x00A0;</variable>
 
         <variable name="Table_Title">Table&#x00A0;</variable>
@@ -1486,37 +1486,55 @@ URL : http://www.antennahouse.com/
         
         <!-- Related-links title
              param: %title title
+                    %end-pos line end position
           -->
         <variable name="RelatedLinksFontFamily">major</variable>
+        <variable name="RelatedLinksTitleStartPos">2mm</variable>
+        
         <wml-object name="wmlRelatedLinksTitle">
             <w:p>
                 <w:pPr>
                     <w:pStyle w:val="note-line"/>
                     <w:tabs>
-                        <w:tab w:val="left" w:pos="940"/>
-                        <w:tab w:val="left" w:pos="8085"/>
+                        <w:tab w:val="left" w:pos="{ahf:toTwipStr($RelatedLinksTitleStartPos)}"/>
+                        <w:tab w:val="right" w:pos="%end-pos"/>
                     </w:tabs>
-                    <w:ind w:left="668"/>
                 </w:pPr>
                 <w:r>
                     <w:rPr>
-                        <w:rFonts w:asciiTheme="{concat('$TocTitleFontFamily','Ascii')}" w:eastAsia="{concat('$TocTitleFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$TocTitleFontFamily','HAnsi')}" w:cstheme="{concat('$TocTitleFontFamily','Bidi')}"/>
+                        <w:rFonts w:asciiTheme="{concat('$RelatedLinksFontFamily','Ascii')}" w:eastAsia="{concat('$RelatedLinksFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$RelatedLinksFontFamily','HAnsi')}" w:cstheme="{concat('$RelatedLinksFontFamily','Bidi')}"/>
                         <w:strike/>
                     </w:rPr>
                     <w:tab/>
                 </w:r>
                 <w:r>
                     <w:rPr>
-                        <w:rFonts w:asciiTheme="{concat('$TocTitleFontFamily','Ascii')}" w:eastAsia="{concat('$TocTitleFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$TocTitleFontFamily','HAnsi')}" w:cstheme="{concat('$TocTitleFontFamily','Bidi')}"/>
+                        <w:rFonts w:asciiTheme="{concat('$RelatedLinksFontFamily','Ascii')}" w:eastAsia="{concat('$RelatedLinksFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$RelatedLinksFontFamily','HAnsi')}" w:cstheme="{concat('$RelatedLinksFontFamily','Bidi')}"/>
                         <w:b/>
                     </w:rPr>
-                    <w:t>%title</w:t>
+                    <w:t xml:space="preserve"> %title </w:t>
                 </w:r>
                 <w:r>
                     <w:rPr>
-                        <w:rFonts w:asciiTheme="{concat('$TocTitleFontFamily','Ascii')}" w:eastAsia="{concat('$TocTitleFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$TocTitleFontFamily','HAnsi')}" w:cstheme="{concat('$TocTitleFontFamily','Bidi')}"/>
+                        <w:rFonts w:asciiTheme="{concat('$RelatedLinksFontFamily','Ascii')}" w:eastAsia="{concat('$RelatedLinksFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$RelatedLinksFontFamily','HAnsi')}" w:cstheme="{concat('$RelatedLinksFontFamily','Bidi')}"/>
                         <w:strike/>
                     </w:rPr>
+                    <w:tab/>
+                </w:r>
+            </w:p>
+        </wml-object>
+        
+        <!-- Related-links under line
+         -->
+        <wml-object name="wmlRelatedLinksUnderLine">
+            <w:p>
+                <w:pPr>
+                    <w:pStyle w:val="note-line-after"/>
+                    <w:tabs>
+                        <w:tab w:val="right" w:pos="%end-pos"/>
+                    </w:tabs>
+                </w:pPr>
+                <w:r>
                     <w:tab/>
                 </w:r>
             </w:p>
