@@ -138,12 +138,6 @@ URL : http://www.antennahouse.com/
             <xsl:variable name="href" select="string($link/@href)" as="xs:string"/>
             <xsl:variable name="ohref" select="string($link/@ohref)" as="xs:string"/>
             <xsl:variable name="xtrf"  select="string($link/@xtrf)" as="xs:string"/>
-            <xsl:variable name="linktext" as="node()*">
-                <xsl:call-template name="getContentsRestricted">
-                    <xsl:with-param name="prmElem" select="$link/linktext"/>
-                    <xsl:with-param name="prmRunProps" tunnel="yes" select="()"/>
-                </xsl:call-template>
-            </xsl:variable>
             <xsl:variable name="isLinkInside" as="xs:boolean" select="starts-with($href,'#')"/>
             <xsl:variable name="topic" as="element()?" select="if ($isLinkInside) then ahf:getTopicFromLink($link) else ()"/>
             <xsl:variable name="topicRef" as="element()?" select="if (exists($topic)) then ahf:getTopicRef($topic) else ()"/>
@@ -178,7 +172,7 @@ URL : http://www.antennahouse.com/
                 <xsl:otherwise>
                     <xsl:call-template name="editLinkOutside">
                         <xsl:with-param name="prmHref" select="$href"/>
-                        <xsl:with-param name="prmLinkText" select="$linktext"/>
+                        <xsl:with-param name="prmLink" select="$link"/>
                         <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
                         <xsl:with-param name="prmExtraIndent" tunnel="yes" select="ahf:toTwip($contentIndent)"/>
                     </xsl:call-template>
@@ -202,23 +196,23 @@ URL : http://www.antennahouse.com/
         
         <xsl:variable name="targetElemNumber" as="xs:integer?" select="map:get($targetElemIdAndNumberMap,generate-id($prmTopic))"/>
         <xsl:assert test="exists($targetElemNumber)" select="'[editLinkInside] Target is not defined',ahf:generateId($prmTopic)"/>
-        <xsl:variable name="titleResult" as="element(w:r)*">
-            <xsl:variable name="titlePrefix" as="xs:string">
-                <xsl:call-template name="genTitlePrefix">
-                    <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
-                </xsl:call-template>                                        
-            </xsl:variable>
-            <xsl:if test="$pAddChapterNumberPrefixToTopicTitle and string($titlePrefix)">
-                <w:r>
-                    <w:t>
-                        <xsl:value-of select="$titlePrefix"/>
-                    </w:t>
-                </w:r>
-            </xsl:if>
-            <xsl:call-template name="getContentsRestricted">
-                <xsl:with-param name="prmElem" select="$prmTopic/*[contains(@class,' topic/title ')][1]"/> 
-                <xsl:with-param name="prmRunProps" tunnel="yes" select="()"/>
-            </xsl:call-template>
+        <xsl:variable name="titleResult" as="document-node()">
+            <xsl:document>
+                <xsl:variable name="titlePrefix" as="xs:string">
+                    <xsl:call-template name="genTitlePrefix">
+                        <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
+                    </xsl:call-template>                                        
+                </xsl:variable>
+                <xsl:if test="$pAddChapterNumberPrefixToTopicTitle and string($titlePrefix)">
+                    <w:r>
+                        <w:t xml:space="preserve"><xsl:value-of select="$titlePrefix"/>&#xA0;</w:t>
+                    </w:r>
+                </xsl:if>
+                <xsl:call-template name="getContentsRestricted">
+                    <xsl:with-param name="prmElem" select="$prmTopic/*[contains(@class,' topic/title ')][1]"/> 
+                    <xsl:with-param name="prmRunProps" tunnel="yes" select="()"/>
+                </xsl:call-template>
+            </xsl:document>
         </xsl:variable>
         <w:p>
             <w:pPr>
@@ -228,7 +222,7 @@ URL : http://www.antennahouse.com/
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlRefField'"/>
                 <xsl:with-param name="prmSrc" select="('%ref-id','%field-opt','node:field-result')"/>
-                <xsl:with-param name="prmDst" select="(ahf:genBookmarkName($targetElemNumber),'\w',$titleResult)"/>
+                <xsl:with-param name="prmDst" select="(ahf:genBookmarkName($targetElemNumber),'',$titleResult)"/>
             </xsl:call-template>
         </w:p>
     </xsl:template>
@@ -241,10 +235,16 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:template name="editLinkOutside">
         <xsl:param name="prmHref"     required="yes" as="xs:string"/>
-        <xsl:param name="prmLinkText" required="yes" as="node()*"/>
+        <xsl:param name="prmLink"     required="yes" as="element()"/>
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         
+        <xsl:variable name="linkText" as="node()*">
+            <xsl:call-template name="getContentsRestricted">
+                <xsl:with-param name="prmElem" select="$prmLink/linktext"/>
+                <xsl:with-param name="prmRunProps" tunnel="yes" select="()"/>
+            </xsl:call-template>
+        </xsl:variable>
         <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get($externalLinkIdMap,$prmHref))"/>
         <w:p>
             <w:pPr>
@@ -253,11 +253,10 @@ URL : http://www.antennahouse.com/
             </w:pPr>
             <w:r>
                 <w:hyperlink r:id="{$rId}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-                    <xsl:copy-of select="$prmLinkText"/>
+                    <xsl:copy-of select="$linkText"/>
                 </w:hyperlink>
             </w:r>
         </w:p>
-
     </xsl:template>
     
     <!-- END OF STYLESHEET -->

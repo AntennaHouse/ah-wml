@@ -19,7 +19,7 @@ URL : http://www.antennahouse.com/
     version="3.0">
 
     <!-- 
-     function:	Genral template for getting contents
+     function:	General template for getting contents
      param:		none
      return:	
      note:		This template ignores indexterm, bookmark generation, footnotes.
