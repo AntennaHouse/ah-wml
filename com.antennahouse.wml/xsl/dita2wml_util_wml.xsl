@@ -461,12 +461,12 @@ URL : http://www.antennahouse.com/
   <xsl:function name="ahf:getLineEndPosInTwip" as="xs:integer" visibility="public">
     <xsl:param name="prmElem" as="element()"/>
     <xsl:variable name="isInTwoColumn" as="xs:boolean">
-      <xsl:variable name="Col" as="xs:integer">
+      <xsl:variable name="col" as="xs:integer">
         <xsl:variable name="colInfo" as="xs:integer*" select="map:get($columnMap, ahf:generateId($prmElem))"/>
         <xsl:variable name="currentCol" as="xs:integer" select="$colInfo[2]"/>
         <xsl:sequence select="$currentCol"/>                        
       </xsl:variable>
-      <xsl:sequence select="$Col eq 2"/>
+      <xsl:sequence select="$col eq 2"/>
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="$isInTwoColumn">

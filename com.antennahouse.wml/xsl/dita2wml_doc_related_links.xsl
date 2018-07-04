@@ -41,9 +41,15 @@ URL : http://www.antennahouse.com/
         
     </xsl:template>
     
+    <!-- 
+     function:	Judge target link
+     param:		prmLink
+     return:	xs:boolean
+     note:		parent, child links are ignored. 
+     -->
     <xsl:function name="ahf:isTargetLink" as="xs:boolean">
         <xsl:param name="prmLink" as="element()"/>
-        <xsl:sequence select="(string($prmLink/@role) = ('friend','other')) or empty($prmLink/@role)"/>
+        <xsl:sequence select="string($prmLink/@role) = ('friend','other','')"/>
     </xsl:function>
     
     <!-- 
@@ -69,7 +75,7 @@ URL : http://www.antennahouse.com/
 
     <!-- 
      function:	Make related-links title line
-     param:		
+     param:		none
      return:	w:p
      note:		Current context is related-links
      -->
