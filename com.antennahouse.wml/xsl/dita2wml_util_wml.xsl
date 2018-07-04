@@ -128,13 +128,13 @@ URL : http://www.antennahouse.com/
      return:	indent value in twip
      note:		
      -->
-  <xsl:function name="ahf:getIndentFromIndentLevel" as="xs:integer">
+  <xsl:function name="ahf:getIndentFromIndentLevel" as="xs:integer" use-when="system-property('main.doc.processing') eq $cYes">
     <xsl:param name="prmIndentLevel" as="xs:integer"/>
     <xsl:param name="prmExtraIndent" as="xs:integer"/>
     <xsl:sequence select="$pListBaseIndentSizeInTwip + $prmIndentLevel * $pListIndentSizeInTwip + $prmExtraIndent"/>
   </xsl:function>
 
-  <xsl:function name="ahf:getIndentFromIndentLevelInEmu" as="xs:integer">
+  <xsl:function name="ahf:getIndentFromIndentLevelInEmu" as="xs:integer" use-when="system-property('main.doc.processing') eq $cYes">
     <xsl:param name="prmIndentLevel" as="xs:integer"/>
     <xsl:param name="prmExtraIndent" as="xs:integer"/>
     <xsl:sequence select="$pListBaseIndentSizeInEmu + $prmIndentLevel * $pListIndentSizeInEmu + ahf:toEmu(concat(string($prmExtraIndent),'twip'))"/>
@@ -378,7 +378,7 @@ URL : http://www.antennahouse.com/
      return:	w:ind
      note:		
    -->
-  <xsl:function name="ahf:getIndentAttrElem" as="element(w:ind)?" visibility="public">
+  <xsl:function name="ahf:getIndentAttrElem" as="element(w:ind)?" visibility="public" use-when="system-property('main.doc.processing') eq $cYes">
     <xsl:param name="prmIndentLevel" as="xs:integer"/>
     <xsl:param name="prmExtraIndent" as="xs:integer"/>
     <xsl:choose>
