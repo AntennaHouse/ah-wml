@@ -127,6 +127,12 @@ URL : http://www.antennahouse.com/
     <xsl:template name="processLink">
         <xsl:param name="prmRelatedLinks" required="yes" as="element()"/>
         
+        <xsl:variable name="contentIndent" as="xs:string">
+            <xsl:call-template name="getVarValue">
+                <xsl:with-param name="prmVarName" select="'RelatedLinksContentIndent'"/>
+            </xsl:call-template>
+        </xsl:variable>
+        
         <xsl:for-each select="$prmRelatedLinks/descendant::*[contains(@class,' topic/link ')][ahf:isTargetLink(.)]">
             <xsl:variable name="link" select="." as="element()"/>
             <xsl:variable name="href" select="string($link/@href)" as="xs:string"/>
@@ -163,6 +169,8 @@ URL : http://www.antennahouse.com/
                                 <xsl:with-param name="prmTopicRef"     select="$topicRef"/>
                                 <xsl:with-param name="prmTopic"        select="$topic"/>
                                 <xsl:with-param name="prmRelatedLinks" select="$prmRelatedLinks"/>
+                                <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
+                                <xsl:with-param name="prmExtraIndent" tunnel="yes" select="ahf:toTwip($contentIndent)"/>
                             </xsl:call-template>
                         </xsl:otherwise>
                     </xsl:choose>
@@ -171,6 +179,8 @@ URL : http://www.antennahouse.com/
                     <xsl:call-template name="editLinkOutside">
                         <xsl:with-param name="prmHref" select="$href"/>
                         <xsl:with-param name="prmLinkText" select="$linktext"/>
+                        <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
+                        <xsl:with-param name="prmExtraIndent" tunnel="yes" select="ahf:toTwip($contentIndent)"/>
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
@@ -187,7 +197,9 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmTopicRef"     required="yes" as="element()"/>
         <xsl:param name="prmTopic"        required="yes" as="element()"/>
         <xsl:param name="prmRelatedLinks" required="yes" as="element()"/>
-
+        <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        
         <xsl:variable name="targetElemNumber" as="xs:integer?" select="map:get($targetElemIdAndNumberMap,generate-id($prmTopic))"/>
         <xsl:assert test="exists($targetElemNumber)" select="'[editLinkInside] Target is not defined',ahf:generateId($prmTopic)"/>
         <xsl:variable name="titleResult" as="element(w:r)*">
@@ -211,6 +223,7 @@ URL : http://www.antennahouse.com/
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName('related-links')}"/>
+                <xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
             </w:pPr>
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlRefField'"/>
@@ -229,11 +242,14 @@ URL : http://www.antennahouse.com/
     <xsl:template name="editLinkOutside">
         <xsl:param name="prmHref"     required="yes" as="xs:string"/>
         <xsl:param name="prmLinkText" required="yes" as="node()*"/>
+        <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         
         <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get($externalLinkIdMap,$prmHref))"/>
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName('related-links')}"/>
+                <xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
             </w:pPr>
             <w:r>
                 <w:hyperlink r:id="{$rId}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">

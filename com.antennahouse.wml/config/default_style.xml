@@ -1521,9 +1521,14 @@ URL : http://www.antennahouse.com/
                 </w:r>
             </w:p>
         </wml-object>
+
+        <!-- Related-links content indent
+         -->
+        <variable name="RelatedLinksContentIndent">2mm</variable>
         
         <!-- Headers and Footers -->
-        <!-- Header/Footer definition seqence
+        <!-- Header/Footer definition sequence
+             index:
              1: WML Object Name
              2: File Name
              3: w:type of w:footerReference or w:headerReference, 
