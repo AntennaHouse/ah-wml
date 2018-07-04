@@ -1473,6 +1473,7 @@ URL : http://www.antennahouse.com/
             <w:p>
                 <w:pPr>
                     <w:pStyle w:val="note-line"/>
+                    <w:keepNext/>
                     <w:tabs>
                         <w:tab w:val="left" w:pos="{ahf:toTwipStr('$RelatedLinksTitleStartPos')}"/>
                         <w:tab w:val="right" w:pos="%end-pos"/>
