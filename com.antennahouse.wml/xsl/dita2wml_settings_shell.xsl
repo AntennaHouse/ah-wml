@@ -17,6 +17,6 @@ E-mail : info@antennahouse.com
     <xsl:include href="dita2wml_constants.xsl"/>
     <xsl:include href="dita2wml_param.xsl"/>
     
-    <xsl:include href="dita2wml_setting_main.xsl"/>
+    <xsl:include href="dita2wml_settings_main.xsl"/>
     
 </xsl:stylesheet>

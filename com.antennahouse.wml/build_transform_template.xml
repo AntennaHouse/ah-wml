@@ -69,14 +69,14 @@
         </antcall>
     </target>
 
-    <target name="generate.docx.file" depends="core.xml,theme1.xml,custom.xml,header.footer,document.xml,styles.xml,setting.xml,numbering.xml,footnote.xml,document.xml.rels,Content_Types.xml"/>
+    <target name="generate.docx.file" depends="core.xml,theme1.xml,custom.xml,header.footer,document.xml,styles.xml,settings.xml,numbering.xml,footnote.xml,document.xml.rels,Content_Types.xml"/>
         
     <target name="core.xml">
         <antcall target="transform.common">
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/docProps/core.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_core_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="no"/>
+            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>        
 
@@ -85,7 +85,7 @@
             <param name="prmInputDir" value="${dita.temp.dir}/template/word/theme"/>
             <param name="prmOutputDir" value="${dita.temp.dir}/docx/word/theme"/>
             <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_theme_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="no"/>
+            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
 
@@ -104,7 +104,7 @@
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/dummy.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_output_header_footer_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="no"/>
+            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
     
@@ -124,16 +124,16 @@
             <param name="prmInputFile" value="${dita.temp.dir}/template/word/styles.xml"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/styles.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_styles_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="no"/>
+            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
     
-    <target name="setting.xml">
+    <target name="settings.xml">
         <echo message="styles.xml"/>
         <antcall target="transform.common">
-            <param name="prmInputFile" value="${dita.temp.dir}/template/word/setting.xml"/>
-            <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/setting.xml"/>
-            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_setting_shell.xsl"/>
+            <param name="prmInputFile" value="${dita.temp.dir}/template/word/settings.xml"/>
+            <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/settings.xml"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_settings_shell.xsl"/>
             <param name="prmMainDocProcessing" value="no"/>
         </antcall>
     </target>
@@ -144,7 +144,7 @@
             <param name="prmInputFile" value="${dita.temp.dir}/template/word/numbering.xml"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/numbering.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_numbering_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="no"/>
+            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
 
@@ -154,7 +154,7 @@
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/footnotes.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_footnote_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="no"/>
+            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
 
@@ -164,7 +164,7 @@
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/_rels/document.xml.rels"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_doc_xml_rels_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="no"/>
+            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
 
@@ -174,7 +174,7 @@
             <param name="prmInputFile" value="${dita.temp.dir}/template/[Content_Types].xml"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/[Content_Types].xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_content_types_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="no"/>
+            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
 
