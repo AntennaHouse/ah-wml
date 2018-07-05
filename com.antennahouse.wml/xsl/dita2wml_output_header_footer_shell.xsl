@@ -24,15 +24,15 @@ URL : http://www.antennahouse.com/
 
     <xsl:include href="dita2wml_global_wml.xsl"/>
     <xsl:include href="dita2wml_global_merged.xsl"/>
-    <xsl:include href="dita2wml_global_header_footer.xsl"/>
     <xsl:include href="dita2wml_param.xsl"/>
+    <xsl:include href="dita2wml_param_var.xsl"/>
     <xsl:include href="dita2wml_param_papersize.xsl"/>
     <xsl:include href="dita2wml_style_get.xsl"/>
     <xsl:include href="dita2wml_style_set.xsl"/>
-    <xsl:include href="dita2wml_doc_sect_control_info.xsl"/>
     <xsl:include href="dita2wml_history_id.xsl"/>
     <xsl:include href="dita2wml_doc_id.xsl"/>
     
+    <xsl:include href="dita2wml_global_header_footer.xsl"/>
     <xsl:include href="dita2wml_output_header_footer_main.xsl"/>
     
 </xsl:stylesheet>

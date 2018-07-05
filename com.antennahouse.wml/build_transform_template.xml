@@ -47,7 +47,6 @@
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${build.temp.dir}${file.separator}${converted.merged.file1}"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_convmerged_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="no"/>
         </antcall>
     </target>
     
@@ -56,7 +55,6 @@
             <param name="prmInputFile" value="${build.temp.dir}${file.separator}${converted.merged.file1}"/>
             <param name="prmOutputFile" value="${build.temp.dir}${file.separator}${converted.merged.file2}"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_convmerged2_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
     
@@ -65,7 +63,6 @@
             <param name="prmInputFile" value="${build.temp.dir}${file.separator}${converted.merged.file2}"/>
             <param name="prmOutputFile" value="${prmOutputFile}"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_convmerged3_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="no"/>
         </antcall>
     </target>
 
@@ -76,7 +73,6 @@
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/docProps/core.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_core_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>        
 
@@ -85,7 +81,6 @@
             <param name="prmInputDir" value="${dita.temp.dir}/template/word/theme"/>
             <param name="prmOutputDir" value="${dita.temp.dir}/docx/word/theme"/>
             <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_theme_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
 
@@ -95,7 +90,6 @@
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/docProps/custom.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_custom.xsl"/>
-            <param name="prmMainDocProcessing" value="no"/>
         </antcall>
     </target>
     
@@ -104,7 +98,6 @@
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/dummy.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}/dita2wml_output_header_footer_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
     
@@ -114,7 +107,6 @@
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/document.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_doc_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
 
@@ -124,7 +116,6 @@
             <param name="prmInputFile" value="${dita.temp.dir}/template/word/styles.xml"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/styles.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_styles_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
     
@@ -134,7 +125,6 @@
             <param name="prmInputFile" value="${dita.temp.dir}/template/word/settings.xml"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/settings.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_settings_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="no"/>
         </antcall>
     </target>
     
@@ -144,7 +134,6 @@
             <param name="prmInputFile" value="${dita.temp.dir}/template/word/numbering.xml"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/numbering.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_numbering_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
 
@@ -154,7 +143,6 @@
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/footnotes.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_footnote_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
 
@@ -164,7 +152,6 @@
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/_rels/document.xml.rels"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_doc_xml_rels_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
 
@@ -174,7 +161,6 @@
             <param name="prmInputFile" value="${dita.temp.dir}/template/[Content_Types].xml"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/[Content_Types].xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_content_types_shell.xsl"/>
-            <param name="prmMainDocProcessing" value="yes"/>
         </antcall>
     </target>
 
@@ -184,7 +170,6 @@
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${prmOutputFile}"/>
             <param name="prmStylesheetFile" value="${prmStylesheetFile}"/>
-            <param name="prmMainDocProcessing" value="${prmMainDocProcessing}"/>
         </antcall>
     </target>
 
@@ -266,7 +251,6 @@
             <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
             <dita:extension id="com.antennahouse.wml.param" behavior="org.dita.dost.platform.InsertAction"/>
-            <sysproperty key="main.doc.processing" value="${prmMainDocProcessing}"/>
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
@@ -347,7 +331,6 @@
             <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
             <dita:extension id="com.antennahouse.wml.param" behavior="org.dita.dost.platform.InsertAction"/>
-            <sysproperty key="main.doc.processing" value="${prmMainDocProcessing}"/>
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
@@ -439,7 +422,6 @@
             <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
             <dita:extension id="com.antennahouse.wml.param" behavior="org.dita.dost.platform.InsertAction"/>
-            <sysproperty key="main.doc.processing" value="${prmMainDocProcessing}"/>
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>

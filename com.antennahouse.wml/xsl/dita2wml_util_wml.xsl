@@ -128,13 +128,13 @@ URL : http://www.antennahouse.com/
      return:	indent value in twip
      note:		
      -->
-  <xsl:function name="ahf:getIndentFromIndentLevel" as="xs:integer" use-when="system-property('main.doc.processing') eq $cYes">
+  <xsl:function name="ahf:getIndentFromIndentLevel" as="xs:integer">
     <xsl:param name="prmIndentLevel" as="xs:integer"/>
     <xsl:param name="prmExtraIndent" as="xs:integer"/>
     <xsl:sequence select="$pListBaseIndentSizeInTwip + $prmIndentLevel * $pListIndentSizeInTwip + $prmExtraIndent"/>
   </xsl:function>
 
-  <xsl:function name="ahf:getIndentFromIndentLevelInEmu" as="xs:integer" use-when="system-property('main.doc.processing') eq $cYes">
+  <xsl:function name="ahf:getIndentFromIndentLevelInEmu" as="xs:integer">
     <xsl:param name="prmIndentLevel" as="xs:integer"/>
     <xsl:param name="prmExtraIndent" as="xs:integer"/>
     <xsl:sequence select="$pListBaseIndentSizeInEmu + $prmIndentLevel * $pListIndentSizeInEmu + ahf:toEmu(concat(string($prmExtraIndent),'twip'))"/>
@@ -378,7 +378,7 @@ URL : http://www.antennahouse.com/
      return:	w:ind
      note:		
    -->
-  <xsl:function name="ahf:getIndentAttrElem" as="element(w:ind)?" visibility="public" use-when="system-property('main.doc.processing') eq $cYes">
+  <xsl:function name="ahf:getIndentAttrElem" as="element(w:ind)?" visibility="public">
     <xsl:param name="prmIndentLevel" as="xs:integer"/>
     <xsl:param name="prmExtraIndent" as="xs:integer"/>
     <xsl:choose>
@@ -448,32 +448,6 @@ URL : http://www.antennahouse.com/
       </xsl:when>
       <xsl:otherwise>
         <xsl:sequence select="$prmRunProps"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:function>
-
-  <!-- 
-     function:	Calculate line end position in twip
-     param:		prmElem
-     return:	xs:integer
-     note:		
-   -->
-  <xsl:function name="ahf:getLineEndPosInTwip" as="xs:integer" visibility="public">
-    <xsl:param name="prmElem" as="element()"/>
-    <xsl:variable name="isInTwoColumn" as="xs:boolean">
-      <xsl:variable name="col" as="xs:integer">
-        <xsl:variable name="colInfo" as="xs:integer*" select="map:get($columnMap, ahf:generateId($prmElem))"/>
-        <xsl:variable name="currentCol" as="xs:integer" select="$colInfo[2]"/>
-        <xsl:sequence select="$currentCol"/>                        
-      </xsl:variable>
-      <xsl:sequence select="$col eq 2"/>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$isInTwoColumn">
-        <xsl:sequence select="(ahf:toTwip($pPaperBodyWidth) - ahf:toTwip($pPaperColumnGap) ) div 2"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:sequence select="ahf:toTwip($pPaperBodyWidth)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
