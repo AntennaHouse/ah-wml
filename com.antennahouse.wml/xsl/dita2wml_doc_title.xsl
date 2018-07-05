@@ -43,10 +43,10 @@ URL : http://www.antennahouse.com/
                     </w:numPr>
                 </xsl:if>
             </w:pPr>
+            <xsl:apply-templates select="$prmTopic/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/*[contains(@class,' topic/indexterm ')]"/>
             <xsl:call-template name="genBookmarkStart">
                 <xsl:with-param name="prmElem" select="parent::*"/>
             </xsl:call-template>
-            <xsl:apply-templates select="$prmTopic/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/*[contains(@class,' topic/indexterm ')]"/>
             <xsl:apply-templates/>
             <xsl:call-template name="genBookmarkEnd">
                 <xsl:with-param name="prmElem" select="parent::*"/>

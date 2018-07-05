@@ -190,8 +190,6 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmListOccurenceNumber" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmListLevel" tunnel="yes" required="yes" as="xs:integer"/>
         
-        <xsl:variable name="targetElemNumber" as="xs:integer?" select="map:get($targetElemIdAndNumberMap,generate-id($prmTopic))"/>
-        <xsl:assert test="exists($targetElemNumber)" select="'[editLinkInside] Target is not defined',ahf:generateId($prmTopic)"/>
         <xsl:variable name="titleResult" as="document-node()">
             <xsl:document>
                 <xsl:variable name="titlePrefix" as="xs:string">
@@ -216,6 +214,17 @@ URL : http://www.antennahouse.com/
                 <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>
             </w:numPr>
         </xsl:variable>
+        <xsl:variable name="pagePrefix" as="xs:string">
+            <xsl:call-template name="getVarValueWithLang">
+                <xsl:with-param name="prmVarName" select="'Xref_Page_Prefix'"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="pageSuffix" as="xs:string">
+            <xsl:call-template name="getVarValueWithLang">
+                <xsl:with-param name="prmVarName" select="'Xref_Page_Suffix'"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="bookmarkName" as="xs:string?" select="ahf:getBookmarkName($prmTopic)"/>
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName('related-links')}"/>
@@ -225,8 +234,19 @@ URL : http://www.antennahouse.com/
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlRefField'"/>
                 <xsl:with-param name="prmSrc" select="('%ref-id','%field-opt','node:field-result')"/>
-                <xsl:with-param name="prmDst" select="(ahf:genBookmarkName($targetElemNumber),'',$titleResult)"/>
+                <xsl:with-param name="prmDst" select="($bookmarkName,'',$titleResult)"/>
             </xsl:call-template>
+            <w:r>
+                <w:t xml:space="preserve"><xsl:value-of select="$pagePrefix"/></w:t>
+            </w:r>
+            <xsl:call-template name="getWmlObjectReplacing">
+                <xsl:with-param name="prmObjName" select="'wmlPageRefField'"/>
+                <xsl:with-param name="prmSrc" select="('%bookmark','%field-opt')"/>
+                <xsl:with-param name="prmDst" select="($bookmarkName,'')"/>
+            </xsl:call-template>
+            <w:r>
+                <w:t xml:space="preserve"><xsl:value-of select="$pageSuffix"/></w:t>
+            </w:r>
         </w:p>
     </xsl:template>
     

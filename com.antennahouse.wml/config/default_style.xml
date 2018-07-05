@@ -280,8 +280,8 @@ URL : http://www.antennahouse.com/
         <variable name="Q_Suffix">”</variable>
 
         <!-- Xref -->
-        <variable name="Xref_Prefix"> on page </variable>
-        <variable name="Xref_Suffix"/>
+        <variable name="Xref_Page_Prefix"> on page </variable>
+        <variable name="Xref_Page_Suffix"/>
 
         <!-- Draft-comment -->
         <variable name="Draft_Comment_Title_Prefix">[DRAFT-COMMENT </variable>
