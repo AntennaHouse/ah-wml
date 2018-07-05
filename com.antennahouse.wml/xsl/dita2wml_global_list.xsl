@@ -19,9 +19,10 @@ E-mail : info@antennahouse.com
 >
     <!-- List occurence number map for whole document.
      -->
-    <!-- List instances: All ol,ul -->
+    <!-- List instances: All ol,ul,related-links -->
     <xsl:variable name="listInstances" as="element()*">
-        <xsl:sequence select="doc($pMergedFinalOutputUrl)/descendant::*[contains(@class, ' topic/ol ') or contains(@class, ' topic/ul ')]"/>
+        <xsl:sequence select="doc($pMergedFinalOutputUrl)/*/*[contains(@class,' topic/topic ')]/descendant::*[contains(@class, ' topic/ol ') or contains(@class, ' topic/ul ')]"/>
+        <xsl:sequence select="doc($pMergedFinalOutputUrl)/*/*[contains(@class,' topic/topic ')]/descendant::*[contains(@class, ' topic/related-links ')][ahf:isEffectiveRelatedLinks(.)]"/>
     </xsl:variable>
     
     <!-- Unique list instances

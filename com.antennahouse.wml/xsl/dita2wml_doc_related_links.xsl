@@ -30,27 +30,21 @@ URL : http://www.antennahouse.com/
         <!-- Generate section property -->
         <xsl:call-template name="getSectionPropertyElemBefore"/>
         
-        <xsl:variable name="linkCount" select="count(descendant::*[contains(@class,' topic/link ')][ahf:isTargetLink(.)])" as="xs:integer"/>
-        <xsl:if test="$linkCount gt 0">
+        <xsl:if test="ahf:isEffectiveRelatedLinks(.)">
+            <xsl:variable name="id" as="xs:string" select="ahf:generateId(.)"/>
+            <xsl:variable name="listOccurenceNumber" as="xs:integer?" select="map:get($listNumberMap,$id)"/>
+            <xsl:assert test="exists($listOccurenceNumber)" select="'[related-links] id=',$id,' does not exits in $listNumberMap'"/>
+            
             <xsl:call-template name="makeRelatedLink">
                 <xsl:with-param name="prmRelatedLinks" select="."/>
+                <xsl:with-param name="prmListOccurenceNumber" tunnel="yes" select="$listOccurenceNumber"/>
+                <xsl:with-param name="prmListLevel" tunnel="yes" select="1"/>
             </xsl:call-template>
         </xsl:if>
         
         <xsl:call-template name="getSectionPropertyElemAfter"/>
         
     </xsl:template>
-    
-    <!-- 
-     function:	Judge target link
-     param:		prmLink
-     return:	xs:boolean
-     note:		parent, child links are ignored. 
-     -->
-    <xsl:function name="ahf:isTargetLink" as="xs:boolean">
-        <xsl:param name="prmLink" as="element()"/>
-        <xsl:sequence select="string($prmLink/@role) = ('friend','other','')"/>
-    </xsl:function>
     
     <!-- 
      function:	Make related-links block
@@ -193,6 +187,8 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmRelatedLinks" required="yes" as="element()"/>
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmListOccurenceNumber" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmListLevel" tunnel="yes" required="yes" as="xs:integer"/>
         
         <xsl:variable name="targetElemNumber" as="xs:integer?" select="map:get($targetElemIdAndNumberMap,generate-id($prmTopic))"/>
         <xsl:assert test="exists($targetElemNumber)" select="'[editLinkInside] Target is not defined',ahf:generateId($prmTopic)"/>
@@ -214,10 +210,17 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>
             </xsl:document>
         </xsl:variable>
+        <xsl:variable name="numPr" as="element(w:numPr)">
+            <w:numPr>
+                <w:ilvl w:val="{string(ahf:getIlvlFromListLevel($prmListLevel))}"/>
+                <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>
+            </w:numPr>
+        </xsl:variable>
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName('related-links')}"/>
-                <xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
+                <xsl:copy-of select="$numPr"/>
+                <!--xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/-->
             </w:pPr>
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlRefField'"/>
@@ -238,6 +241,8 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmLink"     required="yes" as="element()"/>
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmListOccurenceNumber" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmListLevel" tunnel="yes" required="yes" as="xs:integer"/>
         
         <xsl:variable name="linkText" as="node()*">
             <xsl:call-template name="getContentsRestricted">
@@ -246,10 +251,17 @@ URL : http://www.antennahouse.com/
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get($externalLinkIdMap,$prmHref))"/>
+        <xsl:variable name="numPr" as="element(w:numPr)">
+            <w:numPr>
+                <w:ilvl w:val="{string(ahf:getIlvlFromListLevel($prmListLevel))}"/>
+                <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>
+            </w:numPr>
+        </xsl:variable>
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName('related-links')}"/>
-                <xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
+                <xsl:copy-of select="$numPr"/>
+                <!--xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/-->
             </w:pPr>
             <w:r>
                 <w:hyperlink r:id="{$rId}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
