@@ -190,29 +190,24 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmListOccurenceNumber" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmListLevel" tunnel="yes" required="yes" as="xs:integer"/>
         
-        <xsl:variable name="titleResult" as="document-node()">
-            <xsl:document>
-                <xsl:variable name="titlePrefix" as="xs:string">
-                    <xsl:call-template name="genTitlePrefix">
-                        <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
-                    </xsl:call-template>                                        
-                </xsl:variable>
-                <xsl:if test="$pAddChapterNumberPrefixToTopicTitle and string($titlePrefix)">
-                    <w:r>
-                        <w:t xml:space="preserve"><xsl:value-of select="$titlePrefix"/>&#xA0;</w:t>
-                    </w:r>
-                </xsl:if>
-                <xsl:call-template name="getContentsRestricted">
-                    <xsl:with-param name="prmElem" select="$prmTopic/*[contains(@class,' topic/title ')][1]"/> 
-                    <xsl:with-param name="prmRunProps" tunnel="yes" select="()"/>
-                </xsl:call-template>
-            </xsl:document>
-        </xsl:variable>
         <xsl:variable name="numPr" as="element(w:numPr)">
             <w:numPr>
                 <w:ilvl w:val="{string(ahf:getIlvlFromListLevel($prmListLevel))}"/>
                 <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>
             </w:numPr>
+        </xsl:variable>
+        <xsl:variable name="titlePrefix" as="xs:string">
+            <xsl:call-template name="genTitlePrefix">
+                <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
+            </xsl:call-template>                                        
+        </xsl:variable>
+        <xsl:variable name="titleResult" as="document-node()">
+            <xsl:document>
+                <xsl:call-template name="getContentsRestricted">
+                    <xsl:with-param name="prmElem" select="$prmTopic/*[contains(@class,' topic/title ')][1]"/> 
+                    <xsl:with-param name="prmRunProps" tunnel="yes" select="()"/>
+                </xsl:call-template>
+            </xsl:document>
         </xsl:variable>
         <xsl:variable name="pagePrefix" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
@@ -225,12 +220,29 @@ URL : http://www.antennahouse.com/
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="bookmarkName" as="xs:string?" select="ahf:getBookmarkName($prmTopic)"/>
+        
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName('related-links')}"/>
                 <xsl:copy-of select="$numPr"/>
-                <!--xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/-->
             </w:pPr>
+            <xsl:if test="$pAddChapterNumberPrefixToTopicTitle and string($titlePrefix)">
+                <xsl:variable name="titlePrefixResult" as="element(w:r)">
+                    <w:r>
+                        <w:t>
+                            <xsl:value-of select="$titlePrefix"/>
+                        </w:t>
+                    </w:r>
+                </xsl:variable>
+                <xsl:call-template name="getWmlObjectReplacing">
+                    <xsl:with-param name="prmObjName" select="'wmlRefField'"/>
+                    <xsl:with-param name="prmSrc" select="('%ref-id','%field-opt','node:field-result')"/>
+                    <xsl:with-param name="prmDst" select="($bookmarkName,'\w',$titlePrefixResult)"/>
+                </xsl:call-template>
+                <w:r>
+                    <w:t xml:space="preserve"> </w:t>
+                </w:r>
+            </xsl:if>
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlRefField'"/>
                 <xsl:with-param name="prmSrc" select="('%ref-id','%field-opt','node:field-result')"/>
@@ -281,7 +293,6 @@ URL : http://www.antennahouse.com/
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName('related-links')}"/>
                 <xsl:copy-of select="$numPr"/>
-                <!--xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/-->
             </w:pPr>
             <w:r>
                 <w:hyperlink r:id="{$rId}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">

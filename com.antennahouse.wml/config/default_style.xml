@@ -1018,7 +1018,7 @@ URL : http://www.antennahouse.com/
                 <w:fldChar w:fldCharType="begin"/>
             </w:r>
             <w:r>
-                <w:instrText xml:space="preserve"> PAGEREF "%bookmark" %field-opt </w:instrText>
+                <w:instrText xml:space="preserve"> PAGEREF "%bookmark" \h %field-opt </w:instrText>
             </w:r>
             <w:r>
                 <w:fldChar w:fldCharType="end"/>

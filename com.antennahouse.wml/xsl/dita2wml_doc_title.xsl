@@ -24,7 +24,9 @@ URL : http://www.antennahouse.com/
      param:		none
      return:	
      note:		Initial implementation.
-                toc="no", nested topic are not considered yet.
+                - toc="no" and nested topic are not considered.
+                - XE field from indexterm should be generated outside the bookmark
+                  because bookmark referenced from toc, related-links/link and xref.
      -->
     <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
         <xsl:param name="prmTopicRef"       tunnel="yes" required="yes" as="element()"/>
