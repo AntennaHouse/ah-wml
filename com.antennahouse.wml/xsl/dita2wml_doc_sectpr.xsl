@@ -44,13 +44,15 @@ URL : http://www.antennahouse.com/
             <xsl:when test="exists($sectInfo)">
                 <xsl:choose>
                     <xsl:when test="$prmElem/self::*[contains(@class, ' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]">
-                        <!-- generate 1 column section property-->
+                        <!-- generate N column section property-->
+                        <xsl:variable name="colInfo" as="xs:integer*" select="map:get($columnMap,ahf:generateId($prmElem/ancestor::*[contains(@class,' topic/body ')]))"/>
+                        <xsl:variable name="currentCol" as="xs:integer" select="$colInfo[2]"/>
                         <w:p>
                             <w:pPr>
                                 <xsl:call-template name="getWmlObjectReplacing">
                                     <xsl:with-param name="prmObjName" select="'wmlSectPr'"/>
                                     <xsl:with-param name="prmSrc" select="('node:hdrFtrReference','%type','node:pgNumType','%col')"/>
-                                    <xsl:with-param name="prmDst" select="($cElemNull,$sectTypeContinuous,$cElemNull,'1')"/>
+                                    <xsl:with-param name="prmDst" select="($cElemNull,$sectTypeContinuous,$cElemNull,string($currentCol))"/>
                                 </xsl:call-template>
                             </w:pPr>
                         </w:p>
@@ -66,6 +68,7 @@ URL : http://www.antennahouse.com/
     <!-- getSectionPropertyElemAfter handles column spanned spanned image and common sect generation opportunity.
          If called at the document end, w:pPr should be directly generated. Otherwise it should wrapped by w:p/w:pPr.
          If it is called at the start of the content, w:hdrreference, w:ftrReference, w:pgNumType should be also generated.
+         If it is called from end of the N-column body that have spanned image and has following-sibling related-links, omit w:sectPr generation to remove redundant section break.
      -->
     <xsl:template name="getSectionPropertyElemAfter" as="node()*">
         <xsl:param name="prmElem" as="element()" required="no" select="."/>
@@ -97,6 +100,7 @@ URL : http://www.antennahouse.com/
                             </w:pPr>
                         </w:p>
                     </xsl:when>
+                    <xsl:when test="$prmElem/self::*[contains(@class, ' topic/body ')][$currentCol gt 1][exists(descendant::*[contains(@class, ' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)])][exists(following-sibling::*[contains(@class, ' topic/related-links ')][ahf:isEffectiveRelatedLinks(.)])]"/>
                     <xsl:otherwise>
                         <xsl:variable name="isFirst" as="xs:boolean" select="$seq eq 1"/>
                         <xsl:variable name="isLast" as="xs:boolean" select="$nextCol eq 0"/>
