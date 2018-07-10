@@ -35,6 +35,7 @@ URL : http://www.antennahouse.com/
     <xsl:include href="dita2wml_global_clear.xsl"/>
     <xsl:include href="dita2wml_global_list.xsl"/>
     <xsl:include href="dita2wml_global_header_footer.xsl"/>
+    <xsl:include href="dita2wml_global_frame.xsl"/>
     <xsl:include href="dita2wml_param.xsl"/>
     <xsl:include href="dita2wml_param_var.xsl"/>
     <xsl:include href="dita2wml_param_papersize.xsl"/>
