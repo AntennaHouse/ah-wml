@@ -17,8 +17,11 @@ E-mail : info@antennahouse.com
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     exclude-result-prefixes="xs ahf map"
 >
-    <!-- Frame id map for whole document.
+    <!-- This module defines maps for implementing DITA @frame attribute
      -->
+    
+    
+    <!-- Frame attribute value -->
     <xsl:variable name="frameVal" as="xs:string+" select="('top','bottom','topbot','all','sides')"/>
     
     <!-- Frame targets: All fig (except floatfig) lines, pre. (table and simpletable are implemented in another way) -->
@@ -30,7 +33,7 @@ E-mail : info@antennahouse.com
 
     <xsl:variable name="uniqueFrameTargets" as="element()" select="$frameTargets|()"/>
 
-    <!-- WebSetting.xml w:div/w:val base -->
+    <!-- WebSetting.xml w:div/@w:val base -->
     <xsl:variable name="divIdBase" as="xs:integer">
         <xsl:call-template name="getVarValueAsInteger">
             <xsl:with-param name="prmVarName" select="'DivldIdBase'"/>
@@ -38,21 +41,31 @@ E-mail : info@antennahouse.com
     </xsl:variable>
 
     <!-- map: key=ahf:generateId() 
-              value=w:div/@w:id
-         Used for target elements to generate w:divId/@w:val
+              value=w:div/@w:id, 0 or 1 (has ancestor fig/@frame?)
+         Used to generate w:divId/@w:val for w:pPr or w:trPr in main document generation.
      -->
-    <xsl:variable name="frameTargetIdAndNumberMap" as="map(xs:string,xs:decimal)">
+    <xsl:variable name="frameTargetIdAndNumberMap" as="map(xs:string,xs:integer+)">
         <xsl:map>
             <xsl:for-each select="$uniqueFrameTargets">
-                <xsl:map-entry key="ahf:generateId(.)" select="position() + $divIdBase"/>
+                <xsl:variable name="hasAncestorFigWithFrame" as="xs:boolean">
+                    <xsl:choose>
+                        <xsl:when test="ancestor::*[contains(@class,' topic/fig ')][[string(@frame) = $frameVal]]">
+                            <xsl:sequence select="true()"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="false()"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:map-entry key="ahf:generateId(.)" select="(position() + $divIdBase,xs:integer($hasAncestorFigWithFrame))"/>
             </xsl:for-each>
         </xsl:map>
     </xsl:variable>
     
     <!-- map: key=w:div/@w:id
               value=@frame value (top, bottom, topbot,all, sides
-         Used for generating WebSetting.xml w:divs/w:div entry
-         An div border is supposed only one level. Nested @frame such as fig/codeblock with every @frame attribute is not supported.
+         Used to generate WebSetting.xml w:divs/w:div entry
+         An div border is supposed only one level. Nested @frame such as fig/codeblock with @frame attribute for every element is not supported.
      -->
     <xsl:variable name="frameTargetIdAndFrameClassMap" as="map(xs:decimal, xs:string)">
         <xsl:map>

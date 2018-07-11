@@ -420,6 +420,8 @@ URL : http://www.antennahouse.com/
         <variable name="NumId_For_Topic_Title">5000</variable>
         <variable name="NumId_Base_For_List">10000</variable>
         
+        <variable name="DivldIdBase">10000</variable>
+        
         <!-- Table Border -->
         <variable name="Table_Border_Common_Style">single</variable>
         <variable name="Table_Border_Top_Style">$Table_Border_Common_Style</variable>
@@ -1723,6 +1725,55 @@ URL : http://www.antennahouse.com/
                     </w:pPr>
                 </w:p>
             </w:ftr>
+        </wml-object>
+  
+        <!-- WebSetting.xml prototype -->
+        <wml-object name="wmlWebSetting">
+            <w:webSettings
+                xmlns:w="http://purl.oclc.org/ooxml/wordprocessingml/main">
+                <ahr:divs/>
+                <w:encoding w:val="unicode"/>
+                <w:optimizeForBrowser/>
+                <w:allowPNG/>
+            </w:webSettings>
+        </wml-object>
+        
+        <!-- w:divs -->
+        <wml-object name="wmlDivs">
+            <w:divs xmlns:w="http://purl.oclc.org/ooxml/wordprocessingml/main">
+                <ahr:div/>
+            </w:divs>
+        </wml-object>
+        
+        <!-- w:div
+             param: %id id
+                    %border-top-style, %border-left-style, %border-bottom-style, %border-right-style border style 
+          -->
+        <variable name="FrameBorderColor">auto</variable>
+        <variable name="FrameBorderWidth">1pt</variable>
+        <variable name="FramePadding">4pt</variable>
+
+        <wml-object name="wmlDiv">
+            <w:div w:id="%id" xmlns:w="http://purl.oclc.org/ooxml/wordprocessingml/main">
+                <w:marLeft w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding')}"/>
+                <w:marRight w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding')}"/>
+                <w:marTop w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding')}"/>
+                <w:marBottom w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding')}"/>
+                <w:divBdr>
+                    <w:top w:val="%border-top-style" w:sz="{ahf:toBorderWidth('$FrameBorderWidth')}" w:space="{ahf:toPtStr('$FramePadding')}" w:color="$FrameBorderColor"/>
+                    <w:left w:val="%border-left-style" w:sz="{ahf:toBorderWidth('$FrameBorderWidth')}" w:space="{ahf:toPtStr('$FramePadding')}" w:color="$FrameBorderColor"/>
+                    <w:bottom w:val="%border-bottom-style" w:sz="{ahf:toBorderWidth('$FrameBorderWidth')}" w:space="{ahf:toPtStr('$FramePadding')}" w:color="$FrameBorderColor"/>
+                    <w:right w:val="%border-right-style" w:sz="{ahf:toBorderWidth('$FrameBorderWidth')}" w:space="{ahf:toPtStr('$FramePadding')}" w:color="$FrameBorderColor"/>
+                </w:divBdr>
+                <ahr:divsChild/>
+            </w:div>
+        </wml-object>
+        
+        <!-- w:divsChild -->
+        <wml-object name="wmlDivsChild">
+            <w:divsChild xmlns:w="http://purl.oclc.org/ooxml/wordprocessingml/main">
+                <ahr:div/>
+            </w:divsChild>
         </wml-object>
         
     </wml-objects>
