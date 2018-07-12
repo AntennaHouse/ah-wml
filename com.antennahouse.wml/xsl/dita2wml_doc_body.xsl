@@ -38,6 +38,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmTcAttr" tunnel="yes" as="element()?" select="()"/>
+        <xsl:param name="prmFrameId" tunnel="yes" as="xs:integer?" select="()"/>
         <xsl:variable name="isChildOfStepSection" as="xs:boolean" select="exists(parent::*[contains(@class,' task/stepsection ')])"/>
         <xsl:variable name="isFirstChildOfStep" as="xs:boolean" select="exists(parent::*[contains(@class,' task/step ')]/*[1][. is current()])"/>
         <xsl:variable name="isFirstChildOfLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/*[1][. is current()])"/>
@@ -47,6 +48,16 @@ URL : http://www.antennahouse.com/
             <xsl:call-template name="getVarValueWithLang">
                 <xsl:with-param name="prmVarName" select="'P_Style'"/>
             </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="divId" as="element()?">
+            <xsl:choose>
+                <xsl:when test="exists($prmFrameId)">
+                    <w:divId w:val="{string($prmFrameId)}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="()"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <xsl:call-template name="ahf:genPFromOutputClass">
             <xsl:with-param name="prmRegx" select="'(before)(\d+)(p)'"/>
@@ -60,6 +71,7 @@ URL : http://www.antennahouse.com/
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
                         <w:ind w:left="{ahf:getIndentFromIndentLevel($prmIndentLevel,$prmExtraIndent) - ahf:getHangingFromStyleNameAndLevel(ahf:getStyleNameFromLi(parent::*),$prmListLevel)}"/>
+                        <xsl:copy-of select="$divId"/>
                     </w:pPr>                    
                 </xsl:when>
                 <xsl:when test="$isFirstChildOfLi">
@@ -76,6 +88,7 @@ URL : http://www.antennahouse.com/
                             <xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
                         </xsl:if>
                         <xsl:copy-of select="ahf:getAlignAttrElem($prmTcAttr/@align)"/>
+                        <xsl:copy-of select="$divId"/>
                     </w:pPr>
                 </xsl:when>
                 <xsl:otherwise>
@@ -84,6 +97,7 @@ URL : http://www.antennahouse.com/
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
                         <w:ind w:left="{ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent)}"/>
                         <xsl:copy-of select="ahf:getAlignAttrElem($prmTcAttr/@align)"/>
+                        <xsl:copy-of select="$divId"/>
                     </w:pPr>                    
                 </xsl:otherwise>
             </xsl:choose>

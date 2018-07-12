@@ -94,12 +94,11 @@ E-mail : info@antennahouse.com
     <!-- map: key=w:div/@w:id
               value=@frame value (top, bottom, topbot,all, sides
          Used to generate WebSetting.xml w:divs/w:div entry
-         An div border is supposed only one level. Nested @frame such as fig/codeblock with @frame attribute for every element is not supported.
      -->
     <xsl:variable name="frameClassInfoMap" as="map(xs:integer, xs:string)">
         <xsl:map>
             <xsl:for-each select="$uniqueFrameTargets">
-                <xsl:map-entry key="position() + $divIdBase" select="if (exists(@frame)) then string(./@frame) else 'all'"/>
+                <xsl:map-entry key="position() + $divIdBase" select="if (exists(@frame)) then string(@frame) else 'all'"/>
             </xsl:for-each>
         </xsl:map>
     </xsl:variable>
@@ -126,10 +125,10 @@ E-mail : info@antennahouse.com
                 <xsl:variable name="frameClassInfo" as="item()*" select="map:get($frameClassInfoMap,$id)"/>
                 <xsl:assert test="exists($frameClassInfo)" select="'[genWebSettingDiv] Cannot get frameClassInfo from map id=',$elemId"/>
                 <xsl:variable name="frameClass" as="xs:string"  select="xs:string($frameClassInfo[1])"/>
-                <xsl:variable name="leftStyle"  as="xs:string"   select="if ($frameClass = ('sides','all')) then 'solid' else 'none'"/>
-                <xsl:variable name="rightStyle" as="xs:string"   select="if ($frameClass = ('sides','all')) then 'solid' else 'none'"/>
-                <xsl:variable name="topStyle"  as="xs:string"   select="if ($frameClass = ('top','topbot','all')) then 'solid' else 'none'"/>
-                <xsl:variable name="bottomStyle" as="xs:string"  select="if ($frameClass = ('bottom','topbot','all')) then 'solid' else 'none'"/>
+                <xsl:variable name="leftStyle"  as="xs:string"   select="if ($frameClass = ('sides','all')) then 'single' else 'none'"/>
+                <xsl:variable name="rightStyle" as="xs:string"   select="if ($frameClass = ('sides','all')) then 'single' else 'none'"/>
+                <xsl:variable name="topStyle"  as="xs:string"   select="if ($frameClass = ('top','topbot','all')) then 'single' else 'none'"/>
+                <xsl:variable name="bottomStyle" as="xs:string"  select="if ($frameClass = ('bottom','topbot','all')) then 'single' else 'none'"/>
                 <xsl:variable name="divsChild" as="element()">
                     <xsl:choose>
                         <xsl:when test="$hasDescendant">
