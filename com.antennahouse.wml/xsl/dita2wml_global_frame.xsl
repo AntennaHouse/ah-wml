@@ -191,8 +191,8 @@ E-mail : info@antennahouse.com
     <!-- 
      function:	Generate webSettting.xml
      param:		none
-     return:	element(w:div)*
-     note:		Used to generate word/webSetting.xml that defines HTML border/padding/margin
+     return:	element(w:webSettings)
+     note:		Used to generate word/webSetting.xml that defines HTML equivalent border/padding/margin
      -->
     <xsl:template name="genWebSetting" as="element(w:webSettings)">
         <xsl:variable name="divs" as="node()">
