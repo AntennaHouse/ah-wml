@@ -101,12 +101,15 @@ E-mail : info@antennahouse.com
     
     <!-- 
      function:	Generate webSettting.xml's w:div
-     param:		prmElem
+     param:		prmElem DITA element that has effective @frame attribute
+                prmIsTop switch to indicate top level elements processing
      return:	element(w:div)*
-     note:		
+     note:		Recursively call itself to generate nested w:divsChild/w:w:div 
      -->
-    <xsl:template name="genWebSettingDiv" as="element(w:div)">
-        <xsl:param name="prmElem" as="element()"/>
+    <xsl:template name="genWebSettingDiv" as="element(w:div)*">
+        <xsl:param name="prmElem" as="element()" required="yes"/>
+        <xsl:param name="prmIsTop" as="xs:boolean" required="yes"/>
+        
         <xsl:variable name="elemId" as="xs:string" select="ahf:generateId($prmElem)"/>
         <xsl:variable name="frameInfo" as="item()*" select="map:get($frameInfoMap,$elemId)"/>
         <xsl:assert test="exists($frameInfo)" select="'[genWebSettingDiv] Cannot get frameInfo from map id=',ahf:generateId($prmElem)"/>
@@ -114,11 +117,11 @@ E-mail : info@antennahouse.com
         <xsl:variable name="hasAncestor" as="xs:boolean" select="xs:integer($frameInfo[2]) eq 1"/>        
         <xsl:variable name="hasDescendant" as="xs:boolean" select="xs:integer($frameInfo[3]) eq 1"/>
         <xsl:choose>
-            <xsl:when test="not($hasAncestor)">
+            <xsl:when test="(not($hasAncestor) and $prmIsTop) or not($prmIsTop)">
                 <xsl:variable name="frameClassInfo" as="item()*" select="map:get($frameClassInfoMap,$elemId)"/>
                 <xsl:variable name="frameClass" as="xs:string"  select="xs:string($frameClassInfo[2])"/>
-                <xsl:variable name="leftStyle"  as="xs:string"   select="if ($frameClass = ('all','sides')) then 'solid' else 'none'"/>
-                <xsl:variable name="rightStyle" as="xs:string"   select="if ($frameClass = ('all','sides')) then 'solid' else 'none'"/>
+                <xsl:variable name="leftStyle"  as="xs:string"   select="if ($frameClass = ('sides','all')) then 'solid' else 'none'"/>
+                <xsl:variable name="rightStyle" as="xs:string"   select="if ($frameClass = ('sides','all')) then 'solid' else 'none'"/>
                 <xsl:variable name="topStyle"  as="xs:string"   select="if ($frameClass = ('top','topbot','all')) then 'solid' else 'none'"/>
                 <xsl:variable name="bottomStyle" as="xs:string"  select="if ($frameClass = ('bottom','topbot','all')) then 'solid' else 'none'"/>
                 <xsl:variable name="divsChild" as="element()">
@@ -129,6 +132,7 @@ E-mail : info@antennahouse.com
                                     <xsl:for-each select="$prmElem/*[ahf:isFrameAttrElem(.)]">
                                         <xsl:call-template name="genWebSettingDiv">
                                             <xsl:with-param name="prmElem" select="."/>
+                                            <xsl:with-param name="prmIsTop" select="false()"/>
                                         </xsl:call-template>                                        
                                     </xsl:for-each>
                                 </xsl:document>
@@ -146,8 +150,8 @@ E-mail : info@antennahouse.com
                 </xsl:variable>
                 <xsl:call-template name="getWmlObjectReplacing">
                     <xsl:with-param name="prmObjName" select="'wmlDiv'"/>
-                    <xsl:with-param name="prmSrc" select="('%id','%border-top-style', '%border-left-style', '%border-bottom-style', '%border-right-style','node:divsChild')"/>
-                    <xsl:with-param name="prmDst" select="($id,$topStyle,$leftStyle,$bottomStyle,$rightStyle,$divsChild)"/>
+                    <xsl:with-param name="prmSrc" select="('%id','%border-top-style', '%border-bottom-style', '%border-left-style', '%border-right-style','node:divsChild')"/>
+                    <xsl:with-param name="prmDst" select="($id,$topStyle,$bottomStyle,$leftStyle,$rightStyle,$divsChild)"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise/>
@@ -158,21 +162,22 @@ E-mail : info@antennahouse.com
      function:	Generate webSettting.xml
      param:		none
      return:	element(w:div)*
-     note:		
+     note:		Used to generate word/webSetting.xml that defines HTML border/padding/margin
      -->
     <xsl:template name="genWebSetting" as="element(w:webSettings)">
         <xsl:variable name="divs" as="node()">
-            <xsl:variable name="divsFromMap" as="element(w:div)*">
+            <xsl:variable name="divsFromFrameTargets" as="element(w:div)*">
                 <xsl:for-each select="$uniqueFrameTargets">
                     <xsl:call-template name="genWebSettingDiv">
                         <xsl:with-param name="prmElem" select="."/>
+                        <xsl:with-param name="prmIsTop" select="true()"/>
                     </xsl:call-template>
                 </xsl:for-each>
             </xsl:variable>
             <xsl:choose>
-                <xsl:when test="exists($divsFromMap)">
+                <xsl:when test="exists($divsFromFrameTargets)">
                     <xsl:document>
-                        <xsl:copy-of select="$divsFromMap"/>
+                        <xsl:copy-of select="$divsFromFrameTargets"/>
                     </xsl:document>
                 </xsl:when>
                 <xsl:otherwise>
