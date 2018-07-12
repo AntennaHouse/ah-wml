@@ -11,13 +11,15 @@ E-mail : info@antennahouse.com
 -->
 <xsl:stylesheet version="3.0" 
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
+    xmlns:ct="http://schemas.openxmlformats.org/package/2006/content-types"
+    xmlns:r="http://schemas.openxmlformats.org/package/2006/relationships"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     exclude-result-prefixes="xs ahf map"
 >
-    <!-- This module defines maps for implementing DITA @frame attribute.
+    <!-- This module defines maps, templates for implementing DITA @frame attribute.
          @frame attribute is used in fig, lines, pre (and its specialization elements).
          Table and simple table also has @frame sttributes but they are implemented in table building.
          NOTE:
@@ -26,6 +28,34 @@ E-mail : info@antennahouse.com
          - These nesting is expressed using w:divsChild element.
      -->
     
+    <!-- Relatioship Type -->
+    <xsl:variable name="relationshipTypeWebSetting" as="xs:string">
+        <xsl:call-template name="getVarValue">
+            <xsl:with-param name="prmVarName" select="'RelationshipTypeWebSettings'"/>
+        </xsl:call-template>
+    </xsl:variable>
+    
+    <!-- rId for webSettings.xml -->
+    <xsl:variable name="rIDForWebSettingsXml" as="xs:integer">
+        <xsl:call-template name="getVarValueAsInteger">
+            <xsl:with-param name="prmVarName" select="'RIdForWebSettingsXml'"/>
+        </xsl:call-template>
+    </xsl:variable>
+    
+    <!-- Content Type -->
+    <xsl:variable name="contentTypeWebSettings" as="xs:string">
+        <xsl:call-template name="getVarValue">
+            <xsl:with-param name="prmVarName" select="'ContentTypeWebSettings'"/>
+        </xsl:call-template>
+    </xsl:variable>
+
+    <!-- Web Settings file name -->
+    <xsl:variable name="webSettingsXmlFileName" as="xs:string">
+        <xsl:call-template name="getVarValue">
+            <xsl:with-param name="prmVarName" select="'WebSettingsXmlFileName'"/>
+        </xsl:call-template>
+    </xsl:variable>
+
     <!-- Frame attribute value -->
     <xsl:variable name="frameVal" as="xs:string+" select="('top','bottom','topbot','all','sides')"/>
 
@@ -190,6 +220,34 @@ E-mail : info@antennahouse.com
             <xsl:with-param name="prmSrc" select="('node:divs')"/>
             <xsl:with-param name="prmDst" select="($divs)"/>
         </xsl:call-template>
+    </xsl:template>
+
+    <!-- 
+     function:	Generate Content Type Override entry for webSettins.xml
+     param:		None
+     return:	ct:Override elements
+     note:		Used to generate entry in word/[Content_Types].xml
+     -->
+    <xsl:template name="genWebSettingsXmlContentTypeOverride" as="element(ct:Override)">
+            <xsl:element name="Override" namespace="http://schemas.openxmlformats.org/package/2006/content-types">
+                <xsl:attribute name="PartName" select="concat('/word/',$webSettingsXmlFileName)"/>
+                <xsl:attribute name="ContentType" select="$contentTypeWebSettings"/>
+            </xsl:element>
+    </xsl:template>
+    
+    <!-- 
+     function:	Generate Relationship entry for webSettings.xml
+     param:		None
+     return:	rs:Relationship element
+     note:		Used to generate word/_rels/document.xml.rels
+     -->
+    <xsl:template name="genWebSettingsRelationship" as="element(r:Relationship)">
+        <xsl:variable name="rid" as="xs:string" select="concat($rIdPrefix,string($rIDForWebSettingsXml))"/>
+        <xsl:element name="Relationship" namespace="http://schemas.openxmlformats.org/package/2006/relationships">
+            <xsl:attribute name="Id" select="$rid"/>
+            <xsl:attribute name="Type" select="$relationshipTypeWebSetting"/>
+            <xsl:attribute name="Target" select="$webSettingsXmlFileName"/>
+        </xsl:element>
     </xsl:template>
 
 </xsl:stylesheet>

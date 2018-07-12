@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--
 ************************************************************
-DITA to XSL-FO Style Definition 
+DITA to WordprocessingML Style Definition 
 ************************************************************
 File Name : default_style.xml
 ************************************************************
@@ -475,6 +475,9 @@ URL : http://www.antennahouse.com/
 
         <!-- Default header/footer file relationship offset -->
         <variable name="Default_Header_Footer_Id_Offset">1000</variable>
+        
+        <!-- webSetting.xml relationship id-->
+        <variable name="RIdForWebSettingsXml">900</variable>
         
         <!-- Relationship table namspace -->
         <variable name="Relationship_Table_Namespace">http://schemas.openxmlformats.org/package/2006/relationships</variable>
@@ -1726,6 +1729,16 @@ URL : http://www.antennahouse.com/
                 </w:p>
             </w:ftr>
         </wml-object>
+  
+        <!-- webSetting.xml relationship -->
+        <variable name="RelationshipTypeWebSettings">http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings</variable>
+        
+  
+        <!-- webSetting.xml content type -->
+        <variable name="ContentTypeWebSettings">application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml</variable>
+  
+        <!-- Web Settings file name-->
+        <variable name="WebSettingsXmlFileName">webSettings.xml</variable>
   
         <!-- WebSetting.xml prototype -->
         <wml-object name="wmlWebSetting">

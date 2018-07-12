@@ -17,13 +17,9 @@ URL : http://www.antennahouse.com/
     exclude-result-prefixes="xs ahf"
     version="3.0">
 
-
     <xsl:include href="dita2wml_constants.xsl"/>
     <xsl:include href="dita2wml_global.xsl"/>
     <xsl:include href="dita2wml_global_wml.xsl"/>
-    <xsl:include href="dita2wml_global_image.xsl"/>
-    <xsl:include href="dita2wml_global_link.xsl"/>
-    <xsl:include href="dita2wml_global_header_footer.xsl"/>
     <xsl:include href="dita2wml_param.xsl"/>
     <xsl:include href="dita2wml_param_var.xsl"/>
     <xsl:include href="dita2wml_param_papersize.xsl"/>
@@ -36,6 +32,11 @@ URL : http://www.antennahouse.com/
     <xsl:include href="dita2wml_doc_sect_control_info.xsl"/>
     <xsl:include href="dita2wml_history_id.xsl"/>
     <xsl:include href="dita2wml_doc_id.xsl"/>
+
+    <xsl:include href="dita2wml_global_image.xsl"/>
+    <xsl:include href="dita2wml_global_link.xsl"/>
+    <xsl:include href="dita2wml_global_header_footer.xsl"/>
+    <xsl:include href="dita2wml_global_frame.xsl"/>
     
     <xsl:include href="dita2wml_doc_xml_rels.xsl"/>
     

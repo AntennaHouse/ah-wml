@@ -49,6 +49,8 @@ E-mail : info@antennahouse.com
             <xsl:apply-templates select="* except ctype:Default"/>
             <!-- Generate Header/Footer Content Overrides -->
             <xsl:call-template name="genHeaderFooterContentTypeOverride"/>
+            <!-- Generate webSettings Content Overrides -->
+            <xsl:call-template name="genWebSettingsXmlContentTypeOverride"/>
         </xsl:copy>
     </xsl:template>
     

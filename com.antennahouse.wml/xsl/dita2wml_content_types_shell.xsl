@@ -31,6 +31,7 @@ E-mail : info@antennahouse.com
     <xsl:include href="dita2wml_doc_id.xsl"/>
     
     <xsl:include href="dita2wml_global_header_footer.xsl"/>
+    <xsl:include href="dita2wml_global_frame.xsl"/>
     <xsl:include href="dita2wml_content_types_main.xsl"/>
     
 </xsl:stylesheet>
