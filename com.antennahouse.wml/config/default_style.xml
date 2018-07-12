@@ -1729,26 +1729,6 @@ URL : http://www.antennahouse.com/
                 </w:p>
             </w:ftr>
         </wml-object>
-  
-        <!-- webSetting.xml relationship -->
-        <variable name="RelationshipTypeWebSettings">http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings</variable>
-        
-  
-        <!-- webSetting.xml content type -->
-        <variable name="ContentTypeWebSettings">application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml</variable>
-  
-        <!-- Web Settings file name-->
-        <variable name="WebSettingsXmlFileName">webSettings.xml</variable>
-  
-        <!-- WebSetting.xml prototype -->
-        <wml-object name="wmlWebSetting">
-            <w:webSettings>
-                <ahr:divs/>
-                <w:encoding w:val="unicode"/>
-                <w:optimizeForBrowser/>
-                <w:allowPNG/>
-            </w:webSettings>
-        </wml-object>
         
         <!-- w:divs -->
         <wml-object name="wmlDivs">

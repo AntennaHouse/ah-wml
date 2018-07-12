@@ -149,7 +149,7 @@
     <target name="web.settings.xml">
         <echo message="webSettings.xml"/>
         <antcall target="transform.common">
-            <param name="prmInputFile" value="${xsl.dir}${file.separator}dita2wml_dummy_input.xml"/>
+            <param name="prmInputFile" value="${dita.temp.dir}/template/word/webSettings.xml"/>
             <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/webSettings.xml"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_web_settings_shell.xsl"/>
         </antcall>

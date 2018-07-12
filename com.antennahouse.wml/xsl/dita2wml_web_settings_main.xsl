@@ -16,11 +16,27 @@ E-mail : info@antennahouse.com
     exclude-result-prefixes="xs ahf"
     version="3.0">
     
-    <!-- This template generates word/webSettings.xml from the scratch.
-         The input is dummy XML file.
+    <!-- This template generates word/webSettings.xml from template adding w:divs element.
      -->
     
-    <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
+    <xsl:output method="xml" encoding="UTF-8"/>
+
+    <!--
+    function:   General template
+    param:      none
+    return:     itself and attribute & descendant node
+    note:       
+    -->
+    <xsl:template match="node()">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:apply-templates/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="@*">
+        <xsl:copy/>
+    </xsl:template>
 
     <!--
     function:   document-node template
@@ -28,10 +44,12 @@ E-mail : info@antennahouse.com
     return:     w:webSettings
     note:       
     -->
-    <xsl:template match="/" as="document-node()">
-        <xsl:document>
-            <xsl:call-template name="genWebSetting"/>
-        </xsl:document>
+    <xsl:template match="w:webSettings">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:call-template name="genWebSettingDivs"/>
+            <xsl:apply-templates select="* except w:div"/>
+        </xsl:copy>
     </xsl:template>
 
 </xsl:stylesheet>

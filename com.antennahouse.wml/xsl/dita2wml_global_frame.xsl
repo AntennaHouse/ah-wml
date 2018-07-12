@@ -27,34 +27,6 @@ E-mail : info@antennahouse.com
          - Elements that has @frame attribute can be nested. fig/@frame contains lines/@frame or pre/@frame.
          - These nesting is expressed using w:divsChild element.
      -->
-    
-    <!-- Relatioship Type -->
-    <xsl:variable name="relationshipTypeWebSetting" as="xs:string">
-        <xsl:call-template name="getVarValue">
-            <xsl:with-param name="prmVarName" select="'RelationshipTypeWebSettings'"/>
-        </xsl:call-template>
-    </xsl:variable>
-    
-    <!-- rId for webSettings.xml -->
-    <xsl:variable name="rIDForWebSettingsXml" as="xs:integer">
-        <xsl:call-template name="getVarValueAsInteger">
-            <xsl:with-param name="prmVarName" select="'RIdForWebSettingsXml'"/>
-        </xsl:call-template>
-    </xsl:variable>
-    
-    <!-- Content Type -->
-    <xsl:variable name="contentTypeWebSettings" as="xs:string">
-        <xsl:call-template name="getVarValue">
-            <xsl:with-param name="prmVarName" select="'ContentTypeWebSettings'"/>
-        </xsl:call-template>
-    </xsl:variable>
-
-    <!-- Web Settings file name -->
-    <xsl:variable name="webSettingsXmlFileName" as="xs:string">
-        <xsl:call-template name="getVarValue">
-            <xsl:with-param name="prmVarName" select="'WebSettingsXmlFileName'"/>
-        </xsl:call-template>
-    </xsl:variable>
 
     <!-- Frame attribute value -->
     <xsl:variable name="frameVal" as="xs:string+" select="('top','bottom','topbot','all','sides')"/>
@@ -192,13 +164,13 @@ E-mail : info@antennahouse.com
     </xsl:template>
 
     <!-- 
-     function:	Generate webSettting.xml
+     function:	Generate webSettting.xml/w:divs
      param:		none
-     return:	element(w:webSettings)
+     return:	element(w:divs)
      note:		Used to generate word/webSetting.xml that defines HTML equivalent border/padding/margin
      -->
-    <xsl:template name="genWebSetting" as="element(w:webSettings)">
-        <xsl:variable name="divs" as="node()">
+    <xsl:template name="genWebSettingDivs" as="element(w:divs)">
+        <xsl:variable name="div" as="node()">
             <xsl:variable name="divsFromFrameTargets" as="element(w:div)*">
                 <xsl:for-each select="$uniqueFrameTargets">
                     <xsl:call-template name="genWebSettingDiv">
@@ -219,38 +191,10 @@ E-mail : info@antennahouse.com
             </xsl:choose>
         </xsl:variable>
         <xsl:call-template name="getWmlObjectReplacing">
-            <xsl:with-param name="prmObjName" select="'wmlWebSetting'"/>
-            <xsl:with-param name="prmSrc" select="('node:divs')"/>
-            <xsl:with-param name="prmDst" select="($divs)"/>
+            <xsl:with-param name="prmObjName" select="'wmlDivs'"/>
+            <xsl:with-param name="prmSrc" select="('node:div')"/>
+            <xsl:with-param name="prmDst" select="($div)"/>
         </xsl:call-template>
-    </xsl:template>
-
-    <!-- 
-     function:	Generate Content Type Override entry for webSettins.xml
-     param:		None
-     return:	ct:Override elements
-     note:		Used to generate entry in word/[Content_Types].xml
-     -->
-    <xsl:template name="genWebSettingsXmlContentTypeOverride" as="element(ct:Override)">
-            <xsl:element name="Override" namespace="http://schemas.openxmlformats.org/package/2006/content-types">
-                <xsl:attribute name="PartName" select="concat('/word/',$webSettingsXmlFileName)"/>
-                <xsl:attribute name="ContentType" select="$contentTypeWebSettings"/>
-            </xsl:element>
-    </xsl:template>
-    
-    <!-- 
-     function:	Generate Relationship entry for webSettings.xml
-     param:		None
-     return:	rs:Relationship element
-     note:		Used to generate word/_rels/document.xml.rels
-     -->
-    <xsl:template name="genWebSettingsRelationship" as="element(r:Relationship)">
-        <xsl:variable name="rid" as="xs:string" select="concat($rIdPrefix,string($rIDForWebSettingsXml))"/>
-        <xsl:element name="Relationship" namespace="http://schemas.openxmlformats.org/package/2006/relationships">
-            <xsl:attribute name="Id" select="$rid"/>
-            <xsl:attribute name="Type" select="$relationshipTypeWebSetting"/>
-            <xsl:attribute name="Target" select="$webSettingsXmlFileName"/>
-        </xsl:element>
     </xsl:template>
 
 </xsl:stylesheet>
