@@ -1729,8 +1729,7 @@ URL : http://www.antennahouse.com/
   
         <!-- WebSetting.xml prototype -->
         <wml-object name="wmlWebSetting">
-            <w:webSettings
-                xmlns:w="http://purl.oclc.org/ooxml/wordprocessingml/main">
+            <w:webSettings>
                 <ahr:divs/>
                 <w:encoding w:val="unicode"/>
                 <w:optimizeForBrowser/>
@@ -1740,7 +1739,7 @@ URL : http://www.antennahouse.com/
         
         <!-- w:divs -->
         <wml-object name="wmlDivs">
-            <w:divs xmlns:w="http://purl.oclc.org/ooxml/wordprocessingml/main">
+            <w:divs>
                 <ahr:div/>
             </w:divs>
         </wml-object>
@@ -1754,7 +1753,7 @@ URL : http://www.antennahouse.com/
         <variable name="FramePadding">4pt</variable>
 
         <wml-object name="wmlDiv">
-            <w:div w:id="%id" xmlns:w="http://purl.oclc.org/ooxml/wordprocessingml/main">
+            <w:div w:id="%id">
                 <w:marLeft w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding')}"/>
                 <w:marRight w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding')}"/>
                 <w:marTop w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding')}"/>
@@ -1771,7 +1770,7 @@ URL : http://www.antennahouse.com/
         
         <!-- w:divsChild -->
         <wml-object name="wmlDivsChild">
-            <w:divsChild xmlns:w="http://purl.oclc.org/ooxml/wordprocessingml/main">
+            <w:divsChild>
                 <ahr:div/>
             </w:divsChild>
         </wml-object>
