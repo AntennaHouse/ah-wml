@@ -1747,10 +1747,10 @@ URL : http://www.antennahouse.com/
 
         <wml-object name="wmlDiv">
             <w:div w:id="%id">
-                <w:marLeft w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding')}"/>
-                <w:marRight w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding')}"/>
-                <w:marTop w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding')}"/>
-                <w:marBottom w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding')}"/>
+                <w:marLeft w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding'))}"/>
+                <w:marRight w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding'))}"/>
+                <w:marTop w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding'))}"/>
+                <w:marBottom w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding'))}"/>
                 <w:divBdr>
                     <w:top w:val="%border-top-style" w:sz="{ahf:toBorderWidth('$FrameBorderWidth')}" w:space="{ahf:toPtStr('$FramePadding')}" w:color="$FrameBorderColor"/>
                     <w:left w:val="%border-left-style" w:sz="{ahf:toBorderWidth('$FrameBorderWidth')}" w:space="{ahf:toPtStr('$FramePadding')}" w:color="$FrameBorderColor"/>

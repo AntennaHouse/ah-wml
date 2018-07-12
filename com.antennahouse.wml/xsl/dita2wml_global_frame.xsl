@@ -86,7 +86,7 @@ E-mail : info@antennahouse.com
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:map-entry key="ahf:generateId(.)" select="(xs:decimal(position() + $divIdBase),xs:integer($hasAncestorFigWithFrame),xs:integer($hasDescendantFigWithFrame))"/>
+                <xsl:map-entry key="ahf:generateId(.)" select="(xs:integer(position() + $divIdBase),xs:integer($hasAncestorFigWithFrame),xs:integer($hasDescendantFigWithFrame))"/>
             </xsl:for-each>
         </xsl:map>
     </xsl:variable>
@@ -96,10 +96,10 @@ E-mail : info@antennahouse.com
          Used to generate WebSetting.xml w:divs/w:div entry
          An div border is supposed only one level. Nested @frame such as fig/codeblock with @frame attribute for every element is not supported.
      -->
-    <xsl:variable name="frameClassInfoMap" as="map(xs:decimal, xs:string)">
+    <xsl:variable name="frameClassInfoMap" as="map(xs:integer, xs:string)">
         <xsl:map>
             <xsl:for-each select="$uniqueFrameTargets">
-                <xsl:map-entry key="position() + $divIdBase" select="string(./@frame)"/>
+                <xsl:map-entry key="position() + $divIdBase" select="if (exists(@frame)) then string(./@frame) else 'all'"/>
             </xsl:for-each>
         </xsl:map>
     </xsl:variable>
@@ -117,14 +117,15 @@ E-mail : info@antennahouse.com
         
         <xsl:variable name="elemId" as="xs:string" select="ahf:generateId($prmElem)"/>
         <xsl:variable name="frameInfo" as="item()*" select="map:get($frameInfoMap,$elemId)"/>
-        <xsl:assert test="exists($frameInfo)" select="'[genWebSettingDiv] Cannot get frameInfo from map id=',ahf:generateId($prmElem)"/>
-        <xsl:variable name="id" as="xs:decimal" select="$frameInfo[1]"/>
+        <xsl:assert test="exists($frameInfo)" select="'[genWebSettingDiv] Cannot get frameInfo from map id=',$elemId"/>
+        <xsl:variable name="id" as="xs:integer" select="$frameInfo[1]"/>
         <xsl:variable name="hasAncestor" as="xs:boolean" select="xs:integer($frameInfo[2]) eq 1"/>        
         <xsl:variable name="hasDescendant" as="xs:boolean" select="xs:integer($frameInfo[3]) eq 1"/>
         <xsl:choose>
             <xsl:when test="(not($hasAncestor) and $prmIsTop) or not($prmIsTop)">
-                <xsl:variable name="frameClassInfo" as="item()*" select="map:get($frameClassInfoMap,$elemId)"/>
-                <xsl:variable name="frameClass" as="xs:string"  select="xs:string($frameClassInfo[2])"/>
+                <xsl:variable name="frameClassInfo" as="item()*" select="map:get($frameClassInfoMap,$id)"/>
+                <xsl:assert test="exists($frameClassInfo)" select="'[genWebSettingDiv] Cannot get frameClassInfo from map id=',$elemId"/>
+                <xsl:variable name="frameClass" as="xs:string"  select="xs:string($frameClassInfo[1])"/>
                 <xsl:variable name="leftStyle"  as="xs:string"   select="if ($frameClass = ('sides','all')) then 'solid' else 'none'"/>
                 <xsl:variable name="rightStyle" as="xs:string"   select="if ($frameClass = ('sides','all')) then 'solid' else 'none'"/>
                 <xsl:variable name="topStyle"  as="xs:string"   select="if ($frameClass = ('top','topbot','all')) then 'solid' else 'none'"/>
@@ -156,7 +157,7 @@ E-mail : info@antennahouse.com
                 <xsl:call-template name="getWmlObjectReplacing">
                     <xsl:with-param name="prmObjName" select="'wmlDiv'"/>
                     <xsl:with-param name="prmSrc" select="('%id','%border-top-style', '%border-bottom-style', '%border-left-style', '%border-right-style','node:divsChild')"/>
-                    <xsl:with-param name="prmDst" select="($id,$topStyle,$bottomStyle,$leftStyle,$rightStyle,$divsChild)"/>
+                    <xsl:with-param name="prmDst" select="(string($id),$topStyle,$bottomStyle,$leftStyle,$rightStyle,$divsChild)"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise/>

@@ -151,6 +151,12 @@ URL : http://www.antennahouse.com/
         </xsl:try>
     </xsl:function>
 
+    <!-- string version -->
+    <xsl:function name="ahf:toPtStr" as="xs:string" visibility="public">
+        <xsl:param name="prmUnitValue" as="xs:string"/>
+        <xsl:sequence select="string(ahf:toPt($prmUnitValue))"/>
+    </xsl:function>
+
     <!--
     function:   Convert to half point
     param:      prmUnitVal any numeric value with length unit
