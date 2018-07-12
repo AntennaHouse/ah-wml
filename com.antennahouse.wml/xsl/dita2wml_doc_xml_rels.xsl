@@ -44,7 +44,7 @@ URL : http://www.antennahouse.com/
             <xsl:call-template name="genHeaderFooterRelationships"/>
             
             <!-- Generate Web Setting Relationship-->
-            <xsl:call-template name="genWebSettingsRelationship"/>
+            <!--xsl:call-template name="genWebSettingsRelationship"/-->
             
             <!-- Generate common image relationships -->
             <xsl:for-each select="map:keys($commonImageIdMap)">

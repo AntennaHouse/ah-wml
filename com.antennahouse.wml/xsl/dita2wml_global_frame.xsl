@@ -67,7 +67,10 @@ E-mail : info@antennahouse.com
      -->
     <xsl:function name="ahf:isFrameAttrElem" as="xs:boolean">
         <xsl:param name="prmElem" as="element()"/>
-        <xsl:sequence select="exists($prmElem[ahf:seqContains(@class,(' topic/fig ',' topic/lines ',' topic/pre '))][not(contains(@class,' floatfig-d/floatfig '))][[string(@frame) = $frameVal]])"/>
+        <!--xsl:sequence select="exists($prmElem/self::*[ahf:seqContains(@class,(' topic/fig ',' topic/lines ',' topic/pre '))][not(contains(@class,' floatfig-d/floatfig '))][[string(@frame) = $frameVal]])"/-->
+        <xsl:variable name="classAttr" as="xs:string" select="string($prmElem/@class)"/>   
+        <xsl:variable name="frameAttr" as="xs:string" select="string($prmElem/@frame)"/>
+        <xsl:sequence select="ahf:seqContains($classAttr,(' topic/fig ',' topic/lines ',' topic/pre ')) and not(contains($classAttr,' floatfig-d/floatfig ')) and ($frameAttr = $frameVal)"/>
     </xsl:function>
 
     <!-- Frame targets: All fig (except floatfig) lines, pre. (table and simpletable are implemented in another way) -->
@@ -75,7 +78,7 @@ E-mail : info@antennahouse.com
         <xsl:sequence select="$root/*[contains(@class,' topic/topic ')]/descendant::*[ahf:isFrameAttrElem(.)]"/>
     </xsl:variable>
 
-    <xsl:variable name="uniqueFrameTargets" as="element()" select="$frameTargets|()"/>
+    <xsl:variable name="uniqueFrameTargets" as="element()*" select="$frameTargets|()"/>
 
     <!-- WebSetting.xml w:div/@w:val base -->
     <xsl:variable name="divIdBase" as="xs:integer">

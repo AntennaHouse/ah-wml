@@ -66,7 +66,7 @@
         </antcall>
     </target>
 
-    <target name="generate.docx.file" depends="core.xml,theme1.xml,custom.xml,header.footer,document.xml,styles.xml,settings.xml,numbering.xml,footnote.xml,document.xml.rels,Content_Types.xml"/>
+    <target name="generate.docx.file" depends="core.xml,theme1.xml,custom.xml,header.footer,document.xml,styles.xml,settings.xml,numbering.xml,footnote.xml,web.settings.xml,document.xml.rels,content.types.xml"/>
         
     <target name="core.xml">
         <antcall target="transform.common">
@@ -146,6 +146,15 @@
         </antcall>
     </target>
 
+    <target name="web.settings.xml">
+        <echo message="webSettings.xml"/>
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${xsl.dir}${file.separator}dita2wml_dummy_input.xml"/>
+            <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/webSettings.xml"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_web_settings_shell.xsl"/>
+        </antcall>
+    </target>
+    
     <target name="document.xml.rels">
         <echo message="document.xml.rels"/>
         <antcall target="transform.common">
@@ -155,7 +164,7 @@
         </antcall>
     </target>
 
-    <target name="Content_Types.xml">
+    <target name="content.types.xml">
         <echo message="[Content_Types].xml"/>
         <antcall target="transform.common">
             <param name="prmInputFile" value="${dita.temp.dir}/template/[Content_Types].xml"/>
