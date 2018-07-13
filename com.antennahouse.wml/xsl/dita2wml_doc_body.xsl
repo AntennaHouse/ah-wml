@@ -37,8 +37,10 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmListStyle" tunnel="yes" required="no" as="xs:string?" select="()"/>
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
         <xsl:param name="prmTcAttr" tunnel="yes" as="element()?" select="()"/>
         <xsl:param name="prmFrameId" tunnel="yes" as="xs:integer?" select="()"/>
+        
         <xsl:variable name="isChildOfStepSection" as="xs:boolean" select="exists(parent::*[contains(@class,' task/stepsection ')])"/>
         <xsl:variable name="isFirstChildOfStep" as="xs:boolean" select="exists(parent::*[contains(@class,' task/step ')]/*[1][. is current()])"/>
         <xsl:variable name="isFirstChildOfLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/*[1][. is current()])"/>
@@ -70,7 +72,7 @@ URL : http://www.antennahouse.com/
                     <xsl:assert test="exists($prmListLevel)" select="'[ASSERT: topic/p] $prmListLevel is empty!'"/>
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
-                        <w:ind w:left="{ahf:getIndentFromIndentLevel($prmIndentLevel,$prmExtraIndent) - ahf:getHangingFromStyleNameAndLevel(ahf:getStyleNameFromLi(parent::*),$prmListLevel)}"/>
+                        <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel,$prmExtraIndent) - ahf:getHangingFromStyleNameAndLevel(ahf:getStyleNameFromLi(parent::*),$prmListLevel),$prmEndIndent,0,0)"/>
                         <xsl:copy-of select="$divId"/>
                     </w:pPr>                    
                 </xsl:when>
@@ -85,7 +87,7 @@ URL : http://www.antennahouse.com/
                             <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>
                         </w:numPr>
                         <xsl:if test="not($pAdoptFixedListIndent)">
-                            <xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
+                            <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
                         </xsl:if>
                         <xsl:copy-of select="ahf:getAlignAttrElem($prmTcAttr/@align)"/>
                         <xsl:copy-of select="$divId"/>
@@ -95,7 +97,7 @@ URL : http://www.antennahouse.com/
                     <!-- Generate left indent take into account list nesting level -->
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
-                        <w:ind w:left="{ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent)}"/>
+                        <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
                         <xsl:copy-of select="ahf:getAlignAttrElem($prmTcAttr/@align)"/>
                         <xsl:copy-of select="$divId"/>
                     </w:pPr>                    

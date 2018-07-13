@@ -76,6 +76,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmListStyle" tunnel="yes" required="yes" as="xs:string"/>
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
         <xsl:if test="empty(child::*[1][contains(@class,' topic/p ')])">
             <!-- generate dummmy w:p -->
             <w:p>
@@ -85,7 +86,7 @@ URL : http://www.antennahouse.com/
                         <w:ilvl w:val="{string(ahf:getIlvlFromListLevel($prmListLevel))}"/>
                         <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>
                     </w:numPr>
-                    <xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
+                    <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
                 </w:pPr>
             </w:p>
         </xsl:if>
@@ -120,11 +121,12 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/dt ')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
         <xsl:variable name="dtStyleName" as="xs:string" select="ahf:getVarValue('Dt_Style_Name')"/>
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName($dtStyleName)}"/>
-                <w:ind w:left="{ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent)}"/>
+                <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
             </w:pPr>
             <xsl:apply-templates/>
         </w:p>
@@ -133,11 +135,12 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/dd ')]/*[contains(@class,' topic/p ')]" priority="5">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
         <xsl:variable name="ddStyleName" as="xs:string" select="ahf:getVarValue('Dd_Style_Name')"/>
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName($ddStyleName)}"/>
-                <w:ind w:left="{ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent)}"/>
+                <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
             </w:pPr>
             <xsl:apply-templates/>
         </w:p>
@@ -159,13 +162,14 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/sli ')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
         <xsl:variable name="slStyleName" as="xs:string" select="ahf:getVarValue('Sl_Style_Name')"/>
         <w:p>
             <w:pPr>
                 <xsl:if test="string($slStyleName)">
                     <w:pStyle w:val="{ahf:getStyleIdFromName($slStyleName)}"/>
                 </xsl:if>
-                <w:ind w:left="{ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent)}"/>
+                <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
             </w:pPr>
             <xsl:apply-templates/>
         </w:p>

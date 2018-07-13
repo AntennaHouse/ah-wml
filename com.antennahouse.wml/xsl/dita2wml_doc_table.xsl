@@ -44,10 +44,11 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class,' topic/title ')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName('caption')}"/>
-                <xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
+                <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
             </w:pPr>
             <xsl:call-template name="genBookmarkStart">
                 <xsl:with-param name="prmElem" select="parent::*"/>

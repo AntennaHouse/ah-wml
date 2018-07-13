@@ -342,18 +342,16 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break']" name="processBlockImage" as="element(w:p)" priority="5">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
         <xsl:param name="prmTcAttr" tunnel="yes" as="element()?" select="()"/>
         
         <w:p>
-            <xsl:variable name="pPr" as="element()*">
+            <w:pPr>
                 <xsl:call-template name="getWmlObject">
                     <xsl:with-param name="prmObjName" select="'wmlSingleLineHeight'"/>
                 </xsl:call-template>
-                <xsl:sequence select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
-                <xsl:sequence select="ahf:getAlignAttrElem(if (exists(@align)) then @align else $prmTcAttr/@align)"/>
-            </xsl:variable>
-            <w:pPr>
-                <xsl:copy-of select="$pPr"/>
+                <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
+                <xsl:copy-of select="ahf:getAlignAttrElem(if (exists(@align)) then @align else $prmTcAttr/@align)"/>
             </w:pPr>
             <xsl:next-match/>
         </w:p>
