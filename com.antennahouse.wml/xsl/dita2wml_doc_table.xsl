@@ -13,6 +13,7 @@ URL : http://www.antennahouse.com/
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     xmlns:style="http://www.antennahouse.com/names/XSLT/Document/Layout"
@@ -266,14 +267,26 @@ URL : http://www.antennahouse.com/
      function:	Genrate w:gridCol from colspec 
      param:		none
      return:	w:gridCol
-     note:		w:gridCol/@w:w only expresses column width ratio here. 
-                Not actual width.
+     note:		w:gridCol/@w:w only expresses temporary column width. 
+                It si not a actual width. See ECMA Spc p.1496 "17.18.87  ST_TblLayoutType (Table Layout Type)" 
      -->
     <xsl:template name="genGridCol" as="element()+">
         <xsl:param name="prmColSpec" as="element()+" required="yes"/>
+        <xsl:variable name="colInfo" as="item()+" select="map:get($columnMap,ahf:generateId($prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')]))"/>
+        <xsl:variable name="columnCount" as="xs:integer" select="xs:integer($colInfo[2])"/>
+        <xsl:variable name="bodyWidth" as="xs:integer">
+            <xsl:choose>
+                <xsl:when test="$columnCount eq 1">
+                    <xsl:sequence select="ahf:toTwip($pPaperBodyWidth)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="ahf:toTwip($pPaperBodyWidth) div $columnCount - ahf:toTwip($pPaperColumnGap) * ($columnCount - 1) div $columnCount"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:for-each select="$prmColSpec">
             <w:gridCol>
-                <xsl:attribute name="w:w" select="string(@ahf:colwidth-ratio)"/>
+                <xsl:attribute name="w:w" select="xs:integer(round($bodyWidth * xs:integer(string(@ahf:colwidth-ratio)) div 100))"/>
             </w:gridCol>
         </xsl:for-each>
     </xsl:template>
