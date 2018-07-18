@@ -126,7 +126,7 @@ E-mail : info@antennahouse.com
                 <xsl:for-each select="$colspecComplemented/*[contains(@class,' topic/colspec ')]">
                     <xsl:copy>
                         <xsl:copy-of select="@*"/>
-                        <xsl:attribute name="ahf:colwidth-ratio" select="string(xs:integer(xs:double(@ahf:colwidth-normalized) div $colWidthSum * 100))"/>
+                        <xsl:attribute name="ahf:colwidth-ratio" select="string(xs:double(xs:double(@ahf:colwidth-normalized) div $colWidthSum * 100))"/>
                     </xsl:copy>
                 </xsl:for-each>
             </xsl:document>

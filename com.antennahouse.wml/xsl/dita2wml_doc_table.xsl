@@ -286,7 +286,7 @@ URL : http://www.antennahouse.com/
         </xsl:variable>
         <xsl:for-each select="$prmColSpec">
             <w:gridCol>
-                <xsl:attribute name="w:w" select="xs:integer(round($bodyWidth * xs:integer(string(@ahf:colwidth-ratio)) div 100))"/>
+                <xsl:attribute name="w:w" select="xs:integer(round($bodyWidth * xs:double(string(@ahf:colwidth-ratio)) div 100))"/>
             </w:gridCol>
         </xsl:for-each>
     </xsl:template>
