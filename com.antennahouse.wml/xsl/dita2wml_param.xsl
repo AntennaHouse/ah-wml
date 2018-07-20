@@ -307,18 +307,6 @@ E-mail : info@antennahouse.com
     
     <!-- List indent size -->
     <xsl:param name="PRM_LIST_INDENT_SIZE" required="no" as="xs:string" select="''"/>
-    <xsl:variable name="pListIndentSize" as="xs:string" use-when="system-property('main.doc.processing') eq $cYes">
-        <xsl:choose>
-            <xsl:when test="not(string($PRM_LIST_INDENT_SIZE)) or ($PRM_LIST_INDENT_SIZE = ('''''','&quot;&quot;'))">
-                <xsl:sequence select="ahf:getVarValue('List_Indent_Size')"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="$PRM_LIST_INDENT_SIZE"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="pListIndentSizeInTwip" as="xs:integer" select="ahf:toTwip($pListIndentSize)" use-when="system-property('main.doc.processing') eq $cYes"/>
-    <xsl:variable name="pListIndentSizeInEmu" as="xs:integer" select="ahf:toEmu($pListIndentSize)" use-when="system-property('main.doc.processing') eq $cYes"/>
     
     <!-- List base indent size -->
     <xsl:param name="PRM_LIST_BASE_INDENT_SIZE" required="no" as="xs:string" select="''"/>
