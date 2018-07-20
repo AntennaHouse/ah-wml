@@ -666,27 +666,27 @@ URL : http://www.antennahouse.com/
     <xsl:template name="buildStColWidthSeq" as="xs:double+">
         <xsl:param name="prmSimpleTable" as="element()" required="yes"/>
         <xsl:variable name="colCount" as="xs:integer" select="count($prmSimpleTable/*[contains(@class,' topic/strow ')][1]/*[contains(@class,' topic/stentry ')])"/>
-        <xsl:variable name="relColWidth" as="xs:integer+">
+        <xsl:variable name="relColWidth" as="xs:double+">
             <xsl:choose>
                 <xsl:when test="string($prmSimpleTable/@relcolwidth)">
                     <xsl:variable name="relColWidthAttVal" as="xs:string" select="string($prmSimpleTable/@relcolwidth)"/>
                     <xsl:for-each select="tokenize($relColWidthAttVal,'[\s]+')">
                         <xsl:variable name="colWidth" as="xs:string" select="substring-before(.,'*')"/>
                         <xsl:choose>
-                            <xsl:when test="$colWidth castable as xs:integer">
-                                <xsl:sequence select="xs:integer($colWidth)"/>
+                            <xsl:when test="$colWidth castable as xs:double">
+                                <xsl:sequence select="xs:double($colWidth)"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:call-template name="warningContinue">
                                     <xsl:with-param name="prmMes" select="ahf:replace($stMes2500,('%relcolwidth'),($relColWidthAttVal))"/>
                                 </xsl:call-template>
-                                <xsl:sequence select="1"/>
+                                <xsl:sequence select="1.0"/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:for-each>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:sequence select="for $n in (1 to $colCount) return 1"/>
+                    <xsl:sequence select="for $n in (1 to $colCount) return 1.0"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
