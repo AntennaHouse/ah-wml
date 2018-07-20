@@ -14,5 +14,6 @@ E-mail : info@antennahouse.com
   <xsl:include href="dita2wml_history_id.xsl"/>
 
   <xsl:include href="dita2wml_convmerged3.xsl"/>
-  <xsl:include href="dita2wml_table_expand.xsl"/>
+  <xsl:include href="dita2wml_convmerged_table_expand.xsl"/>
+  <xsl:include href="dita2wml_convmerged_build_colspec.xsl"/>
 </xsl:stylesheet>

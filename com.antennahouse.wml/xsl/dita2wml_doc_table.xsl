@@ -601,7 +601,7 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class, ' topic/simpletable ')]">
         <xsl:variable name="simpleTableAttr" select="ahf:getSimpleTableAttr(.)" as="element()"/>
         <!-- Complement the @relcolwidth and calculate the column width ratio -->
-        <xsl:variable name="colWidthSeq" as="xs:integer+">
+        <xsl:variable name="colWidthSeq" as="xs:double+">
             <xsl:call-template name="buildStColWidthSeq">
                 <xsl:with-param name="prmSimpleTable" select="."/>
             </xsl:call-template>
@@ -615,6 +615,7 @@ URL : http://www.antennahouse.com/
             </w:tblPr>    
             <w:tblGrid>
                 <xsl:call-template name="genStGridCol">
+                    <xsl:with-param name="prmSimpleTable" select="."/>
                     <xsl:with-param name="prmColWidthSeq" select="$colWidthSeq"/>
                 </xsl:call-template>
             </w:tblGrid>
@@ -658,11 +659,11 @@ URL : http://www.antennahouse.com/
     <!-- 
      function:	Generate nomalized colum width sequence for simpletable
      param:		prmSimpleTable
-     return:    xs:integer+
+     return:    xs:double+
      note:      simpletable uses @relcolwidth to express column width.
                 @relcolwidth will not work currently because simpletable is outputted as <w:tblLayout w:type="autofit"/>.
      -->
-    <xsl:template name="buildStColWidthSeq" as="xs:integer+">
+    <xsl:template name="buildStColWidthSeq" as="xs:double+">
         <xsl:param name="prmSimpleTable" as="element()" required="yes"/>
         <xsl:variable name="colCount" as="xs:integer" select="count($prmSimpleTable/*[contains(@class,' topic/strow ')][1]/*[contains(@class,' topic/stentry ')])"/>
         <xsl:variable name="relColWidth" as="xs:integer+">
@@ -709,9 +710,9 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="colWidthSum" as="xs:double" select="sum($colspecComplemented)"/>
         
         <!-- Calculate column width ratio --> 
-        <xsl:variable name="colspecCalculated" as="xs:integer+">
+        <xsl:variable name="colspecCalculated" as="xs:double+">
             <xsl:for-each select="$colspecComplemented">
-                <xsl:sequence select="xs:integer(. div $colWidthSum * 100)"/>
+                <xsl:sequence select="xs:double(. div $colWidthSum * 100)"/>
             </xsl:for-each>
         </xsl:variable>
         
@@ -726,10 +727,24 @@ URL : http://www.antennahouse.com/
                 Not actual width.
      -->
     <xsl:template name="genStGridCol" as="element()+">
-        <xsl:param name="prmColWidthSeq" as="xs:integer+" required="yes"/>
+        <xsl:param name="prmSimpleTable" as="element()" required="yes"/>
+        <xsl:param name="prmColWidthSeq" as="xs:double+" required="yes"/>
+        <xsl:variable name="colInfo" as="item()+" select="map:get($columnMap,ahf:generateId($prmSimpleTable/ancestor::*[contains(@class,' topic/body ')]))"/>
+        <xsl:variable name="columnCount" as="xs:integer" select="xs:integer($colInfo[2])"/>
+        <xsl:variable name="bodyWidth" as="xs:integer">
+            <xsl:choose>
+                <xsl:when test="$columnCount eq 1">
+                    <xsl:sequence select="ahf:toTwip($pPaperBodyWidth)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="ahf:toTwip($pPaperBodyWidth) div $columnCount - ahf:toTwip($pPaperColumnGap) * ($columnCount - 1) div $columnCount"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:for-each select="$prmColWidthSeq">
             <w:gridCol>
-                <xsl:attribute name="w:w" select="string(.)"/>
+                <xsl:variable name="colWidthRatio" as="xs:double" select="."/>
+                <xsl:attribute name="w:w" select="xs:integer(round($bodyWidth * $colWidthRatio div 100))"/>
             </w:gridCol>
         </xsl:for-each>
     </xsl:template>

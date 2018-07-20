@@ -4,7 +4,7 @@
 DITA to WordprocessingML Stylesheet
 Document.xml Table element Templates
 **************************************************************
-File Name : dita2wml_document_table_expand.xsl
+File Name : dita2wml_convmerged_table_expand.xsl
 **************************************************************
 Copyright © 2009-2017 Antenna House, Inc. All rights reserved.
 Antenna House is a trademark of Antenna House, Inc.
