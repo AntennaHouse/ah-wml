@@ -41,7 +41,7 @@ URL : http://www.antennahouse.com/
                 <xsl:choose>
                     <xsl:when test="empty($targetElemInfo) or not(string($targetId))">
                         <xsl:call-template name="warningContinue">
-                            <xsl:with-param name="prmMes" select="ahf:replace($stMes2032,('%href'),($href))"/>
+                            <xsl:with-param name="prmMes" select="ahf:replace($stMes2032,('%xref','%href'),(ahf:getNodeXPathStr(.),$href))"/>
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
@@ -289,7 +289,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:function name="ahf:genBookmarkStart" as="element()?">
         <xsl:param name="prmElem" as="element()"/>
-        <xsl:variable name="id" as="xs:string" select="generate-id($prmElem)"/>
+        <xsl:variable name="id" as="xs:string" select="ahf:generateId($prmElem)"/>
         <xsl:variable name="seq" as="xs:integer?" select="map:get($targetElemIdAndNumberMap,$id)"/>
         <xsl:choose>
             <xsl:when test="exists($seq)">
@@ -336,7 +336,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:function name="ahf:genBookmarkEnd" as="element()?">
         <xsl:param name="prmElem" as="element()"/>
-        <xsl:variable name="id" as="xs:string" select="generate-id($prmElem)"/>
+        <xsl:variable name="id" as="xs:string" select="ahf:generateId($prmElem)"/>
         <xsl:variable name="seq" as="xs:integer?" select="map:get($targetElemIdAndNumberMap,$id)"/>
         <xsl:choose>
             <xsl:when test="exists($seq)">
@@ -383,7 +383,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:function name="ahf:getBookmarkName" as="xs:string?">
         <xsl:param name="prmElem" as="element()"/>
-        <xsl:variable name="id" as="xs:string" select="generate-id($prmElem)"/>
+        <xsl:variable name="id" as="xs:string" select="ahf:generateId($prmElem)"/>
         <xsl:variable name="seq" as="xs:integer?" select="map:get($targetElemIdAndNumberMap,$id)"/>
         <xsl:choose>
             <xsl:when test="exists($seq)">

@@ -502,7 +502,7 @@ URL : http://www.antennahouse.com/
     </xsl:variable>
     
     <xsl:variable name="stMes2032">
-        <xsl:text>[xref 2032W] Xref target not found. @href='%href'</xsl:text>
+        <xsl:text>[xref 2032W] Xref target not found. xref='%xref' @href='%href'</xsl:text>
     </xsl:variable>
 
     <xsl:variable name="stMes2500">

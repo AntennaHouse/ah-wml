@@ -38,6 +38,7 @@ E-mail : info@antennahouse.com
             <xsl:variable name="targetElem" as="element()?" select="if (not(string($elemId))) then $topicElem else $topicElem//*[string(@id) eq $elemId][1]"/>
             <xsl:choose>
                 <xsl:when test="empty($targetElem)">
+                    <xsl:message select="'[global-bookmark] @href target not found=',$href"/>
                     <xsl:comment>Not Found: <xsl:value-of select="$href"/></xsl:comment>
                 </xsl:when>
                 <xsl:otherwise>
@@ -47,9 +48,9 @@ E-mail : info@antennahouse.com
         </xsl:for-each>
     </xsl:variable>
     
-    <xsl:variable name="targetIds" as="xs:string*" select="for $elem in $targetElems return if ($elem[self::element()]) then generate-id($elem) else '' "/>
+    <xsl:variable name="targetIds" as="xs:string*" select="for $elem in $targetElems return if ($elem[self::element()]) then ahf:generateId($elem) else '' "/>
 
-    <!-- map: key=@href value=generate-id(), target node()
+    <!-- map: key=@href value=ahf:generateId(), target node()
          Used for xref & link to generate "REF" field
       -->
     <xsl:variable name="bookmarkTargetMap" as="map(xs:string,item()*)">
@@ -69,18 +70,18 @@ E-mail : info@antennahouse.com
      -->
     <xsl:variable name="targetIdsWithNoHref" as="xs:string*">
         <xsl:sequence select="$targetIds"/>
-        <xsl:sequence select="$map/*[not(contains(@class,' map/reltable '))]/descendant-or-self::*[contains(@class,' map/topicref ')][empty(@href)]/generate-id(.)"/>
+        <xsl:sequence select="$map/*[not(contains(@class,' map/reltable '))]/descendant-or-self::*[contains(@class,' map/topicref ')][empty(@href)]/ahf:generateId(.)"/>
     </xsl:variable>
     
-    <xsl:variable name="targetElemsDocSeq" as="element()*" select="$root/descendant::*[generate-id() = $targetIdsWithNoHref]"/>
+    <xsl:variable name="targetElemsDocSeq" as="element()*" select="$root/descendant::*[ahf:generateId(.) = $targetIdsWithNoHref]"/>
     
-    <!-- map: key=generate-id() value=position()
+    <!-- map: key=ahf:generateId() value=position()
          Used for target elements to generate w:bookMark
      -->
     <xsl:variable name="targetElemIdAndNumberMap" as="map(xs:string,xs:integer)">
         <xsl:map>
             <xsl:for-each select="$targetElemsDocSeq">
-                <xsl:map-entry key="generate-id(.)" select="position()"/>
+                <xsl:map-entry key="ahf:generateId(.)" select="position()"/>
             </xsl:for-each>
         </xsl:map>
     </xsl:variable>
