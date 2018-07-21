@@ -272,7 +272,8 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:template name="genGridCol" as="element()+">
         <xsl:param name="prmColSpec" as="element()+" required="yes"/>
-        <xsl:variable name="colInfo" as="item()+" select="map:get($columnMap,ahf:generateId($prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')]))"/>
+        <xsl:param name="ancestorColElem" as="element()" select="if (exists($prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')])) then $prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')] else $prmColSpec[1]/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
+        <xsl:variable name="colInfo" as="item()+" select="map:get($columnMap,ahf:generateId($ancestorColElem))"/>
         <xsl:variable name="columnCount" as="xs:integer" select="xs:integer($colInfo[2])"/>
         <xsl:variable name="bodyWidth" as="xs:integer">
             <xsl:choose>
