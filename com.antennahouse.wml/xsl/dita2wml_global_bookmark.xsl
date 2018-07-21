@@ -22,20 +22,22 @@ E-mail : info@antennahouse.com
     <!-- Bookmark targets: All xref, link and topicref element that reference internal target -->
     <xsl:variable name="bookmarkTargets" as="xs:string*">
         <xsl:sequence select="$map/*[not(contains(@class,' map/reltable '))]/descendant-or-self::*[contains(@class,' map/topicref ')][starts-with(@href,'#')]/string(@href)"/>
-        <xsl:sequence select="$root/*[contains(@class,' topic/topic ')]/descendant::*[contains(@class,' topic/xref ')][starts-with(@href,'#')]/string(@href)"/>
-        <xsl:sequence select="$root/*[contains(@class,' topic/topic ')]/descendant::*[contains(@class,' topic/link ')][starts-with(@href,'#')]/string(@href)"/>
+        <xsl:sequence select="$topic/descendant::*[contains(@class,' topic/xref ')][starts-with(@href,'#')]/string(@href)"/>
+        <xsl:sequence select="$topic/descendant::*[contains(@class,' topic/link ')][starts-with(@href,'#')]/string(@href)"/>
     </xsl:variable>
 
     <xsl:variable name="uniqueBookmarkTargets" as="xs:string*" select="distinct-values($bookmarkTargets)"/>
 
-    <!-- Target elements -->
+    <!-- Target elements
+         If target is not foud, make dummy comment node.
+     -->
     <xsl:variable name="targetElems" as="node()*">
         <xsl:for-each select="$uniqueBookmarkTargets">
             <xsl:variable name="href" as="xs:string" select="."/>
             <xsl:variable name="topicId" as="xs:string" select="if (contains($href,'/')) then substring-before(substring($href,2),'/') else substring($href,2)"/>
             <xsl:variable name="elemId" as="xs:string" select="if (contains($href,'/')) then substring-after($href,'/') else ''"/>
             <xsl:variable name="topicElem" as="element()?" select="key('topicById', $topicId, $root)[1]"/>
-            <xsl:variable name="targetElem" as="element()?" select="if (not(string($elemId))) then $topicElem else $topicElem//*[string(@id) eq $elemId][1]"/>
+            <xsl:variable name="targetElem" as="element()?" select="if (not(string($elemId))) then $topicElem else $topicElem/descendant::*[string(@id) eq $elemId][1]"/>
             <xsl:choose>
                 <xsl:when test="empty($targetElem)">
                     <xsl:message select="'[global-bookmark] @href target not found=',$href"/>

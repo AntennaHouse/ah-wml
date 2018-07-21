@@ -27,6 +27,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:template match="*[contains(@class,' topic/xref ')]">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
+        <xsl:variable name="xref" as="element()" select="."/>
         <xsl:variable name="href" as="xs:string" select="string(@href)"/>
         <xsl:variable name="isInternalLink" as="xs:boolean" select="starts-with($href,'#')"/>
         <xsl:choose>
@@ -190,21 +191,42 @@ URL : http://www.antennahouse.com/
                                 <xsl:variable name="key" as="xs:string" select="ahf:generateId($targetElem)"/>
                                 <xsl:variable name="fnId" as="xs:integer?" select="map:get($fnIdMap,$key)[1]"/>
                                 <xsl:assert test="exists($fnId)" select="'[fn] key=',$key,' does not exists is $fnIdMap key=',ahf:mapKeyDump($fnIdMap)"/>
-                                <w:r>
-                                    <w:rPr>
-                                        <w:rStyle w:val="{ahf:getStyleIdFromName('footnote reference')}"/>
-                                        <xsl:copy-of select="$prmRunProps"/>
-                                    </w:rPr>
-                                    <xsl:choose>
-                                        <xsl:when test="$targetElem/@callout">
-                                            <w:footnoteReference w:customMarkFollows="1" w:id="{string($fnId)}"/>
-                                            <w:t xml:space="preserve"><xsl:value-of select="$targetElem/@callout"/></w:t>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <w:footnoteReference w:id="{string($fnId)}"/>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </w:r>
+                                <xsl:variable name="isFirstXrefToFn" as="xs:boolean">
+                                    <xsl:variable name="sameXrefs" as="element()+" select="$topic/descendant::*[contains(@class,' topic/xref ')][string(@href) eq $href]"/>
+                                    <xsl:sequence select="$sameXrefs[1] is $xref"/> 
+                                </xsl:variable>
+                                <xsl:choose>
+                                    <!-- Generate w:footnoteReference from first xref to fn -->
+                                    <xsl:when test="$isFirstXrefToFn">
+                                        <xsl:copy-of select="ahf:genBookmarkStart($targetElem)"/>
+                                        <w:r>
+                                            <w:rPr>
+                                                <w:rStyle w:val="{ahf:getStyleIdFromName('footnote reference')}"/>
+                                                <xsl:copy-of select="$prmRunProps"/>
+                                            </w:rPr>
+                                            <xsl:choose>
+                                                <xsl:when test="$targetElem/@callout">
+                                                    <w:footnoteReference w:customMarkFollows="1" w:id="{string($fnId)}"/>
+                                                    <w:t xml:space="preserve"><xsl:value-of select="$targetElem/@callout"/></w:t>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <w:footnoteReference w:id="{string($fnId)}"/>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </w:r>
+                                        <xsl:copy-of select="ahf:genBookmarkEnd($targetElem)"/>
+                                    </xsl:when>
+                                    <!-- Generate NOTEREF field from remaining xref to fn
+                                         The field result is determined by Word using Ctrl + A & F9
+                                      -->
+                                    <xsl:otherwise>
+                                        <xsl:call-template name="getWmlObjectReplacing">
+                                            <xsl:with-param name="prmObjName" select="'wmlNoteRefField'"/>
+                                            <xsl:with-param name="prmSrc" select="('%bookmark','%field-opt')"/>
+                                            <xsl:with-param name="prmDst" select="(ahf:genBookmarkName($targetElemNumber),'\f')"/>
+                                        </xsl:call-template>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </xsl:when>
                             <xsl:otherwise>
                                 <!-- Not Yet Implemented -->

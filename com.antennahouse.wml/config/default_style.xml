@@ -1029,6 +1029,21 @@ URL : http://www.antennahouse.com/
                 <w:fldChar w:fldCharType="end"/>
             </w:r>
         </wml-object>
+
+        <!-- NOTEREF Field
+             The reference page will be determined when Word formats a document.
+          -->
+        <wml-object name="wmlNoteRefField">
+            <w:r>
+                <w:fldChar w:fldCharType="begin"/>
+            </w:r>
+            <w:r>
+                <w:instrText xml:space="preserve"> NOTEREF "%bookmark" \h %field-opt </w:instrText>
+            </w:r>
+            <w:r>
+                <w:fldChar w:fldCharType="end"/>
+            </w:r>
+        </wml-object>
         
         <!-- w:abstractNum for topic/title -->
         <wml-object name="wmlTopicTitleAbstractNum">
