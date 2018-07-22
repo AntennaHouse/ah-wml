@@ -1197,7 +1197,7 @@ URL : http://www.antennahouse.com/
              param: %type section break type
                     %col  column count
          -->
-        <wml-object name="wmlSectPr">
+        <wml-object name="wmlSectPrDprecated">
             <w:sectPr>
                 <ahr:hdrFtrReference/>
                 <w:type w:val="%type"/>
@@ -1208,7 +1208,19 @@ URL : http://www.antennahouse.com/
                 <w:cols w:num="%col" w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
             </w:sectPr>
         </wml-object>
-
+        
+        <wml-object name="wmlSectPr">
+            <w:sectPr>
+                <ahr:hdrFtrReference/>
+                <w:type w:val="%type"/>
+                <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
+                <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginLeft)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
+                    w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
+                <ahr:pgNumType/>
+                <w:cols w:num="%col" w:sep="%sep" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
+            </w:sectPr>
+        </wml-object>
+        
         <!-- Page number format -->
         <wml-object name="wmlPgNumTypeFrontMatter">
             <w:pgNumType w:start="1" w:fmt="lowerRoman"/>

@@ -39,7 +39,8 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="nextCol" as="xs:integer?" select="$sectInfo[3]"/>
         <xsl:variable name="break" as="xs:integer?" select="$sectInfo[4]"/>
         <xsl:variable name="content" as="xs:integer?" select="$sectInfo[5]"/>
-        <xsl:variable name="seq" as="xs:integer?" select="$sectInfo[6]"/>
+        <xsl:variable name="colsep" as="xs:integer?" select="$sectInfo[6]"/>
+        <xsl:variable name="seq" as="xs:integer?" select="$sectInfo[7]"/>
         <xsl:choose>
             <xsl:when test="exists($sectInfo)">
                 <xsl:choose>
@@ -51,8 +52,8 @@ URL : http://www.antennahouse.com/
                             <w:pPr>
                                 <xsl:call-template name="getWmlObjectReplacing">
                                     <xsl:with-param name="prmObjName" select="'wmlSectPr'"/>
-                                    <xsl:with-param name="prmSrc" select="('node:hdrFtrReference','%type','node:pgNumType','%col')"/>
-                                    <xsl:with-param name="prmDst" select="($cElemNull,$sectTypeContinuous,$cElemNull,string($currentCol))"/>
+                                    <xsl:with-param name="prmSrc" select="('node:hdrFtrReference','%type','node:pgNumType','%col','$sep')"/>
+                                    <xsl:with-param name="prmDst" select="($cElemNull,$sectTypeContinuous,$cElemNull,string($currentCol),string($colsep))"/>
                                 </xsl:call-template>
                             </w:pPr>
                         </w:p>
@@ -85,7 +86,8 @@ URL : http://www.antennahouse.com/
                 <xsl:variable name="nextCol" as="xs:integer" select="$sectInfo[3]"/>
                 <xsl:variable name="break" as="xs:integer" select="$sectInfo[4]"/>
                 <xsl:variable name="content" as="xs:integer" select="$sectInfo[5]"/>
-                <xsl:variable name="seq" as="xs:integer" select="$sectInfo[6]"/>
+                <xsl:variable name="colsep" as="xs:integer?" select="$sectInfo[6]"/>
+                <xsl:variable name="seq" as="xs:integer" select="$sectInfo[7]"/>
                 <xsl:variable name="sectType" as="xs:string" select="ahf:getSectTypeFromBreak($break)"/>
                 <xsl:choose>
                     <xsl:when test="$prmElem/self::*[contains(@class, ' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]">
@@ -94,8 +96,8 @@ URL : http://www.antennahouse.com/
                             <w:pPr>
                                 <xsl:call-template name="getWmlObjectReplacing">
                                     <xsl:with-param name="prmObjName" select="'wmlSectPr'"/>
-                                    <xsl:with-param name="prmSrc" select="('node:hdrFtrReference','%type','node:pgNumType','%col')"/>
-                                    <xsl:with-param name="prmDst" select="($cElemNull,$sectTypeContinuous,$cElemNull,string($currentCol))"/>
+                                    <xsl:with-param name="prmSrc" select="('node:hdrFtrReference','%type','node:pgNumType','%col','%sep')"/>
+                                    <xsl:with-param name="prmDst" select="($cElemNull,$sectTypeContinuous,$cElemNull,string($currentCol),string($colsep))"/>
                                 </xsl:call-template>
                             </w:pPr>
                         </w:p>
@@ -110,8 +112,8 @@ URL : http://www.antennahouse.com/
                             <xsl:when test="$isLast">
                                 <xsl:call-template name="getWmlObjectReplacing">
                                     <xsl:with-param name="prmObjName" select="'wmlSectPr'"/>
-                                    <xsl:with-param name="prmSrc" select="('node:hdrFtrReference','%type','node:pgNumType','%col')"/>
-                                    <xsl:with-param name="prmDst" select="($hdrFtrReference,$sectType,$pgNumType,string($currentCol))"/>
+                                    <xsl:with-param name="prmSrc" select="('node:hdrFtrReference','%type','node:pgNumType','%col','%sep')"/>
+                                    <xsl:with-param name="prmDst" select="($hdrFtrReference,$sectType,$pgNumType,string($currentCol),string($colsep))"/>
                                 </xsl:call-template>
                             </xsl:when>
                             <xsl:otherwise>
@@ -119,8 +121,8 @@ URL : http://www.antennahouse.com/
                                     <w:pPr>
                                         <xsl:call-template name="getWmlObjectReplacing">
                                             <xsl:with-param name="prmObjName" select="'wmlSectPr'"/>
-                                            <xsl:with-param name="prmSrc" select="('node:hdrFtrReference','%type','node:pgNumType','%col')"/>
-                                            <xsl:with-param name="prmDst" select="($hdrFtrReference,$sectType,$pgNumType,string($currentCol))"/>
+                                            <xsl:with-param name="prmSrc" select="('node:hdrFtrReference','%type','node:pgNumType','%col','%sep')"/>
+                                            <xsl:with-param name="prmDst" select="($hdrFtrReference,$sectType,$pgNumType,string($currentCol),string($colsep))"/>
                                         </xsl:call-template>
                                     </w:pPr>
                                 </w:p>
