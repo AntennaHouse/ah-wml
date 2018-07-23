@@ -437,7 +437,7 @@ URL : http://www.antenna.co.jp/
     </xsl:function>
     
     <!--
-    function:   Get break information for topic & topicref
+    function:   Get break information for chapter level element
     param:      prmElem (topic or topicref)
     return:     xs:integer
     note:       
@@ -450,7 +450,7 @@ URL : http://www.antenna.co.jp/
                 <xsl:variable name="break" as="xs:string" select="ahf:getOutputClassRegx($prmElem,'(break-)(auto|page|col)','$2')"/>
                 <xsl:variable name="breakIndex" as="xs:integer?" select="index-of($cBreakSpecSeq,$break)"/>
                 <xsl:choose>
-                    <xsl:when test="$prmElem[ahf:seqContains(@class,(' bookmap/part ',' bookmap/chapter ',' bookmap/appendix ',' bookmap/toc ',' bookmap/indexlist'))][empty(parent::*[contains(@class,' bookmap/part ')])]">
+                    <xsl:when test="$prmElem[ahf:seqContains(@class,(' bookmap/part ',' bookmap/chapter ',' bookmap/appendix ',' bookmap/toc ',' bookmap/indexlist',' bookmap/glossarylist '))][empty(parent::*[contains(@class,' bookmap/part ')])]">
                         <xsl:sequence select="ahf:getPageSpecInfo($prmElem)"/>
                     </xsl:when>
                     <xsl:when test="exists($breakIndex)">
