@@ -275,7 +275,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="ancestorColElem" as="element()" select="if (exists($prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')])) then $prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')] else $prmColSpec[1]/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
         <xsl:variable name="colInfo" as="item()+" select="map:get($columnMap,ahf:generateId($ancestorColElem))"/>
         <xsl:variable name="columnCount" as="xs:integer" select="xs:integer($colInfo[2])"/>
-        <xsl:variable name="bodyWidth" as="xs:integer">
+        <xsl:variable name="bodyWidth" as="xs:double">
             <xsl:choose>
                 <xsl:when test="$columnCount eq 1">
                     <xsl:sequence select="ahf:toTwip($pPaperBodyWidth)"/>
@@ -693,7 +693,7 @@ URL : http://www.antennahouse.com/
         </xsl:variable>
         
         <!-- Complement colwidth -->
-        <xsl:variable name="colspecComplemented" as="xs:integer+">
+        <xsl:variable name="colspecComplemented" as="xs:double+">
             <xsl:for-each select="1 to $colCount">
                 <xsl:variable name="colPos" as="xs:integer" select="."/>
                 <xsl:choose>
@@ -701,7 +701,7 @@ URL : http://www.antennahouse.com/
                         <xsl:sequence select="$relColWidth[$colPos]"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:sequence select="1"/>
+                        <xsl:sequence select="1.0"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>

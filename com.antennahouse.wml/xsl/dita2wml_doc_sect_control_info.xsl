@@ -273,6 +273,7 @@ URL : http://www.antenna.co.jp/
                 item()[5]: element() topic
      note:		Column of topichead is assumed as unknown (0).
                 Chapter is 1 column without no consideration.
+                Glossentry as descendant of booklists/glossarylist is assumed as 2 column unconditionally.
      -->
     <xsl:function name="ahf:getColumnInfo" as="item()+">
         <xsl:param name="prmTopicRef" as="element()"/>
@@ -284,6 +285,9 @@ URL : http://www.antenna.co.jp/
                 <xsl:choose>
                     <xsl:when test="$prmTopicRef[contains(@class,' bookmap/chapter ')]">
                         <xsl:sequence select="(1,ahf:generateId($topic),string($topic/@oid),$topicRefColSepSpec,$topic)"/>
+                    </xsl:when>
+                    <xsl:when test="$prmTopicRef/ancestor::*[contains(@class,' bookmap/glossarylist ')]">
+                        <xsl:sequence select="(2,ahf:generateId($topic),string($topic/@oid),$topicRefColSepSpec,$topic)"/>
                     </xsl:when>
                     <xsl:when test="$topicRefColSpec ne ''">
                         <xsl:sequence select="(xs:integer($topicRefColSpec),ahf:generateId($topic),string($topic/@oid),$topicRefColSepSpec,$topic)"/>

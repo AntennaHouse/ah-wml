@@ -62,12 +62,24 @@ URL : http://www.antennahouse.com/
         <xsl:call-template name="getSectionPropertyElemBefore"/>
 
         <xsl:choose>
-            <xsl:when test="exists($topicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]) or exists(@navtitle)">
+            <xsl:when test="$topicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')] or exists(@navtitle) or $topicRef[contains(@class,' bookmap/glossarylist ')]">
                 <!-- Process title -->
                 <xsl:call-template name="genTopicHeadTitle">
                     <xsl:with-param name="prmTopicRef"       select="$topicRef"/>
                     <xsl:with-param name="prmIndentLevel"    tunnel="yes" select="0"/>
                     <xsl:with-param name="prmExtraIndent"    tunnel="yes" select="0"/>
+                    <xsl:with-param name="prmDefaultTitle">
+                        <xsl:choose>
+                            <xsl:when test="$topicRef[contains(@class,' bookmap/glossarylist ')]">
+                                <xsl:call-template name="getVarValue">
+                                    <xsl:with-param name="prmVarName" select="'Glossary_List_Title'"/>
+                                </xsl:call-template>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:sequence select="''"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise/>

@@ -58,12 +58,13 @@ URL : http://www.antennahouse.com/
 
     <!-- 
      function:	topichead (including chapter or part) title processing
-     param:		prmTopicRef, prmTopicRefLevel
+     param:		prmTopicRef, prmDefaultTitle
      return:	w:p
      note:		
      -->
     <xsl:template name="genTopicHeadTitle">
         <xsl:param name="prmTopicRef"       required="yes" as="element()"/>
+        <xsl:param name="prmDefaultTitle"   required="yes" as="xs:string"/>
 
         <xsl:variable name="topicRefLevel" select="ahf:getTopicRefLevel($prmTopicRef)" as="xs:integer"/>
         <xsl:variable name="isInFrontmatterOrBackmatter" as="xs:boolean" select="exists($prmTopicRef/ancestor-or-self::*[ahf:seqContains(@class,(' bookmap/frontmatter',' bookmap/backmatter '))])"/>
@@ -80,6 +81,11 @@ URL : http://www.antennahouse.com/
                 </xsl:if>
             </w:pPr>
             <xsl:choose>
+                <xsl:when test="$prmDefaultTitle ne ''">
+                    <w:r>
+                        <w:t xml:space="preserve"><xsl:value-of select="$prmDefaultTitle"/></w:t>
+                    </w:r>
+                </xsl:when>
                 <xsl:when test="$prmTopicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]">
                     <xsl:apply-templates select="$prmTopicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/node()">
                         <xsl:with-param name="prmTopicRef" tunnel="yes" select="$prmTopicRef"/>
