@@ -75,7 +75,7 @@
         </antcall>
     </target>
     
-    <target name="generate.docx.file" depends="core.xml,theme1.xml,custom.xml,header.footer,document.xml,styles.xml,settings.xml,numbering.xml,footnote.xml,web.settings.xml,document.xml.rels,content.types.xml"/>
+    <target name="generate.docx.file" depends="core.xml,theme1.xml,custom.xml,header.footer,document.xml,styles.xml,settings.xml,numbering.xml,footnote.xml,web.settings.xml,document.xml.rels,footnotes.xml.rels,content.types.xml"/>
         
     <target name="core.xml">
         <antcall target="transform.common">
@@ -173,6 +173,15 @@
         </antcall>
     </target>
 
+    <target name="footnotes.xml.rels">
+        <echo message="footnotes.xml.rels"/>
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${prmInputFile}"/>
+            <param name="prmOutputFile" value="${dita.temp.dir}/docx/word/_rels/footnotes.xml.rels"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_footnotes_xml_rels_shell.xsl"/>
+        </antcall>
+    </target>
+    
     <target name="content.types.xml">
         <echo message="[Content_Types].xml"/>
         <antcall target="transform.common">

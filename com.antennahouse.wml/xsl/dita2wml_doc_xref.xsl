@@ -237,7 +237,7 @@ URL : http://www.antennahouse.com/
             </xsl:when>
             <xsl:otherwise>
                 <!-- External link -->
-                <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get($externalLinkIdMap,$href))"/>
+                <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get(if ($xref/ancestor::*[contains(@class,' topic/fn ')]) then $externalFootnotesLinkIdMap else $externalDocumentLinkIdMap,$href))"/>
                 <w:hyperlink r:id="{$rId}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
                     <xsl:apply-templates>
                         <xsl:with-param name="prmRunProps" tunnel="yes" as="element()*">

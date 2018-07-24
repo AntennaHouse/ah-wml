@@ -282,7 +282,7 @@ URL : http://www.antennahouse.com/
                 <xsl:with-param name="prmRunProps" tunnel="yes" select="()"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get($externalLinkIdMap,$prmHref))"/>
+        <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get($externalDocumentLinkIdMap,$prmHref))"/>
         <xsl:variable name="numPr" as="element(w:numPr)">
             <w:numPr>
                 <w:ilvl w:val="{string(ahf:getIlvlFromListLevel($prmListLevel))}"/>
