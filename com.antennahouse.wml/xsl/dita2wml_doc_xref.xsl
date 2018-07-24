@@ -192,7 +192,7 @@ URL : http://www.antennahouse.com/
                                 <xsl:variable name="fnId" as="xs:integer?" select="map:get($fnIdMap,$key)[1]"/>
                                 <xsl:assert test="exists($fnId)" select="'[fn] key=',$key,' does not exists is $fnIdMap key=',ahf:mapKeyDump($fnIdMap)"/>
                                 <xsl:variable name="isFirstXrefToFn" as="xs:boolean">
-                                    <xsl:variable name="sameXrefs" as="element()+" select="$topic/descendant::*[contains(@class,' topic/xref ')][string(@href) eq $href]"/>
+                                    <xsl:variable name="sameXrefs" as="element()+" select="$topics/descendant::*[contains(@class,' topic/xref ')][string(@href) eq $href]"/>
                                     <xsl:sequence select="$sameXrefs[1] is $xref"/> 
                                 </xsl:variable>
                                 <xsl:choose>

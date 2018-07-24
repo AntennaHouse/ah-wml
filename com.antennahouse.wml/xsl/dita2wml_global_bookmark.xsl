@@ -22,8 +22,8 @@ E-mail : info@antennahouse.com
     <!-- Bookmark targets: All xref, link and topicref element that reference internal target -->
     <xsl:variable name="bookmarkTargets" as="xs:string*">
         <xsl:sequence select="$map/*[not(contains(@class,' map/reltable '))]/descendant-or-self::*[contains(@class,' map/topicref ')][starts-with(@href,'#')]/string(@href)"/>
-        <xsl:sequence select="$topic/descendant::*[contains(@class,' topic/xref ')][starts-with(@href,'#')]/string(@href)"/>
-        <xsl:sequence select="$topic/descendant::*[contains(@class,' topic/link ')][starts-with(@href,'#')]/string(@href)"/>
+        <xsl:sequence select="$topics/descendant::*[contains(@class,' topic/xref ')][starts-with(@href,'#')]/string(@href)"/>
+        <xsl:sequence select="$topics/descendant::*[contains(@class,' topic/link ')][starts-with(@href,'#')]/string(@href)"/>
     </xsl:variable>
 
     <xsl:variable name="uniqueBookmarkTargets" as="xs:string*" select="distinct-values($bookmarkTargets)"/>

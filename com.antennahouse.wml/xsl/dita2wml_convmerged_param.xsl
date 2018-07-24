@@ -25,4 +25,10 @@ E-mail : info@antennahouse.com
     <xsl:variable name="pOutputRequiredCleanup" select="boolean($PRM_OUTPUT_REQUIRED_CLEANUP eq $cYes)"
         as="xs:boolean"/>
     
+    <!-- Sort glossarylist according to the xml:lang of map
+     -->
+    <xsl:param name="PRM_SORT_GLOSSARY_LIST" required="no" as="xs:string" select="$cYes"/>
+    <xsl:variable name="pSortGlossaryList" select="boolean($PRM_SORT_GLOSSARY_LIST eq $cYes)"
+        as="xs:boolean"/>
+    
 </xsl:stylesheet>

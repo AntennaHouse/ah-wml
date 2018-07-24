@@ -58,14 +58,14 @@ E-mail : info@antennahouse.com
     <xsl:param name="PRM_LANG" as="xs:string" required="no" select="$doubleApos"/>
 
     <!-- Output draft-comment -->
-    <xsl:param name="PRM_OUTPUT_DRAFT_COMMENT" required="no" as="xs:string" select="$cNo"/>
+    <!--xsl:param name="PRM_OUTPUT_DRAFT_COMMENT" required="no" as="xs:string" select="$cNo"/>
     <xsl:variable name="pOutputDraftComment" select="boolean($PRM_OUTPUT_DRAFT_COMMENT eq $cYes)"
-        as="xs:boolean"/>
+        as="xs:boolean"/-->
 
     <!-- Output required-cleanup -->
-    <xsl:param name="PRM_OUTPUT_REQUIRED_CLEANUP" required="no" as="xs:string" select="$cNo"/>
+    <!--xsl:param name="PRM_OUTPUT_REQUIRED_CLEANUP" required="no" as="xs:string" select="$cNo"/>
     <xsl:variable name="pOutputRequiredCleanup" select="boolean($PRM_OUTPUT_REQUIRED_CLEANUP eq $cYes)"
-        as="xs:boolean"/>
+        as="xs:boolean"/-->
 
     <!-- Generate unique id in XSL-FO: Deprecated. -->
     <!--xsl:param name="PRM_GEN_UNIQUE_ID" select="$cYes"/>
@@ -122,14 +122,6 @@ E-mail : info@antennahouse.com
     <!--xsl:param name="PRM_USE_OUTPUT_CLASS_NOHYPHENATE" required="no" as="xs:string" select="$cNo"/>
     <xsl:variable name="pUseOutputClassNoHyphenate"
         select="boolean($PRM_USE_OUTPUT_CLASS_NOHYPHENATE eq $cYes)" as="xs:boolean"/-->
-
-    <!-- Sort glossentry according to the xml:lang of map
-         Not released in build.xml.
-         2011-10-11 t.makita
-     -->
-    <xsl:param name="PRM_SORT_GLOSSENTRY" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pSortGlossEntry" select="boolean($PRM_SORT_GLOSSENTRY eq $cYes)"
-        as="xs:boolean"/>
 
     <!-- Supress first page-break for first child of part,chapter,appendix in bookmap
          Not released in build.xml.

@@ -24,7 +24,8 @@
         <property name="converted.merged.file1" value="${dita.map.filename.root}_CONVERTED_1.xml" />
         <property name="converted.merged.file2" value="${dita.map.filename.root}_CONVERTED_2.xml" />
         <property name="converted.merged.file3" value="${dita.map.filename.root}_CONVERTED_3.xml" />
-        <property name="merged.final.output.file" value="${dita.temp.dir}${file.separator}${converted.merged.file3}"/>
+        <property name="converted.merged.file4" value="${dita.map.filename.root}_CONVERTED_4.xml" />
+        <property name="merged.final.output.file" value="${dita.temp.dir}${file.separator}${converted.merged.file4}"/>
         <makeurl property="template.dir.url" file="${dita.temp.dir}/template"/>
         <makeurl property="user.input.dir.url" file="${user.input.dir}"/>
         <makeurl property="merged.final.output.url" file="${merged.final.output.file}" validate="no"/>
@@ -40,13 +41,13 @@
 
     </target>
     
-    <target name="convert.merged.file" depends="convmerged1,convmerged2,convmerged3"/>
+    <target name="convert.merged.file" depends="convmerged1,convmerged2,convmerged3,convmerged4"/>
         
     <target name="convmerged1">
         <antcall target="transform.common">
             <param name="prmInputFile" value="${prmInputFile}"/>
             <param name="prmOutputFile" value="${build.temp.dir}${file.separator}${converted.merged.file1}"/>
-            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_convmerged_shell.xsl"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_convmerged1_shell.xsl"/>
         </antcall>
     </target>
     
@@ -61,11 +62,19 @@
     <target name="convmerged3">
         <antcall target="transform.common">
             <param name="prmInputFile" value="${build.temp.dir}${file.separator}${converted.merged.file2}"/>
-            <param name="prmOutputFile" value="${prmOutputFile}"/>
+            <param name="prmOutputFile" value="${build.temp.dir}${file.separator}${converted.merged.file3}"/>
             <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_convmerged3_shell.xsl"/>
         </antcall>
     </target>
-
+    
+    <target name="convmerged4">
+        <antcall target="transform.common">
+            <param name="prmInputFile" value="${build.temp.dir}${file.separator}${converted.merged.file3}"/>
+            <param name="prmOutputFile" value="${prmOutputFile}"/>
+            <param name="prmStylesheetFile" value="${xsl.dir}${file.separator}dita2wml_convmerged4_shell.xsl"/>
+        </antcall>
+    </target>
+    
     <target name="generate.docx.file" depends="core.xml,theme1.xml,custom.xml,header.footer,document.xml,styles.xml,settings.xml,numbering.xml,footnote.xml,web.settings.xml,document.xml.rels,content.types.xml"/>
         
     <target name="core.xml">
@@ -219,8 +228,8 @@
                 if="debug.style"/>
             <!--param name="PRM_APPLY_TOC_ATTR" expression="${apply.toc.attr}" if="apply.toc.attr"/-->
             <!--param name="PRM_ONLINE_PDF" expression="${online.pdf}" if="online.pdf"/-->
-            <param name="PRM_SORT_GLOSSENTRY" expression="${sort.glossentry}"
-                if="output.start.message"/>
+            <param name="PRM_SORT_GLOSSARY_LIST" expression="${sort.glossary.list}"
+                if="sort.glossary.list"/>
             <param name="PRM_OUTPUT_START_MESSAGE" expression="${output.start.message}"
                 if="output.start.message"/>
             <param name="PRM_AUTO_SCALE_DOWN_TO_FIT" expression="${auto.scale.down.to.fit}"
@@ -299,8 +308,8 @@
                 if="debug.style"/>
             <!--param name="PRM_APPLY_TOC_ATTR" expression="${apply.toc.attr}" if="apply.toc.attr"/-->
             <!--param name="PRM_ONLINE_PDF" expression="${online.pdf}" if="online.pdf"/-->
-            <param name="PRM_SORT_GLOSSENTRY" expression="${sort.glossentry}"
-                if="output.start.message"/>
+            <param name="PRM_SORT_GLOSSARY_LIST" expression="${sort.glossary.list}"
+                if="sort.glossary.list"/>
             <param name="PRM_OUTPUT_START_MESSAGE" expression="${output.start.message}"
                 if="output.start.message"/>
             <param name="PRM_AUTO_SCALE_DOWN_TO_FIT" expression="${auto.scale.down.to.fit}"
@@ -390,8 +399,8 @@
                 if="debug.style"/>
             <!--param name="PRM_APPLY_TOC_ATTR" expression="${apply.toc.attr}" if="apply.toc.attr"/-->
             <!--param name="PRM_ONLINE_PDF" expression="${online.pdf}" if="online.pdf"/-->
-            <param name="PRM_SORT_GLOSSENTRY" expression="${sort.glossentry}"
-                if="output.start.message"/>
+            <param name="PRM_SORT_GLOSSARY_LIST" expression="${sort.glossary.list}"
+                if="sort.glossary.list"/>
             <param name="PRM_OUTPUT_START_MESSAGE" expression="${output.start.message}"
                 if="output.start.message"/>
             <param name="PRM_AUTO_SCALE_DOWN_TO_FIT" expression="${auto.scale.down.to.fit}"
