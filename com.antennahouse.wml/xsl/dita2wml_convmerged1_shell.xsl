@@ -12,7 +12,7 @@ E-mail : info@antennahouse.com
 <xsl:stylesheet version="3.0" 
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
    
-  <xsl:import href="dita2wml_convmerged_import.xsl"/>
+  <xsl:import href="dita2wml_convmerged1_import.xsl"/>
   <!--xsl:import href="../customization/dita2fo_convmerged_custom.xsl"/-->
   <xsl:output method="xml" encoding="UTF-8"/>
    

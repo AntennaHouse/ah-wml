@@ -51,7 +51,10 @@ E-mail : info@antennahouse.com
     <xsl:template match="*[contains(@class,' bookmap/glossarylist ')]">
         <xsl:choose>
             <xsl:when test="$pSortGlossaryList">
-                <xsl:call-template name="sortGlossryList"/>                
+                <xsl:copy>
+                    <xsl:apply-templates select="@*"/>
+                    <xsl:call-template name="sortGlossryList"/>
+                </xsl:copy>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:next-match/>
@@ -119,10 +122,11 @@ E-mail : info@antennahouse.com
                         <xsl:variable name="glossGroup" as="element()" select="$topic"/>
                         <xsl:variable name="glossEntry" as="element()+" select="$glossGroup/descendant::*[contains(@class,' glossentry/glossentry ')]"/>
                         <xsl:for-each select="$glossEntry">
-                            <xsl:variable name="href" as="xs:string" select="concat('#',string(@id))"/>
+                            <xsl:variable name="glossEntry" as="element()" select="."/>
+                            <xsl:variable name="href" as="xs:string" select="concat('#',string($glossEntry/@id))"/>
                             <xsl:variable name="sortKey" as="xs:string">
                                 <xsl:variable name="sortKeyTexts" as="xs:string*">
-                                    <xsl:apply-templates select="$topic/*[contains(@class,' topic/title ')]" mode="TEXT_ONLY"/>
+                                    <xsl:apply-templates select="$glossEntry/*[contains(@class,' glossentry/glossterm ')]" mode="TEXT_ONLY"/>
                                 </xsl:variable>
                                 <xsl:sequence select="normalize-space(string-join($sortKeyTexts,''))"/>
                             </xsl:variable>
@@ -172,7 +176,7 @@ E-mail : info@antennahouse.com
      return:	Extract glossentry as the dependent entry
      note:		
      -->
-    <xsl:template match="$topics/*[contains(@class,' glossgroup/glossgroup ')]">
+    <xsl:template match="$topics/descendant-or-self::*[contains(@class,' glossgroup/glossgroup ')]">
         <xsl:variable name="glossGroup" as="element()" select="."/>
         <xsl:variable name="glossEntries" as="element()+" select="$glossGroup/descendant::*[contains(@class,' glossentry/glossentry ')]"/>
         <xsl:for-each select="$glossEntries">
