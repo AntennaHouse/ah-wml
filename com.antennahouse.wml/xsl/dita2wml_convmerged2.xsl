@@ -41,6 +41,10 @@ E-mail : info@antennahouse.com
     <xsl:template match="@*">
         <xsl:copy/>
     </xsl:template>
+
+    <xsl:template match="node()" priority="-10">
+        <xsl:copy/>
+    </xsl:template>
     
     <!-- 
      function:	glossarylist
@@ -96,7 +100,7 @@ E-mail : info@antennahouse.com
     <!-- 
      function:	topicref template for glossentry
      param:		none
-     return:	topicref adding sort-key and auto generated topicrf from glossgrop
+     return:	topicref adding sort-key and auto generated topicref from glossgroup
      note:		
      -->
     <xsl:template match="*[contains(@class,' map/topicref ')][exists(@href)]" mode="MODE_MAKE_SORT_KEY">
@@ -180,7 +184,7 @@ E-mail : info@antennahouse.com
         <xsl:variable name="glossGroup" as="element()" select="."/>
         <xsl:variable name="glossEntries" as="element()+" select="$glossGroup/descendant::*[contains(@class,' glossentry/glossentry ')]"/>
         <xsl:for-each select="$glossEntries">
-            <xsl:copy-of select="."/>
+            <xsl:apply-templates select="."/>
         </xsl:for-each>
     </xsl:template>
         
