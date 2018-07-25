@@ -27,10 +27,10 @@ URL : http://www.antennahouse.com/
     </xsl:variable>
 
     <!-- 
-     function:	Generate relationships both from template "_rels" file and DITA merged middle file
+     function:	Generate relationships DITA merged middle file
      param:		
      return:	Relationships
-     note:		Relationship ID is obtained from $imageIdMap, $commonImageIdMap.
+     note:		Relationship ID is obtained from $externalFootnotesLinkIdMap.
      -->
     <xsl:template match="/">
         <xsl:element name="Relationships" namespace="{$rsNs}">
