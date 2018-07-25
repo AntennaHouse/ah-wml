@@ -72,7 +72,7 @@ E-mail : info@antennahouse.com
      return:	sorted result
      note:		Extract glossentry from glossgroup
      -->
-    <xsl:template name="sortGlossryList">
+    <xsl:template name="sortGlossryList" as="element()*">
         <xsl:param name="prmGlossaryList" as="element()" select="."/>
         
         <xsl:variable name="glossEntryTopicRefs" as="document-node()">
