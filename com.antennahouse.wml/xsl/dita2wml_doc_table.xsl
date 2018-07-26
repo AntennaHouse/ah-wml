@@ -31,8 +31,6 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="tableAttr" select="ahf:getTableAttr(.)" as="element()"/>
         <xsl:apply-templates select="*[contains(@class, ' topic/tgroup ')]">
             <xsl:with-param name="prmTableAttr" select="$tableAttr"/>
-            <xsl:with-param name="prmIndentLevel"    tunnel="yes" select="0"/>
-            <xsl:with-param name="prmExtraIndent"    tunnel="yes" select="0"/>
         </xsl:apply-templates>
     </xsl:template>
 
@@ -115,6 +113,7 @@ URL : http://www.antennahouse.com/
                     <xsl:with-param name="prmColSpec" select="$colspec"/>
                     <xsl:with-param name="prmTableHeadOrBodyPart" select="*[contains(@class, ' topic/thead ')]"/>
                     <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
+                    <xsl:with-param name="prmExtraIndent" tunnel="yes" select="0"/>
                 </xsl:call-template>
             </xsl:if>
 
@@ -125,6 +124,7 @@ URL : http://www.antennahouse.com/
                     <xsl:with-param name="prmColSpec" select="$colspec"/>
                     <xsl:with-param name="prmTableHeadOrBodyPart" select="*[contains(@class, ' topic/tbody ')]"/>
                     <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
+                    <xsl:with-param name="prmExtraIndent" tunnel="yes" select="0"/>
                 </xsl:call-template>
             </xsl:if>
         </w:tbl>
