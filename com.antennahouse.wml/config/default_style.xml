@@ -194,9 +194,9 @@ URL : http://www.antennahouse.com/
         <!-- Should be &#x25CF; 6C-->
 
         <!-- User interface -->
-        <variable name="MenuCascade_Symbol">&gt;</variable>
-        <variable name="UiControl_Prefix">[&#x200D;</variable>
-        <variable name="UiControl_Suffix">&#x200D;]</variable>
+        <variable name="MenuCascadeSymbol">&gt;</variable>
+        <variable name="UiControlPrefix">[&#x200D;</variable>
+        <variable name="UiControlSuffix">&#x200D;]</variable>
 
         <!-- Title Literals -->
         <variable name="Part_Title_Prefix">Part </variable>
@@ -728,6 +728,11 @@ URL : http://www.antennahouse.com/
                     w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi"/>
                 <w:lang w:val="en-US" w:eastAsia="ja-JP" w:bidi="ar-SA"/>
             </w:rPr>
+        </wml-object>
+
+        <!-- uicontrol run property -->
+        <wml-object name="wmlUiControl">
+            <w:b w:val="true"/>
         </wml-object>
 
         <!-- Image -->
