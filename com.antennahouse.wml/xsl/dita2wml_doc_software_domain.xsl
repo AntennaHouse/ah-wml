@@ -2,7 +2,7 @@
 <!--
 **************************************************************
 DITA to WordprocessingML Stylesheet
-Document.xml User Software Domain Templates
+Document.xml Software Domain Templates
 **************************************************************
 File Name : dita2wml_doc_software_domain.xsl
 **************************************************************
