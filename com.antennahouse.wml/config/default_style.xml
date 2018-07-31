@@ -734,6 +734,41 @@ URL : http://www.antennahouse.com/
         <wml-object name="wmlUiControl">
             <w:b w:val="true"/>
         </wml-object>
+        
+        <!-- msgph -->
+        <wml-object name="wmlMsgPh">
+            <w:rFont ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="MS-Gothic" w:cs="Courier New"/>
+        </wml-object>
+        
+        <!-- msgph -->
+        <wml-object name="wmlMsgNum">
+            <w:rFont ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="MS-Gothic" w:cs="Courier New"/>
+        </wml-object>
+
+        <!-- msgph -->
+        <wml-object name="wmlCmdName">
+            <w:rFont ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="MS-Gothic" w:cs="Courier New"/>
+        </wml-object>
+        
+        <!-- varname -->
+        <wml-object name="wmlVarName">
+            <w:i w:val="true"/>
+        </wml-object>
+
+        <!-- filepath -->
+        <wml-object name="wmlFilePath">
+            <w:rFont ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="MS-Gothic" w:cs="Courier New"/>
+        </wml-object>
+
+        <!-- userinput -->
+        <wml-object name="wmlUserInput">
+            <w:rFont ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="MS-Gothic" w:cs="Courier New"/>
+        </wml-object>
+
+        <!-- systemoutput -->
+        <wml-object name="wmlSytemOutput">
+            <w:rFont ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="MS-Gothic" w:cs="Courier New"/>
+        </wml-object>
 
         <!-- Image -->
         <wml-object name="wmlImage">
