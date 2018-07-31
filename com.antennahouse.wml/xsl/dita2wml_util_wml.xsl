@@ -453,7 +453,7 @@ URL : http://www.antennahouse.com/
               <xsl:sequence select="($prmRunProps[name() ne name($addingRunprop)],$addingRunprop)"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:sequence select="$prmRunProps"/>
+              <xsl:sequence select="($prmRunProps,$addingRunprop)"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>

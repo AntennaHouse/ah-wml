@@ -735,6 +735,38 @@ URL : http://www.antennahouse.com/
             <w:b w:val="true"/>
         </wml-object>
         
+        <!-- Highlight Domain -->
+        <!--u-->
+        <wml-object name="wmlU">
+            <w:u w:val="single"/>
+        </wml-object>
+
+        <!--b-->
+        <wml-object name="wmlB">
+            <w:b w:val="true"/>
+        </wml-object>
+        
+        <!--i-->
+        <wml-object name="wmlI">
+            <w:i w:val="true"/>
+        </wml-object>
+        
+        <!--sup-->
+        <wml-object name="wmlSup">
+            <w:vertAlign w:val="superscript"/>
+        </wml-object>
+        
+        <!--sub-->
+        <wml-object name="wmlSub">
+            <w:vertAlign w:val="subscript"/>
+        </wml-object>
+
+        <!--strike-->
+        <wml-object name="wmlLineThrough">
+            <w:strike w:val="true"/>
+        </wml-object>
+
+        <!-- Software Domain -->
         <!-- msgph -->
         <wml-object name="wmlMsgPh">
             <w:rFonts w:ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="MS-Gothic" w:cs="Courier New"/>
