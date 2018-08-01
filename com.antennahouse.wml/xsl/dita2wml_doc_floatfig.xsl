@@ -126,11 +126,12 @@ URL : http://www.antennahouse.com/
                     <xsl:with-param name="prmVarName" select="'PHeightInEmu'"/>
                 </xsl:call-template>
             </xsl:variable>
-            <xsl:variable name="contentHeightsInEmu" as="xs:integer+">
+            <xsl:variable name="contentHeightsInEmu" as="xs:integer*">
                 <xsl:apply-templates select="$txbxContent/*" mode="MODE_GET_HEIGHT">
                     <xsl:with-param name="prmPHeightInEmu" tunnel="yes" select="$pHeightInEmu"/>
                 </xsl:apply-templates>
             </xsl:variable>
+            <xsl:assert test="exists($contentHeightsInEmu)" select="'[floatfig] $contentHeightsInEmu is empty! position=',ahf:getNodeXPathStr($prmFloatFig),'floatfig=',$prmFloatFig,' $txbxContent=',$txbxContent"/>
             <xsl:sequence select="sum($contentHeightsInEmu) + $insetTopInEmu + $insetBottomInEmu"/>
         </xsl:variable>
         
