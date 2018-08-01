@@ -44,6 +44,7 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')][ahf:isNotEmptyElement(.)]" name="processFloatFigInline" as="element(w:r)?" priority="5">
         <xsl:param name="prmFloatFig" as="element()" required="no" select="."/>
         <xsl:param name="prmSpaceBefore" as="xs:string" tunnel="yes" required="no" select="'0pt'"/>
+        <xsl:assert test="ahf:isNotEmptyElement($prmFloatFig)" select="'[floatfig] this assertion should not be invoked because non-emptiness is checked in matching pattern. position=',ahf:getNodeXPathStr($prmFloatFig),'floatfig=',$prmFloatFig"/>
         <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId($prmFloatFig)"/>
         <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
         <xsl:variable name="isRight" as="xs:boolean" select="string($prmFloatFig/@float) eq 'right'"/>
