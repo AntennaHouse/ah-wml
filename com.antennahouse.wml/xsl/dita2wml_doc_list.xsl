@@ -73,10 +73,12 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/li ')]">
         <xsl:param name="prmListOccurenceNumber" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmListLevel" tunnel="yes" required="yes" as="xs:integer"/>
-        <xsl:param name="prmListStyle" tunnel="yes" required="yes" as="xs:string"/>
+        <!--xsl:param name="prmListStyle" tunnel="yes" required="yes" as="xs:string"/-->
+        <xsl:param name="prmListStyle" tunnel="yes" required="no" as="xs:string?"/>
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
+        <xsl:assert test="exists($prmListStyle)" select="'[topic/li] $prmListStyle is empty. current=',ahf:generateId(.)"/>
         <xsl:if test="empty(child::*[1][contains(@class,' topic/p ')])">
             <!-- generate dummmy w:p -->
             <w:p>

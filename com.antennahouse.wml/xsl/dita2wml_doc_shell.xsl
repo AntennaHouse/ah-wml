@@ -74,6 +74,7 @@ URL : http://www.antennahouse.com/
     <xsl:include href="dita2wml_doc_character_domain.xsl"/>
     <xsl:include href="dita2wml_doc_userinterface_domain.xsl"/>
     <xsl:include href="dita2wml_doc_software_domain.xsl"/>
+    <xsl:include href="dita2wml_doc_task.xsl"/>
     
     <xsl:include href="dita2wml_dita_class.xsl"/>
 
