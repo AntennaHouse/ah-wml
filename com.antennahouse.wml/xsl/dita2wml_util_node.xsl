@@ -112,6 +112,11 @@ URL : http://www.antennahouse.com/
      return:	xs:boolean
      note:		
      -->
+    <xsl:function name="ahf:isNotEmptyElement" as="xs:boolean">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:sequence select="not(ahf:isEmptyElement($prmElem))"/>
+    </xsl:function>        
+    
     <xsl:function name="ahf:isEmptyElement" as="xs:boolean">
         <xsl:param name="prmElem" as="element()"/>
         <xsl:choose>
