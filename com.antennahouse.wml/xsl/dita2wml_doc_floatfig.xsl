@@ -41,7 +41,7 @@ URL : http://www.antennahouse.com/
         </xsl:for-each>    
     </xsl:template>
     
-    <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')][[ahf:isNotEmptyElement(.)]]" name="processFloatFigInline" as="element(w:r)?" priority="5">
+    <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')][ahf:isNotEmptyElement(.)]" name="processFloatFigInline" as="element(w:r)?" priority="5">
         <xsl:param name="prmFloatFig" as="element()" required="no" select="."/>
         <xsl:param name="prmSpaceBefore" as="xs:string" tunnel="yes" required="no" select="'0pt'"/>
         <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId($prmFloatFig)"/>
