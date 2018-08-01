@@ -140,7 +140,7 @@ URL : http://www.antennahouse.com/
             </xsl:when>
             <xsl:when test="$prmNode/self::text()">
                 <xsl:choose>
-                    <xsl:when test="not(string(normalize-space($prmNode)))">
+                    <xsl:when test="string(normalize-space($prmNode)) eq ''">
                         <xsl:sequence select="true()"/>
                     </xsl:when>
                     <xsl:otherwise>
