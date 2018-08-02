@@ -23,7 +23,7 @@ E-mail : info@antennahouse.com
     
     <!-- * -->
     <xsl:template match="*" mode="MODE_TEXT_ONLY">
-        <xsl:apply-templates mode="MODE_TEXT_ONLY"/>
+        <xsl:apply-templates mode="#current"/>
     </xsl:template>
     
     <!-- text -->
@@ -37,7 +37,7 @@ E-mail : info@antennahouse.com
     
     <!-- tm -->
     <xsl:template match="*[contains(@class,' topic/tm ')]" mode="MODE_TEXT_ONLY">
-        <xsl:apply-templates mode="MODE_TEXT_ONLY"/>
+        <xsl:apply-templates mode="#current"/>
         <xsl:variable name="tmType" as="xs:string" select="string(@tmtype)"/>
         <xsl:choose>
             <xsl:when test="$tmType eq 'tm'">
