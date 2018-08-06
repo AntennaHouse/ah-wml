@@ -253,8 +253,8 @@ URL : http://www.antennahouse.com/
             </w:r>
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlPageRefField'"/>
-                <xsl:with-param name="prmSrc" select="('%bookmark','%field-opt')"/>
-                <xsl:with-param name="prmDst" select="($bookmarkName,'')"/>
+                <xsl:with-param name="prmSrc" select="('%bookmark','%field-opt','%node:field-result')"/>
+                <xsl:with-param name="prmDst" select="($bookmarkName,'',$cElemNull)"/>
             </xsl:call-template>
             <w:r>
                 <w:t xml:space="preserve"><xsl:value-of select="$pageSuffix"/></w:t>

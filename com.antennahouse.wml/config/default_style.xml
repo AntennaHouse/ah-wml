@@ -280,9 +280,16 @@ URL : http://www.antennahouse.com/
         <variable name="Q_Suffix">”</variable>
 
         <!-- Xref -->
-        <variable name="Xref_Page_Prefix"> on page </variable>
-        <variable name="Xref_Page_Suffix"/>
-
+        <variable name="XrefPagePrefix"> on page </variable>
+        <variable name="XrefPageSuffix"/>
+        <variable name="XrefPageOnlyPrefix">p.</variable>
+        <variable name="XrefPageOnlySuffix"/>
+        
+        <!-- Xref Option -->
+        <variable name="XrefOptTitleAndPage">title-page</variable>
+        <variable name="XrefOptTitleOnly">title-only</variable>
+        <variable name="XrefOptPageOnly">page-only</variable>
+        
         <!-- Draft-comment -->
         <variable name="Draft_Comment_Title_Prefix">[DRAFT-COMMENT </variable>
         <variable name="Draft_Comment_Author"> Author:</variable>
@@ -526,6 +533,8 @@ URL : http://www.antennahouse.com/
         <!-- floatfig -->
         <variable name="PHeight">10.5pt</variable>
         <variable name="PHeightInEmu">{ahf:toEmuStr('$PHeight')}</variable>
+        
+        
         
     </variables>
     
@@ -973,7 +982,7 @@ URL : http://www.antennahouse.com/
                 <w:fldChar w:fldCharType="begin"/>
             </w:r>
             <w:r>
-                <w:instrText xml:space="preserve"> REF "%ref-id" \h %field-opt </w:instrText>
+                <w:instrText xml:space="preserve"> REF %ref-id \h %field-opt \* MERGEFORMAT </w:instrText>
             </w:r>
             <w:r>
                 <w:fldChar w:fldCharType="separate"/>
@@ -1095,8 +1104,12 @@ URL : http://www.antennahouse.com/
                 <w:fldChar w:fldCharType="begin"/>
             </w:r>
             <w:r>
-                <w:instrText xml:space="preserve"> PAGEREF "%bookmark" \h %field-opt </w:instrText>
+                <w:instrText xml:space="preserve"> PAGEREF %bookmark \h %field-opt \* MERGEFORMAT </w:instrText>
             </w:r>
+            <w:r>
+                <w:fldChar w:fldCharType="separate"/>
+            </w:r>
+            <ahr:field-result/>
             <w:r>
                 <w:fldChar w:fldCharType="end"/>
             </w:r>
@@ -1110,7 +1123,7 @@ URL : http://www.antennahouse.com/
                 <w:fldChar w:fldCharType="begin"/>
             </w:r>
             <w:r>
-                <w:instrText xml:space="preserve"> NOTEREF "%bookmark" \h %field-opt </w:instrText>
+                <w:instrText xml:space="preserve"> NOTEREF %bookmark \h %field-opt \* MERGEFORMAT </w:instrText>
             </w:r>
             <w:r>
                 <w:fldChar w:fldCharType="end"/>
