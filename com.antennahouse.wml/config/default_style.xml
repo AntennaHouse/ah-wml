@@ -1880,6 +1880,11 @@ URL : http://www.antennahouse.com/
             </w:divsChild>
         </wml-object>
         
+        <!-- Xref run property -->
+        <wml-object name="wmlXrefRunProp">
+            <w:i w:val="true"/>
+        </wml-object>
+        
     </wml-objects>
 
     <!-- DO NOT REMOVE! Style customize inclusion -->

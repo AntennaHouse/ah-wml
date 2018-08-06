@@ -41,22 +41,32 @@ URL : http://www.antennahouse.com/
         </xsl:call-template>
     </xsl:variable>
     
+    <!-- Common xref run prop (Italic) -->
+    <xsl:variable name="xrefRunProp" as="element()*">
+        <xsl:call-template name="getWmlObject">
+            <xsl:with-param name="prmObjName" select="'wmlXrefRunProp'"/>
+        </xsl:call-template>
+    </xsl:variable>
+    
     <xsl:template match="*[contains(@class,' topic/xref ')]">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="xref" as="element()" select="."/>
         <xsl:variable name="href" as="xs:string" select="string(@href)"/>
         <xsl:variable name="isInternalLink" as="xs:boolean" select="starts-with($href,'#')"/>
+        <xsl:variable name="mergedXrefRunProps" as="element()*" select="ahf:mergeRunProps($prmRunProps,$xrefRunProp)"/>
         <xsl:choose>
             <xsl:when test="$isInternalLink">
                 <xsl:call-template name="processInternalXref">
                     <xsl:with-param name="prmXref" select="$xref"/>
                     <xsl:with-param name="prmHref" select="$href"/>
+                    <xsl:with-param name="prmRunProps" tunnel="yes" select="$mergedXrefRunProps"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="processExternalXref">
                     <xsl:with-param name="prmXref" select="$xref"/>
                     <xsl:with-param name="prmHref" select="$href"/>
+                    <xsl:with-param name="prmRunProps" tunnel="yes" select="$mergedXrefRunProps"/>
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
