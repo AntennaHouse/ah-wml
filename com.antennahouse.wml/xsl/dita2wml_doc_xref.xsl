@@ -239,7 +239,7 @@ URL : http://www.antennahouse.com/
     </xsl:template>
 
     <!-- 
-     function:	Output page number tenplate
+     function:	Output page number template
      param:		prmXref
      return:	w:r*
      note:		
@@ -478,7 +478,7 @@ URL : http://www.antennahouse.com/
      return:	w:r with field
      note:		
      -->
-    <xsl:template name="xrefToFig">
+    <xsl:template name="xrefToFig" as="element(w:r)+">
         <xsl:param name="prmXref"             as="element()" required="yes"/>
         <xsl:param name="prmTopicRef"            as="element()" required="yes"/>
         <xsl:param name="prmTargetElem"          as="element()" required="yes"/>
@@ -526,7 +526,7 @@ URL : http://www.antennahouse.com/
                 Varibale 'Ol_Number_Formats' must be changed according to the ol/li style.
                 Xref to ol/li has no @outputclass rendering option.
      -->
-    <xsl:template name="xrefToOlLi">
+    <xsl:template name="xrefToOlLi" as="element(w:r)+">
         <xsl:param name="prmTopicRef"            as="element()" required="yes"/>
         <xsl:param name="prmTargetElem"          as="element()" required="yes"/>
         <xsl:param name="prmTargetElemNumber"    as="xs:integer" required="yes"/>
@@ -569,7 +569,7 @@ URL : http://www.antennahouse.com/
      return:	w:r with field
      note:		Xref to fn has no rendering @outputclass option
      -->
-    <xsl:template name="xrefToFn">
+    <xsl:template name="xrefToFn" as="element(w:r)+">
         <xsl:param name="prmXref"                as="element()" required="yes"/>
         <xsl:param name="prmTopicRef"            as="element()" required="yes"/>
         <xsl:param name="prmTargetElem"          as="element()" required="yes"/>
@@ -646,33 +646,9 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmOlNumberFormat" as="xs:string+"/>
         
         <xsl:variable name="olNumberFormatCount" as="xs:integer" select="count($prmOlNumberFormat)"/>
-        <xsl:variable name="olNestLevel" select="ahf:countOl($prmOl,0)" as="xs:integer"/>
-        <xsl:variable name="formatOrder" as="xs:integer">
-            <xsl:variable name="tempFormatOrder" as="xs:integer" select="$olNestLevel mod $olNumberFormatCount"/>
-            <xsl:sequence select="if ($tempFormatOrder eq 0) then $olNumberFormatCount else $tempFormatOrder"/>
-        </xsl:variable>
+        <xsl:variable name="olNestLevel" as="xs:integer" select="ahf:getListLevel($prmOl)"/>
+        <xsl:variable name="formatOrder" as="xs:integer" select="($olNestLevel mod $olNumberFormatCount) + 1"/>
         <xsl:sequence select="$prmOlNumberFormat[$formatOrder]"/>
-    </xsl:function>
-    
-    <xsl:function name="ahf:countOl" as="xs:integer">
-        <xsl:param name="prmElement" as="element()"/>
-        <xsl:param name="prmCount" as="xs:integer"/>
-        
-        <xsl:variable name="count" select="if ($prmElement[contains(@class, ' topic/ol ')]) then ($prmCount+1) else $prmCount"/>
-        <xsl:choose>
-            <xsl:when test="$prmElement[contains(@class, ' topic/entry ')]">
-                <xsl:sequence select="$count"/>
-            </xsl:when>
-            <xsl:when test="$prmElement[contains(@class, ' topic/note ')]">
-                <xsl:sequence select="$count"/>
-            </xsl:when>
-            <xsl:when test="$prmElement/parent::*">
-                <xsl:sequence select="ahf:countOl($prmElement/parent::*, $count)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="$count"/>
-            </xsl:otherwise>
-        </xsl:choose>
     </xsl:function>
     
     <!-- 
