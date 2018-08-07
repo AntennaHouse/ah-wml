@@ -78,7 +78,7 @@ URL : http://www.antennahouse.com/
      return:	w:r with field
      note:		
      -->
-    <xsl:template name="processInternalXref" as="element(w:r)*">
+    <xsl:template name="processInternalXref" as="element()*">
         <xsl:param name="prmXref" as="element()" required="yes"/>
         <xsl:param name="prmHref" as="xs:string" required="yes"/>
         <xsl:variable name="targetElemInfo" as="item()*" select="map:get($bookmarkTargetMap,$prmHref)"/>
@@ -569,16 +569,17 @@ URL : http://www.antennahouse.com/
      return:	w:r with field
      note:		Xref to fn has no rendering @outputclass option
      -->
-    <xsl:template name="xrefToFn" as="element(w:r)+">
+    <xsl:template name="xrefToFn" as="element()+">
         <xsl:param name="prmXref"                as="element()" required="yes"/>
         <xsl:param name="prmTopicRef"            as="element()" required="yes"/>
         <xsl:param name="prmTargetElem"          as="element()" required="yes"/>
         <xsl:param name="prmTargetElemNumber"    as="xs:integer" required="yes"/>
+        <xsl:variable name="topic" as="element()" select="$prmXref/ancestor-or-self::*[contains(@class,' topic/topic ')][last()]"/>
         <xsl:variable name="key" as="xs:string" select="ahf:generateId($prmTargetElem)"/>
         <xsl:variable name="fnId" as="xs:integer?" select="map:get($fnIdMap,$key)[1]"/>
         <xsl:assert test="exists($fnId)" select="'[fn] key=',$key,' does not exists is $fnIdMap key=',ahf:mapKeyDump($fnIdMap)"/>
         <xsl:variable name="isFirstXrefToFn" as="xs:boolean">
-            <xsl:variable name="sameXrefs" as="element()+" select="$topics/descendant::*[contains(@class,' topic/xref ')][string(@href) eq $prmXref]"/>
+            <xsl:variable name="sameXrefs" as="element()+" select="$topic/descendant::*[contains(@class,' topic/xref ')][string(@href) eq string($prmXref/@href)]"/>
             <xsl:sequence select="$sameXrefs[1] is $prmXref"/> 
         </xsl:variable>
         <xsl:choose>
