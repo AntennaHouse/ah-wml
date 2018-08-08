@@ -130,7 +130,7 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>                    
             </xsl:when>
             <!-- Reference to ol/li -->
-            <xsl:when test="$targetElem[contains(@class,' topic/li ')][ancestor::*[contains(@class,' topic/ol ')]]">
+            <xsl:when test="$targetElem[contains(@class,' topic/li ')][parent::*[contains(@class,' topic/ol ')]]">
                 <xsl:call-template name="xrefToOlLi">
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
                     <xsl:with-param name="prmTargetElem"  select="$targetElem"/>
@@ -542,7 +542,7 @@ URL : http://www.antennahouse.com/
                 <xsl:sequence select="."/>
             </xsl:for-each>
         </xsl:variable>
-        <xsl:variable name="olFormat" as="xs:string" select="ahf:getOlNumberFormat($prmTargetElem,$olNumberFormat)"/>
+        <xsl:variable name="olFormat" as="xs:string" select="ahf:getOlNumberFormat($prmTargetElem/parent::*,$olNumberFormat)"/>
         <xsl:variable name="liNumber" as="xs:integer" select="count($prmTargetElem|$prmTargetElem/preceding-sibling::*[not(contains(@class,' task/stepsection '))])"/>
         <xsl:variable name="targetLi" as="element(w:r)">
             <w:r>
@@ -648,8 +648,8 @@ URL : http://www.antennahouse.com/
         
         <xsl:variable name="olNumberFormatCount" as="xs:integer" select="count($prmOlNumberFormat)"/>
         <xsl:variable name="olNestLevel" as="xs:integer" select="ahf:getListLevel($prmOl)"/>
-        <xsl:variable name="formatOrder" as="xs:integer" select="($olNestLevel mod $olNumberFormatCount) + 1"/>
-        <xsl:sequence select="$prmOlNumberFormat[$formatOrder]"/>
+        <xsl:variable name="formatOrder" as="xs:integer" select="$olNestLevel mod $olNumberFormatCount"/>
+        <xsl:sequence select="$prmOlNumberFormat[if ($formatOrder eq 0) then $olNumberFormatCount else $formatOrder]"/>
     </xsl:function>
     
     <!-- 
