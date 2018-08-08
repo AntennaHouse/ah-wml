@@ -1599,7 +1599,7 @@
         function: Node replace function
         param: prmStr,prmSrc,prmDst,prmTarget
         return: Result node
-        note: This function accespts $prmDst as item()+.
+        note: This function accepts $prmDst as item()+.
               If $prmDst is not instance of node(), the processing is skipped.
     -->
     <xsl:function name="ahf:extNodeReplace" as="node()*">
