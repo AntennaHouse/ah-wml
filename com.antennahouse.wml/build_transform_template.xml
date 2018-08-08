@@ -277,6 +277,7 @@
             <param name="PRM_MERGED_FINAL_OUTPUT_URL" expression="${merged.final.output.url}" if="merged.final.output.url"/>
             <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
+            <param name="PRM_OUTPUT_FOLIO_PREFIX" expression="${output.folio.prefix}" if="output.folio.prefix"/>
             <dita:extension id="com.antennahouse.wml.param" behavior="org.dita.dost.platform.InsertAction"/>
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
@@ -357,6 +358,7 @@
             <param name="PRM_MERGED_FINAL_OUTPUT_URL" expression="${merged.final.output.url}" if="merged.final.output.url"/>
             <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
+            <param name="PRM_OUTPUT_FOLIO_PREFIX" expression="${output.folio.prefix}" if="output.folio.prefix"/>
             <dita:extension id="com.antennahouse.wml.param" behavior="org.dita.dost.platform.InsertAction"/>
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
@@ -448,6 +450,7 @@
             <param name="PRM_MERGED_FINAL_OUTPUT_URL" expression="${merged.final.output.url}" if="merged.final.output.url"/>
             <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
+            <param name="PRM_OUTPUT_FOLIO_PREFIX" expression="${output.folio.prefix}" if="output.folio.prefix"/>
             <dita:extension id="com.antennahouse.wml.param" behavior="org.dita.dost.platform.InsertAction"/>
             <xmlcatalog refid="dita.catalog"/>
         </xslt>

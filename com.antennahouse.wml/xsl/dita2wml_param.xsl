@@ -318,5 +318,12 @@ E-mail : info@antennahouse.com
     <!-- temp directory URL -->
     <xsl:param name="PRM_TEMP_DIR_URL" required="yes" as="xs:anyURI"/>
     <xsl:variable name="pTempDirUrl" as="xs:anyURI" select="$PRM_TEMP_DIR_URL"/>
+
+    <!-- folio prefix
+         If the value is "A", the page number will be appeared as "A-nnn".
+     -->
+    <xsl:param name="PRM_OUTPUT_FOLIO_PREFIX" as="xs:string" select="''"/>
+    <xsl:variable name="pOutputFolioPrefix" select="$PRM_OUTPUT_FOLIO_PREFIX" as="xs:string"/>
+    <xsl:variable name="pHasOutputFolioPrefix" select="$pOutputFolioPrefix ne ''" as="xs:boolean"/>
     
 </xsl:stylesheet>

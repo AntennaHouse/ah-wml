@@ -163,6 +163,20 @@ E-mail : info@antennahouse.com
      note:		Used to generate header/footer file generation step
      -->
     <xsl:template name="genHeaderFooterFiles">
+        <xsl:variable name="folioPrefix" as="node()">
+            <xsl:choose>
+                <xsl:when test="$pHasOutputFolioPrefix">
+                    <xsl:document>
+                        <w:r>
+                            <w:t xml:space="preserve"><xsl:value-of select="concat($pOutputFolioPrefix,'-')"/></w:t>
+                        </w:r>
+                    </xsl:document>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:copy-of select="$cElemNull"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:for-each select="1 to count($headerFooterDefinitionSeq) div $headerFooterDefinitionItemCount">
             <xsl:variable name="index" as="xs:integer" select=". - 1"/>
             <xsl:variable name="fileName" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterFileName]"/>
@@ -170,8 +184,10 @@ E-mail : info@antennahouse.com
             <xsl:variable name="type" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterType]"/>
             <xsl:variable name="usage" as="xs:string" select="$headerFooterDefinitionSeq[$index * $headerFooterDefinitionItemCount + $cOffsetHeaderFooterUsage]"/>
             <xsl:result-document href="{concat($pTempDirUrl,'/docx/word/',$fileName)}" method="xml" encoding="UTF-8" byte-order-mark="no">
-                <xsl:call-template name="getWmlObject">
+                <xsl:call-template name="getWmlObjectReplacing">
                     <xsl:with-param name="prmObjName" select="$wmlObjectName"/>
+                    <xsl:with-param name="prmSrc" select="('node:folio-prefix')"/>
+                    <xsl:with-param name="prmDst" select="($folioPrefix)"/>
                 </xsl:call-template>
             </xsl:result-document>
         </xsl:for-each>

@@ -211,12 +211,12 @@ URL : http://www.antennahouse.com/
         </xsl:variable>
         <xsl:variable name="pagePrefix" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
-                <xsl:with-param name="prmVarName" select="'Xref_Page_Prefix'"/>
+                <xsl:with-param name="prmVarName" select="'XrefPagePrefix'"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="pageSuffix" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
-                <xsl:with-param name="prmVarName" select="'Xref_Page_Suffix'"/>
+                <xsl:with-param name="prmVarName" select="'XrefPageSuffix'"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="bookmarkName" as="xs:string?" select="ahf:getBookmarkName($prmTopic)"/>
@@ -253,7 +253,7 @@ URL : http://www.antennahouse.com/
             </w:r>
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlPageRefField'"/>
-                <xsl:with-param name="prmSrc" select="('%bookmark','%field-opt','%node:field-result')"/>
+                <xsl:with-param name="prmSrc" select="('%bookmark','%field-opt','node:field-result')"/>
                 <xsl:with-param name="prmDst" select="($bookmarkName,'',$cElemNull)"/>
             </xsl:call-template>
             <w:r>
