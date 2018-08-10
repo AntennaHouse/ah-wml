@@ -180,8 +180,7 @@ URL : http://www.antennahouse.com/
      function:	Xref to topic template
      param:		prmXref, prmHref, prmRunProps (tunnel)
      return:	w:r with field
-     note:		Set U+00A0 to the PAGEREF field result to retain inherited run property such as <b>.
-                U+0020 does not work in this case.
+     note:		
      -->
     <xsl:template name="xrefToTopic" as="element(w:r)+">
         <xsl:param name="prmXref"             as="element()" required="yes"/>
@@ -242,7 +241,8 @@ URL : http://www.antennahouse.com/
      function:	Output page number template
      param:		prmXref
      return:	w:r*
-     note:		
+     note:		Set U+00A0 to the PAGEREF field result to retain inherited run property such as <b>.
+                U+0020 does not work in this case.
      -->
     <xsl:template name="outputPageRef" as="element(w:r)*">
         <xsl:param name="prmRunProps"    as="element()*" tunnel="yes" required="false" select="()"/>
