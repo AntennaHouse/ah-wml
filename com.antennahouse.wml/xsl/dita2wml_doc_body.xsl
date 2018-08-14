@@ -114,20 +114,18 @@ URL : http://www.antennahouse.com/
                 </xsl:for-each>
             </xsl:if>
             <xsl:apply-templates>
-                <!-- Temorary commented -->
-                <!--xsl:with-param name="prmSpaceBefore" tunnel="yes">
+                <xsl:with-param name="prmRunProps" as="element()*">
                     <xsl:choose>
                         <xsl:when test="$isChildOfStepSection">
-                            <xsl:sequence select="ahf:getSpaceBeforeFromStyleName($pStyle)"/>
-                        </xsl:when>
-                        <xsl:when test="$isFirstChildOfLi">
-                            <xsl:sequence select="ahf:getSpaceBeforeFromStyleName(ahf:getStyleNameFromLi(parent::*))"/>
+                            <xsl:call-template name="getWmlObject">
+                                <xsl:with-param name="prmObjName" select="'wmlStepSectionRunProp'"/>
+                            </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:sequence select="ahf:getSpaceBeforeFromStyleName($pStyle)"/>
+                            <xsl:sequence select="()"/>
                         </xsl:otherwise>
                     </xsl:choose>
-                </xsl:with-param-->
+                </xsl:with-param>
             </xsl:apply-templates>
             <xsl:if test="$isFirstChildOfLi">
                 <xsl:call-template name="genBookmarkEnd">

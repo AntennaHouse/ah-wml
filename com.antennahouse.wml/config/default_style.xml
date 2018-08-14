@@ -1887,6 +1887,11 @@ URL : http://www.antennahouse.com/
             <w:i w:val="true"/>
         </wml-object>
 
+        <!-- Stepsection run property -->
+        <wml-object name="wmlStepSectionRunProp">
+            <w:b w:val="true"/>
+        </wml-object>
+        
         <!-- Column break -->
         <wml-object name="wmlColumnBreak">
             <w:p>
