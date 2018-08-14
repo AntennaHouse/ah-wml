@@ -115,10 +115,12 @@ URL : http://www.antenna.co.jp/
                     <xsl:attribute name="href" select="string(@href)"/>
                 </topicref>
                 <!-- body & related-links -->
-                <xsl:if test="ahf:shouldProcessBodyAndRelatdLinks(.)">
+                <xsl:if test="ahf:shouldProcessBody(.)">
                     <xsl:apply-templates select="$topic/*[contains(@class,' topic/body ')]" mode="#current">
                         <xsl:with-param name="prmTopicRef" select="."/>
                     </xsl:apply-templates>
+                </xsl:if>
+                <xsl:if test="ahf:shouldProcessRelatdLinks(.)">
                     <xsl:apply-templates select="$topic/*[contains(@class,' topic/related-links ')]" mode="#current">
                         <xsl:with-param name="prmTopicRef" select="."/>
                     </xsl:apply-templates>
@@ -138,7 +140,12 @@ URL : http://www.antenna.co.jp/
      return:	xs:boolean
      note:		
      -->
-    <xsl:function name="ahf:shouldProcessBodyAndRelatdLinks" as="xs:boolean">
+    <xsl:function name="ahf:shouldProcessBody" as="xs:boolean">
+        <xsl:param name="prmTopicRef" as="element()"/>
+        <xsl:sequence select="true()"/>
+    </xsl:function>    
+
+    <xsl:function name="ahf:shouldProcessRelatdLinks" as="xs:boolean">
         <xsl:param name="prmTopicRef" as="element()"/>
         <xsl:sequence select="true()"/>
     </xsl:function>    
@@ -248,10 +255,12 @@ URL : http://www.antenna.co.jp/
             <xsl:attribute name="colsep" select="$columnInfo2[4]"/>
         </topic>
         <!-- body & related-links -->
-        <xsl:if test="ahf:shouldProcessBodyAndRelatdLinks($prmTopicRef)">
+        <xsl:if test="ahf:shouldProcessBody($prmTopicRef)">
             <xsl:apply-templates select="$topic/*[contains(@class,' topic/body ')]" mode="#current">
                 <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
             </xsl:apply-templates>
+        </xsl:if>
+        <xsl:if test="ahf:shouldProcessRelatdLinks($prmTopicRef)">
             <xsl:apply-templates select="$topic/*[contains(@class,' topic/related-links ')]" mode="#current">
                 <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
             </xsl:apply-templates>
