@@ -72,7 +72,7 @@ URL : http://www.antennahouse.com/
                     <xsl:assert test="exists($prmListLevel)" select="'[ASSERT: topic/p] $prmListLevel is empty!'"/>
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
-                        <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel,$prmExtraIndent) - ahf:getHangingFromStyleNameAndLevel(ahf:getStyleNameFromLi(parent::*),$prmListLevel),$prmEndIndent,0,0)"/>
+                        <xsl:copy-of select="ahf:getIndentAttrElem(0,$prmEndIndent,0,0)"/>
                         <xsl:copy-of select="$divId"/>
                     </w:pPr>                    
                 </xsl:when>
@@ -114,7 +114,7 @@ URL : http://www.antennahouse.com/
                 </xsl:for-each>
             </xsl:if>
             <xsl:apply-templates>
-                <xsl:with-param name="prmRunProps" as="element()*">
+                <xsl:with-param name="prmRunProps" as="element()*" tunnel="yes">
                     <xsl:choose>
                         <xsl:when test="$isChildOfStepSection">
                             <xsl:call-template name="getWmlObject">
