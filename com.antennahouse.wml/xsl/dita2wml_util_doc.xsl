@@ -28,6 +28,7 @@ URL : http://www.antennahouse.com/
     <xsl:variable name="isInTwoColumn" as="xs:boolean">
       <xsl:variable name="col" as="xs:integer">
         <xsl:variable name="colInfo" as="xs:integer*" select="map:get($columnMap, ahf:generateId($prmElem))"/>
+        <xsl:assert test="exists($colInfo)" select="'[ahf:getLineEndPosInTwip] Empty column info elem=',ahf:getNodeXPathStr($prmElem)"/>
         <xsl:variable name="currentCol" as="xs:integer" select="$colInfo[2]"/>
         <xsl:sequence select="$currentCol"/>                        
       </xsl:variable>
