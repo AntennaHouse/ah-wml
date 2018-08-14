@@ -42,7 +42,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmFrameId" tunnel="yes" as="xs:integer?" select="()"/>
         
         <xsl:variable name="isChildOfStepSection" as="xs:boolean" select="exists(parent::*[contains(@class,' task/stepsection ')])"/>
-        <xsl:variable name="isFirstChildOfStep" as="xs:boolean" select="exists(parent::*[contains(@class,' task/step ')]/*[1][. is current()])"/>
+        <xsl:variable name="isChildOfStep" as="xs:boolean" select="exists(parent::*[contains(@class,' task/step ') and parent::*[contains(@class,' task/steps ')]])"/>
         <xsl:variable name="isFirstChildOfLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/*[1][. is current()])"/>
         <xsl:variable name="isChildOfOlLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/parent::*[contains(@class,' topic/ol ')])"/>
         <xsl:variable name="floatFigs" as="element()*" select="parent::*[contains(@class,' task/step ')]/*[contains(@class,' task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][ahf:isNotEmptyElement(.)]"/>
