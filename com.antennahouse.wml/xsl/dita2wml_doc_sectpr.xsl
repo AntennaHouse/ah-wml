@@ -236,5 +236,21 @@ URL : http://www.antennahouse.com/
         </xsl:choose>
     </xsl:function>
 
+    <!-- 
+     function:	Generate column break
+     param:		prmTopicRef, prmTopic
+     return:	w:p
+     note:		Column break is not expressed by section property. But defined here for compatibility.
+    -->
+    <xsl:template name="getColumnBreak" as="element(w:p)?">
+        <xsl:param name="prmTopicRef" as="element()?" required="yes"/>
+        <xsl:param name="prmTopic"    as="element()?" required="yes"/>
+        <xsl:if test="ahf:isColumnBreak($prmTopicRef) or ahf:isColumnBreak($prmTopic)">
+            <xsl:call-template name="getWmlObject">
+                <xsl:with-param name="prmObjName" select="'wmlColumnBreak'"/>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+
     <!-- end of stylesheet -->
 </xsl:stylesheet>

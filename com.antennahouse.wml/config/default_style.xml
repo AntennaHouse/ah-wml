@@ -1886,7 +1886,19 @@ URL : http://www.antennahouse.com/
         <wml-object name="wmlXrefRunProp">
             <w:i w:val="true"/>
         </wml-object>
-        
+
+        <!-- Column break -->
+        <wml-object name="wmlColumnBreak">
+            <w:p>
+                <w:pPr>
+                    <w:spacing w:line="{ahf:toTwipStr('1pt')}" w:lineRule="exact"/>
+                </w:pPr>
+                <w:r>
+                    <w:br w:type="column"/>
+                </w:r>
+            </w:p>
+        </wml-object>
+
     </wml-objects>
 
     <!-- DO NOT REMOVE! Style customize inclusion -->

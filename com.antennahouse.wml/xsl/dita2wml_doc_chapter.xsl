@@ -61,6 +61,12 @@ URL : http://www.antennahouse.com/
         <!-- Generate section property -->
         <xsl:call-template name="getSectionPropertyElemBefore"/>
 
+        <!-- Generate column break -->
+        <xsl:call-template name="getColumnBreak">
+            <xsl:with-param name="prmTopicRef" select="$topicRef"/>
+            <xsl:with-param name="prmTopic" select="()"/>
+        </xsl:call-template>
+
         <xsl:choose>
             <xsl:when test="$topicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')] or exists(@navtitle) or $topicRef[contains(@class,' bookmap/glossarylist ')]">
                 <!-- Process title -->
@@ -95,17 +101,24 @@ URL : http://www.antennahouse.com/
 
     <!-- 
      function:	General topic processing
-     param:		none
+     param:		prmTopicRef
      return:	
      note:		related-links is not implemented yet!
                 Section break must be detected after shortdesc/abstract processing.
                 An boy may have another section property.
      -->
     <xsl:template match="*[contains(@class, ' topic/topic ')]">
+        <xsl:param name="prmTopicRef" as="element()" tunnel="yes" required="yes"/>
         <xsl:comment> topic @id="<xsl:value-of select="ahf:generateId(.)"/>"</xsl:comment>
         
         <!-- Generate section property -->
         <xsl:call-template name="getSectionPropertyElemBefore"/>
+
+        <!-- Generate column break -->
+        <xsl:call-template name="getColumnBreak">
+            <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
+            <xsl:with-param name="prmTopic" select="."/>
+        </xsl:call-template>
         
         <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>    
         <xsl:apply-templates select="*[contains(@class, ' topic/shortdesc ')] | *[contains(@class, ' topic/abstract ')]"/>
