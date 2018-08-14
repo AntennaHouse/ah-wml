@@ -440,11 +440,11 @@ URL : http://www.antenna.co.jp/
     function:   Get break information for chapter level element
     param:      prmElem (topic or topicref)
     return:     xs:integer
-    note:       
+    note:       Remove column break because it is implemented via <w:br w:type="column"/> inline content.
     -->
     <xsl:function name="ahf:getBreakInfo" as="xs:integer">
         <xsl:param name="prmElem" as="element()?"/>
-        <xsl:variable name="cBreakSpecSeq" as="xs:string+" select="('auto','page','col')"/>
+        <xsl:variable name="cBreakSpecSeq" as="xs:string+" select="('auto','page')"/>
         <xsl:choose>
             <xsl:when test="exists($prmElem)">
                 <xsl:variable name="break" as="xs:string" select="ahf:getOutputClassRegx($prmElem,'(break-)(auto|page|col)','$2')"/>
@@ -463,6 +463,25 @@ URL : http://www.antenna.co.jp/
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="$cBreakAuto"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+    <!--
+    function:   Check column break for specified element
+    param:      prmElem (topic or topicref)
+    return:     xs:boolean
+    note:       
+    -->
+    <xsl:function name="ahf:isColumnBreak" as="xs:boolean">
+        <xsl:param name="prmElem" as="element()?"/>
+        <xsl:choose>
+            <xsl:when test="exists($prmElem)">
+                <xsl:variable name="break" as="xs:string" select="ahf:getOutputClassRegx($prmElem,'(break-)(auto|page|col)','$2')"/>
+                <xsl:sequence select="$break eq 'column'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="false()"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
