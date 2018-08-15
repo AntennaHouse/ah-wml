@@ -45,6 +45,8 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="isChildOfStep" as="xs:boolean" select="exists(parent::*[contains(@class,' task/step ') and parent::*[contains(@class,' task/steps ')]])"/>
         <xsl:variable name="isFirstChildOfLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/*[1][. is current()])"/>
         <xsl:variable name="isChildOfOlLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/parent::*[contains(@class,' topic/ol ')])"/>
+        <xsl:variable name="isChildOfEntry" as="xs:boolean" select="exists(parent::*[ahf:seqContains(@class,(' topic/entry ',' topic/stentry '))])"/>
+        <xsl:variable name="isInThead" as="xs:boolean" select="$isChildOfEntry and (exists(parent::*/parent::*[contains(@class,' topic/sthead ')]) or exists(parent::*/parent::*/parent::*[contains(@class,' topic/thead ')]))"/>
         <xsl:variable name="floatFigs" as="element()*" select="parent::*[contains(@class,' task/step ')]/*[contains(@class,' task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][ahf:isNotEmptyElement(.)]"/>
         <xsl:variable name="pStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
@@ -93,6 +95,15 @@ URL : http://www.antennahouse.com/
                         <xsl:copy-of select="$divId"/>
                     </w:pPr>
                 </xsl:when>
+                <xsl:when test="$isChildOfEntry">
+                    <!-- Generate initial indent -->
+                    <w:pPr>
+                        <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
+                        <xsl:copy-of select="ahf:getIndentAttrElem(0,0,0,0)"/>
+                        <xsl:copy-of select="ahf:getAlignAttrElem($prmTcAttr/@align)"/>
+                        <xsl:copy-of select="$divId"/>
+                    </w:pPr>
+                </xsl:when>
                 <xsl:otherwise>
                     <!-- Generate left indent take into account list nesting level -->
                     <w:pPr>
@@ -119,6 +130,11 @@ URL : http://www.antennahouse.com/
                         <xsl:when test="$isChildOfStepSection">
                             <xsl:call-template name="getWmlObject">
                                 <xsl:with-param name="prmObjName" select="'wmlStepSectionRunProp'"/>
+                            </xsl:call-template>
+                        </xsl:when>
+                        <xsl:when test="$isInThead">
+                            <xsl:call-template name="getWmlObject">
+                                <xsl:with-param name="prmObjName" select="'wmlTheadRunProp'"/>
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>

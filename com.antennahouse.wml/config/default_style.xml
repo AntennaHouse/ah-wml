@@ -970,6 +970,11 @@ URL : http://www.antennahouse.com/
             <w:tblHeader w:val="true"/>
         </wml-object>
         
+        <!-- Header entry property -->
+        <wml-object name="wmlTheadRunProp">
+            <w:b w:val="true"/>
+        </wml-object>
+        
         <!-- Body row -->
         <wml-object name="wmlTrPrBody">
             <w:cantSplit w:val="false"/>
