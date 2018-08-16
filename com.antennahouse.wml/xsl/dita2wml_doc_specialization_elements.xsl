@@ -96,4 +96,15 @@ URL : http://www.antennahouse.com/
     -->
     <xsl:template match="*[contains(@class,' topic/unknown ')]" as="empty-sequence()"/>
 
+    <!-- 
+     function:	itemgroup
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/itemgroup ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+
 </xsl:stylesheet>
