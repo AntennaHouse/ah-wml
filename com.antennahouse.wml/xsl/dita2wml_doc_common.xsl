@@ -19,6 +19,18 @@ URL : http://www.antennahouse.com/
     version="3.0">
 
     <!-- 
+     function:	General template for unsupported element
+     param:		
+     return:	empty-sequence
+     note:		This template aims to detect unsupported elements.
+     -->
+    <xsl:template match="*" priority="-5">
+        <xsl:call-template name="warningContinue">
+            <xsl:with-param name="prmMes" select="ahf:replace($stMes001,('%elem','%file'),(name(.),string(@xtrf)))"/>
+        </xsl:call-template>
+    </xsl:template>
+
+    <!-- 
      function:	General template for getting contents
      param:		none
      return:	

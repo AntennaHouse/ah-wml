@@ -532,7 +532,67 @@ URL : http://www.antennahouse.com/
         </xsl:choose>
     </xsl:template>
     
+    <!-- 
+     function:	ph template
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/ph ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    <!-- 
+     function:	fig template
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/fig ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
 
+    <!-- 
+     function:	dd template
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/dd ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    <!-- 
+     function:	keyword template
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/keyword ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
+
+    <!-- 
+     function:	text template
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/text ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    <!-- 
+     function:	section template
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/section ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    
     <!-- END OF STYLESHEET -->
 
 </xsl:stylesheet>
