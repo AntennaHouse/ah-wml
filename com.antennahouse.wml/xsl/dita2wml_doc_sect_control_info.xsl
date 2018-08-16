@@ -305,7 +305,7 @@ URL : http://www.antenna.co.jp/
                         <xsl:variable name="topicColSpec" as="xs:string" select="ahf:getColSpecFromElem($topic)"/>
                         <xsl:choose>
                             <xsl:when test="$topicColSpec ne ''">
-                                <xsl:sequence select="(xs:integer($topicColSpec),ahf:generateId($topic),string($topic/@oid),$topic,$topicRefColSepSpec)"/>
+                                <xsl:sequence select="(xs:integer($topicColSpec),ahf:generateId($topic),string($topic/@oid),$topicRefColSepSpec,$topic)"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:sequence select="(1,ahf:generateId($topic),string($topic/@oid),$topicRefColSepSpec,$topic)"/>
