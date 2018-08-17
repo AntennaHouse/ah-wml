@@ -341,26 +341,24 @@ URL : http://www.antenna.co.jp/
          item()[2]: xs:string  id 
          item()[3]: xs:string  oid 
          item()[4]: xs:integer column separator
+         If no value is specified, adopt most upper topic's value
      -->
     <xsl:function name="ahf:getColumnInfo2" as="item()+">
         <xsl:param name="prmTopicRef" as="element()"/>
         <xsl:param name="prmTopic" as="element()"/>
         <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopicRef)"/>
         <xsl:variable name="topicRefColSepSpec" as="xs:integer" select="ahf:getColSepSpecFromTopicRef($prmTopicRef)"/>
+        <xsl:variable name="topicColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopic)"/>
         <xsl:choose>
             <xsl:when test="$topicRefColSpec ne ''">
                 <xsl:sequence select="(xs:integer($topicRefColSpec),ahf:generateId($prmTopic),string($prmTopic/@oid),$topicRefColSepSpec)"/>
             </xsl:when>
+            <xsl:when test="$topicColSpec ne ''">
+                <xsl:sequence select="(xs:integer($topicColSpec),ahf:generateId($prmTopic),string($prmTopic/@oid),$topicRefColSepSpec)"/>
+            </xsl:when>
             <xsl:otherwise>
-                <xsl:variable name="topicColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopic)"/>
-                <xsl:choose>
-                    <xsl:when test="$topicColSpec ne ''">
-                        <xsl:sequence select="(xs:integer($topicColSpec),ahf:generateId($prmTopic),string($prmTopic/@oid),$topicRefColSepSpec)"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:sequence select="(1,ahf:generateId($prmTopic),string($prmTopic/@oid),$topicRefColSepSpec)"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:variable name="upperMostTopicColSpec" as="item()+" select="ahf:getColumnInfo($prmTopicRef)"/>
+                <xsl:sequence select="(xs:integer($upperMostTopicColSpec[1]),ahf:generateId($prmTopic),string($prmTopic/@oid),$topicRefColSepSpec)"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>    
@@ -369,26 +367,29 @@ URL : http://www.antenna.co.jp/
          item()[1]: xs:integer column count
          item()[2]: xs:string  id 
          item()[3]: xs:integer column separator
+         If no value is specified, adopt most upper topic's value
      -->
     <xsl:function name="ahf:getColumnInfo3" as="item()*">
         <xsl:param name="prmTopicRef" as="element()"/>
         <xsl:param name="prmBody" as="element()"/>
         <xsl:variable name="bodyColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmBody)"/>
+        <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopicRef)"/>
         <xsl:variable name="topicRefColSepSpec" as="xs:integer" select="ahf:getColSepSpecFromTopicRef($prmTopicRef)"/>
+        <xsl:variable name="topic" as="element()" select="$prmBody/parent::*[contains(@class,' topic/topic ')]"/>
+        <xsl:variable name="topicColSpec" as="xs:string" select="ahf:getColSpecFromElem($topic)"/>
         <xsl:choose>
             <xsl:when test="$bodyColSpec ne ''">
                 <xsl:sequence select="(xs:integer($bodyColSpec),ahf:generateId($prmBody),$topicRefColSepSpec)"/>
             </xsl:when>
+            <xsl:when test="$topicRefColSpec ne ''">
+                <xsl:sequence select="(xs:integer($topicRefColSpec),ahf:generateId($prmBody),$topicRefColSepSpec)"/>
+            </xsl:when>
+            <xsl:when test="$topicColSpec ne ''">
+                <xsl:sequence select="(xs:integer($topicColSpec),ahf:generateId($prmBody),$topicRefColSepSpec)"/>
+            </xsl:when>
             <xsl:otherwise>
-                <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopicRef)"/>
-                <xsl:choose>
-                    <xsl:when test="$topicRefColSpec ne ''">
-                        <xsl:sequence select="(xs:integer($topicRefColSpec),ahf:generateId($prmBody),$topicRefColSepSpec)"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:sequence select="(1,ahf:generateId($prmBody),$topicRefColSepSpec)"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:variable name="upperMostTopicColSpec" as="item()+" select="ahf:getColumnInfo($prmTopicRef)"/>
+                <xsl:sequence select="(xs:integer($upperMostTopicColSpec[1]),ahf:generateId($prmBody),$topicRefColSepSpec)"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>    
@@ -398,27 +399,30 @@ URL : http://www.antenna.co.jp/
          item()[2]: xs:string   id
          item()[3]: xs:integer  column separator
          related-links inherits body column
+         If no value is specified, adopt most upper topic's value
      -->
     <xsl:function name="ahf:getColumnInfo4" as="item()*">
         <xsl:param name="prmTopicRef" as="element()"/>
-        <xsl:param name="prmRelatdLinks" as="element()"/>
-        <xsl:variable name="body" as="element()?" select="$prmRelatdLinks/preceding-sibling::*[contains(@class,' topic/body ')][1]"/>
+        <xsl:param name="prmRelatedLinks" as="element()"/>
+        <xsl:variable name="body" as="element()?" select="$prmRelatedLinks/preceding-sibling::*[contains(@class,' topic/body ')][1]"/>
         <xsl:variable name="bodyColSpec" as="xs:string" select="if (exists($body)) then ahf:getColSpecFromElem($body) else ''"/>
+        <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopicRef)"/>
         <xsl:variable name="topicRefColSepSpec" as="xs:integer" select="ahf:getColSepSpecFromTopicRef($prmTopicRef)"/>
+        <xsl:variable name="topic" as="element()" select="$prmRelatedLinks/parent::*[contains(@class,' topic/topic ')]"/>
+        <xsl:variable name="topicColSpec" as="xs:string" select="ahf:getColSpecFromElem($topic)"/>
         <xsl:choose>
             <xsl:when test="$bodyColSpec ne ''">
-                <xsl:sequence select="(xs:integer($bodyColSpec),ahf:generateId($prmRelatdLinks),$topicRefColSepSpec)"/>
+                <xsl:sequence select="(xs:integer($bodyColSpec),ahf:generateId($prmRelatedLinks),$topicRefColSepSpec)"/>
+            </xsl:when>
+            <xsl:when test="$topicRefColSpec ne ''">
+                <xsl:sequence select="(xs:integer($topicRefColSpec),ahf:generateId($prmRelatedLinks),$topicRefColSepSpec)"/>
+            </xsl:when>
+            <xsl:when test="$topicColSpec ne ''">
+                <xsl:sequence select="(xs:integer($topicColSpec),ahf:generateId($prmRelatedLinks),$topicRefColSepSpec)"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopicRef)"/>
-                <xsl:choose>
-                    <xsl:when test="$topicRefColSpec ne ''">
-                        <xsl:sequence select="(xs:integer($topicRefColSpec),ahf:generateId($prmRelatdLinks),$topicRefColSepSpec)"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:sequence select="(1,ahf:generateId($prmRelatdLinks),$topicRefColSepSpec)"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:variable name="upperMostTopicColSpec" as="item()+" select="ahf:getColumnInfo($prmTopicRef)"/>
+                <xsl:sequence select="(xs:integer($upperMostTopicColSpec[1]),ahf:generateId($prmRelatedLinks),$topicRefColSepSpec)"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
