@@ -272,16 +272,13 @@ URL : http://www.antennahouse.com/
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:variable name="columnCount" as="xs:integer">
-                                <xsl:variable name="body" as="element()?" select="$prmImage/ancestor::*[contains(@class,' topic/body ')]"/>
+                                <xsl:variable name="bodyOrTopic" as="element()" select="if (exists($prmImage/ancestor::*[contains(@class,' topic/body ')])) then $prmImage/ancestor::*[contains(@class,' topic/body ')] else $prmImage/ancestor::*[contains(@class,' topic/topic ')][1]"/>
                                 <xsl:choose>
                                     <xsl:when test="ahf:isSpannedImage($prmImage)">
                                         <xsl:sequence select="1"/>
                                     </xsl:when>
-                                    <xsl:when test="empty($body)">
-                                        <xsl:sequence select="1"/>
-                                    </xsl:when>
                                     <xsl:otherwise>
-                                        <xsl:variable name="columnInfo" as="item()*" select="map:get($columnMap,ahf:generateId($body))"/>
+                                        <xsl:variable name="columnInfo" as="item()*" select="map:get($columnMap,ahf:generateId($bodyOrTopic))"/>
                                         <xsl:choose>
                                             <xsl:when test="exists($columnInfo)">
                                                 <xsl:sequence select="xs:integer($columnInfo[2])"/>
