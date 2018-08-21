@@ -1930,18 +1930,33 @@
          function： Check the $prmInput should be evaluated as XPath and return the xs:evaluate result 
          parameter: prmInputStr: Input string
          note:      If $prmInputStr has the form "{...}", it is assumed as XPath expression.
+                    Extended to handle above pattern in the middle of string. The @regx description is very complex
+                    because \, { and } is keyword of regular expression and { is keyword of XSLT.
       -->
     <xsl:function name="ahf:evaluateXpath" as="xs:string">
         <xsl:param name="prmInputStr" as="xs:string"/>
-        <xsl:choose>
-            <xsl:when test="starts-with($prmInputStr,'{') and ends-with($prmInputStr,'}')">
-				<xsl:variable name="xPath" as="xs:string" select="substring($prmInputStr,2,string-length($prmInputStr) - 2)"/>
-				<xsl:sequence select="ahf:evaluateStyleXPath($xPath)"/>
-			</xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="$prmInputStr"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:variable name="strExpanded" as="xs:string*">
+            <xsl:analyze-string select="$prmInputStr" regex="(\\\{{)|(\\\}})|(\{{.+\}})">
+                <xsl:matching-substring>
+                    <xsl:choose>
+                        <xsl:when test="string(regex-group(1))">
+                            <xsl:sequence select="'{'"/>
+                        </xsl:when>
+                        <xsl:when test="string(regex-group(2))">
+                            <xsl:sequence select="'}'"/>
+                        </xsl:when>
+                        <xsl:when test="string(regex-group(3))">
+                            <xsl:variable name="xPath" as="xs:string" select="substring(regex-group(3),2,string-length(regex-group(3)) - 2)"/>
+                            <xsl:sequence select="ahf:evaluateStyleXPath($xPath)"/>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:matching-substring>
+                <xsl:non-matching-substring>
+                    <xsl:sequence select="."/>
+                </xsl:non-matching-substring>
+            </xsl:analyze-string>
+        </xsl:variable>
+        <xsl:sequence select="string-join($strExpanded,'')"/>
     </xsl:function>
 
     <!--
