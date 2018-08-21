@@ -1134,6 +1134,42 @@ URL : http://www.antennahouse.com/
                 <w:fldChar w:fldCharType="end"/>
             </w:r>
         </wml-object>
+
+        <!-- DISPLAYBARCODE Field for QR barcode
+             Barcode type: QR
+             \h field-argument: The text in this switch's field-argument is an integer that specifies the height of the symbol.  
+                                The units are in TWIPS (1/1440 inch).
+             \s field-argument: The text in this switch's field-argument is an integer that specifies a scaling factor for the symbol. 
+                                The value is in whole percentage points and the valid values are [10, 1000]
+             \q field-argument: The text in this switch's field-argument is an integer that specifies the error correction level of QR Code. 
+                                Valid values are [0, 3]
+             \p field-argument: The text in this switch's field-argument specifies the style of a Point of Sale barcode (barcode types UPCA|UPCE|EAN13|EAN8).  
+                                The valid values (case insensitive) are [STD|SUP2|SUP5|CASE].
+             \x: Fixes the check digit if it’s invalid.
+             \d: Adds Start/Stop characters for barcode types NW7 and CODE39
+             \c field-argument: The text in this switch's field-argument specifies the style of a Case Code for barcode type ITF14.   
+                                The valid values are [STD|EXT|ADD]
+             \r field-argument: The text in this switch's field-argument is an integer that specifies the rotation of the barcode symbol.  
+                                Valid values are [0, 3]
+             \f field-argument: The text in this switch's field-argument is an integer that specifies the foreground color of the barcode symbol.  
+                                Valid values are in the range [0, 0xFFFFFF]
+             \b field-argument: The text in this switch's field-argument is an integer that specifies the background color of the barcode symbol.  
+                                Valid values are in the range [0, 0xFFFFFF]
+             \t: Display barcode data (text) along with image
+          -->
+        <variable name="QrCodeHeight">2cm</variable>
+        <variable name="QrCodeOpt">\h {ahf:toTwipStr('$QrCodeHeight')} \s 100 \q 3 \f 0 \b 0xFFFFFF</variable>
+        <wml-object name="wmlQrCodeField">
+            <w:r>
+                <w:fldChar w:fldCharType="begin"/>
+            </w:r>
+            <w:r>
+                <w:instrText xml:space="preserve"> DISPLAYBARCODE %field-opt </w:instrText>
+            </w:r>
+            <w:r>
+                <w:fldChar w:fldCharType="end"/>
+            </w:r>
+        </wml-object>
         
         <!-- w:abstractNum for topic/title -->
         <wml-object name="wmlTopicTitleAbstractNum">
