@@ -631,7 +631,7 @@ URL : http://www.antenna.co.jp/
     return:     map(xs:string, xs:integer+)
     note:       Made from $columnMapTree by grouping content/column/break key change
                 Column count may be 1 or 2.
-                Break keys are column, page. auto. Group it column with follwoing auto or oage with following auto.
+                Break keys are column, page. auto. Group it column with following auto or page with following auto.
                 This grouping is needed to construct two column layout in Word.
     -->
     <xsl:variable name="sectMap" as="map(xs:string,xs:integer+)">
@@ -649,16 +649,11 @@ URL : http://www.antenna.co.jp/
             <xsl:for-each-group select="$sectMapElemsTree/*" group-adjacent="ahf:genSectContentKey(.)">
                 <xsl:variable name="sectContentGroup" as="element()+" select="current-group()"/>
                 <xsl:variable name="sectContentKey" as="xs:string" select="current-grouping-key()"/>
-                <xsl:message select="'[sectMap] current-content-grouping-key()=',$sectContentKey"/>
                 <xsl:for-each-group select="$sectContentGroup" group-adjacent="ahf:genSectGroupKey(.)">
                     <xsl:variable name="sectGroup" as="element()+" select="current-group()"/>
                     <xsl:variable name="seqInSectGroup" as="xs:integer" select="position()"/>
                     <xsl:variable name="sectGroupStart" as="element()" select="$sectGroup[1]"/>
                     <xsl:variable name="sectGroupEnd" as="element()" select="$sectGroup[last()]"/>
-                    <xsl:if test="$pDebugSect">
-                        <xsl:message select="'[sectMap] current-grouping-key()=',current-grouping-key()"/>
-                        <xsl:message select="'[sectMap] current-group()=',current-group()"/>
-                    </xsl:if>
                     <xsl:variable name="id" select="string($sectGroupEnd/@id)"/>
                     <xsl:variable name="currentColumn" as="xs:integer" select="xs:integer($sectGroupEnd/@column)"/>
                     <xsl:variable name="prevColumn" as="xs:integer" select="xs:integer($sectGroupStart/@prev-column)"/>
@@ -672,6 +667,49 @@ URL : http://www.antenna.co.jp/
             </xsl:for-each-group>
         </xsl:map>
     </xsl:variable>
+
+    <!--
+    function:   Section map for debug
+    param:      none
+    return:     map(xs:integer, item()+)
+    note:       Equivalent of $sectMap. 
+                The difference is that key is sequence number in document. 
+    -->
+    <xsl:variable name="sectDebugMap" as="map(xs:integer,item()+)">
+        <xsl:variable name="sectMapElems" as="element()+" select="$columnMapTreeWithAdjacentInfo/*"/>
+        <xsl:variable name="sectMapElemsTree" as="document-node()">
+            <xsl:document>
+                <xsl:for-each select="$sectMapElems">
+                    <xsl:copy>
+                        <xsl:copy-of select="@*"/>
+                    </xsl:copy>
+                </xsl:for-each>
+            </xsl:document>
+        </xsl:variable>
+        <xsl:map>
+            <xsl:for-each-group select="$sectMapElemsTree/*" group-adjacent="ahf:genSectContentKey(.)">
+                <xsl:variable name="sectContentGroup" as="element()+" select="current-group()"/>
+                <xsl:variable name="sectContentKey" as="xs:integer" select="xs:integer(current-grouping-key())"/>
+                <xsl:for-each-group select="$sectContentGroup" group-adjacent="ahf:genSectGroupKey(.)">
+                    <xsl:variable name="sectGroup" as="element()+" select="current-group()"/>
+                    <xsl:variable name="seqInSectGroup" as="xs:integer" select="position()"/>
+                    <xsl:variable name="sectGroupStart" as="element()" select="$sectGroup[1]"/>
+                    <xsl:variable name="sectGroupEnd" as="element()" select="$sectGroup[last()]"/>
+                    <xsl:variable name="id" select="string($sectGroupEnd/@id)"/>
+                    <xsl:variable name="currentColumn" as="xs:integer" select="xs:integer($sectGroupEnd/@column)"/>
+                    <xsl:variable name="prevColumn" as="xs:integer" select="xs:integer($sectGroupStart/@prev-column)"/>
+                    <xsl:variable name="nextColumn" as="xs:integer" select="xs:integer($sectGroupEnd/@next-column)"/>
+                    <xsl:variable name="break" as="xs:integer" select="xs:integer($sectGroupStart/@break)"/>
+                    <xsl:variable name="content" as="xs:integer" select="xs:integer($sectContentKey)"/>
+                    <xsl:variable name="colsep" as="xs:integer" select="xs:integer($sectGroupStart/@colsep)"/>
+                    <xsl:variable name="seq" as="xs:integer" select="$seqInSectGroup"/>
+                    <xsl:variable name="key" as="xs:integer" select="$sectContentKey * 10000 + $seq"/>
+                    <xsl:map-entry key="$key" select="($id,$prevColumn,$currentColumn,$nextColumn,$break,$content,$colsep)"/>
+                </xsl:for-each-group>
+            </xsl:for-each-group>
+        </xsl:map>
+    </xsl:variable>
+    
 
     <!--
     function:   Generate sect content key
@@ -758,7 +796,7 @@ URL : http://www.antenna.co.jp/
     note:       
     -->
     <xsl:template name="columnMapTreeDump">
-        <xsl:result-document href="{concat($pTempDirUrl,'/ColumnMapTree.xml')}" encoding="UTF-8" indent="yes">
+        <xsl:result-document href="{concat($pTempDirUrl,'/DebugColumnMapTree.xml')}" encoding="UTF-8" indent="yes">
             <map>
                 <xsl:copy-of select="$columnMapTreeWithAdjacentInfo"/>
             </map>
@@ -766,34 +804,25 @@ URL : http://www.antenna.co.jp/
     </xsl:template>
 
     <!--
-    function:   Dump column map in document order
+    function:   Dump sect map in document order
     param:      none
-    return:     ColumnMap.xml
+    return:     SectMap.xml
     note:       
     -->
     <xsl:template name="sectMapDump">
-        <xsl:variable name="sectMapElems" as="element()+" select="$columnMapTreeWithAdjacentInfo/*/descendant::*"/>
-        <xsl:variable name="sectMapElemsTree" as="document-node()">
-            <xsl:document>
-                <xsl:for-each select="$sectMapElems">
-                    <xsl:copy>
-                        <xsl:copy-of select="@*"/>
-                    </xsl:copy>
-                </xsl:for-each>
-            </xsl:document>
-        </xsl:variable>
-        <xsl:result-document href="{concat($pTempDirUrl,'/SectMap.xml')}" encoding="UTF-8" indent="yes">
+        <xsl:result-document href="{concat($pTempDirUrl,'/DebugSectMap.xml')}" encoding="UTF-8" indent="yes">
             <xsl:variable name="dumpData" as="element()+">
                 <xsl:variable name="mapEntrySeq" as="xs:string+" 
-                    select="map:for-each($sectMap,function($k, $v){(string($k),string($v[1]),string($v[2]),string($v[3]),string($v[4]),string($v[5]),string($v[6]),string($v[7]))})"/>
+                    select="map:for-each($sectDebugMap,function($k, $v){(string($k),string($v[1]),string($v[2]),string($v[3]),string($v[4]),string($v[5]),string($v[6]),string($v[7]))})"/>
                 <xsl:for-each select="1 to (xs:integer(count($mapEntrySeq) div 8))">
                     <xsl:variable name="pos" as="xs:integer" select="(. - 1) * 8 + 1"/>
-                    <entry key="{$mapEntrySeq[$pos]}" prev="{$mapEntrySeq[$pos + 1]}" current="{$mapEntrySeq[$pos + 2]}" next="{$mapEntrySeq[$pos + 3]}" 
-                           break="{$mapEntrySeq[$pos + 4]}" content="{$mapEntrySeq[$pos + 5]}" colsep="{$mapEntrySeq[$pos + 6]}" seq="{$mapEntrySeq[$pos + 7]}"/>
+                    <entry seq="{$mapEntrySeq[$pos]}" id="{$mapEntrySeq[$pos + 1]}" prev="{$mapEntrySeq[$pos + 2]}" current="{$mapEntrySeq[$pos + 3]}" 
+                           next="{$mapEntrySeq[$pos + 4]}" break="{$mapEntrySeq[$pos + 5]}" content="{$mapEntrySeq[$pos + 6]}" colsep="{$mapEntrySeq[$pos + 7]}"/>
                 </xsl:for-each>
             </xsl:variable>
             <map>
                 <xsl:for-each select="$dumpData">
+                    <xsl:sort select="@seq" data-type="number"/>
                     <xsl:copy-of select="."/>
                 </xsl:for-each>
             </map>
