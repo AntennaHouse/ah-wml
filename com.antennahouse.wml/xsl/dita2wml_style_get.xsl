@@ -1467,7 +1467,7 @@
                     prmDocType: Document type
                     prmPaperSize: Paper size
                     prmSrc: Target strings 
-                            - usually prefixde '%'. 
+                            - usually prefixed '%'. 
                             - If the replacement is node it should be prefixed by 'node:'
                               (In the style definition file, it is prefixed by 'ahr:')
                     prmDst: Replace strings or nodes

@@ -1366,8 +1366,8 @@ URL : http://www.antennahouse.com/
         
         <!-- Hazardstatement table -->
         <variable name="HazardStatementTableStyleName">Table Grid</variable>
-        <variable name="HazardStatementTableBeforeSpace">6pt</variable>
-        <variable name="HazardStatementTableBeforePHeight">0.1pt</variable>
+        <variable name="HazardStatementTableAfterSpace">6pt</variable>
+        <variable name="HazardStatementTableAfterPHeight">0.1pt</variable>
         <variable name="HazardStatementTableBorderWidth">1.5pt</variable>
         <variable name="HazardSymbolCellWidth">15.18mm</variable>
         <variable name="HazardStatementTitleRowHeight">7.7mm</variable>
@@ -1376,12 +1376,6 @@ URL : http://www.antennahouse.com/
         <variable name="HazardStatementSignalWordFontSize">15pt</variable>
         
         <wml-object name="wmlHazardStatementTable">
-            <w:p>
-                <w:pPr>
-                    <w:keepNext/>
-                    <w:spacing w:line="{ahf:toTwipStr('$HazardStatementTableBeforePHeight')}" w:lineRule="exact" w:before="{ahf:toTwipStr('$HazardStatementTableBeforeSpace')}"/>
-                </w:pPr>
-            </w:p>
             <w:tbl>
                 <w:tblPr>
                     <w:tblStyle w:val="{ahf:getStyleIdFromName('$HazardStatementTableStyleName')}"/>
@@ -1449,7 +1443,11 @@ URL : http://www.antennahouse.com/
                 </w:tr>
                 <ahr:rows/>
             </w:tbl>
-            
+            <w:p>
+                <w:pPr>
+                    <w:spacing w:line="{ahf:toTwipStr('$HazardStatementTableAfterPHeight')}" w:lineRule="exact" w:before="{ahf:toTwipStr('$HazardStatementTableAfterSpace')}"/>
+                </w:pPr>
+            </w:p>
         </wml-object>
         
         <!-- Hazardstatement row -->
@@ -1953,6 +1951,17 @@ URL : http://www.antennahouse.com/
             </w:p>
         </wml-object>
 
+        <!-- Space-after only paragraph -->
+        <variable name="SpaceAfterPHeight">0.1pt</variable>
+        <variable name="SpaceAfterForTable">2mm</variable>
+        <wml-object name="wmlSpaceAfterOnlyP">
+            <w:p>
+                <w:pPr>
+                    <w:spacing w:line="{ahf:toTwipStr('$SpaceAfterPHeight')}" w:lineRule="exact" w:after="{ahf:toTwipStr('%space-after')}"/>
+                </w:pPr>
+            </w:p>
+        </wml-object>
+        
     </wml-objects>
 
     <!-- DO NOT REMOVE! Style customize inclusion -->

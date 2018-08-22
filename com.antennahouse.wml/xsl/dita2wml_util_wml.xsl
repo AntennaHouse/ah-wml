@@ -465,5 +465,25 @@ URL : http://www.antennahouse.com/
     </xsl:choose>
   </xsl:function>
 
+  <!-- 
+     function:	Generate space-after only paragraph
+     param:		prmSpaceAfter (Variable name defined in style definition)
+     return:	element(w:p)
+     note:		This function generates after-space only paragraph for adjusting styles.
+   -->
+  <xsl:function name="ahf:genSpaceAfterOnlyP" as="element(w:p)" visibility="public">
+    <xsl:param name="prmSpaceAfterName" as="xs:string"/>
+    <xsl:variable name="spaceAfterVal" as="xs:string">
+      <xsl:call-template name="getVarValue">
+        <xsl:with-param name="prmVarName" select="$prmSpaceAfterName"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:call-template name="getWmlObjectReplacing">
+      <xsl:with-param name="prmObjName" select="'wmlSpaceAfterOnlyP'"/>
+      <xsl:with-param name="prmSrc" select="('%space-after')"/>
+      <xsl:with-param name="prmDst" select="$spaceAfterVal"/>
+    </xsl:call-template>
+  </xsl:function>
+
   <!-- end of stylesheet -->
 </xsl:stylesheet>

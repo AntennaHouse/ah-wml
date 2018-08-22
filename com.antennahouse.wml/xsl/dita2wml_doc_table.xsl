@@ -85,7 +85,7 @@ URL : http://www.antennahouse.com/
      function:	Tgroup processing
      param:		none
      return:	w:tbl
-     note:		
+     note:		Generate space-after only w:p after w:tbl
      -->
     <xsl:template match="*[contains(@class, ' topic/tgroup ')]">
         <xsl:param name="prmTableAttr" required="yes" as="element()"/>
@@ -128,6 +128,7 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>
             </xsl:if>
         </w:tbl>
+        <xsl:copy-of select="ahf:genSpaceAfterOnlyP('SpaceAfterForTable')"/>
     </xsl:template>
     
     <!-- 
