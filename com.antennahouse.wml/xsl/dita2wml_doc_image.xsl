@@ -17,7 +17,7 @@ URL : http://www.antennahouse.com/
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-    xmlns:graphicUtil="java:com.antennahouse.xsltutil.GraphicUtil"
+    xmlns:graphicUtil="java:com.antennahouse.wml.xsltutil.GraphicUtil"
     extension-element-prefixes="graphicUtil"
     exclude-result-prefixes="xs ahf dita-ot map graphicUtil"
     version="3.0">
