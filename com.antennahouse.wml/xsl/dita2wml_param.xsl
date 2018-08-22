@@ -58,14 +58,14 @@ E-mail : info@antennahouse.com
     <xsl:param name="PRM_LANG" as="xs:string" required="no" select="$doubleApos"/>
 
     <!-- Output draft-comment -->
-    <xsl:param name="PRM_OUTPUT_DRAFT_COMMENT" required="no" as="xs:string" select="$cNo"/>
+    <!--xsl:param name="PRM_OUTPUT_DRAFT_COMMENT" required="no" as="xs:string" select="$cNo"/>
     <xsl:variable name="pOutputDraftComment" select="boolean($PRM_OUTPUT_DRAFT_COMMENT eq $cYes)"
-        as="xs:boolean"/>
+        as="xs:boolean"/-->
 
     <!-- Output required-cleanup -->
-    <xsl:param name="PRM_OUTPUT_REQUIRED_CLEANUP" required="no" as="xs:string" select="$cNo"/>
+    <!--xsl:param name="PRM_OUTPUT_REQUIRED_CLEANUP" required="no" as="xs:string" select="$cNo"/>
     <xsl:variable name="pOutputRequiredCleanup" select="boolean($PRM_OUTPUT_REQUIRED_CLEANUP eq $cYes)"
-        as="xs:boolean"/>
+        as="xs:boolean"/-->
 
     <!-- Generate unique id in XSL-FO: Deprecated. -->
     <!--xsl:param name="PRM_GEN_UNIQUE_ID" select="$cYes"/>
@@ -122,14 +122,6 @@ E-mail : info@antennahouse.com
     <!--xsl:param name="PRM_USE_OUTPUT_CLASS_NOHYPHENATE" required="no" as="xs:string" select="$cNo"/>
     <xsl:variable name="pUseOutputClassNoHyphenate"
         select="boolean($PRM_USE_OUTPUT_CLASS_NOHYPHENATE eq $cYes)" as="xs:boolean"/-->
-
-    <!-- Sort glossentry according to the xml:lang of map
-         Not released in build.xml.
-         2011-10-11 t.makita
-     -->
-    <xsl:param name="PRM_SORT_GLOSSENTRY" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pSortGlossEntry" select="boolean($PRM_SORT_GLOSSENTRY eq $cYes)"
-        as="xs:boolean"/>
 
     <!-- Supress first page-break for first child of part,chapter,appendix in bookmap
          Not released in build.xml.
@@ -307,33 +299,9 @@ E-mail : info@antennahouse.com
     
     <!-- List indent size -->
     <xsl:param name="PRM_LIST_INDENT_SIZE" required="no" as="xs:string" select="''"/>
-    <xsl:variable name="pListIndentSize" as="xs:string">
-        <xsl:choose>
-            <xsl:when test="not(string($PRM_LIST_INDENT_SIZE)) or ($PRM_LIST_INDENT_SIZE = ('''''','&quot;&quot;'))">
-                <xsl:sequence select="ahf:getVarValue('List_Indent_Size')"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="$PRM_LIST_INDENT_SIZE"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="pListIndentSizeInTwip" as="xs:integer" select="ahf:toTwip($pListIndentSize)"/>
-    <xsl:variable name="pListIndentSizeInEmu" as="xs:integer" select="ahf:toEmu($pListIndentSize)"/>
     
     <!-- List base indent size -->
     <xsl:param name="PRM_LIST_BASE_INDENT_SIZE" required="no" as="xs:string" select="''"/>
-    <xsl:variable name="pListBaseIndentSize" as="xs:string">
-        <xsl:choose>
-            <xsl:when test="not(string($PRM_LIST_BASE_INDENT_SIZE)) or ($PRM_LIST_BASE_INDENT_SIZE = ('''''','&quot;&quot;'))">
-                <xsl:sequence select="ahf:getVarValue('List_Base_Indent_Size')"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="$PRM_LIST_BASE_INDENT_SIZE"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="pListBaseIndentSizeInTwip" as="xs:integer" select="ahf:toTwip($pListBaseIndentSize)"/>
-    <xsl:variable name="pListBaseIndentSizeInEmu" as="xs:integer" select="ahf:toEmu($pListBaseIndentSize)"/>
     
     <!-- Adopt fixed list indent -->
     <xsl:param name="PRM_ADOPT_FIXED_LIST_INDENT" required="no" as="xs:string" select="$cNo"/>
@@ -350,5 +318,12 @@ E-mail : info@antennahouse.com
     <!-- temp directory URL -->
     <xsl:param name="PRM_TEMP_DIR_URL" required="yes" as="xs:anyURI"/>
     <xsl:variable name="pTempDirUrl" as="xs:anyURI" select="$PRM_TEMP_DIR_URL"/>
+
+    <!-- folio prefix
+         If the value is "A", the page number will be appeared as "A-nnn".
+     -->
+    <xsl:param name="PRM_OUTPUT_FOLIO_PREFIX" as="xs:string" select="''"/>
+    <xsl:variable name="pOutputFolioPrefix" select="$PRM_OUTPUT_FOLIO_PREFIX" as="xs:string"/>
+    <xsl:variable name="pHasOutputFolioPrefix" select="$pOutputFolioPrefix ne ''" as="xs:boolean"/>
     
 </xsl:stylesheet>

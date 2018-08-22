@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--
 ************************************************************
-DITA to XSL-FO Style Definition 
+DITA to WordprocessingML Style Definition 
 ************************************************************
 File Name : default_style.xml
 ************************************************************
@@ -94,10 +94,10 @@ URL : http://www.antennahouse.com/
         <variable name="General_Paper_Height">%paper-height</variable-->
         <variable name="Paper_Margin_Top">25mm</variable>
         <variable name="Paper_Margin_Bottom">25mm</variable>
-        <variable name="Paper_Margin_Outer">30mm</variable>
-        <variable name="Paper_Margin_Outer" output-type="print-color print-mono">25mm</variable>
-        <variable name="Paper_Margin_Inner">30mm</variable>
-        <variable name="Paper_Margin_Inner" output-type="print-color print-mono">35mm</variable>
+        <variable name="Paper_Margin_Outer">25mm</variable>
+        <variable name="Paper_Margin_Outer" output-type="print-color print-mono">20mm</variable>
+        <variable name="Paper_Margin_Inner">25mm</variable>
+        <variable name="Paper_Margin_Inner" output-type="print-color print-mono">30mm</variable>
         <variable name="Paper_Header_Height">20mm</variable>
         <variable name="Paper_Footer_Height">20mm</variable>
         <variable name="Paper_Column_Gap">10mm</variable>
@@ -194,9 +194,9 @@ URL : http://www.antennahouse.com/
         <!-- Should be &#x25CF; 6C-->
 
         <!-- User interface -->
-        <variable name="MenuCascade_Symbol">&gt;</variable>
-        <variable name="UiControl_Prefix">[&#x200D;</variable>
-        <variable name="UiControl_Suffix">&#x200D;]</variable>
+        <variable name="MenuCascadeSymbol">&gt;</variable>
+        <variable name="UiControlPrefix">[&#x200D;</variable>
+        <variable name="UiControlSuffix">&#x200D;]</variable>
 
         <!-- Title Literals -->
         <variable name="Part_Title_Prefix">Part </variable>
@@ -221,7 +221,7 @@ URL : http://www.antennahouse.com/
         <variable name="Preface_Title">Preface</variable>
 
         <variable name="Blank_Page_Title">&#x00A0;Blank&#x00A0;Page&#x00A0;</variable>
-        <variable name="Relatedlink_Title">&#x00A0;RELATED&#x00A0;LINKS&#x00A0;</variable>
+        <variable name="Relatedlink_Title">RELATED LINK</variable>
         <variable name="Postnote_Title">&#x00A0;NOTES&#x00A0;</variable>
 
         <variable name="Table_Title">Table&#x00A0;</variable>
@@ -280,9 +280,16 @@ URL : http://www.antennahouse.com/
         <variable name="Q_Suffix">”</variable>
 
         <!-- Xref -->
-        <variable name="Xref_Prefix"> on page </variable>
-        <variable name="Xref_Suffix"/>
-
+        <variable name="XrefPagePrefix"> on page </variable>
+        <variable name="XrefPageSuffix"/>
+        <variable name="XrefPageOnlyPrefix">p.</variable>
+        <variable name="XrefPageOnlySuffix"/>
+        
+        <!-- Xref Option -->
+        <variable name="XrefOptTitleAndPage">title-page</variable>
+        <variable name="XrefOptTitleOnly">title-only</variable>
+        <variable name="XrefOptPageOnly">page-only</variable>
+        
         <!-- Draft-comment -->
         <variable name="Draft_Comment_Title_Prefix">[DRAFT-COMMENT </variable>
         <variable name="Draft_Comment_Author"> Author:</variable>
@@ -420,6 +427,8 @@ URL : http://www.antennahouse.com/
         <variable name="NumId_For_Topic_Title">5000</variable>
         <variable name="NumId_Base_For_List">10000</variable>
         
+        <variable name="DivldIdBase">10000</variable>
+        
         <!-- Table Border -->
         <variable name="Table_Border_Common_Style">single</variable>
         <variable name="Table_Border_Top_Style">$Table_Border_Common_Style</variable>
@@ -474,6 +483,9 @@ URL : http://www.antennahouse.com/
         <!-- Default header/footer file relationship offset -->
         <variable name="Default_Header_Footer_Id_Offset">1000</variable>
         
+        <!-- webSetting.xml relationship id-->
+        <variable name="RIdForWebSettingsXml">900</variable>
+        
         <!-- Relationship table namspace -->
         <variable name="Relationship_Table_Namespace">http://schemas.openxmlformats.org/package/2006/relationships</variable>
         
@@ -521,6 +533,8 @@ URL : http://www.antennahouse.com/
         <!-- floatfig -->
         <variable name="PHeight">10.5pt</variable>
         <variable name="PHeightInEmu">{ahf:toEmuStr('$PHeight')}</variable>
+        
+        
         
     </variables>
     
@@ -725,6 +739,78 @@ URL : http://www.antennahouse.com/
             </w:rPr>
         </wml-object>
 
+        <!-- uicontrol run property -->
+        <wml-object name="wmlUiControl">
+            <w:b w:val="true"/>
+        </wml-object>
+        
+        <!-- Highlight Domain -->
+        <!--u-->
+        <wml-object name="wmlU">
+            <w:u w:val="single"/>
+        </wml-object>
+
+        <!--b-->
+        <wml-object name="wmlB">
+            <w:b w:val="true"/>
+        </wml-object>
+        
+        <!--i-->
+        <wml-object name="wmlI">
+            <w:i w:val="true"/>
+        </wml-object>
+        
+        <!--sup-->
+        <wml-object name="wmlSup">
+            <w:vertAlign w:val="superscript"/>
+        </wml-object>
+        
+        <!--sub-->
+        <wml-object name="wmlSub">
+            <w:vertAlign w:val="subscript"/>
+        </wml-object>
+
+        <!--strike-->
+        <wml-object name="wmlLineThrough">
+            <w:strike w:val="true"/>
+        </wml-object>
+
+        <!-- Software Domain -->
+        <!-- msgph -->
+        <wml-object name="wmlMsgPh">
+            <w:rFonts w:ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="MS-Gothic" w:cs="Courier New"/>
+        </wml-object>
+        
+        <!-- msgph -->
+        <wml-object name="wmlMsgNum">
+            <w:rFonts w:ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="MS-Gothic" w:cs="Courier New"/>
+        </wml-object>
+
+        <!-- msgph -->
+        <wml-object name="wmlCmdName">
+            <w:rFonts w:ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="MS-Gothic" w:cs="Courier New"/>
+        </wml-object>
+        
+        <!-- varname -->
+        <wml-object name="wmlVarName">
+            <w:i w:val="true"/>
+        </wml-object>
+
+        <!-- filepath -->
+        <wml-object name="wmlFilePath">
+            <w:rFonts w:ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="MS-Gothic" w:cs="Courier New"/>
+        </wml-object>
+
+        <!-- userinput -->
+        <wml-object name="wmlUserInput">
+            <w:rFonts w:ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="MS-Gothic" w:cs="Courier New"/>
+        </wml-object>
+
+        <!-- systemoutput -->
+        <wml-object name="wmlSystemOutput">
+            <w:rFonts w:ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="MS-Gothic" w:cs="Courier New"/>
+        </wml-object>
+
         <!-- Image -->
         <wml-object name="wmlImage">
             <w:drawing>
@@ -884,6 +970,11 @@ URL : http://www.antennahouse.com/
             <w:tblHeader w:val="true"/>
         </wml-object>
         
+        <!-- Header entry property -->
+        <wml-object name="wmlTheadRunProp">
+            <w:b w:val="true"/>
+        </wml-object>
+        
         <!-- Body row -->
         <wml-object name="wmlTrPrBody">
             <w:cantSplit w:val="false"/>
@@ -896,7 +987,7 @@ URL : http://www.antennahouse.com/
                 <w:fldChar w:fldCharType="begin"/>
             </w:r>
             <w:r>
-                <w:instrText xml:space="preserve"> REF "%ref-id" \h %field-opt </w:instrText>
+                <w:instrText xml:space="preserve"> REF %ref-id \h %field-opt \* MERGEFORMAT </w:instrText>
             </w:r>
             <w:r>
                 <w:fldChar w:fldCharType="separate"/>
@@ -1018,7 +1109,62 @@ URL : http://www.antennahouse.com/
                 <w:fldChar w:fldCharType="begin"/>
             </w:r>
             <w:r>
-                <w:instrText xml:space="preserve"> PAGEREF "%bookmark" %field-opt </w:instrText>
+                <w:instrText xml:space="preserve"> PAGEREF %bookmark \h %field-opt \* MERGEFORMAT </w:instrText>
+            </w:r>
+            <w:r>
+                <w:fldChar w:fldCharType="separate"/>
+            </w:r>
+            <ahr:field-result/>
+            <w:r>
+                <w:fldChar w:fldCharType="end"/>
+            </w:r>
+        </wml-object>
+
+        <!-- NOTEREF Field
+             The reference page will be determined when Word formats a document.
+          -->
+        <wml-object name="wmlNoteRefField">
+            <w:r>
+                <w:fldChar w:fldCharType="begin"/>
+            </w:r>
+            <w:r>
+                <w:instrText xml:space="preserve"> NOTEREF %bookmark \h %field-opt \* MERGEFORMAT </w:instrText>
+            </w:r>
+            <w:r>
+                <w:fldChar w:fldCharType="end"/>
+            </w:r>
+        </wml-object>
+
+        <!-- DISPLAYBARCODE Field for QR barcode
+             Barcode type: QR
+             \h field-argument: The text in this switch's field-argument is an integer that specifies the height of the symbol.  
+                                The units are in TWIPS (1/1440 inch).
+             \s field-argument: The text in this switch's field-argument is an integer that specifies a scaling factor for the symbol. 
+                                The value is in whole percentage points and the valid values are [10, 1000]
+             \q field-argument: The text in this switch's field-argument is an integer that specifies the error correction level of QR Code. 
+                                Valid values are [0, 3]
+             \p field-argument: The text in this switch's field-argument specifies the style of a Point of Sale barcode (barcode types UPCA|UPCE|EAN13|EAN8).  
+                                The valid values (case insensitive) are [STD|SUP2|SUP5|CASE].
+             \x: Fixes the check digit if it’s invalid.
+             \d: Adds Start/Stop characters for barcode types NW7 and CODE39
+             \c field-argument: The text in this switch's field-argument specifies the style of a Case Code for barcode type ITF14.   
+                                The valid values are [STD|EXT|ADD]
+             \r field-argument: The text in this switch's field-argument is an integer that specifies the rotation of the barcode symbol.  
+                                Valid values are [0, 3]
+             \f field-argument: The text in this switch's field-argument is an integer that specifies the foreground color of the barcode symbol.  
+                                Valid values are in the range [0, 0xFFFFFF]
+             \b field-argument: The text in this switch's field-argument is an integer that specifies the background color of the barcode symbol.  
+                                Valid values are in the range [0, 0xFFFFFF]
+             \t: Display barcode data (text) along with image
+          -->
+        <variable name="QrCodeHeight">2cm</variable>
+        <variable name="QrCodeOpt">\h {ahf:toTwipStr('$QrCodeHeight')} \s 100 \q 3 \f 0 \b 0xFFFFFF</variable>
+        <wml-object name="wmlQrCodeField">
+            <w:r>
+                <w:fldChar w:fldCharType="begin"/>
+            </w:r>
+            <w:r>
+                <w:instrText xml:space="preserve"> DISPLAYBARCODE %field-opt </w:instrText>
             </w:r>
             <w:r>
                 <w:fldChar w:fldCharType="end"/>
@@ -1177,47 +1323,45 @@ URL : http://www.antennahouse.com/
              param: %type section break type
                     %col  column count
          -->
-        <wml-object name="wmlSectPr">
+        <wml-object name="wmlSectPrDprecated">
             <w:sectPr>
                 <ahr:hdrFtrReference/>
                 <w:type w:val="%type"/>
                 <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
-                <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginBottom)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
+                <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginLeft)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
                     w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
                 <ahr:pgNumType/>
                 <w:cols w:num="%col" w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
             </w:sectPr>
         </wml-object>
-
+        
+        <wml-object name="wmlSectPr">
+            <w:sectPr>
+                <ahr:hdrFtrReference/>
+                <w:type w:val="%type"/>
+                <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
+                <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginLeft)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
+                    w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
+                <ahr:pgNumType/>
+                <w:cols w:num="%col" w:sep="%sep" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
+            </w:sectPr>
+        </wml-object>
+        
         <!-- Page number format -->
         <wml-object name="wmlPgNumTypeFrontMatter">
             <w:pgNumType w:start="1" w:fmt="lowerRoman"/>
         </wml-object>
 
+        <wml-object name="wmlPgNumTypeFrontMatterContinue">
+            <w:pgNumType w:fmt="lowerRoman"/>
+        </wml-object>
+        
         <wml-object name="wmlPgNumTypeMain">
             <w:pgNumType w:start="1" w:fmt="decimal"/>
         </wml-object>
-        
 
-        <!-- 2 column section property-->
-        <wml-object name="wmlSect2Col">
-            <w:sectPr>
-                <w:type w:val="%type"/>
-                <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
-                <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginBottom)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
-                    w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
-                <w:cols w:num="2" w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
-            </w:sectPr>
-        </wml-object>
-        
-        <wml-object name="wmlSect1Col">
-            <w:sectPr>
-                <w:type w:val="%type"/>
-                <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
-                <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginBottom)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
-                    w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
-                <w:cols w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
-            </w:sectPr>
+        <wml-object name="wmlPgNumTypeMainContinue">
+            <w:pgNumType w:fmt="decimal"/>
         </wml-object>
         
         <!-- Hazardstatement table -->
@@ -1484,8 +1628,74 @@ URL : http://www.antennahouse.com/
             </w:p>
         </wml-object>
         
+        <!-- Related-links title
+             param: %title title
+                    %end-pos line end position
+          -->
+        <variable name="RelatedLinksFontFamily">major</variable>
+        <variable name="RelatedLinksTitleStartPos">3mm</variable>
+        
+        <wml-object name="wmlRelatedLinksTitle">
+            <w:p>
+                <w:pPr>
+                    <w:pStyle w:val="note-line"/>
+                    <w:keepNext/>
+                    <w:tabs>
+                        <w:tab w:val="left" w:pos="{ahf:toTwipStr('$RelatedLinksTitleStartPos')}"/>
+                        <w:tab w:val="right" w:pos="%end-pos"/>
+                    </w:tabs>
+                </w:pPr>
+                <w:r>
+                    <w:rPr>
+                        <w:rFonts w:asciiTheme="{concat('$RelatedLinksFontFamily','Ascii')}" w:eastAsia="{concat('$RelatedLinksFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$RelatedLinksFontFamily','HAnsi')}" w:cstheme="{concat('$RelatedLinksFontFamily','Bidi')}"/>
+                        <w:strike w:val="true"/>
+                    </w:rPr>
+                    <w:tab/>
+                </w:r>
+                <w:r>
+                    <w:rPr>
+                        <w:rFonts w:asciiTheme="{concat('$RelatedLinksFontFamily','Ascii')}" w:eastAsia="{concat('$RelatedLinksFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$RelatedLinksFontFamily','HAnsi')}" w:cstheme="{concat('$RelatedLinksFontFamily','Bidi')}"/>
+                        <w:b w:val="true"/>
+                        <w:strike w:val="false"/>
+                    </w:rPr>
+                    <w:t xml:space="preserve">&#xA0;%title&#xA0;</w:t>
+                </w:r>
+                <w:r>
+                    <w:rPr>
+                        <w:rFonts w:asciiTheme="{concat('$RelatedLinksFontFamily','Ascii')}" w:eastAsia="{concat('$RelatedLinksFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$RelatedLinksFontFamily','HAnsi')}" w:cstheme="{concat('$RelatedLinksFontFamily','Bidi')}"/>
+                        <w:strike w:val="true"/>
+                    </w:rPr>
+                    <w:tab/>
+                </w:r>
+            </w:p>
+        </wml-object>
+        
+        <!-- Related-links under line
+         -->
+        <wml-object name="wmlRelatedLinksUnderLine">
+            <w:p>
+                <w:pPr>
+                    <w:pStyle w:val="note-line-after"/>
+                    <w:tabs>
+                        <w:tab w:val="right" w:pos="%end-pos"/>
+                    </w:tabs>
+                </w:pPr>
+                <w:r>
+                    <w:rPr>
+                        <w:strike/>
+                    </w:rPr>
+                    <w:tab/>
+                </w:r>
+            </w:p>
+        </wml-object>
+
+        <!-- Related-links content indent
+         -->
+        <variable name="RelatedLinksContentIndent">2mm</variable>
+        
         <!-- Headers and Footers -->
-        <!-- Header/Footer definition seqence
+        <!-- Header/Footer definition sequence
+             index:
              1: WML Object Name
              2: File Name
              3: w:type of w:footerReference or w:headerReference, 
@@ -1638,6 +1848,7 @@ URL : http://www.antennahouse.com/
                         <w:pStyle w:val="Footer"/>
                         <w:jc w:val="left"/>
                     </w:pPr>
+                    <ahr:folio-prefix/>
                     <w:r>
                         <w:fldChar w:fldCharType="begin"/>
                     </w:r>
@@ -1663,6 +1874,7 @@ URL : http://www.antennahouse.com/
                         <w:pStyle w:val="Footer"/>
                         <w:jc w:val="right"/>
                     </w:pPr>
+                    <ahr:folio-prefix/>
                     <w:r>
                         <w:fldChar w:fldCharType="begin"/>
                     </w:r>
@@ -1681,6 +1893,66 @@ URL : http://www.antennahouse.com/
             </w:ftr>
         </wml-object>
         
+        <!-- w:divs -->
+        <wml-object name="wmlDivs">
+            <w:divs>
+                <ahr:div/>
+            </w:divs>
+        </wml-object>
+        
+        <!-- w:div
+             param: %id id
+                    %border-top-style, %border-left-style, %border-bottom-style, %border-right-style border style 
+          -->
+        <variable name="FrameBorderColor">auto</variable>
+        <variable name="FrameBorderWidth">1pt</variable>
+        <variable name="FramePadding">4pt</variable>
+
+        <wml-object name="wmlDiv">
+            <w:div w:id="%id">
+                <w:marLeft w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding'))}"/>
+                <w:marRight w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding'))}"/>
+                <w:marTop w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding'))}"/>
+                <w:marBottom w:val="{string(ahf:toPt('$FrameBorderWidth') + ahf:toPt('$FramePadding'))}"/>
+                <w:divBdr>
+                    <w:top w:val="%border-top-style" w:sz="{ahf:toBorderWidth('$FrameBorderWidth')}" w:space="{ahf:toPtStr('$FramePadding')}" w:color="$FrameBorderColor"/>
+                    <w:left w:val="%border-left-style" w:sz="{ahf:toBorderWidth('$FrameBorderWidth')}" w:space="{ahf:toPtStr('$FramePadding')}" w:color="$FrameBorderColor"/>
+                    <w:bottom w:val="%border-bottom-style" w:sz="{ahf:toBorderWidth('$FrameBorderWidth')}" w:space="{ahf:toPtStr('$FramePadding')}" w:color="$FrameBorderColor"/>
+                    <w:right w:val="%border-right-style" w:sz="{ahf:toBorderWidth('$FrameBorderWidth')}" w:space="{ahf:toPtStr('$FramePadding')}" w:color="$FrameBorderColor"/>
+                </w:divBdr>
+                <ahr:divsChild/>
+            </w:div>
+        </wml-object>
+        
+        <!-- w:divsChild -->
+        <wml-object name="wmlDivsChild">
+            <w:divsChild>
+                <ahr:div/>
+            </w:divsChild>
+        </wml-object>
+        
+        <!-- Xref run property -->
+        <wml-object name="wmlXrefRunProp">
+            <w:i w:val="true"/>
+        </wml-object>
+
+        <!-- Stepsection run property -->
+        <wml-object name="wmlStepSectionRunProp">
+            <w:b w:val="true"/>
+        </wml-object>
+        
+        <!-- Column break -->
+        <wml-object name="wmlColumnBreak">
+            <w:p>
+                <w:pPr>
+                    <w:spacing w:line="{ahf:toTwipStr('1pt')}" w:lineRule="exact"/>
+                </w:pPr>
+                <w:r>
+                    <w:br w:type="column"/>
+                </w:r>
+            </w:p>
+        </wml-object>
+
     </wml-objects>
 
     <!-- DO NOT REMOVE! Style customize inclusion -->

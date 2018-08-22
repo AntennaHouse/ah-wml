@@ -36,14 +36,15 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' task/step ')]/*[contains(@class,' task/info ')][1]//*[contains(@class,' floatfig-d/floatfig ')]" priority="10"/>
 
     <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')][string(@float) eq 'none']" priority="5">
-        <xsl:for-each select="*[contains(@class,' floatfig-d/floatfig-group ')][string(@float) = ('left','right')]">
+        <xsl:for-each select="*[contains(@class,' floatfig-d/floatfig-group ')][string(@float) = ('left','right')][ahf:isNotEmptyElement(.)]">
             <xsl:call-template name="processFloatFigInline"/>
         </xsl:for-each>    
     </xsl:template>
     
-    <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]" name="processFloatFigInline" as="element(w:r)?" priority="5">
+    <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')][ahf:isNotEmptyElement(.)]" name="processFloatFigInline" as="element(w:r)?" priority="5">
         <xsl:param name="prmFloatFig" as="element()" required="no" select="."/>
         <xsl:param name="prmSpaceBefore" as="xs:string" tunnel="yes" required="no" select="'0pt'"/>
+        <xsl:assert test="ahf:isNotEmptyElement($prmFloatFig)" select="'[floatfig] this assertion should not be invoked because non-emptiness is checked in matching pattern. position=',ahf:getNodeXPathStr($prmFloatFig),'floatfig=',$prmFloatFig"/>
         <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId($prmFloatFig)"/>
         <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
         <xsl:variable name="isRight" as="xs:boolean" select="string($prmFloatFig/@float) eq 'right'"/>
@@ -126,11 +127,12 @@ URL : http://www.antennahouse.com/
                     <xsl:with-param name="prmVarName" select="'PHeightInEmu'"/>
                 </xsl:call-template>
             </xsl:variable>
-            <xsl:variable name="contentHeightsInEmu" as="xs:integer+">
+            <xsl:variable name="contentHeightsInEmu" as="xs:integer*">
                 <xsl:apply-templates select="$txbxContent/*" mode="MODE_GET_HEIGHT">
                     <xsl:with-param name="prmPHeightInEmu" tunnel="yes" select="$pHeightInEmu"/>
                 </xsl:apply-templates>
             </xsl:variable>
+            <xsl:assert test="exists($contentHeightsInEmu)" select="'[floatfig] $contentHeightsInEmu is empty! position=',ahf:getNodeXPathStr($prmFloatFig),'floatfig=',$prmFloatFig,' $txbxContent=',$txbxContent"/>
             <xsl:sequence select="sum($contentHeightsInEmu) + $insetTopInEmu + $insetBottomInEmu"/>
         </xsl:variable>
         

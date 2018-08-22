@@ -42,7 +42,7 @@ URL : http://www.antennahouse.com/
             
             <!-- Generate Header/Footer Relationships-->
             <xsl:call-template name="genHeaderFooterRelationships"/>
-
+            
             <!-- Generate common image relationships -->
             <xsl:for-each select="map:keys($commonImageIdMap)">
                 <xsl:variable name="file" as="xs:string" select="."/>
@@ -66,9 +66,9 @@ URL : http://www.antennahouse.com/
             </xsl:for-each>
 
             <!-- Generate external link relationships contained in DITA document -->
-            <xsl:for-each select="map:keys($externalLinkIdMap)">
+            <xsl:for-each select="map:keys($externalDocumentLinkIdMap)">
                 <xsl:variable name="href" as="xs:string" select="."/>
-                <xsl:variable name="rId" as="xs:string" select="concat($rIdPrefix,map:get($externalLinkIdMap,$href))"/>
+                <xsl:variable name="rId" as="xs:string" select="concat($rIdPrefix,map:get($externalDocumentLinkIdMap,$href))"/>
                 <xsl:call-template name="getWmlObjectReplacing">
                     <xsl:with-param name="prmObjName" select="'wmlExternalLinkRelationship'"/>
                     <xsl:with-param name="prmSrc" select="('%id','%target')"/>

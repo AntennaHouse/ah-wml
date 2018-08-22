@@ -36,11 +36,13 @@ E-mail : info@antennahouse.com
     <!-- Elements that has @clear or clear text wrapping is default.
          1. Elements that has @clear attribute.
          2. task/step that has info/floatfig.
-         3. section, example, topic that follows floatfig or topicref that follows. 
+         3. li that has floatfig
+         4. section, example, topic that follows floatfig. 
      -->
     <xsl:variable name="cmClearCandidateElements" as="element()*">
         <xsl:sequence select="$root/descendant::*[string(@clear) = ('both','right','left')][ahf:isBlockElement(.)]/preceding-sibling::*[1]"/>
         <xsl:sequence select="$root/descendant::*[contains(@class,' task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]/preceding-sibling::*[1]"/>
+        <xsl:sequence select="$root/descendant::*[contains(@class,' topic/li ')][descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]/preceding-sibling::*[1]"/>
         <xsl:variable name="floatFigs" as="element()*" select="$root/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]"/>
         <xsl:variable name="targetClass" as="xs:string*" select="(' topic/topic ',' topic/section ',' topic/example ')"/>
         <xsl:variable name="targetElements" as="element()*">

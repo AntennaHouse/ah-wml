@@ -20,6 +20,8 @@ URL : http://www.antennahouse.com/
     <xsl:include href="dita2wml_util_error.xsl"/>
     <xsl:include href="dita2wml_util.xsl"/>
     <xsl:include href="dita2wml_util_dita.xsl"/>
+    <xsl:include href="dita2wml_util_doc.xsl"/>
+    <xsl:include href="dita2wml_util_related_links.xsl"/>
     <xsl:include href="dita2wml_message.xsl"/>
     <xsl:include href="dita2wml_history_id.xsl"/>
     
@@ -33,12 +35,15 @@ URL : http://www.antennahouse.com/
     <xsl:include href="dita2wml_global_clear.xsl"/>
     <xsl:include href="dita2wml_global_list.xsl"/>
     <xsl:include href="dita2wml_global_header_footer.xsl"/>
+    <xsl:include href="dita2wml_global_frame.xsl"/>
     <xsl:include href="dita2wml_param.xsl"/>
+    <xsl:include href="dita2wml_param_var.xsl"/>
     <xsl:include href="dita2wml_param_papersize.xsl"/>
     <xsl:include href="dita2wml_style_get.xsl"/>
     <xsl:include href="dita2wml_style_set.xsl"/>
     
     <xsl:include href="dita2wml_doc_main.xsl"/>
+    <xsl:include href="dita2wml_doc_common.xsl"/>
     <xsl:include href="dita2wml_doc_sectpr.xsl"/>
     <xsl:include href="dita2wml_doc_chapter.xsl"/>
     <xsl:include href="dita2wml_doc_topic.xsl"/>
@@ -65,6 +70,11 @@ URL : http://www.antennahouse.com/
     <xsl:include href="dita2wml_doc_floatfig.xsl"/>
     <xsl:include href="dita2wml_doc_index.xsl"/>
     <xsl:include href="dita2wml_doc_toc.xsl"/>
+    <xsl:include href="dita2wml_doc_related_links.xsl"/>
+    <xsl:include href="dita2wml_doc_character_domain.xsl"/>
+    <xsl:include href="dita2wml_doc_userinterface_domain.xsl"/>
+    <xsl:include href="dita2wml_doc_software_domain.xsl"/>
+    <xsl:include href="dita2wml_doc_task.xsl"/>
     
     <xsl:include href="dita2wml_dita_class.xsl"/>
 

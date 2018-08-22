@@ -31,7 +31,7 @@ E-mail : info@antennahouse.com
          key:   @href
          value: occurrence number
      -->
-    <xsl:variable name="externalLinkIdMap" as="map(xs:string,xs:integer)">
+    <xsl:variable name="externalDocumentLinkIdMap" as="map(xs:string,xs:integer)">
         <xsl:variable name="externalLinkHrefs" as="xs:string*" select="/descendant::*[ahf:seqContains(@class, (' topic/xref ',' topic/link '))]/@href[ahf:isExternalLink(string(.))]/string(.)"/>
         <xsl:variable name="uniqueExternalHrefs" as="xs:string*" select="distinct-values($externalLinkHrefs)"/>
         <xsl:map>
@@ -42,5 +42,21 @@ E-mail : info@antennahouse.com
             </xsl:for-each>
         </xsl:map>
     </xsl:variable>
-    
+
+    <!-- external link id map for footnote contained xref
+         key:   @href
+         value: occurrence number
+     -->
+    <xsl:variable name="externalFootnotesLinkIdMap" as="map(xs:string,xs:integer)">
+        <xsl:variable name="externalLinkHrefs" as="xs:string*" select="/descendant::*[contains(@class, ' topic/xref ')][ancestor::*[contains(@class,' topic/fn ')]]/@href[ahf:isExternalLink(string(.))]/string(.)"/>
+        <xsl:variable name="uniqueExternalHrefs" as="xs:string*" select="distinct-values($externalLinkHrefs)"/>
+        <xsl:map>
+            <xsl:for-each select="$uniqueExternalHrefs">
+                <xsl:variable name="key" as="xs:string" select="."/>
+                <xsl:variable name="id" as="xs:integer" select="position()"/>
+                <xsl:map-entry key="$key" select="$id"/>
+            </xsl:for-each>
+        </xsl:map>
+    </xsl:variable>
+
 </xsl:stylesheet>

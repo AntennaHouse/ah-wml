@@ -24,7 +24,9 @@ URL : http://www.antennahouse.com/
      param:		none
      return:	
      note:		Initial implementation.
-                toc="no", nested topic are not considered yet.
+                - toc="no" and nested topic are not considered.
+                - XE field from indexterm should be generated outside the bookmark
+                  because bookmark referenced from toc, related-links/link and xref.
      -->
     <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
         <xsl:param name="prmTopicRef"       tunnel="yes" required="yes" as="element()"/>
@@ -43,10 +45,10 @@ URL : http://www.antennahouse.com/
                     </w:numPr>
                 </xsl:if>
             </w:pPr>
+            <xsl:apply-templates select="$prmTopic/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/*[contains(@class,' topic/indexterm ')]"/>
             <xsl:call-template name="genBookmarkStart">
                 <xsl:with-param name="prmElem" select="parent::*"/>
             </xsl:call-template>
-            <xsl:apply-templates select="$prmTopic/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/*[contains(@class,' topic/indexterm ')]"/>
             <xsl:apply-templates/>
             <xsl:call-template name="genBookmarkEnd">
                 <xsl:with-param name="prmElem" select="parent::*"/>
@@ -56,12 +58,13 @@ URL : http://www.antennahouse.com/
 
     <!-- 
      function:	topichead (including chapter or part) title processing
-     param:		prmTopicRef, prmTopicRefLevel
+     param:		prmTopicRef, prmDefaultTitle
      return:	w:p
      note:		
      -->
     <xsl:template name="genTopicHeadTitle">
         <xsl:param name="prmTopicRef"       required="yes" as="element()"/>
+        <xsl:param name="prmDefaultTitle"   required="yes" as="xs:string"/>
 
         <xsl:variable name="topicRefLevel" select="ahf:getTopicRefLevel($prmTopicRef)" as="xs:integer"/>
         <xsl:variable name="isInFrontmatterOrBackmatter" as="xs:boolean" select="exists($prmTopicRef/ancestor-or-self::*[ahf:seqContains(@class,(' bookmap/frontmatter',' bookmap/backmatter '))])"/>
@@ -78,6 +81,11 @@ URL : http://www.antennahouse.com/
                 </xsl:if>
             </w:pPr>
             <xsl:choose>
+                <xsl:when test="$prmDefaultTitle ne ''">
+                    <w:r>
+                        <w:t xml:space="preserve"><xsl:value-of select="$prmDefaultTitle"/></w:t>
+                    </w:r>
+                </xsl:when>
                 <xsl:when test="$prmTopicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]">
                     <xsl:apply-templates select="$prmTopicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/node()">
                         <xsl:with-param name="prmTopicRef" tunnel="yes" select="$prmTopicRef"/>
@@ -415,6 +423,24 @@ URL : http://www.antennahouse.com/
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
+    
+    <!-- 
+     function:	Generate topic title without footnotes, bookmark
+     param:		prmTopicRef, prmTopic, prmRunProps
+     return:	w:r
+     note:		Used for field result processing.
+     -->
+    <xsl:template name="genTitleWmlRestricted" as="element(w:r)*">
+        <xsl:param name="prmTopicRef" as="element()" required="yes"/>
+        <xsl:param name="prmTopic" as="element()?" required="yes"/>
+        <xsl:param name="prmRunProps" as="element()*" required="yes"/>
+        <xsl:apply-templates select="$prmTopic/*[contains(@class,' topic/title')]/node()">
+            <xsl:with-param name="prmRunProps"       tunnel="yes" select="$prmRunProps"/>
+            <xsl:with-param name="prmSkipBookmark"   tunnel="yes" select="true()"/>
+            <xsl:with-param name="prmSkipFn"         tunnel="yes" select="true()"/>
+            <xsl:with-param name="prmSkipIndexTerm"  tunnel="yes" select="true()"/>
+        </xsl:apply-templates>
+    </xsl:template>
 
     <!-- ==== END OF STYLESHEET === -->
 

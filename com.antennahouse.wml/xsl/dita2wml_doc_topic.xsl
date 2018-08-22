@@ -30,6 +30,7 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/shortdesc ')]|*[contains(@class,' topic/abstract ')]/*[contains(@class,' topic/shortdesc ')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
         <w:p>
             <xsl:variable name="shortDescStyle" as="xs:string">
                 <xsl:call-template name="getVarValue">
@@ -40,7 +41,7 @@ URL : http://www.antennahouse.com/
                 <xsl:if test="string($shortDescStyle)">
                     <w:pStyle w:val="{ahf:getStyleIdFromName($shortDescStyle)}"/>
                 </xsl:if>
-                <xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel, $prmExtraIndent)"/>                
+                <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
             </w:pPr>
             <xsl:apply-templates/>
         </w:p>
@@ -84,10 +85,7 @@ URL : http://www.antennahouse.com/
             <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
         </xsl:apply-templates>
 
-        <xsl:variable name="spanImage" as="element()*" select="$body/descendant::*[contains(@class,' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]"/>
-        <xsl:call-template name="getSectionPropertyElemAfter">
-            <xsl:with-param name="prmId" select="if (empty($spanImage)) then () else concat(ahf:generateId(.),'.end')"/>
-        </xsl:call-template>
+        <xsl:call-template name="getSectionPropertyElemAfter"/>
         
     </xsl:template>
 

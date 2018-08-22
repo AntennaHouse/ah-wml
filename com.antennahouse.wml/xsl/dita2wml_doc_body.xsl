@@ -37,16 +37,31 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmListStyle" tunnel="yes" required="no" as="xs:string?" select="()"/>
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
         <xsl:param name="prmTcAttr" tunnel="yes" as="element()?" select="()"/>
+        <xsl:param name="prmFrameId" tunnel="yes" as="xs:integer?" select="()"/>
+        
         <xsl:variable name="isChildOfStepSection" as="xs:boolean" select="exists(parent::*[contains(@class,' task/stepsection ')])"/>
-        <xsl:variable name="isFirstChildOfStep" as="xs:boolean" select="exists(parent::*[contains(@class,' task/step ')]/*[1][. is current()])"/>
+        <xsl:variable name="isChildOfStep" as="xs:boolean" select="exists(parent::*[contains(@class,' task/step ') and parent::*[contains(@class,' task/steps ')]])"/>
         <xsl:variable name="isFirstChildOfLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/*[1][. is current()])"/>
         <xsl:variable name="isChildOfOlLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/parent::*[contains(@class,' topic/ol ')])"/>
-        <xsl:variable name="floatFigs" as="element()*" select="parent::*[contains(@class,' task/step ')]/*[contains(@class,' task/info ')][1]//*[contains(@class,' floatfig-d/floatfig ')]"/>
+        <xsl:variable name="isChildOfEntry" as="xs:boolean" select="exists(parent::*[ahf:seqContains(@class,(' topic/entry ',' topic/stentry '))])"/>
+        <xsl:variable name="isInThead" as="xs:boolean" select="$isChildOfEntry and (exists(parent::*/parent::*[contains(@class,' topic/sthead ')]) or exists(parent::*/parent::*/parent::*[contains(@class,' topic/thead ')]))"/>
+        <xsl:variable name="floatFigs" as="element()*" select="parent::*[contains(@class,' task/step ')]/*[contains(@class,' task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][ahf:isNotEmptyElement(.)]"/>
         <xsl:variable name="pStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
                 <xsl:with-param name="prmVarName" select="'P_Style'"/>
             </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="divId" as="element()?">
+            <xsl:choose>
+                <xsl:when test="exists($prmFrameId)">
+                    <w:divId w:val="{string($prmFrameId)}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="()"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <xsl:call-template name="ahf:genPFromOutputClass">
             <xsl:with-param name="prmRegx" select="'(before)(\d+)(p)'"/>
@@ -59,7 +74,8 @@ URL : http://www.antennahouse.com/
                     <xsl:assert test="exists($prmListLevel)" select="'[ASSERT: topic/p] $prmListLevel is empty!'"/>
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
-                        <w:ind w:left="{ahf:getIndentFromIndentLevel($prmIndentLevel,$prmExtraIndent) - ahf:getHangingFromStyleNameAndLevel(ahf:getStyleNameFromLi(parent::*),$prmListLevel)}"/>
+                        <xsl:copy-of select="ahf:getIndentAttrElem(0,$prmEndIndent,0,0)"/>
+                        <xsl:copy-of select="$divId"/>
                     </w:pPr>                    
                 </xsl:when>
                 <xsl:when test="$isFirstChildOfLi">
@@ -73,17 +89,28 @@ URL : http://www.antennahouse.com/
                             <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>
                         </w:numPr>
                         <xsl:if test="not($pAdoptFixedListIndent)">
-                            <xsl:copy-of select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
+                            <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
                         </xsl:if>
                         <xsl:copy-of select="ahf:getAlignAttrElem($prmTcAttr/@align)"/>
+                        <xsl:copy-of select="$divId"/>
+                    </w:pPr>
+                </xsl:when>
+                <xsl:when test="$isChildOfEntry">
+                    <!-- Generate initial indent -->
+                    <w:pPr>
+                        <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
+                        <xsl:copy-of select="ahf:getIndentAttrElem(0,0,0,0)"/>
+                        <xsl:copy-of select="ahf:getAlignAttrElem($prmTcAttr/@align)"/>
+                        <xsl:copy-of select="$divId"/>
                     </w:pPr>
                 </xsl:when>
                 <xsl:otherwise>
                     <!-- Generate left indent take into account list nesting level -->
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
-                        <w:ind w:left="{ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent)}"/>
+                        <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
                         <xsl:copy-of select="ahf:getAlignAttrElem($prmTcAttr/@align)"/>
+                        <xsl:copy-of select="$divId"/>
                     </w:pPr>                    
                 </xsl:otherwise>
             </xsl:choose>
@@ -98,20 +125,23 @@ URL : http://www.antennahouse.com/
                 </xsl:for-each>
             </xsl:if>
             <xsl:apply-templates>
-                <!-- Temorary commented -->
-                <!--xsl:with-param name="prmSpaceBefore" tunnel="yes">
+                <xsl:with-param name="prmRunProps" as="element()*" tunnel="yes">
                     <xsl:choose>
                         <xsl:when test="$isChildOfStepSection">
-                            <xsl:sequence select="ahf:getSpaceBeforeFromStyleName($pStyle)"/>
+                            <xsl:call-template name="getWmlObject">
+                                <xsl:with-param name="prmObjName" select="'wmlStepSectionRunProp'"/>
+                            </xsl:call-template>
                         </xsl:when>
-                        <xsl:when test="$isFirstChildOfLi">
-                            <xsl:sequence select="ahf:getSpaceBeforeFromStyleName(ahf:getStyleNameFromLi(parent::*))"/>
+                        <xsl:when test="$isInThead">
+                            <xsl:call-template name="getWmlObject">
+                                <xsl:with-param name="prmObjName" select="'wmlTheadRunProp'"/>
+                            </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:sequence select="ahf:getSpaceBeforeFromStyleName($pStyle)"/>
+                            <xsl:sequence select="()"/>
                         </xsl:otherwise>
                     </xsl:choose>
-                </xsl:with-param-->
+                </xsl:with-param>
             </xsl:apply-templates>
             <xsl:if test="$isFirstChildOfLi">
                 <xsl:call-template name="genBookmarkEnd">
@@ -502,7 +532,67 @@ URL : http://www.antennahouse.com/
         </xsl:choose>
     </xsl:template>
     
+    <!-- 
+     function:	ph template
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/ph ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    <!-- 
+     function:	fig template
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/fig ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
 
+    <!-- 
+     function:	dd template
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/dd ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    <!-- 
+     function:	keyword template
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/keyword ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
+
+    <!-- 
+     function:	text template
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/text ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    <!-- 
+     function:	section template
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/section ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    
     <!-- END OF STYLESHEET -->
 
 </xsl:stylesheet>

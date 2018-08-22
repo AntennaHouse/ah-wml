@@ -19,8 +19,8 @@ E-mail : info@antennahouse.com
          ***************************************-->
     
     <!-- External Parameter yes/no value -->
-    <xsl:variable name="cYes" select="'yes'" as="xs:string"/>
-    <xsl:variable name="cNo" select="'no'" as="xs:string"/>
+    <xsl:variable name="cYes" select="'yes'" as="xs:string" static="yes"/>
+    <xsl:variable name="cNo" select="'no'" as="xs:string" static="yes"/>
     
     <!-- Inner flag/attribute value: true/false -->
     <xsl:variable name="true" select="'true'" as="xs:string"/>

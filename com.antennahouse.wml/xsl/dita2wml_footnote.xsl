@@ -41,7 +41,8 @@ URL : http://www.antennahouse.com/
                 <xsl:variable name="fn" as="element()" select="."/>
                 <xsl:variable name="child" as="element()*" select="$fn/*"/>
                 <xsl:variable name="topic" as="element()" select="$fn/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
-                <xsl:variable name="topicRef" as="element()" select="ahf:getTopicRef($topic)"/>
+                <xsl:variable name="topicRef" as="element()?" select="ahf:getTopicRef($topic)"/>
+                <xsl:assert test="exists($topicRef)" select="'[footnote] Failed to get topicref from topic. topic=',string($topic/@id),' title=',string($topic/*[contains(@class,' topic/title ')])"/>
                 <xsl:variable name="fnId" as="xs:integer" select="map:get($fnIdMap,ahf:generateId($fn))"/>
                 <w:footnote w:id="{string($fnId)}">
                     <!-- First element must be p -->

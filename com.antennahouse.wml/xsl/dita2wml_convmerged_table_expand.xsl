@@ -4,7 +4,7 @@
 DITA to WordprocessingML Stylesheet
 Document.xml Table element Templates
 **************************************************************
-File Name : dita2wml_document_table_expand.xsl
+File Name : dita2wml_convmerged_table_expand.xsl
 **************************************************************
 Copyright © 2009-2017 Antenna House, Inc. All rights reserved.
 Antenna House is a trademark of Antenna House, Inc.
@@ -286,7 +286,10 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/entry ')][string(@ahf:row-spanned) eq $cYes]" as="element()" mode="MODE_COMPLEMENT_COL_SPAN">
         <xsl:variable name="colnum" as="xs:integer" select="xs:integer(@ahf:colnum)"/>
         <xsl:variable name="theadOrTbody" as="element()" select="parent::*/parent::*"/>
-        <xsl:variable name="prevRowSpanStartEntry" as="element()?" select="($theadOrTbody/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')][xs:integer(@ahf:colnum) eq $colnum][string(@ahf:row-span-count)][. &gt;&gt; current()])[last()]"/>
+        <xsl:variable name="prevRowSpanStartEntry" as="element()?" select="($theadOrTbody/*[contains(@class, ' topic/row ')][. &lt;&lt; current()/parent::*]/*[contains(@class, ' topic/entry ')][xs:integer(@ahf:colnum) eq $colnum][string(@ahf:row-span-count)])[last()]"/>
+        <!--xsl:message select="'$prevRowSpanStartEntry=',if (exists($prevRowSpanStartEntry)) then ahf:genHistoryId($prevRowSpanStartEntry) else ''"/>
+        <xsl:message select="'$prevRowSpanStartEntry/@ahf:col-span-count=',string($prevRowSpanStartEntry/@ahf:col-span-count)"/>
+        <xsl:message select="'$prevRowSpanStartEntry/@ahf:col-spanned=',string($prevRowSpanStartEntry/@ahf:col-spanned)"/-->
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:copy-of select="$prevRowSpanStartEntry/@ahf:col-span-count"/>

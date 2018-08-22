@@ -1570,7 +1570,77 @@
         <xsl:variable name="text" as="xs:string" select="string(.)"/>
         <xsl:value-of select="ahf:evaluateXpath(ahf:extReplace(string($text),$prmSrc,$prmDst))"/>
     </xsl:template>
-    
+
+    <!--
+        function: Multiple replace function
+        param: prmStr,prmSrc,prmDst
+        return: Result string
+        note: This function accespts $prmDst as item()+.
+              If $prmDst is not instance of xs:string, the processing is skipped.
+    -->
+    <xsl:function name="ahf:extReplace" as="item()">
+        <xsl:param name="prmStr" as="xs:string"/>
+        <xsl:param name="prmSrc" as="xs:string+"/>
+        <xsl:param name="prmDst" as="item()+"/>
+        
+        <xsl:variable name="firstResult" select="if ($prmDst[1] instance of xs:string) then ahf:safeReplace($prmStr,$prmSrc[1],$prmDst[1]) else $prmStr" as="xs:string"/>
+        <xsl:choose>
+            <xsl:when test="exists($prmSrc[2]) and exists($prmDst[2])">
+                <xsl:sequence select="ahf:extReplace($firstResult,subsequence($prmSrc,2),subsequence($prmDst,2))"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$firstResult"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+
+    <!--
+        function: Node replace function
+        param: prmStr,prmSrc,prmDst,prmTarget
+        return: Result node
+        note: This function accepts $prmDst as item()+.
+              If $prmDst is not instance of node(), the processing is skipped.
+    -->
+    <xsl:function name="ahf:extNodeReplace" as="node()*">
+        <xsl:param name="prmStr" as="xs:string"/>
+        <xsl:param name="prmSrc" as="xs:string+"/>
+        <xsl:param name="prmDst" as="item()+"/>
+        <xsl:param name="prmTarget" as="xs:string"/>
+        
+        <xsl:variable name="firstResult" as="node()*">
+            <xsl:choose>
+                <xsl:when test="($prmStr eq $prmSrc[1]) and ($prmDst[1] instance of node())">
+                    <xsl:choose>
+                        <xsl:when test="$prmDst[1] instance of document-node()">
+                            <xsl:copy-of select="$prmDst[1]/node()"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:copy-of select="$prmDst[1]"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="exists($firstResult)">
+                <xsl:sequence select="if ($firstResult instance of element(_null)) then () else $firstResult "/>
+            </xsl:when>
+            <xsl:when test="exists($prmSrc[2]) and exists($prmDst[2])">
+                <xsl:sequence select="ahf:extNodeReplace($prmStr,subsequence($prmSrc,2),subsequence($prmDst,2),$prmTarget)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="errorExit">
+                    <xsl:with-param name="prmMes" select="ahf:replace($stMes2030,('%param','%target'),($prmStr,$prmTarget))"/>
+                </xsl:call-template>
+                <xsl:sequence select="()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
     <!-- 
          filterElements template
          function： Apply filtering to the element specified by $prmTargetElem using parameter $prmXmlLang,$prmDocType,$prmPaperSize.
@@ -1860,18 +1930,33 @@
          function： Check the $prmInput should be evaluated as XPath and return the xs:evaluate result 
          parameter: prmInputStr: Input string
          note:      If $prmInputStr has the form "{...}", it is assumed as XPath expression.
+                    Extended to handle above pattern in the middle of string. The @regx description is very complex
+                    because \, { and } is keyword of regular expression and { is keyword of XSLT.
       -->
     <xsl:function name="ahf:evaluateXpath" as="xs:string">
         <xsl:param name="prmInputStr" as="xs:string"/>
-        <xsl:choose>
-            <xsl:when test="starts-with($prmInputStr,'{') and ends-with($prmInputStr,'}')">
-				<xsl:variable name="xPath" as="xs:string" select="substring($prmInputStr,2,string-length($prmInputStr) - 2)"/>
-				<xsl:sequence select="ahf:evaluateStyleXPath($xPath)"/>
-			</xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="$prmInputStr"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:variable name="strExpanded" as="xs:string*">
+            <xsl:analyze-string select="$prmInputStr" regex="(\\\{{)|(\\\}})|(\{{.+\}})">
+                <xsl:matching-substring>
+                    <xsl:choose>
+                        <xsl:when test="string(regex-group(1))">
+                            <xsl:sequence select="'{'"/>
+                        </xsl:when>
+                        <xsl:when test="string(regex-group(2))">
+                            <xsl:sequence select="'}'"/>
+                        </xsl:when>
+                        <xsl:when test="string(regex-group(3))">
+                            <xsl:variable name="xPath" as="xs:string" select="substring(regex-group(3),2,string-length(regex-group(3)) - 2)"/>
+                            <xsl:sequence select="ahf:evaluateStyleXPath($xPath)"/>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:matching-substring>
+                <xsl:non-matching-substring>
+                    <xsl:sequence select="."/>
+                </xsl:non-matching-substring>
+            </xsl:analyze-string>
+        </xsl:variable>
+        <xsl:sequence select="string-join($strExpanded,'')"/>
     </xsl:function>
 
     <!--

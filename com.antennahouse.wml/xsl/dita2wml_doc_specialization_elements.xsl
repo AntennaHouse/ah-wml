@@ -50,6 +50,27 @@ URL : http://www.antennahouse.com/
     note:       
     -->
     <xsl:template match="*[contains(@class,' topic/data ')]" as="empty-sequence()"/>
+
+    <!--
+    function:   data template for QR code
+    param:      none
+    return:     DISPLAYBARCODE field
+    note:       
+    -->
+    <xsl:template match="*[contains(@class,' topic/data ')][string(@name) eq 'qrcode'][string(@href)]" as="element(w:r)*" priority="5">
+        <xsl:variable name="href" as="xs:string" select="concat('&quot;',string(@href),'&quot;')"/>
+        <xsl:variable name="barcodeType" as="xs:string" select="'QR'"/>
+        <xsl:variable name="fieldOpt" as="xs:string">
+            <xsl:call-template name="getVarValue">
+                <xsl:with-param name="prmVarName" select="'QrCodeOpt'"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:call-template name="getWmlObjectReplacing">
+            <xsl:with-param name="prmObjName" select="'wmlQrCodeField'"/>
+            <xsl:with-param name="prmSrc" select="('%field-opt')"/>
+            <xsl:with-param name="prmDst" select="(string-join(($href,$barcodeType,$fieldOpt),' '))"/>
+        </xsl:call-template>
+    </xsl:template>
     
     <!--
     function:   data-about template
@@ -95,5 +116,16 @@ URL : http://www.antennahouse.com/
     note:       
     -->
     <xsl:template match="*[contains(@class,' topic/unknown ')]" as="empty-sequence()"/>
+
+    <!-- 
+     function:	itemgroup
+     param:		none
+     return:	under-laying result
+     note:		
+     -->
+    <xsl:template match="*[contains(@class,' topic/itemgroup ')]">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
 
 </xsl:stylesheet>

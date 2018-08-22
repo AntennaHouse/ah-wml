@@ -249,6 +249,7 @@ URL : http://www.antennahouse.com/
      note:		references tunnel parameter $prmIndentLevel, $prmExtraIndent
                 If the image is in a table cell, we cannot do anything because column width is hard to know.
                 If the image is in floatfig $prmWidthConstraintInEmu is passed not to over the text box size.
+                The body width is calculated via bodyWidth/column - gap * (column - 1)/column
      -->
     <xsl:template name="ahf:adjustImageSize" as="xs:integer+">
         <xsl:param name="prmImage" required="yes" as="element()"/>
@@ -263,10 +264,47 @@ URL : http://www.antennahouse.com/
             </xsl:when>
             <xsl:otherwise>
                 <!--xsl:message select="'image=',ahf:getHistoryStr($prmImage),'$prmImageSize=',$prmImageSize,' $prmIndentLevel=',$prmIndentLevel,' $prmExtraIndent=',$prmExtraIndent"/-->
-                <xsl:variable name="bodyWidth" as="xs:integer" select="if (empty($prmWidthConstraintInEmu)) then ahf:toEmu($pPaperBodyWidth) else $prmWidthConstraintInEmu"/>
+                <xsl:variable name="bodyWidthDeprecated" as="xs:integer" select="if (empty($prmWidthConstraintInEmu)) then ahf:toEmu($pPaperBodyWidth) else $prmWidthConstraintInEmu"/>
+                <xsl:variable name="bodyWidth" as="xs:integer">
+                    <xsl:choose>
+                        <xsl:when test="exists($prmWidthConstraintInEmu)">
+                            <xsl:sequence select="$prmWidthConstraintInEmu"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:variable name="columnCount" as="xs:integer">
+                                <xsl:variable name="bodyOrTopic" as="element()" select="if (exists($prmImage/ancestor::*[contains(@class,' topic/body ')])) then $prmImage/ancestor::*[contains(@class,' topic/body ')] else $prmImage/ancestor::*[contains(@class,' topic/topic ')][1]"/>
+                                <xsl:choose>
+                                    <xsl:when test="ahf:isSpannedImage($prmImage)">
+                                        <xsl:sequence select="1"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:variable name="columnInfo" as="item()*" select="map:get($columnMap,ahf:generateId($bodyOrTopic))"/>
+                                        <xsl:choose>
+                                            <xsl:when test="exists($columnInfo)">
+                                                <xsl:sequence select="xs:integer($columnInfo[2])"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:sequence select="1"/>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:variable>
+                            <!--xsl:message select="'$columnCount=',$columnCount,'$pPaperColumnGap=',$pPaperColumnGap"/-->
+                            <xsl:choose>
+                                <xsl:when test="$columnCount eq 1">
+                                    <xsl:sequence select="ahf:toEmu($pPaperBodyWidth)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:sequence select="ahf:toEmu($pPaperBodyWidth) div $columnCount - ahf:toEmu($pPaperColumnGap) * ($columnCount - 1) div $columnCount"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
                 <xsl:variable name="inheritedIndentSize" as="xs:integer" select="ahf:getIndentFromIndentLevelInEmu($prmIndentLevel,$prmExtraIndent)"/>
                 <xsl:variable name="remainBodyWidth" as="xs:integer" select="$bodyWidth - $inheritedIndentSize"/>
-                <!--xsl:message select="'$paperBodyWidth=',$paperBodyWidth,' $inheritedIndentSize=',$inheritedIndentSize,' $remainBodySize=',$remainBodyWidth"/-->
+                <!--xsl:message select="'$pPaperBodyWidth=',$pPaperBodyWidth,' $inheritedIndentSize=',$inheritedIndentSize,' $remainBodySize=',$remainBodyWidth"/-->
                 <xsl:choose>
                     <xsl:when test="$prmImageSize[1] gt $remainBodyWidth">
                         <!--xsl:message select="'result=',($remainBodyWidth, xs:integer($prmImageSize[2] * $remainBodyWidth div $prmImageSize[1]))"/-->
@@ -301,18 +339,16 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break']" name="processBlockImage" as="element(w:p)" priority="5">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
         <xsl:param name="prmTcAttr" tunnel="yes" as="element()?" select="()"/>
         
         <w:p>
-            <xsl:variable name="pPr" as="element()*">
+            <w:pPr>
                 <xsl:call-template name="getWmlObject">
                     <xsl:with-param name="prmObjName" select="'wmlSingleLineHeight'"/>
                 </xsl:call-template>
-                <xsl:sequence select="ahf:getIndentAttrElem($prmIndentLevel,$prmExtraIndent)"/>
-                <xsl:sequence select="ahf:getAlignAttrElem(if (exists(@align)) then @align else $prmTcAttr/@align)"/>
-            </xsl:variable>
-            <w:pPr>
-                <xsl:copy-of select="$pPr"/>
+                <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
+                <xsl:copy-of select="ahf:getAlignAttrElem(if (exists(@align)) then @align else $prmTcAttr/@align)"/>
             </w:pPr>
             <xsl:next-match/>
         </w:p>

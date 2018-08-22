@@ -117,7 +117,7 @@ URL : http://www.antennahouse.com/
     function:   generate w:num for the input document 
     param:      
     return:     
-    note:       w:num is categorized into two patterns (ol or ul)
+    note:       w:num is categorized into two patterns (ol or ul. ul is also applied for related-links)
                 Every w:num instances identifies individual list.
                 So w:lvlOverride is needed to restart the new ol number.
     -->

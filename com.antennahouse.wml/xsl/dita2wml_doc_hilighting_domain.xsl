@@ -29,60 +29,72 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class, ' hi-d/u ')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="uProp" as="element()">
-           <w:u w:val="single"/>
+           <xsl:call-template name="getWmlObject">
+               <xsl:with-param name="prmObjName" select="'wmlU'"/>
+           </xsl:call-template>
         </xsl:variable>
         <xsl:apply-templates>
-            <xsl:with-param name="prmRunProps" tunnel="yes" select="($prmRunProps[not(self::w:u)],$uProp)"/>
+            <xsl:with-param name="prmRunProps" tunnel="yes" select="ahf:mergeRunProps($prmRunProps,$uProp)"/>
         </xsl:apply-templates>
     </xsl:template>
     
     <xsl:template match="*[contains(@class, ' hi-d/b ')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="bProp" as="element()">
-            <w:b w:val="true"/>
+            <xsl:call-template name="getWmlObject">
+                <xsl:with-param name="prmObjName" select="'wmlB'"/>
+            </xsl:call-template>
         </xsl:variable>
         <xsl:apply-templates>
-            <xsl:with-param name="prmRunProps" tunnel="yes" select="($prmRunProps[not(self::w:b)],$bProp)"/>
+            <xsl:with-param name="prmRunProps" tunnel="yes" select="ahf:mergeRunProps($prmRunProps,$bProp)"/>
         </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' hi-d/i ')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="iProp" as="element()">
-            <w:i w:val="true"/>
+            <xsl:call-template name="getWmlObject">
+                <xsl:with-param name="prmObjName" select="'wmlI'"/>
+            </xsl:call-template>
         </xsl:variable>
         <xsl:apply-templates>
-            <xsl:with-param name="prmRunProps" tunnel="yes" select="($prmRunProps[not(self::w:i)],$iProp)"/>
+            <xsl:with-param name="prmRunProps" tunnel="yes" select="ahf:mergeRunProps($prmRunProps,$iProp)"/>
         </xsl:apply-templates>
     </xsl:template>
     
     <xsl:template match="*[contains(@class, ' hi-d/sup ')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="supProp" as="element()">
-            <w:vertAlign w:val="superscript"/>
+            <xsl:call-template name="getWmlObject">
+                <xsl:with-param name="prmObjName" select="'wmlSup'"/>
+            </xsl:call-template>
         </xsl:variable>
         <xsl:apply-templates>
-            <xsl:with-param name="prmRunProps" tunnel="yes" select="($prmRunProps[not(self::w:vertAlign)],$supProp)"/>
+            <xsl:with-param name="prmRunProps" tunnel="yes" select="ahf:mergeRunProps($prmRunProps,$supProp)"/>
         </xsl:apply-templates>
     </xsl:template>
     
     <xsl:template match="*[contains(@class, ' hi-d/sub ')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="subProp" as="element()">
-            <w:vertAlign w:val="subscript"/>
+            <xsl:call-template name="getWmlObject">
+                <xsl:with-param name="prmObjName" select="'wmlSub'"/>
+            </xsl:call-template>
         </xsl:variable>
         <xsl:apply-templates>
-            <xsl:with-param name="prmRunProps" tunnel="yes" select="($prmRunProps[not(self::w:vertAlign)],$subProp)"/>
+            <xsl:with-param name="prmRunProps" tunnel="yes" select="ahf:mergeRunProps($prmRunProps,$subProp)"/>
         </xsl:apply-templates>
     </xsl:template>
     
     <xsl:template match="*[contains(@class, ' hi-d/line-through ')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
-        <xsl:variable name="subProp" as="element()">
-            <w:strike w:val="true"/>
+        <xsl:variable name="lsProp" as="element()">
+            <xsl:call-template name="getWmlObject">
+                <xsl:with-param name="prmObjName" select="'wmlLineThrough'"/>
+            </xsl:call-template>
         </xsl:variable>
         <xsl:apply-templates>
-            <xsl:with-param name="prmRunProps" tunnel="yes" select="($prmRunProps[not(self::w:strike)],$subProp)"/>
+            <xsl:with-param name="prmRunProps" tunnel="yes" select="ahf:mergeRunProps($prmRunProps,$lsProp)"/>
         </xsl:apply-templates>
     </xsl:template>
 

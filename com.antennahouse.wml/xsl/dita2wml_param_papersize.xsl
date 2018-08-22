@@ -55,7 +55,7 @@ E-mail : info@antennahouse.com
     <xsl:param name="PRM_PAPER_MARGIN_TOP"    required="no" as="xs:string" select="$cPaperMarginTopDefault"/>
     <xsl:param name="PRM_PAPER_MARGIN_RIGHT"  required="no" as="xs:string" select="$cPaperMarginRightDefault"/>
     <xsl:param name="PRM_PAPER_MARGIN_BOTTOM" required="no" as="xs:string" select="$cPaperMarginBottomDefault"/>
-    <xsl:param name="PRM_PAPER_MARGIN_LEFT"   required="no" as="xs:string" select="$cPaperMarginRightDefault"/>
+    <xsl:param name="PRM_PAPER_MARGIN_LEFT"   required="no" as="xs:string" select="$cPaperMarginLeftDefault"/>
     <xsl:param name="PRM_PAPER_HEADER_HEIGHT" required="no" as="xs:string" select="$cPaperHeaderHeightDefault"/>
     <xsl:param name="PRM_PAPER_FOOTER_HEIGHT" required="no" as="xs:string" select="$cPaperFooterHeightDefault"/>
     <xsl:param name="PRM_PAPER_COLUMN_GAP"    required="no" as="xs:string" select="$cPaperColumnGapDefault"/>

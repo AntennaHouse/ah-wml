@@ -26,6 +26,7 @@ E-mail : info@antennahouse.com
     <!-- Top level element -->
     <xsl:variable name="root" select="$docMergedMiddleFile/*[1]" as="element()"/>
     <xsl:variable name="map" select="$root/*[contains(@class,' map/map ')][1]" as="element()"/>
+    <xsl:variable name="topic" select="$root/*[contains(@class,' topic/topic ')]" as="element()*"/>
     
     <!-- Document language -->
     <xsl:variable name="documentLang" as="xs:string">

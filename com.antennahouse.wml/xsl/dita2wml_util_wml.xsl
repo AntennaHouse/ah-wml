@@ -14,6 +14,7 @@ URL : http://www.antennahouse.com/
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
   xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+  xmlns:map="http://www.w3.org/2005/xpath-functions/map"
   exclude-result-prefixes="xs ahf">
   <!-- 
       ============================================
@@ -372,19 +373,32 @@ URL : http://www.antennahouse.com/
   </xsl:function>
 
   <!-- 
-     function:	Get paragraph indent element
-     param:		prmIndentLevel, prmExtraIndent
-     return:	w:ind
-     note:		
+     function:	Generate paragraph indent element
+     param:		prmStart, prmEnd, prmHanging, prmFirstLine
+     return:	w:ind?
+     note:		Added parameter to satisfy w:ind in any case
+              All of the parameters are the twip unit value
    -->
   <xsl:function name="ahf:getIndentAttrElem" as="element(w:ind)?" visibility="public">
-    <xsl:param name="prmIndentLevel" as="xs:integer"/>
-    <xsl:param name="prmExtraIndent" as="xs:integer"/>
+    <xsl:param name="prmStart" as="xs:integer"/>
+    <xsl:param name="prmEnd" as="xs:integer"/>
+    <xsl:param name="prmHanging" as="xs:integer"/>
+    <xsl:param name="prmFirstLine" as="xs:integer"/>
     <xsl:choose>
-      <xsl:when test="($prmIndentLevel gt 0) or ($prmExtraIndent gt 0)">
-        <xsl:variable name="startIndent" as="xs:integer" select="ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent)"/>
+      <xsl:when test="($prmStart ne 0) or ($prmEnd ne 0) or ($prmHanging ne 0) or ($prmFirstLine ne 0)">
         <w:ind>
-          <xsl:attribute name="w:left" select="$startIndent"/>
+          <xsl:if test="$prmStart ne 0">
+            <xsl:attribute name="w:start" select="$prmStart"/>
+          </xsl:if>
+          <xsl:if test="$prmEnd ne 0">
+            <xsl:attribute name="w:end" select="$prmEnd"/>
+          </xsl:if>
+          <xsl:if test="$prmHanging ne 0">
+            <xsl:attribute name="w:hanging" select="$prmHanging"/>
+          </xsl:if>
+          <xsl:if test="$prmFirstLine ne 0">
+            <xsl:attribute name="w:firstLine" select="$prmFirstLine"/>
+          </xsl:if>
         </w:ind>
       </xsl:when>
       <xsl:otherwise>
@@ -439,7 +453,7 @@ URL : http://www.antennahouse.com/
               <xsl:sequence select="($prmRunProps[name() ne name($addingRunprop)],$addingRunprop)"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:sequence select="$prmRunProps"/>
+              <xsl:sequence select="($prmRunProps,$addingRunprop)"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>

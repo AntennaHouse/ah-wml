@@ -11,15 +11,11 @@ E-mail : info@antennahouse.com
 -->
 <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:include href="dita2wml_constants.xsl"/>
-  <xsl:include href="dita2wml_global.xsl"/>
-  <xsl:include href="dita2wml_global_wml.xsl"/>
-  <xsl:include href="dita2wml_param.xsl"/>
-  <xsl:include href="dita2wml_param_papersize.xsl"/>
   <xsl:include href="dita2wml_message.xsl"/>
-  <xsl:include href="dita2wml_util.xsl"/>
+  <xsl:include href="dita2wml_util_string.xsl"/>
   <xsl:include href="dita2wml_util_error.xsl"/>
-  <xsl:include href="dita2wml_style_set.xsl"/>
-  <xsl:include href="dita2wml_style_get.xsl"/>
-  <xsl:include href="dita2wml_convmerged.xsl"/>
+  <xsl:include href="dita2wml_convmerged1.xsl"/>
   <xsl:include href="dita2wml_convmerged_message.xsl"/>
+  <xsl:include href="dita2wml_convmerged_param.xsl"/>
+  <xsl:include href="dita2wml_history_id.xsl"/>
 </xsl:stylesheet>
