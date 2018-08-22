@@ -231,7 +231,20 @@ URL : http://www.antennahouse.com/
                 </xsl:document>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:sequence select="$cElemNull"/>
+                <xsl:document>
+                    <xsl:call-template name="getWmlObject">
+                        <xsl:with-param name="prmObjName">
+                            <xsl:choose>
+                                <xsl:when test="$prmContent eq $cContentFrontmatter">
+                                    <xsl:sequence select="'wmlPgNumTypeFrontMatterContinue'"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:sequence select="'wmlPgNumTypeMainContinue'"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                </xsl:document>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>

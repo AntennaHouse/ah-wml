@@ -792,7 +792,7 @@ URL : http://www.antenna.co.jp/
     <!--
     function:   Dump column map tree
     param:      none
-    return:     ColumnMapTree.xml
+    return:     DebugColumnMapTree.xml
     note:       
     -->
     <xsl:template name="columnMapTreeDump">
@@ -806,7 +806,7 @@ URL : http://www.antenna.co.jp/
     <!--
     function:   Dump sect map in document order
     param:      none
-    return:     SectMap.xml
+    return:     DebugSectMap.xml
     note:       
     -->
     <xsl:template name="sectMapDump">

@@ -1352,8 +1352,16 @@ URL : http://www.antennahouse.com/
             <w:pgNumType w:start="1" w:fmt="lowerRoman"/>
         </wml-object>
 
+        <wml-object name="wmlPgNumTypeFrontMatterContinue">
+            <w:pgNumType w:fmt="lowerRoman"/>
+        </wml-object>
+        
         <wml-object name="wmlPgNumTypeMain">
             <w:pgNumType w:start="1" w:fmt="decimal"/>
+        </wml-object>
+
+        <wml-object name="wmlPgNumTypeMainContinue">
+            <w:pgNumType w:fmt="decimal"/>
         </wml-object>
         
         <!-- Hazardstatement table -->
