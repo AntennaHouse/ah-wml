@@ -634,6 +634,7 @@ URL : http://www.antennahouse.com/
                 <xsl:with-param name="prmExtraIndent"    tunnel="yes" select="0"/>
             </xsl:apply-templates>
         </w:tbl>
+        <xsl:copy-of select="ahf:genSpaceAfterOnlyP('SpaceAfterForTable')"/>
     </xsl:template>
     
     <!-- 
