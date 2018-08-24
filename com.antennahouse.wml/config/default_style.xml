@@ -221,7 +221,7 @@ URL : http://www.antennahouse.com/
         <variable name="Preface_Title">Preface</variable>
 
         <variable name="Blank_Page_Title">&#x00A0;Blank&#x00A0;Page&#x00A0;</variable>
-        <variable name="Relatedlink_Title">RELATED LINK</variable>
+        <variable name="RelatedlinksTitle">RELATED LINK</variable>
         <variable name="Postnote_Title">&#x00A0;NOTES&#x00A0;</variable>
 
         <variable name="Table_Title">Table&#x00A0;</variable>

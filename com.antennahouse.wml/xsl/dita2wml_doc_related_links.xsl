@@ -81,7 +81,7 @@ URL : http://www.antennahouse.com/
         <!-- Relatd-links title -->
         <xsl:variable name="title" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
-                <xsl:with-param name="prmVarName" select="'Relatedlink_Title'"/>
+                <xsl:with-param name="prmVarName" select="'RelatedlinksTitle'"/>
             </xsl:call-template>
         </xsl:variable>
 
