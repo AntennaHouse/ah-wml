@@ -1951,6 +1951,17 @@ URL : http://www.antennahouse.com/
             </w:p>
         </wml-object>
 
+        <!-- Space-before only paragraph -->
+        <variable name="SpaceBeforePHeight">0.1pt</variable>
+        <wml-object name="wmlSpaceBeforeOnlyP">
+            <w:p>
+                <w:pPr>
+                    <w:spacing w:line="{ahf:toTwipStr('$SpaceAfterPHeight')}" w:lineRule="exact" w:before="{ahf:toTwipStr('%space-before')}"/>
+                    <w:keepNext/>
+                </w:pPr>
+            </w:p>
+        </wml-object>
+
         <!-- Space-after only paragraph -->
         <variable name="SpaceAfterPHeight">0.1pt</variable>
         <variable name="SpaceAfterForTable">2mm</variable>
