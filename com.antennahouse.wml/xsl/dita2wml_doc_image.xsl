@@ -336,7 +336,7 @@ URL : http://www.antennahouse.com/
      return:	w:p
      note:      
      -->
-    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break']" name="processBlockImage" as="element(w:p)" priority="5">
+    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break']" name="processBlockImage" as="element(w:p)+" priority="5">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
@@ -352,6 +352,7 @@ URL : http://www.antennahouse.com/
             </w:pPr>
             <xsl:next-match/>
         </w:p>
+        <xsl:copy-of select="ahf:genSpaceAfterOnlyP('SpaceAfterForImage')"/>
     </xsl:template>
 
     <!-- END OF STYLESHEET -->

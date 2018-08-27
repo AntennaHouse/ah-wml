@@ -1965,6 +1965,7 @@ URL : http://www.antennahouse.com/
         <!-- Space-after only paragraph -->
         <variable name="SpaceAfterPHeight">0.1pt</variable>
         <variable name="SpaceAfterForTable">2mm</variable>
+        <variable name="SpaceAfterForImage">5pt</variable>
         <wml-object name="wmlSpaceAfterOnlyP">
             <w:p>
                 <w:pPr>
