@@ -258,7 +258,25 @@ URL : http://www.antennahouse.com/
     <xsl:template name="getColumnBreak" as="element(w:p)?">
         <xsl:param name="prmTopicRef" as="element()?" required="yes"/>
         <xsl:param name="prmTopic"    as="element()?" required="yes"/>
-        <xsl:if test="ahf:isColumnBreak($prmTopicRef) or ahf:isColumnBreak($prmTopic)">
+        <xsl:variable name="isColumnBreak" as="xs:boolean">
+            <xsl:choose>
+                <xsl:when test="exists($prmTopic)">
+                    <xsl:variable name="isNestedTopic" as="xs:boolean" select="exists($prmTopic/ancestor::*[contains(@class,' topic/topic ')])"/>
+                    <xsl:choose>
+                        <xsl:when test="$isNestedTopic">
+                            <xsl:sequence select="ahf:isColumnBreak($prmTopic)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="ahf:isColumnBreak($prmTopicRef) or ahf:isColumnBreak($prmTopic)"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="ahf:isColumnBreak($prmTopicRef)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:if test="$isColumnBreak">
             <xsl:call-template name="getWmlObject">
                 <xsl:with-param name="prmObjName" select="'wmlColumnBreak'"/>
             </xsl:call-template>
