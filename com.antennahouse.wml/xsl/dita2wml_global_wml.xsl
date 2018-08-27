@@ -19,9 +19,9 @@ E-mail : info@antennahouse.com
          ***************************************-->
     
     <!-- Style name -->
-    <xsl:variable name="cOlStyleName" as="xs:string" select="ahf:getVarValue('Ol_Style_Name')"/>
-    <xsl:variable name="cUlStyleName" as="xs:string" select="ahf:getVarValue('Ul_Style_Name')"/>
-    <xsl:variable name="cTopicTitleStyleName" as="xs:string" select="ahf:getVarValue('Topic_Title_Style_Name')"/>
+    <xsl:variable name="cOlStyleName" as="xs:string" select="ahf:getVarValue('OlStyleName')"/>
+    <xsl:variable name="cUlStyleName" as="xs:string" select="ahf:getVarValue('UlStyleName')"/>
+    <xsl:variable name="cTopicTitleStyleName" as="xs:string" select="ahf:getVarValue('TopicTitleStyle_Name')"/>
     <xsl:variable name="cTopicTitleStyleName1st" as="xs:string" select="concat($cTopicTitleStyleName,'1')"/>
     
     <!-- w:numId base -->

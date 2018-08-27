@@ -124,7 +124,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
-        <xsl:variable name="dtStyleName" as="xs:string" select="ahf:getVarValue('Dt_Style_Name')"/>
+        <xsl:variable name="dtStyleName" as="xs:string" select="ahf:getVarValue('DtStyleName')"/>
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName($dtStyleName)}"/>
@@ -138,7 +138,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
-        <xsl:variable name="ddStyleName" as="xs:string" select="ahf:getVarValue('Dd_Style_Name')"/>
+        <xsl:variable name="ddStyleName" as="xs:string" select="ahf:getVarValue('DdStyleName')"/>
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName($ddStyleName)}"/>
@@ -165,7 +165,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
-        <xsl:variable name="slStyleName" as="xs:string" select="ahf:getVarValue('Sl_Style_Name')"/>
+        <xsl:variable name="slStyleName" as="xs:string" select="ahf:getVarValue('SlStyleName')"/>
         <w:p>
             <w:pPr>
                 <xsl:if test="string($slStyleName)">

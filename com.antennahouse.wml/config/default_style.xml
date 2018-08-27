@@ -403,24 +403,24 @@ URL : http://www.antennahouse.com/
         <!-- Style Names 
              Mandatory!
           -->
-        <variable name="Shortdesc_Style_Name"></variable>
-        <variable name="Ol_Style_Name">ol</variable>
-        <variable name="Ul_Style_Name">ul</variable>
-        <variable name="Dt_Style_Name">dt</variable>
-        <variable name="Dd_Style_Name">dd</variable>
-        <variable name="Sl_Style_Name"></variable>
+        <variable name="ShortdescStyleName">Body Text</variable>
+        <variable name="OlStyleName">ol</variable>
+        <variable name="UlStyleName">ul</variable>
+        <variable name="DtStyleName">dt</variable>
+        <variable name="DdStyleName">dd</variable>
+        <variable name="SlStyleName"></variable>
         
-        <variable name="Topic_Title_Style_Name">heading </variable>
+        <variable name="TopicTitleStyleName">heading </variable>
         
-        <variable name="Table_Style_Name"></variable>
+        <variable name="TableStyleName"></variable>
 
-        <variable name="P_Style">Body Text</variable>
-        <variable name="Pre_Style">HTML Preformatted</variable>
-        <variable name="Lines_Style">Body Text</variable>
-        <variable name="Example_Style">caption</variable>
-        <variable name="Fig_Style">caption</variable>
-        <variable name="Section_Style">section</variable>
-        <variable name="Desc_Style">Body Text</variable>
+        <variable name="PStyle">Body Text</variable>
+        <variable name="PreStyle">HTML Preformatted</variable>
+        <variable name="LinesStyle">Body Text</variable>
+        <variable name="ExampleStyle">caption</variable>
+        <variable name="FigStyle">caption</variable>
+        <variable name="SectionStyle">section</variable>
+        <variable name="DescStyle">Body Text</variable>
         
         <!-- w:num/w:numId base -->
         <variable name="Abstract_NumId_For_Topic_Title">5000</variable>
@@ -1518,7 +1518,7 @@ URL : http://www.antennahouse.com/
         <wml-object name="wmlMessgaPanelChildElement">
             <w:p>
                 <w:pPr>
-                    <w:pStyle w:val="$Ul_Style_Name"/>
+                    <w:pStyle w:val="$UlStyleName"/>
                     <w:numPr>
                         <w:ilvl w:val="0"/>
                         <w:numId w:val="%num-id"/>

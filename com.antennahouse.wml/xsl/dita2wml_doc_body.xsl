@@ -50,7 +50,7 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="floatFigs" as="element()*" select="parent::*[contains(@class,' task/step ')]/*[contains(@class,' task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][ahf:isNotEmptyElement(.)]"/>
         <xsl:variable name="pStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
-                <xsl:with-param name="prmVarName" select="'P_Style'"/>
+                <xsl:with-param name="prmVarName" select="'PStyle'"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="divId" as="element()?">
@@ -193,7 +193,7 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[ahf:seqContains(@class,(' topic/table ',' topic/fig '))]/*[contains(@class,' topic/desc ')]">
         <xsl:variable name="descStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
-                <xsl:with-param name="prmVarName" select="'Desc_Style'"/>
+                <xsl:with-param name="prmVarName" select="'DescStyle'"/>
             </xsl:call-template>
         </xsl:variable>
         <w:p>
@@ -213,7 +213,7 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
         <xsl:variable name="sectionStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
-                <xsl:with-param name="prmVarName" select="'Section_Style'"/>
+                <xsl:with-param name="prmVarName" select="'SectionStyle'"/>
             </xsl:call-template>
         </xsl:variable>
         <w:p>
@@ -239,7 +239,7 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/example ')]/*[contains(@class,' topic/title ')]">
         <xsl:variable name="exampleStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
-                <xsl:with-param name="prmVarName" select="'Example_Style'"/>
+                <xsl:with-param name="prmVarName" select="'ExampleStyle'"/>
             </xsl:call-template>
         </xsl:variable>
         <w:p>
@@ -265,7 +265,7 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class, ' topic/fig ')]/*[contains(@class,' topic/title ')]">
         <xsl:variable name="figStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
-                <xsl:with-param name="prmVarName" select="'Fig_Style'"/>
+                <xsl:with-param name="prmVarName" select="'FigStyle'"/>
             </xsl:call-template>
         </xsl:variable>
         <w:p>
@@ -359,7 +359,7 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/pre ')]">
         <xsl:variable name="preStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
-                <xsl:with-param name="prmVarName" select="'Pre_Style'"/>
+                <xsl:with-param name="prmVarName" select="'PreStyle'"/>
             </xsl:call-template>
         </xsl:variable>
         <w:p>
@@ -381,7 +381,7 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/lines ')]">
         <xsl:variable name="linesStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
-                <xsl:with-param name="prmVarName" select="'Lines_Style'"/>
+                <xsl:with-param name="prmVarName" select="'LinesStyle'"/>
             </xsl:call-template>
         </xsl:variable>
         <w:p>
@@ -404,7 +404,7 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/draft-comment ')]">
         <xsl:variable name="pStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
-                <xsl:with-param name="prmVarName" select="'P_Style'"/>
+                <xsl:with-param name="prmVarName" select="'PStyle'"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:choose>

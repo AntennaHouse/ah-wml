@@ -34,7 +34,7 @@ URL : http://www.antennahouse.com/
         <w:p>
             <xsl:variable name="shortDescStyle" as="xs:string">
                 <xsl:call-template name="getVarValue">
-                    <xsl:with-param name="prmVarName" select="'Shortdesc_Style_Name'"/>
+                    <xsl:with-param name="prmVarName" select="'ShortdescStyleName'"/>
                 </xsl:call-template>
             </xsl:variable>
             <w:pPr>

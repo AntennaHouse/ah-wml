@@ -169,7 +169,7 @@ URL : http://www.antennahouse.com/
         <!-- w:tblStyle -->
         <xsl:variable name="tableStyle" as="xs:string">
             <xsl:call-template name="getVarValue">
-                <xsl:with-param name="prmVarName" select="'Table_Style_Name'"/>
+                <xsl:with-param name="prmVarName" select="'TableStyleName'"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:if test="string($tableStyle)">
