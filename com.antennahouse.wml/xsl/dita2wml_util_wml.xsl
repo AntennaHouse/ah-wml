@@ -15,7 +15,7 @@ URL : http://www.antennahouse.com/
   xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
   xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
   xmlns:map="http://www.w3.org/2005/xpath-functions/map"
-  exclude-result-prefixes="xs ahf">
+  exclude-result-prefixes="xs ahf map">
   <!-- 
       ============================================
          WordprocessingML utility
