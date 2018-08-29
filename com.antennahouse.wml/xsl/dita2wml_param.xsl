@@ -70,20 +70,6 @@ E-mail : info@antennahouse.com
     <xsl:param name="PRM_DEBUG_STYLE" required="no" as="xs:string" select="$cNo"/>
     <xsl:variable name="pDebugStyle" as="xs:boolean" select="$PRM_DEBUG_STYLE eq $cYes"/>
 
-    <!-- Make toc for simple map (not for bookmap)
-         2015-03-11 t.makita
-     -->
-    <xsl:param name="PRM_MAKE_TOC_FOR_MAP" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pMakeTocForMap" select="boolean($PRM_MAKE_TOC_FOR_MAP eq $cYes)"
-        as="xs:boolean"/>
-
-    <!-- Make index for simple map (not for bookmap)
-           2015-03-11 t.makita
-       -->
-    <xsl:param name="PRM_MAKE_INDEX_FOR_MAP" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pMakeIndexForMap" select="boolean($PRM_MAKE_INDEX_FOR_MAP eq $cYes)"
-        as="xs:boolean"/>
-
     <!-- Generate axf:alt-text for fo:external-graphic
          2015-03-11 t.makita
      -->
