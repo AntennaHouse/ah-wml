@@ -36,23 +36,15 @@ E-mail : info@antennahouse.com
     <xsl:variable name="pAddChapterNumberPrefixToFigTitle"
         select="boolean($PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_FIG_TITLE eq $cYes) and $pAddChapterNumberPrefixToTopicTitle" as="xs:boolean"/>
 
-    <!-- Add chapter number prefix to equation number
-      -->
-    <xsl:param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_EQUATION_NUMBER" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pAddChapterNumberPrefixToEquationNumber"
-        select="boolean($PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_EQUATION_NUMBER eq $cYes) and $pAddChapterNumberPrefixToTopicTitle" as="xs:boolean"/>
-
     <!-- Document language -->
     <xsl:param name="PRM_LANG" as="xs:string" required="no" select="$doubleApos"/>
 
     <!-- Map directory URL
-         2012-11-11 t.makita
      -->
     <xsl:param name="PRM_MAP_DIR_URL" required="yes" as="xs:string"/>
     <xsl:variable name="pMapDirUrl" as="xs:string" select="$PRM_MAP_DIR_URL"/>
 
     <!-- Debug parameter
-         2014-11-02 t.makita
      -->
     <xsl:param name="PRM_DEBUG" required="no" as="xs:string" select="$cNo"/>
     <xsl:variable name="pDebug" as="xs:boolean" select="$PRM_DEBUG eq $cYes"/>
@@ -70,24 +62,6 @@ E-mail : info@antennahouse.com
     <xsl:variable name="pOutputType" as="xs:string" select="$PRM_OUTPUT_TYPE"/>
     <xsl:variable name="pIsWebOutput" as="xs:boolean" select="$pOutputType eq 'web'"/>
     <xsl:variable name="pIsPrintOutput" as="xs:boolean" select="not($pIsWebOutput)"/>
-    
-    <!-- Number <equation-block> unconditionally
-         <equation-number> with effective number will be honored
-     -->
-    <xsl:param name="PRM_NUMBER_EQUATION_BLOCK_UNCONDITIONALLY" as="xs:string" required="no" select="$cNo"/>
-    <xsl:variable name="pNumberEquationBlockUnconditionally" as="xs:boolean" select="$PRM_NUMBER_EQUATION_BLOCK_UNCONDITIONALLY eq $cYes"/>
-    
-    <!-- Exclude <equation-block> in <equation-figure> in unconditionally numbering mode
-     -->
-    <xsl:param name="PRM_EXCLUDE_AUTO_NUMBERING_FROM_EQUATION_FIGURE" as="xs:string" required="no" select="$cYes"/>
-    <xsl:variable name="pExcludeAutoNumberingFromEquationFigure" as="xs:boolean" select="$PRM_EXCLUDE_AUTO_NUMBERING_FROM_EQUATION_FIGURE eq $cYes"/>
-
-    <!-- Assume all <equation-number> as auto
-         This parameter ignores manual numbering of <equation-number>
-         This function is not in OASIS standard. But useful for making books. 
-     -->
-    <xsl:param name="PRM_ASSUME_EQUATION_NUMBER_AS_AUTO" as="xs:string" required="no" select="$cNo"/>
-    <xsl:variable name="pAssumeEquationNumberAsAuto" as="xs:boolean" select="$PRM_ASSUME_EQUATION_NUMBER_AS_AUTO eq $cYes"/>
     
     <!-- .docx template directory URL -->
     <xsl:param name="PRM_TEMPLATE_DIR_URL" required="yes" as="xs:anyURI"/>
