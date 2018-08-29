@@ -3,7 +3,7 @@
 ****************************************************************
 DITA to WordprocessingML Stylesheet
 Module: Stylesheet parameter and global variables.
-Copyright © 2009-2017 Antenna House, Inc. All rights reserved.
+Copyright © 2009-2018 Antenna House, Inc. All rights reserved.
 Antenna House is a trademark of Antenna House, Inc.
 URL    : http://www.antennahouse.com/
 E-mail : info@antennahouse.com
@@ -23,13 +23,6 @@ E-mail : info@antennahouse.com
     <xsl:param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TOPIC_TITLE" required="no" as="xs:string" select="$cYes"/>
     <xsl:variable name="pAddChapterNumberPrefixToTopicTitle"
         select="boolean($PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TOPIC_TITLE eq $cYes)" as="xs:boolean"/>
-
-    <!-- Add part/chapter to title
-         Deprecated: not supported in Word conversion
-     -->
-    <!--xsl:param name="PRM_ADD_PART_OR_CHAPTER_TO_TITLE" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pAddPartOrChapterToTitle"
-        select="boolean($PRM_ADD_PART_OR_CHAPTER_TO_TITLE eq $cYes) and $pAddChapterNumberPrefixToTopicTitle" as="xs:boolean"/-->
 
     <!-- Add chapter number prefix to table title
       -->
@@ -70,25 +63,6 @@ E-mail : info@antennahouse.com
     <xsl:param name="PRM_DEBUG_STYLE" required="no" as="xs:string" select="$cNo"/>
     <xsl:variable name="pDebugStyle" as="xs:boolean" select="$PRM_DEBUG_STYLE eq $cYes"/>
 
-    <!-- Generate axf:alt-text for fo:external-graphic
-         2015-03-11 t.makita
-     -->
-    <xsl:param name="PRM_MAKE_ALT_TEXT" required="no" as="xs:string" select="$cNo"/>
-    <xsl:variable name="pMakeAltText" select="boolean($PRM_MAKE_ALT_TEXT eq $cYes)"
-        as="xs:boolean"/>
-    
-    <!-- Copy image to output folder
-         2015-05-05 t.makita
-     -->
-    <xsl:param name="PRM_IMAGE_IN_OUTPUT_FOLDER" required="no" as="xs:string" select="$cNo"/>
-    <xsl:variable name="pImageInOutputFolder" select="boolean($PRM_IMAGE_IN_OUTPUT_FOLDER eq $cYes)" as="xs:boolean"/>
-    
-    <!-- Output crop region
-         2015-05-06 t.makita
-     -->
-    <xsl:param name="PRM_OUTPUT_CROP_REGION" required="no" as="xs:string" select="$cNo"/>
-    <xsl:variable name="pOutputCropRegion" select="boolean($PRM_OUTPUT_CROP_REGION eq $cYes)" as="xs:boolean"/>
-
     <!-- Output type
          Possible value: "web","print-color","print-monochrome"
      -->
@@ -96,18 +70,6 @@ E-mail : info@antennahouse.com
     <xsl:variable name="pOutputType" as="xs:string" select="$PRM_OUTPUT_TYPE"/>
     <xsl:variable name="pIsWebOutput" as="xs:boolean" select="$pOutputType eq 'web'"/>
     <xsl:variable name="pIsPrintOutput" as="xs:boolean" select="not($pIsWebOutput)"/>
-    
-    <!-- Support floating fig
-         This function is experimental
-     -->
-    <xsl:param name="PRM_SUPPORT_FLOAT_FIG" as="xs:string" required="no" select="$cNo"/>
-    <xsl:variable name="pSupportFloatFig" as="xs:boolean" select="$PRM_SUPPORT_FLOAT_FIG eq $cYes"/>
-
-    <!-- Exclude cover pages from counting page
-     -->
-    <xsl:param name="PRM_EXCLUDE_COVER_FROM_COUNTING_PAGE" as="xs:string" required="no" select="$cYes"/>
-    <xsl:variable name="pExcludeCoverFromCountingPage" as="xs:boolean" select="$PRM_EXCLUDE_COVER_FROM_COUNTING_PAGE eq $cYes"/>
-    <xsl:variable name="pIncludeCoverIntoPageCounting" as="xs:boolean" select="not($pExcludeCoverFromCountingPage)"/>
     
     <!-- Number <equation-block> unconditionally
          <equation-number> with effective number will be honored
@@ -127,24 +89,6 @@ E-mail : info@antennahouse.com
     <xsl:param name="PRM_ASSUME_EQUATION_NUMBER_AS_AUTO" as="xs:string" required="no" select="$cNo"/>
     <xsl:variable name="pAssumeEquationNumberAsAuto" as="xs:boolean" select="$PRM_ASSUME_EQUATION_NUMBER_AS_AUTO eq $cYes"/>
     
-    <!-- Output directory URL
-         2016-01-11 t.makita
-     -->
-    <!--xsl:param name="PRM_OUTPUT_DIR_URL" required="yes" as="xs:string"/>
-    <xsl:variable name="pOutputDirUrl" as="xs:string" select="$PRM_OUTPUT_DIR_URL"/-->
-
-    <!-- DITA input file name (wo directory & extension)
-         2016-01-11 t.makita
-     -->
-    <!--xsl:param name="PRM_INPUT_MAP_NAME" required="yes" as="xs:string"/>
-    <xsl:variable name="pInputMapName" as="xs:string" select="$PRM_INPUT_MAP_NAME"/-->
-    
-    <!-- Output index
-         2016-03-26 t.makita
-     -->
-    <xsl:param name="PRM_OUTPUT_INDEX" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pOutputIndex" as="xs:boolean" select="$PRM_OUTPUT_INDEX eq $cYes"/>
-    
     <!-- .docx template directory URL -->
     <xsl:param name="PRM_TEMPLATE_DIR_URL" required="yes" as="xs:anyURI"/>
     <xsl:variable name="pTemplateDirUrl" as="xs:anyURI" select="$PRM_TEMPLATE_DIR_URL"/>
@@ -160,10 +104,14 @@ E-mail : info@antennahouse.com
     <xsl:param name="PRM_DEBUG_TABLE" required="no" as="xs:string"/>
     <xsl:variable name="pDebugTable" as="xs:boolean" select="$PRM_DEBUG_TABLE eq $cYes"/>
     
-    <!-- List indent size -->
+    <!-- List indent size
+         Used in dita2wml_param_var.xsl
+     -->
     <xsl:param name="PRM_LIST_INDENT_SIZE" required="no" as="xs:string" select="''"/>
     
-    <!-- List base indent size -->
+    <!-- List base indent size
+         Used in dita2wml_param_var.xsl
+     -->
     <xsl:param name="PRM_LIST_BASE_INDENT_SIZE" required="no" as="xs:string" select="''"/>
     
     <!-- Adopt fixed list indent -->
