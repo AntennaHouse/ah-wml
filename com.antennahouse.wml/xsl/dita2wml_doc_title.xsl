@@ -154,7 +154,7 @@ URL : http://www.antennahouse.com/
     <xsl:template name="genTitlePrefix" as="xs:string">
         <xsl:param name="prmTopicRef" required="yes" as="element()"/>
         
-        <xsl:variable name="prefixPart" as="xs:string">
+        <!--xsl:variable name="prefixPart" as="xs:string">
             <xsl:choose>
                 <xsl:when test="$pAddPartOrChapterToTitle">
                     <xsl:choose>
@@ -176,13 +176,13 @@ URL : http://www.antennahouse.com/
                                     <xsl:sequence select="''"/>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <!-- May be appendice -->
+                                    <!-\- May be appendice -\->
                                     <xsl:sequence select="''"/>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:when>
                         <xsl:otherwise>
-                            <!-- map -->
+                            <!-\- map -\->
                             <xsl:sequence select="''"/>
                         </xsl:otherwise>
                     </xsl:choose>                    
@@ -191,9 +191,9 @@ URL : http://www.antennahouse.com/
                     <xsl:sequence select="''"/>
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:variable>
+        </xsl:variable-->
         
-        <xsl:variable name="suffixPart" as="xs:string">
+        <!--xsl:variable name="suffixPart" as="xs:string">
             <xsl:choose>
                 <xsl:when test="$pAddPartOrChapterToTitle">
                     <xsl:choose>
@@ -215,13 +215,13 @@ URL : http://www.antennahouse.com/
                                     <xsl:sequence select="''"/>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <!-- May be appendice -->
+                                    <!-\- May be appendice -\->
                                     <xsl:sequence select="''"/>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:when>
                         <xsl:otherwise>
-                            <!-- map -->
+                            <!-\- map -\->
                             <xsl:value-of select="''"/>
                         </xsl:otherwise>
                     </xsl:choose>
@@ -230,7 +230,7 @@ URL : http://www.antennahouse.com/
                     <xsl:sequence select="''"/>
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:variable>
+        </xsl:variable-->
         
         <xsl:variable name="numberPart" as="xs:string">
             <xsl:choose>
@@ -264,8 +264,9 @@ URL : http://www.antennahouse.com/
             </xsl:choose>
         </xsl:variable>
         
-        <xsl:variable name="result" select="concat($prefixPart,$numberPart,$suffixPart)"/>
-        <xsl:sequence select="$result"/>
+        <!--xsl:variable name="result" select="concat($prefixPart,$numberPart,$suffixPart)"/>
+        <xsl:sequence select="$result"/-->
+        <xsl:sequence select="$numberPart"/>
     </xsl:template>
 
     <!-- 
@@ -403,8 +404,8 @@ URL : http://www.antennahouse.com/
                             <xsl:number format="{$chapterCountFormat}" value="$chapterCount"/>
                         </xsl:when>
                         <xsl:when test="$topicRef[contains(@class, ' bookmap/appendix ')]">
-                            <xsl:variable name="appendixCount" select="count($topicRef/preceding-sibling::*[contains(@class, ' map/topicref ')][contains(@class, ' bookmap/appendix ')][ahf:isToc(.)]|$topicRef)"/>
-                            <xsl:variable name="appendixCountFormat" as="xs:string" select="ahf:getVarValue('Appendix_Count_Format')"/>
+                            <xsl:variable name="appendixCount" select="count($topicRef/preceding-sibling::*[contains(@class, ' map/topicref ')][ahf:seqContains(@class, (' bookmap/appendix ',' bookmap/chapter ',' bookmap/part '))][ahf:isToc(.)]|$topicRef)"/>
+                            <xsl:variable name="appendixCountFormat" as="xs:string" select="ahf:getVarValue('Chapter_Count_Format')"/>
                             <xsl:number format="{$appendixCountFormat}" value="$appendixCount"/>
                         </xsl:when>
                         <xsl:otherwise>

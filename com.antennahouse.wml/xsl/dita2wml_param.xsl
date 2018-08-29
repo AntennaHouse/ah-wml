@@ -18,12 +18,6 @@ E-mail : info@antennahouse.com
     <!-- Default style definition file: Plug-in relative path -->
     <xsl:param name="PRM_STYLE_DEF_FILE" required="no" as="xs:string" select="'config/default_style.xml'"/>
 
-    <!-- Include frontmatter to toc
-      -->
-    <xsl:param name="PRM_INCLUDE_FRONTMATTER_TO_TOC" required="no" as="xs:string" select="$cNo"/>
-    <xsl:variable name="pIncludeFrontmatterToToc"
-        select="boolean($PRM_INCLUDE_FRONTMATTER_TO_TOC eq $cYes)" as="xs:boolean"/>
-
     <!-- Add numbering prefix to part/chapter title
       -->
     <xsl:param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TOPIC_TITLE" required="no" as="xs:string" select="$cYes"/>
@@ -31,10 +25,11 @@ E-mail : info@antennahouse.com
         select="boolean($PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TOPIC_TITLE eq $cYes)" as="xs:boolean"/>
 
     <!-- Add part/chapter to title
+         Deprecated: not supported in Word conversion
      -->
-    <xsl:param name="PRM_ADD_PART_OR_CHAPTER_TO_TITLE" required="no" as="xs:string" select="$cNo"/>
+    <!--xsl:param name="PRM_ADD_PART_OR_CHAPTER_TO_TITLE" required="no" as="xs:string" select="$cYes"/>
     <xsl:variable name="pAddPartOrChapterToTitle"
-        select="boolean($PRM_ADD_PART_OR_CHAPTER_TO_TITLE eq $cYes) and $pAddChapterNumberPrefixToTopicTitle" as="xs:boolean"/>
+        select="boolean($PRM_ADD_PART_OR_CHAPTER_TO_TITLE eq $cYes) and $pAddChapterNumberPrefixToTopicTitle" as="xs:boolean"/-->
 
     <!-- Add chapter number prefix to table title
       -->
@@ -57,122 +52,11 @@ E-mail : info@antennahouse.com
     <!-- Document language -->
     <xsl:param name="PRM_LANG" as="xs:string" required="no" select="$doubleApos"/>
 
-    <!-- Output draft-comment -->
-    <!--xsl:param name="PRM_OUTPUT_DRAFT_COMMENT" required="no" as="xs:string" select="$cNo"/>
-    <xsl:variable name="pOutputDraftComment" select="boolean($PRM_OUTPUT_DRAFT_COMMENT eq $cYes)"
-        as="xs:boolean"/-->
-
-    <!-- Output required-cleanup -->
-    <!--xsl:param name="PRM_OUTPUT_REQUIRED_CLEANUP" required="no" as="xs:string" select="$cNo"/>
-    <xsl:variable name="pOutputRequiredCleanup" select="boolean($PRM_OUTPUT_REQUIRED_CLEANUP eq $cYes)"
-        as="xs:boolean"/-->
-
-    <!-- Generate unique id in XSL-FO: Deprecated. -->
-    <!--xsl:param name="PRM_GEN_UNIQUE_ID" select="$cYes"/>
-    <xsl:variable name="pGenUniqueId" select="boolean($PRM_GEN_UNIQUE_ID eq $cYes)" as="xs:boolean"/-->
-
-    <!-- Use @oid in XSL-FO 
-         ADDED: 2010/12/16 t.makita
-    -->
-    <xsl:param name="PRM_USE_OID" required="no" as="xs:string" select="$cNo"/>
-    <xsl:variable name="pUseOid" select="boolean($PRM_USE_OID eq $cYes)" as="xs:boolean"/>
-
-
-    <!-- Format dl as block -->
-    <xsl:param name="PRM_FORMAT_DL_AS_BLOCK" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pFormatDlAsBlock" select="boolean($PRM_FORMAT_DL_AS_BLOCK eq $cYes)"
-        as="xs:boolean"/>
-
-    <!-- Honor toc="no" or not -->
-    <!-- Deprecated. @toc must be honored in DITA 1.2
-         2-15-08-06 t.makita
-     -->
-    <!--xsl:param name="PRM_APPLY_TOC_ATTR" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pApplyTocAttr" select="boolean($PRM_APPLY_TOC_ATTR eq $cYes)" as="xs:boolean"/-->
-
-    <!-- Online or pre-press PDF
-         Deprecated. Use $PRM_OUTPUT_TYPE!
-      -->
-    <!--xsl:param name="PRM_ONLINE_PDF" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pOnlinePdf" select="boolean($PRM_ONLINE_PDF eq $cYes)" as="xs:boolean"/-->
-
-    <!-- Adopt topicref/@navtitle for topicref/[not(@href)] 
-         Not released in build.xml.
-         2011-07-26 t.makita
-         Deprecated.
-         2015-08-08 t.makita
-     -->
-    <!--xsl:param name="PRM_ADOPT_NAVTITLE" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pAdoptNavtitle" select="boolean($PRM_ADOPT_NAVTITLE eq $cYes)" as="xs:boolean"/-->
-
-    <!-- Use outputclass="deprecated" 
-         2011-09-05 t.makita
-         Deprecated! Use fo:prop instead.
-         2015-05-07 t.makita
-     -->
-    <!--xsl:param name="PRM_USE_OUTPUT_CLASS_DEPRECATED" required="no" as="xs:string" select="$cNo"/>
-    <xsl:variable name="pUseOutputClassDeprecated"
-        select="boolean($PRM_USE_OUTPUT_CLASS_DEPRECATED eq $cYes)" as="xs:boolean"/-->
-
-    <!-- Use outputclass="nohyphenation" 
-         2011-09-05 t.makita
-         Deprecated! Use fo:prop instead.
-         2015-05-07 t.makita
-     -->
-    <!--xsl:param name="PRM_USE_OUTPUT_CLASS_NOHYPHENATE" required="no" as="xs:string" select="$cNo"/>
-    <xsl:variable name="pUseOutputClassNoHyphenate"
-        select="boolean($PRM_USE_OUTPUT_CLASS_NOHYPHENATE eq $cYes)" as="xs:boolean"/-->
-
-    <!-- Supress first page-break for first child of part,chapter,appendix in bookmap
-         Not released in build.xml.
-         2012-04-02 t.makita
-         Deprecated. This parameter is not used in anywhere.
-         2015-08-10 t.makita
-    -->
-    <!--xsl:param name="PRM_SUPRESS_FIRST_CHILD_PAGE_BREAK" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pSupressFirstChildPageBreak"
-        select="boolean($PRM_SUPRESS_FIRST_CHILD_PAGE_BREAK eq $cYes)" as="xs:boolean"/-->
-
-    <!-- Compatibility parameter.
-         Display footnote at the end of topic.
-         If this parameter is "no" then <fn> must exists as the descendant of table, simpletable, ul, ol, glossdef and
-         the <fn> elements are displayed at the end of these elements.
-         Not released in build.xml.
-         2012-04-04 t.makita
-    -->
-    <xsl:param name="PRM_DISPLAY_FN_AT_END_OF_TOPIC" required="no" as="xs:string" select="$cNo"/>
-    <xsl:variable name="pDisplayFnAtEndOfTopic"
-        select="boolean($PRM_DISPLAY_FN_AT_END_OF_TOPIC eq $cYes)" as="xs:boolean"/>
-
-    <!-- Compatibility parameter.
-         Display table/title at the end of the table.
-         The new implemenatation outputs table/title before its body.
-         Not released in build.xml.
-         2012-04-04 t.makita
-    -->
-    <xsl:param name="PRM_OUTPUT_TABLE_TITLE_AFTER" required="no" as="xs:string" select="$cNo"/>
-    <xsl:variable name="pOutputTableTitleAfter"
-        select="boolean($PRM_OUTPUT_TABLE_TITLE_AFTER eq $cYes)" as="xs:boolean"/>
-
-    <!-- Output plug-in start message.
-         2013-09-30 t.makita
-      -->
-    <xsl:param name="PRM_OUTPUT_START_MESSAGE" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pOutputStartMessage" select="boolean($PRM_OUTPUT_START_MESSAGE eq $cYes)"
-        as="xs:boolean"/>
-
-
     <!-- Map directory URL
          2012-11-11 t.makita
      -->
     <xsl:param name="PRM_MAP_DIR_URL" required="yes" as="xs:string"/>
     <xsl:variable name="pMapDirUrl" as="xs:string" select="$PRM_MAP_DIR_URL"/>
-
-    <!-- DITA-OT version
-         2014-11-02 t.makita
-     -->
-    <!--xsl:param name="PRM_OT_VERSION" required="yes" as="xs:string"/>
-    <xsl:variable name="pOtVersion" as="xs:string" select="$PRM_OT_VERSION"/-->
 
     <!-- Debug parameter
          2014-11-02 t.makita
@@ -185,13 +69,6 @@ E-mail : info@antennahouse.com
      -->
     <xsl:param name="PRM_DEBUG_STYLE" required="no" as="xs:string" select="$cNo"/>
     <xsl:variable name="pDebugStyle" as="xs:boolean" select="$PRM_DEBUG_STYLE eq $cYes"/>
-
-    <!-- Auto scall down to fit for block level image
-         2015-03-08 t.makita
-     -->
-    <xsl:param name="PRM_AUTO_SCALE_DOWN_TO_FIT" required="no" as="xs:string" select="$cYes"/>
-    <xsl:variable name="pAutoScaleDownToFit" select="boolean($PRM_AUTO_SCALE_DOWN_TO_FIT eq $cYes)"
-        as="xs:boolean"/>
 
     <!-- Make toc for simple map (not for bookmap)
          2015-03-11 t.makita

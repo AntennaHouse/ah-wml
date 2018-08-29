@@ -198,11 +198,13 @@ URL : http://www.antennahouse.com/
         <variable name="UiControlPrefix">[&#x200D;</variable>
         <variable name="UiControlSuffix">&#x200D;]</variable>
 
-        <!-- Title Literals -->
-        <variable name="Part_Title_Prefix">Part </variable>
+        <!-- Title Literals
+             The commented titles are not supported in Word conversion.
+         -->
+        <!--variable name="Part_Title_Prefix">Part </variable>
         <variable name="Part_Title_Suffix"/>
         <variable name="Chapter_Title_Prefix">Chapter </variable>
-        <variable name="Chapter_Title_Suffix"/>
+        <variable name="Chapter_Title_Suffix"/-->
 
         <variable name="Toc_Title">Contents</variable>
         <variable name="Figure_List_Title">Figures</variable>
@@ -211,8 +213,8 @@ URL : http://www.antennahouse.com/
         <variable name="Trademark_List_Title">Trademarks</variable>
         <variable name="Bibliographic_List_Title">Bibliography</variable>
         <variable name="Glossary_List_Title">Glossary</variable>
-        <variable name="Appendices_Title">Appendices</variable>
-        <variable name="Appendix_Title">Appendix </variable>
+        <!--variable name="Appendices_Title">Appendices</variable>
+        <variable name="Appendix_Title">Appendix </variable-->
         <variable name="Index_Title">Index</variable>
 
         <variable name="Front_Matter_Title">Forward</variable>
@@ -423,9 +425,9 @@ URL : http://www.antennahouse.com/
         <variable name="DescStyle">Body Text</variable>
         
         <!-- w:num/w:numId base -->
-        <variable name="Abstract_NumId_For_Topic_Title">5000</variable>
-        <variable name="NumId_For_Topic_Title">5000</variable>
-        <variable name="NumId_Base_For_List">10000</variable>
+        <variable name="AbstractNumIdForTopicTitle">5000</variable>
+        <variable name="NumIdForTopicTitle">5000</variable>
+        <variable name="NumIdBaseForList">10000</variable>
         
         <variable name="DivldIdBase">10000</variable>
         
@@ -1173,7 +1175,7 @@ URL : http://www.antennahouse.com/
         
         <!-- w:abstractNum for topic/title -->
         <wml-object name="wmlTopicTitleAbstractNum">
-            <w:abstractNum w:abstractNumId="$Abstract_NumId_For_Topic_Title">
+            <w:abstractNum w:abstractNumId="$AbstractNumIdForTopicTitle">
                 <w:multiLevelType w:val="multilevel"/>
                 <w:lvl w:ilvl="0">
                     <w:start w:val="1"/>
@@ -1265,8 +1267,8 @@ URL : http://www.antennahouse.com/
 
         <!-- w:num for topic/title numbering -->
         <wml-object name="wmlTopicTitleNum">
-            <w:num w:numId="$NumId_For_Topic_Title">
-                <w:abstractNumId w:val="$Abstract_NumId_For_Topic_Title"/>
+            <w:num w:numId="$NumIdForTopicTitle">
+                <w:abstractNumId w:val="$AbstractNumIdForTopicTitle"/>
             </w:num>
         </wml-object>
         

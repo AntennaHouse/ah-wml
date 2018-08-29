@@ -68,16 +68,18 @@ E-mail : info@antennahouse.com
     <!-- ************************************************ 
             Words depending on language ($map/@xml:lang)
          ************************************************-->
-    <xsl:variable name="cPartTitlePrefix"  select="ahf:getVarValue('Part_Title_Prefix')" as="xs:string"/>
+    <!--xsl:variable name="cPartTitlePrefix"  select="ahf:getVarValue('Part_Title_Prefix')" as="xs:string"/>
     <xsl:variable name="cPartTitleSuffix"  select="ahf:getVarValue('Part_Title_Suffix')" as="xs:string"/>
     <xsl:variable name="cChapterTitlePrefix"  select="ahf:getVarValue('Chapter_Title_Prefix')" as="xs:string"/>
     <xsl:variable name="cChapterTitleSuffix"  select="ahf:getVarValue('Chapter_Title_Suffix')" as="xs:string"/>
+    -->
     
     <xsl:variable name="cTocTitle"         select="ahf:getVarValue('Toc_Title')" as="xs:string"/>
     <xsl:variable name="cFigureListTitle"  select="ahf:getVarValue('Figure_List_Title')" as="xs:string"/>
     <xsl:variable name="cTableListTitle"   select="ahf:getVarValue('Table_List_Title')" as="xs:string"/>
-    <xsl:variable name="cAppendicesTitle"  select="ahf:getVarValue('Appendices_Title')" as="xs:string"/>
+    <!--xsl:variable name="cAppendicesTitle"  select="ahf:getVarValue('Appendices_Title')" as="xs:string"/>
     <xsl:variable name="cAppendixTitle"    select="ahf:getVarValue('Appendix_Title')" as="xs:string"/>
+    -->
     <xsl:variable name="cGlossaryListTitle" select="ahf:getVarValue('Glossary_List_Title')" as="xs:string"/>
     <xsl:variable name="cIndexTitle"       select="ahf:getVarValue('Index_Title')" as="xs:string"/>
     <xsl:variable name="cNoticeTitle"      select="ahf:getVarValue('Notice_Title')" as="xs:string"/>

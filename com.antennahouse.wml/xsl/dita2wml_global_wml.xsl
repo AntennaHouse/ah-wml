@@ -21,15 +21,15 @@ E-mail : info@antennahouse.com
     <!-- Style name -->
     <xsl:variable name="cOlStyleName" as="xs:string" select="ahf:getVarValue('OlStyleName')"/>
     <xsl:variable name="cUlStyleName" as="xs:string" select="ahf:getVarValue('UlStyleName')"/>
-    <xsl:variable name="cTopicTitleStyleName" as="xs:string" select="ahf:getVarValue('TopicTitleStyle_Name')"/>
+    <xsl:variable name="cTopicTitleStyleName" as="xs:string" select="ahf:getVarValue('TopicTitleStyleName')"/>
     <xsl:variable name="cTopicTitleStyleName1st" as="xs:string" select="concat($cTopicTitleStyleName,'1')"/>
     
     <!-- w:numId base -->
-    <xsl:variable name="numIdBaseForList" as="xs:integer" select="ahf:getVarValueAsInteger('NumId_Base_For_List')"/>
-    <xsl:variable name="numIdForTopicTitle" as="xs:integer" select="ahf:getVarValueAsInteger('NumId_For_Topic_Title')"/>
+    <xsl:variable name="numIdBaseForList" as="xs:integer" select="ahf:getVarValueAsInteger('NumIdBaseForList')"/>
+    <xsl:variable name="numIdForTopicTitle" as="xs:integer" select="ahf:getVarValueAsInteger('NumIdForTopicTitle')"/>
 
     <!-- w:abstractNumId -->
-    <xsl:variable name="abstractNumIdForTopicTitle" as="xs:integer" select="ahf:getVarValueAsInteger('Abstract_NumId_For_Topic_Title')"/>
+    <xsl:variable name="abstractNumIdForTopicTitle" as="xs:integer" select="ahf:getVarValueAsInteger('AbstractNumIdForTopicTitle')"/>
 
     <!-- ordered list & unordered list w:numId -->
     <xsl:variable name="olAbstractNumId" as="xs:string" select="ahf:getAbstractNumIdFromStyleName($cOlStyleName)"/>
