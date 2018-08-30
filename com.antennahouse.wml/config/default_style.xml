@@ -194,7 +194,7 @@ URL : http://www.antennahouse.com/
         <!-- Should be &#x25CF; 6C-->
 
         <!-- User interface -->
-        <variable name="MenuCascadeSymbol">&gt;</variable>
+        <variable name="MenuCascadeSymbol"> &gt; </variable>
         <variable name="UiControlPrefix">[&#x200D;</variable>
         <variable name="UiControlSuffix">&#x200D;]</variable>
 
