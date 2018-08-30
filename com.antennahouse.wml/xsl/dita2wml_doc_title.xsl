@@ -32,11 +32,13 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmTopicRef"       tunnel="yes" required="yes" as="element()"/>
         <xsl:param name="prmTopicRefLevel"  tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmTopic"          tunnel="yes" required="yes" as="element()"/>
+        <xsl:variable name="title" as="element()" select="."/>
+        <xsl:variable name="topicLevel" as="xs:integer" select="count($title/parent::*/ancestor::*[contains(@class,' topic/topic ')])"/>
         <xsl:variable name="isInFrontmatterOrBackmatter" as="xs:boolean" select="exists($prmTopicRef/ancestor-or-self::*[ahf:seqContains(@class,(' bookmap/frontmatter',' bookmap/backmatter '))])"/>
         <w:p>
             <w:pPr>
                 <w:pStyle>
-                    <xsl:attribute name="w:val" select="ahf:getStyleIdFromName(concat('heading ',string($prmTopicRefLevel)))"/>
+                    <xsl:attribute name="w:val" select="ahf:getStyleIdFromName(concat('heading ',string($prmTopicRefLevel + $topicLevel)))"/>
                 </w:pStyle>
                 <xsl:if test="$pAddChapterNumberPrefixToTopicTitle and not($isInFrontmatterOrBackmatter)">
                     <w:numPr>
