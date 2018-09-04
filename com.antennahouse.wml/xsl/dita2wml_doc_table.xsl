@@ -217,7 +217,7 @@ URL : http://www.antennahouse.com/
     <!-- 
      function:	Get pgwide attributes
      param:		prmTgroupAttr
-     return:	attribute()
+     return:	xs:boolean
      note:		
      -->
     <xsl:function name="ahf:isTablePgwide" as="xs:boolean">
@@ -228,7 +228,7 @@ URL : http://www.antennahouse.com/
     <!-- 
      function:	Process table/@frame attribute and generate tableBorder child elements
      param:		prmTgroupAttr
-     return:	attribute()
+     return:	element()*
      note:		
      -->
     <xsl:template name="getTableBorderPrElem" as="element()*">
@@ -273,7 +273,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:template name="genGridCol" as="element()+">
         <xsl:param name="prmColSpec" as="element()+" required="yes"/>
-        <xsl:param name="ancestorColElem" as="element()" select="if (exists($prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')])) then $prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')] else $prmColSpec[1]/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
+        <xsl:variable name="ancestorColElem" as="element()" select="if (exists($prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')])) then $prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')] else $prmColSpec[1]/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
         <xsl:variable name="colInfo" as="item()+" select="map:get($columnMap,ahf:generateId($ancestorColElem))"/>
         <xsl:variable name="columnCount" as="xs:integer" select="xs:integer($colInfo[2])"/>
         <xsl:variable name="bodyWidth" as="xs:double">
@@ -395,6 +395,19 @@ URL : http://www.antennahouse.com/
                 <xsl:otherwise>
                     <xsl:apply-templates>
                         <xsl:with-param name="prmTcAttr" tunnel="yes" select="$entryAttr"/>
+                        <xsl:with-param name="prmWidthConstraintInEmu" tunnel="yes">
+                            <xsl:choose>
+                                <xsl:when test="empty($entry/descendant::*[contains(@class,' topic/image ')][string(@placement) eq 'break' ])">
+                                    <xsl:sequence select="()"/>
+                                </xsl:when>
+                                <xsl:when test="ahf:isTablePgwide($entry/ancestor::*[contains(@class,' topic/table ')][1])">
+                                    <xsl:sequence select="ahf:getFIxedTableCellWidthInEmu($entry,$prmColSpec)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:sequence select="()"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:with-param>
                     </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
@@ -402,6 +415,41 @@ URL : http://www.antennahouse.com/
         
     </xsl:template>
     
+    <!-- 
+     function:	get entry width percentage
+     param:		prmEntry, prmColSpec
+     return:	xs:integer of the column width in EMU
+     note:		This function is used to limit image width in fixed table cell.
+     -->
+    <xsl:function name="ahf:getFIxedTableCellWidthInEmu" as="xs:integer">
+        <xsl:param name="prmEntry" as="element()"/>
+        <xsl:param name="prmColSpec" as="element()+"/>
+        <xsl:variable name="ancestorColElem" as="element()" select="if (exists($prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')])) then $prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')] else $prmColSpec[1]/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
+        <xsl:variable name="colInfo" as="item()+" select="map:get($columnMap,ahf:generateId($ancestorColElem))"/>
+        <xsl:variable name="columnCount" as="xs:integer" select="xs:integer($colInfo[2])"/>
+        <xsl:variable name="bodyWidthEmu" as="xs:double">
+            <xsl:choose>
+                <xsl:when test="$columnCount eq 1">
+                    <xsl:sequence select="ahf:toEmu($pPaperBodyWidth)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="ahf:toEmu($pPaperBodyWidth) div $columnCount - ahf:toEmu($pPaperColumnGap) * ($columnCount - 1) div $columnCount"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="gridSpan" as="xs:integer" select="if (exists($prmEntry/@ahf:col-span-count)) then xs:integer(($prmEntry/@ahf:col-span-count)) else 0"/>
+        <xsl:variable name="colWidthRatio" as="xs:double">
+            <xsl:variable name="colWidthRatios" as="xs:double+">
+                <xsl:for-each select="xs:integer($prmEntry/@ahf:colnum) to (xs:integer($prmEntry/@ahf:colnum) + $gridSpan)">
+                    <xsl:sequence select="xs:double($prmColSpec[xs:integer(@colnum) eq current()]/@ahf:colwidth-ratio) div 100"/>
+                </xsl:for-each>
+            </xsl:variable>
+            <xsl:sequence select="sum($colWidthRatios)"/>
+        </xsl:variable>
+        <xsl:variable name="colWidthEmu" as="xs:integer" select="xs:integer(round($colWidthRatio * $bodyWidthEmu))"/>
+        <xsl:sequence select="$colWidthEmu"/>
+    </xsl:function>
+
     <!-- 
      function:	build entry attributes
      param:		prmEntry, prmRowAttr, prmColSpec
