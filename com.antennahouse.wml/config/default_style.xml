@@ -464,6 +464,9 @@ URL : http://www.antennahouse.com/
           -->
         <variable name="Table_Layout_Type">autofit</variable>
         
+        <!-- Default padding of table cell -->
+        <variable name="TableCellMargin">1mm</variable>
+        
         <!-- Default image resolution -->
         <variable name="Default_Image_Dpi">96</variable>
 
@@ -1975,7 +1978,17 @@ URL : http://www.antennahouse.com/
                 </w:pPr>
             </w:p>
         </wml-object>
-        
+
+        <!-- Table cell padding -->
+        <wml-object name="TableCellPaddingDefault">
+            <w:tblCellMar>
+                <w:top w:w="{ahf:toTwipStr('$TableCellMargin')}" w:type="dxa"/>
+                <w:start w:w="{ahf:toTwipStr('$TableCellMargin')}" w:type="dxa"/>
+                <w:bottom w:w="{ahf:toTwipStr('$TableCellMargin')}" w:type="dxa"/>
+                <w:end w:w="{ahf:toTwipStr('$TableCellMargin')}" w:type="dxa"/>
+            </w:tblCellMar>
+        </wml-object>
+
     </wml-objects>
 
     <!-- DO NOT REMOVE! Style customize inclusion -->

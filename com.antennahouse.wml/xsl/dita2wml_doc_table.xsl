@@ -212,6 +212,12 @@ URL : http://www.antennahouse.com/
                 </xsl:with-param>
             </xsl:call-template>
         </w:tblLayout>
+        
+        <!--tblCellMar-->
+        <xsl:call-template name="getWmlObject">
+            <xsl:with-param name="prmObjName" select="'TableCellPaddingDefault'"/>
+        </xsl:call-template>
+        
     </xsl:template>
 
     <!-- 
