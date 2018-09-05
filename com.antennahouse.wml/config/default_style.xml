@@ -549,6 +549,11 @@ URL : http://www.antennahouse.com/
             <attribute name="w:w">100%</attribute>
             <attribute name="w:type">pct</attribute>
         </attribute-set>
+
+        <attribute-set name="atsRelativeWidthTblW">
+            <attribute name="w:w">%width</attribute>
+            <attribute name="w:type">pct</attribute>
+        </attribute-set>
         
         <!-- Automatic table width -->
         <attribute-set name="atsAutoTblW">
