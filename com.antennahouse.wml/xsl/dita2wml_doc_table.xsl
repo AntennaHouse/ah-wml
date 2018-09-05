@@ -488,6 +488,9 @@ URL : http://www.antennahouse.com/
                         <xsl:with-param name="prmTcAttr" tunnel="yes" select="$entryAttr"/>
                         <xsl:with-param name="prmWidthConstraintInEmu" tunnel="yes">
                             <xsl:choose>
+                                <xsl:when test="$entry/descendant::*[contains(@class,' topic/imag ')][string(@placement) eq 'break']">
+                                    <xsl:sequence select="()"/>
+                                </xsl:when>
                                 <xsl:when test="(string($prmTgroupAttr/@pgwide) eq '1') or exists($prmTgroupAttr/@ahf:width)">
                                     <xsl:sequence select="ahf:getFIxedTableCellWidthInEmu($entry,$prmTblGrid)"/>
                                 </xsl:when>
