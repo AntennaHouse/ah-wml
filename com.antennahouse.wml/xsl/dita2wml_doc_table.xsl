@@ -461,6 +461,7 @@ URL : http://www.antennahouse.com/
      param:		prmRowAttr
      return:	w:tr
      note:		Passing $prmTcAttr aims to implement @align in paragraph level.
+                Pass $prmWidthConstraintInEmu to image element template to adjust the image size.
      -->
     <!-- Ignore column spanned entry -->
     <xsl:template match="*[contains(@class,' topic/entry ')][string(@ahf:col-spanned) eq $cYes]" priority="5"/>
