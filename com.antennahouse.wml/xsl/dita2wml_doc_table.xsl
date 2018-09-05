@@ -349,7 +349,7 @@ URL : http://www.antennahouse.com/
                     <xsl:sequence select="100"/>
                 </xsl:when>
                 <xsl:when test="string($prmTgroupAttr/@ahf:width)">
-                    <xsl:sequence select="xs:integer($prmTgroupAttr/@ahf:width)"></xsl:sequence>
+                    <xsl:sequence select="xs:integer($prmTgroupAttr/@ahf:width)"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:sequence select="()"/>
@@ -488,10 +488,12 @@ URL : http://www.antennahouse.com/
                         <xsl:with-param name="prmTcAttr" tunnel="yes" select="$entryAttr"/>
                         <xsl:with-param name="prmWidthConstraintInEmu" tunnel="yes">
                             <xsl:choose>
-                                <xsl:when test="$entry/descendant::*[contains(@class,' topic/imag ')][string(@placement) eq 'break']">
+                                <xsl:when test="empty($entry/descendant::*[contains(@class,' topic/image ')][string(@placement) eq 'break'])">
                                     <xsl:sequence select="()"/>
                                 </xsl:when>
                                 <xsl:when test="(string($prmTgroupAttr/@pgwide) eq '1') or exists($prmTgroupAttr/@ahf:width)">
+                                    <xsl:message select="'$entry=',$entry"/>
+                                    <xsl:message select="'$prmTblGrid=',$prmTblGrid"/>
                                     <xsl:sequence select="ahf:getFIxedTableCellWidthInEmu($entry,$prmTblGrid)"/>
                                 </xsl:when>
                                 <xsl:otherwise>
