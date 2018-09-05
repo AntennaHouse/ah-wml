@@ -487,7 +487,7 @@ URL : http://www.antennahouse.com/
                 <xsl:otherwise>
                     <xsl:apply-templates>
                         <xsl:with-param name="prmTcAttr" tunnel="yes" select="$entryAttr"/>
-                        <xsl:with-param name="prmWidthConstraintInEmu" tunnel="yes">
+                        <xsl:with-param name="prmWidthConstraintInEmu" as="xs:integer?" tunnel="yes">
                             <xsl:choose>
                                 <xsl:when test="empty($entry/descendant::*[contains(@class,' topic/image ')][string(@placement) eq 'break'])">
                                     <xsl:sequence select="()"/>
