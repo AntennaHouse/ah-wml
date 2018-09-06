@@ -74,7 +74,7 @@ E-mail : info@antennahouse.com
     <xsl:param name="PRM_DEBUG_MERGED" required="no" as="xs:string"/>
     <xsl:variable name="pDebugMerged" as="xs:boolean" select="$PRM_DEBUG_MERGED eq $cYes"/>
     
-    <!-- Debug table expansition -->
+    <!-- Debug table expansion -->
     <xsl:param name="PRM_DEBUG_TABLE" required="no" as="xs:string"/>
     <xsl:variable name="pDebugTable" as="xs:boolean" select="$PRM_DEBUG_TABLE eq $cYes"/>
     
