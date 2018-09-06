@@ -922,14 +922,14 @@ URL : http://www.antennahouse.com/
      return:	none
      note:		
      -->
-    <!--xsl:template match="*[contains(@class,' topic/sthead ')]">
+    <xsl:template match="*[contains(@class,' topic/sthead ')]">
         <w:tr>
             <w:trPr>
                 <xsl:copy-of select="ahf:getWmlObject('wmlTrPrHead')"/>
             </w:trPr>
             <xsl:apply-templates select="*[contains(@class,' topic/stentry ')]"/>
         </w:tr>
-    </xsl:template-->
+    </xsl:template>
 
     <!-- 
      function:	strow template 
@@ -937,14 +937,14 @@ URL : http://www.antennahouse.com/
      return:	none
      note:		
      -->
-    <!--xsl:template match="*[contains(@class,' topic/strow ')]">
+    <xsl:template match="*[contains(@class,' topic/strow ')]">
         <w:tr>
             <w:trPr>
                 <xsl:copy-of select="ahf:getWmlObject('wmlTrPrBody')"/>
             </w:trPr>
             <xsl:apply-templates select="*[contains(@class,' topic/stentry ')]"/>
         </w:tr>
-    </xsl:template-->
+    </xsl:template>
     
     <!-- 
      function:	Generate w:tc from stentry
