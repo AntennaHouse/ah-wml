@@ -519,6 +519,14 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmEntry" as="element()"/>
         <xsl:param name="prmTblGrid" as="element()+"/>
         <xsl:variable name="gridSpan" as="xs:integer" select="if (exists($prmEntry/@ahf:col-span-count)) then xs:integer(($prmEntry/@ahf:col-span-count)) else 0"/>
+        <xsl:variable name="cellPaddingBothSideInEmu" as="xs:integer">
+            <xsl:variable name="cellPadding" as="xs:string">
+                <xsl:call-template name="getVarValue">
+                    <xsl:with-param name="prmVarName" select="'TableCellMargin'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:sequence select="ahf:toEmu($cellPadding) * 2"/>
+        </xsl:variable>
         <xsl:variable name="colWidth" as="xs:double">
             <xsl:variable name="colWidths" as="xs:double+">
                 <xsl:for-each select="xs:integer($prmEntry/@ahf:colnum) to (xs:integer($prmEntry/@ahf:colnum) + $gridSpan)">
@@ -527,7 +535,7 @@ URL : http://www.antennahouse.com/
             </xsl:variable>
             <xsl:sequence select="sum($colWidths)"/>
         </xsl:variable>
-        <xsl:variable name="colWidthEmu" as="xs:integer" select="ahf:toEmu(concat(string($colWidth),'twip'))"/>
+        <xsl:variable name="colWidthEmu" as="xs:integer" select="ahf:toEmu(concat(string($colWidth),'twip')) - $cellPaddingBothSideInEmu"/>
         <xsl:sequence select="$colWidthEmu"/>
     </xsl:function>
 

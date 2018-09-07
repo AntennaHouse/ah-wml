@@ -134,24 +134,6 @@ URL : http://www.antennahouse.com/
         <variable name="General_Table_Border_Width">0.5pt</variable>
         <variable name="Table_Outer_Border_Width">$General_Table_Border_Width</variable>
         <variable name="Table_Header_Border_After_Width">1pt</variable>
-        
-        <!-- Table cell padding -->
-        <variable name="General_Table_Cell_Padding">1mm</variable>
-        
-        <!-- Spacing & indent: probably defined in template .docx -->
-        <!--space-before: 2mm for 11pt, 1.2mm for 9.5pt (in table) -\->
-        <variable name="Para_Space_Before">1.5122em - 3.8673mm</variable>
-        <!-\-start-indent: 7mm for 11pt, 5mm for 9.5pt (in table) -\->
-        <variable name="General_Indent_Value">3.7807em - 7.669mm</variable>
-        <!-\-dl indent: 7mm for 11pt, 3mm for 9.5pt (in table) -\->
-        <variable name="Dl_Indent_Value">7.5614em - 22.338mm</variable>
-        <!-\-dd indent: 5mm for 11pt, 2mm for 9.5pt (in table) -\->
-        <variable name="Dl_Dd_Indent_Value">5.671em - 17.003mm</variable>
-
-        <!-\- space-before: 5mm for 11pt, 2mm for 9.5pt (in table) -\->
-        <variable name="Dl_Dt_Block_Space_Before">5.6693em - 16.9997mm</variable>
-        <variable name="Dl_Dd_Block_Space_Before">$Para_Space_Before</variable>
-        -->
 
         <!-- Bookmark -->
         <variable name="Starting_State">hide</variable>
