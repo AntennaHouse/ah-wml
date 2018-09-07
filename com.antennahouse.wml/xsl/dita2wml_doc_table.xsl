@@ -514,6 +514,8 @@ URL : http://www.antennahouse.com/
      param:		prmEntry, prmTblGrid (Calculated table grid width in twip unit)
      return:	xs:integer of the column width in EMU
      note:		This function is used to limit image width in fixed table cell.
+                2018-09-07 t.makita
+                Subtract both side padding from cell width to prevent image overflow.  
      -->
     <xsl:function name="ahf:getFixedTableCellWidthInEmu" as="xs:integer">
         <xsl:param name="prmEntry" as="element()"/>
