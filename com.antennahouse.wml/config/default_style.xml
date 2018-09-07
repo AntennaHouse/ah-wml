@@ -1623,13 +1623,11 @@ URL : http://www.antennahouse.com/
              param: %title title
                     %end-pos line end position
           -->
-        <variable name="RelatedLinksFontFamily">major</variable>
         <variable name="RelatedLinksTitleStartPos">3mm</variable>
-        
         <wml-object name="wmlRelatedLinksTitle">
             <w:p>
                 <w:pPr>
-                    <w:pStyle w:val="note-line"/>
+                    <w:pStyle w:val="{ahf:getStyleIdFromName('note-line')}"/>
                     <w:keepNext/>
                     <w:tabs>
                         <w:tab w:val="left" w:pos="{ahf:toTwipStr('$RelatedLinksTitleStartPos')}"/>
@@ -1638,14 +1636,12 @@ URL : http://www.antennahouse.com/
                 </w:pPr>
                 <w:r>
                     <w:rPr>
-                        <w:rFonts w:asciiTheme="{concat('$RelatedLinksFontFamily','Ascii')}" w:eastAsia="{concat('$RelatedLinksFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$RelatedLinksFontFamily','HAnsi')}" w:cstheme="{concat('$RelatedLinksFontFamily','Bidi')}"/>
                         <w:strike w:val="true"/>
                     </w:rPr>
                     <w:tab/>
                 </w:r>
                 <w:r>
                     <w:rPr>
-                        <w:rFonts w:asciiTheme="{concat('$RelatedLinksFontFamily','Ascii')}" w:eastAsia="{concat('$RelatedLinksFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$RelatedLinksFontFamily','HAnsi')}" w:cstheme="{concat('$RelatedLinksFontFamily','Bidi')}"/>
                         <w:b w:val="true"/>
                         <w:strike w:val="false"/>
                     </w:rPr>
@@ -1653,7 +1649,6 @@ URL : http://www.antennahouse.com/
                 </w:r>
                 <w:r>
                     <w:rPr>
-                        <w:rFonts w:asciiTheme="{concat('$RelatedLinksFontFamily','Ascii')}" w:eastAsia="{concat('$RelatedLinksFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$RelatedLinksFontFamily','HAnsi')}" w:cstheme="{concat('$RelatedLinksFontFamily','Bidi')}"/>
                         <w:strike w:val="true"/>
                     </w:rPr>
                     <w:tab/>
