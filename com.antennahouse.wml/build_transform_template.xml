@@ -228,7 +228,8 @@
             <param name="PRM_DEBUG_MERGED"                             expression="${debug.merged}"                             if="debug.merged"/>
             <param name="PRM_DEBUG_TABLE"                              expression="${debug.table}"                              if="debug.table"/>
             <param name="PRM_LIST_INDENT_SIZE"                         expression="${list.indent.size}"                         if="list.indent.size"/>
-            <param name="PRM_LIST_BASE_INDENT_SIZE"                    expression="${list.base.indent.size}"                    if="list.base.indent.size"/>
+            <param name="PRM_OL_BASE_INDENT_SIZE"                      expression="${ol.base.indent.size}"                      if="ol.base.indent.size"/>
+            <param name="PRM_UL_BASE_INDENT_SIZE"                      expression="${ul.base.indent.size}"                      if="ul.base.indent.size"/>
             <param name="PRM_ADOPT_FIXED_LIST_INDENT"                  expression="${adopt.fixed.list.indent}"                  if="adopt.fixed.list.indent"/>
             <param name="PRM_MERGED_FINAL_OUTPUT_URL"                  expression="${merged.final.output.url}"                  if="merged.final.output.url"/>
             <param name="PRM_PLUGIN_DIR_URL"                           expression="${plugin.dir.url}"                           if="plugin.dir.url"/>
@@ -280,7 +281,8 @@
             <param name="PRM_DEBUG_MERGED"                             expression="${debug.merged}"                             if="debug.merged"/>
             <param name="PRM_DEBUG_TABLE"                              expression="${debug.table}"                              if="debug.table"/>
             <param name="PRM_LIST_INDENT_SIZE"                         expression="${list.indent.size}"                         if="list.indent.size"/>
-            <param name="PRM_LIST_BASE_INDENT_SIZE"                    expression="${list.base.indent.size}"                    if="list.base.indent.size"/>
+            <param name="PRM_OL_BASE_INDENT_SIZE"                      expression="${ol.base.indent.size}"                      if="ol.base.indent.size"/>
+            <param name="PRM_UL_BASE_INDENT_SIZE"                      expression="${ul.base.indent.size}"                      if="ul.base.indent.size"/>
             <param name="PRM_ADOPT_FIXED_LIST_INDENT"                  expression="${adopt.fixed.list.indent}"                  if="adopt.fixed.list.indent"/>
             <param name="PRM_MERGED_FINAL_OUTPUT_URL"                  expression="${merged.final.output.url}"                  if="merged.final.output.url"/>
             <param name="PRM_PLUGIN_DIR_URL"                           expression="${plugin.dir.url}"                           if="plugin.dir.url"/>
@@ -343,7 +345,8 @@
             <param name="PRM_DEBUG_MERGED"                             expression="${debug.merged}"                             if="debug.merged"/>
             <param name="PRM_DEBUG_TABLE"                              expression="${debug.table}"                              if="debug.table"/>
             <param name="PRM_LIST_INDENT_SIZE"                         expression="${list.indent.size}"                         if="list.indent.size"/>
-            <param name="PRM_LIST_BASE_INDENT_SIZE"                    expression="${list.base.indent.size}"                    if="list.base.indent.size"/>
+            <param name="PRM_OL_BASE_INDENT_SIZE"                      expression="${ol.base.indent.size}"                      if="ol.base.indent.size"/>
+            <param name="PRM_UL_BASE_INDENT_SIZE"                      expression="${ul.base.indent.size}"                      if="ul.base.indent.size"/>
             <param name="PRM_ADOPT_FIXED_LIST_INDENT"                  expression="${adopt.fixed.list.indent}"                  if="adopt.fixed.list.indent"/>
             <param name="PRM_MERGED_FINAL_OUTPUT_URL"                  expression="${merged.final.output.url}"                  if="merged.final.output.url"/>
             <param name="PRM_PLUGIN_DIR_URL"                           expression="${plugin.dir.url}"                           if="plugin.dir.url"/>

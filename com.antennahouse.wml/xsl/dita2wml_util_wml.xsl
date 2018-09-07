@@ -131,13 +131,13 @@ URL : http://www.antennahouse.com/
   <xsl:function name="ahf:getIndentFromIndentLevel" as="xs:integer">
     <xsl:param name="prmIndentLevel" as="xs:integer"/>
     <xsl:param name="prmExtraIndent" as="xs:integer"/>
-    <xsl:sequence select="$pListBaseIndentSizeInTwip + $prmIndentLevel * $pListIndentSizeInTwip + $prmExtraIndent"/>
+    <xsl:sequence select="$prmIndentLevel * $pListIndentSizeInTwip + $prmExtraIndent"/>
   </xsl:function>
 
   <xsl:function name="ahf:getIndentFromIndentLevelInEmu" as="xs:integer">
     <xsl:param name="prmIndentLevel" as="xs:integer"/>
     <xsl:param name="prmExtraIndent" as="xs:integer"/>
-    <xsl:sequence select="$pListBaseIndentSizeInEmu + $prmIndentLevel * $pListIndentSizeInEmu + ahf:toEmu(concat(string($prmExtraIndent),'twip'))"/>
+    <xsl:sequence select="$prmIndentLevel * $pListIndentSizeInEmu + ahf:toEmu(concat(string($prmExtraIndent),'twip'))"/>
   </xsl:function>
 
   <!-- 

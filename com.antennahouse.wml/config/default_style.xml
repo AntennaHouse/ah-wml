@@ -377,13 +377,14 @@ URL : http://www.antennahouse.com/
         
         <!-- List indent size 
           -->
-        <variable name="List_Indent_Size">6.5mm</variable>
+        <variable name="ListIndentSize">6.5mm</variable>
         
         <!-- List indent base size 
              Apply first level list 
           -->
-        <variable name="List_Base_Indent_Size">0mm</variable>
-
+        <variable name="OlBaseIndentSize">0pt</variable>
+        <variable name="UlBaseIndentSize">2pt</variable>
+        
         <!-- Style Names 
              Mandatory!
           -->

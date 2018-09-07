@@ -19,7 +19,7 @@ E-mail : info@antennahouse.com
     <xsl:variable name="pListIndentSize" as="xs:string">
         <xsl:choose>
             <xsl:when test="not(string($PRM_LIST_INDENT_SIZE)) or ($PRM_LIST_INDENT_SIZE = ('''''','&quot;&quot;'))">
-                <xsl:sequence select="ahf:getVarValue('List_Indent_Size')"/>
+                <xsl:sequence select="ahf:getVarValue('ListIndentSize')"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="$PRM_LIST_INDENT_SIZE"/>
@@ -29,17 +29,32 @@ E-mail : info@antennahouse.com
     <xsl:variable name="pListIndentSizeInTwip" as="xs:integer" select="ahf:toTwip($pListIndentSize)"/>
     <xsl:variable name="pListIndentSizeInEmu" as="xs:integer" select="ahf:toEmu($pListIndentSize)"/>
 
-    <xsl:variable name="pListBaseIndentSize" as="xs:string">
+    <!-- ol base indent size: applicable for first level ol -->
+    <xsl:variable name="pOlBaseIndentSize" as="xs:string">
         <xsl:choose>
-            <xsl:when test="not(string($PRM_LIST_BASE_INDENT_SIZE)) or ($PRM_LIST_BASE_INDENT_SIZE = ('''''','&quot;&quot;'))">
-                <xsl:sequence select="ahf:getVarValue('List_Base_Indent_Size')"/>
+            <xsl:when test="not(string($PRM_OL_BASE_INDENT_SIZE)) or ($PRM_OL_BASE_INDENT_SIZE = ('''''','&quot;&quot;'))">
+                <xsl:sequence select="ahf:getVarValue('OlBaseIndentSize')"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:sequence select="$PRM_LIST_BASE_INDENT_SIZE"/>
+                <xsl:sequence select="$PRM_OL_BASE_INDENT_SIZE"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="pListBaseIndentSizeInTwip" as="xs:integer" select="ahf:toTwip($pListBaseIndentSize)"/>
-    <xsl:variable name="pListBaseIndentSizeInEmu" as="xs:integer" select="ahf:toEmu($pListBaseIndentSize)"/>
-
+    <xsl:variable name="pOlBaseIndentSizeInTwip" as="xs:integer" select="ahf:toTwip($pOlBaseIndentSize)"/>
+    <xsl:variable name="pOlBaseIndentSizeInEmu" as="xs:integer" select="ahf:toEmu($pOlBaseIndentSize)"/>
+    
+    <!-- ul base indent size: applicable for first level ol -->
+    <xsl:variable name="pUlBaseIndentSize" as="xs:string">
+        <xsl:choose>
+            <xsl:when test="not(string($PRM_UL_BASE_INDENT_SIZE)) or ($PRM_UL_BASE_INDENT_SIZE = ('''''','&quot;&quot;'))">
+                <xsl:sequence select="ahf:getVarValue('UlBaseIndentSize')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$PRM_UL_BASE_INDENT_SIZE"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="pUlBaseIndentSizeInTwip" as="xs:integer" select="ahf:toTwip($pUlBaseIndentSize)"/>
+    <xsl:variable name="pUlBaseIndentSizeInEmu" as="xs:integer" select="ahf:toEmu($pUlBaseIndentSize)"/>
+    
 </xsl:stylesheet>

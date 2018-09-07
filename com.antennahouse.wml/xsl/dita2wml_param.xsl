@@ -86,7 +86,8 @@ E-mail : info@antennahouse.com
     <!-- List base indent size
          Used in dita2wml_param_var.xsl
      -->
-    <xsl:param name="PRM_LIST_BASE_INDENT_SIZE" required="no" as="xs:string" select="''"/>
+    <xsl:param name="PRM_OL_BASE_INDENT_SIZE" required="no" as="xs:string" select="''"/>
+    <xsl:param name="PRM_UL_BASE_INDENT_SIZE" required="no" as="xs:string" select="''"/>
     
     <!-- Adopt fixed list indent -->
     <xsl:param name="PRM_ADOPT_FIXED_LIST_INDENT" required="no" as="xs:string" select="$cNo"/>
