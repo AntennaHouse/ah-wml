@@ -21,8 +21,10 @@ E-mail : info@antennahouse.com
          3. Remove non needed nodes such as comments or processing instructions in topic.
       -->
 
-    <xsl:variable name="root" select="/*[1]" as="element()"/>
-    <xsl:variable name="map" select="$root/*[contains(@class,' map/map ')][1]" as="element()"/>
+    <xsl:variable name="root"  as="element()" select="/*[1]"/>
+    <xsl:variable name="map"  as="element()" select="$root/*[contains(@class,' map/map ')][1]"/>
+    <xsl:variable name="isBookMap" as="xs:boolean" select="exists($map[contains(@class,' bookmap/bookmap ')])"/>
+    <xsl:variable name="isMap" as="xs:boolean" select="not($isBookMap)"/>
     
     <!-- Debug -->
     <xsl:param name="PRM_OMIT_ATT" as="xs:boolean" select="false()"/>
@@ -85,6 +87,37 @@ E-mail : info@antennahouse.com
             </xsl:if>
         </xsl:copy>
     </xsl:template>
+
+    <!-- 
+     function:	Map template
+     param:		none
+     return:	copied result
+     note:		Generate frontmatter/booklists/toc, backmatter/booklists/indexlist if needed.
+     -->
+    <xsl:template match="*[contains(@class,' map/map ')]">
+        <xsl:copy>
+            <xsl:copy-of select="@*"/>
+            <xsl:if test="$isMap and $pMakeTocForMap">
+                <frontmatter class="- map/topicref bookmap/frontmatter " xtrc="{@xtrc}" xtrf="{@xtrf}">
+                    <booklists class="- map/topicref bookmap/booklists " xtrc="{@xtrc}" xtrf="{@xtrf}">
+                        <toc class="- map/topicref bookmap/toc " xtrc="{@xtrc}" xtrf="{@xtrf}"/>
+                    </booklists>
+                </frontmatter>
+            </xsl:if>
+            <xsl:apply-templates/>
+            <xsl:if test="$isMap and $pMakeIndexForMap">
+                <backmatter class="- map/topicref bookmap/backmatter " xtrc="{@xtrc}" xtrf="{@xtrf}">
+                    <booklists class="- map/topicref bookmap/booklists " xtrc="{@xtrc}" xtrf="{@xtrf}">
+                        <indexlist class="- map/topicref bookmap/indexlist " xtrc="{@xtrc}" xtrf="{@xtrf}"/>
+                    </booklists>
+                </backmatter>
+            </xsl:if>
+        </xsl:copy>
+    </xsl:template>    
+
+
+
+
 
     <!-- 
      function:	General template for all element

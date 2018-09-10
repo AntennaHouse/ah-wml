@@ -59,11 +59,9 @@ URL : http://www.antennahouse.com/
     <xsl:include href="dita2wml_doc_fn.xsl"/>
     <xsl:include href="dita2wml_doc_indexterm.xsl"/>
     <xsl:include href="dita2wml_doc_bookmark.xsl"/>
-    <xsl:include href="dita2wml_doc_equation_numbering_map.xsl"/>
     <xsl:include href="dita2wml_doc_numbering_map.xsl"/>
     <xsl:include href="dita2wml_doc_disp_atts.xsl"/>
     <xsl:include href="dita2wml_doc_id.xsl"/>
-    <xsl:include href="dita2wml_doc_equation_domain_util.xsl"/>
     <xsl:include href="dita2wml_doc_sect_control_info.xsl"/>
     <xsl:include href="dita2wml_doc_specialization_elements.xsl"/>
     <xsl:include href="dita2wml_doc_hazardstatement.xsl"/>

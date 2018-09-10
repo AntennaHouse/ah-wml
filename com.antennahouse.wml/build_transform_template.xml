@@ -216,68 +216,40 @@
                 <!--attribute name="http://saxon.sf.net/feature/traceListenerClass" value="net.sf.saxon.trace.XSLTTraceListener"/-->
             </factory>
             <param name="PRM_STYLE_DEF_FILE" expression="${style.def.file}" if="style.def.file"/>
-            <param name="PRM_INCLUDE_FRONTMATTER_TO_TOC" expression="${include.frontmatter.to.toc}"
-                if="include.frontmatter.to.toc"/>
-            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TOPIC_TITLE" expression="${add.chapter.number.prefix.to.topic.title}"
-                if="add.numbering.title.prefix"/>
-            <param name="PRM_ADD_PART_OR_CHAPTER_TO_TITLE" expression="${add.part.or.chapter.to.title}"
-                if="add.part.or.chapter.to.title"/>
-            <param name="PRM_ASSUME_SORTAS_PINYIN" expression="${assume.sortas.pinyin}"
-                if="assume.sortas.pinyin"/>
-            <param name="PRM_LANG" expression="${xml.lang}" if="xml.lang"/>
-            <param name="PRM_MAKE_SEE_LINK" expression="${make.see.link}" if="make.see.link"/>
-            <param name="PRM_OUTPUT_DRAFT_COMMENT" expression="${output.draft.comment}"
-                if="output.draft.comment"/>
-            <param name="PRM_OUTPUT_REQUIRED_CLEANUP" expression="${output.required.cleanup}"
-                if="output.required.cleanup"/>
-            <param name="PRM_USE_OID" expression="${use.oid}" if="use.oid"/>
-            <param name="PRM_FORMAT_DL_AS_BLOCK" expression="${format.dl.as.block}"
-                if="format.dl.as.block"/>
-            <param name="PRM_DEBUG_STYLE" expression="${debug.style}"
-                if="debug.style"/>
-            <!--param name="PRM_APPLY_TOC_ATTR" expression="${apply.toc.attr}" if="apply.toc.attr"/-->
-            <!--param name="PRM_ONLINE_PDF" expression="${online.pdf}" if="online.pdf"/-->
-            <param name="PRM_SORT_GLOSSARY_LIST" expression="${sort.glossary.list}"
-                if="sort.glossary.list"/>
-            <param name="PRM_OUTPUT_START_MESSAGE" expression="${output.start.message}"
-                if="output.start.message"/>
-            <param name="PRM_AUTO_SCALE_DOWN_TO_FIT" expression="${auto.scale.down.to.fit}"
-                if="auto.scale.down.to.fit"/>
-            <param name="PRM_MAKE_TOC_FOR_MAP" expression="${make.toc.for.map}"
-                if="make.toc.for.map"/>
-            <param name="PRM_MAKE_INDEX_FOR_MAP" expression="${make.index.for.map}"
-                if="make.index.for.map"/>
-            <param name="PRM_MAKE_ALT_TEXT" expression="${make.alt.text}" if="make.alt.text"/>
-            <param name="PRM_PAPER_SIZE" expression="${paper.size}" if="paper.size"/>
-            <param name="PRM_IMAGE_IN_OUTPUT_FOLDER" expression="${image.in.output.folder}"
-                if="image.in.output.folder"/>
-            <param name="PRM_OUTPUT_CROP_REGION" expression="${output.crop.region}"
-                if="output.crop.region"/>
-            <param name="PRM_OUTPUT_TYPE" expression="${output.type}"
-                if="output.type"/>
-            <param name="PRM_EXCLUDE_COVER_FROM_COUNTING_PAGE" expression="${exclude.cover.from.counting.page}"
-                if="exclude.cover.from.counting.page"/>
-            <param name="PRM_NUMBER_EQUATION_BLOCK_UNCONDITIONALLY" expression="${number.equation.block.unconditionally}"
-                if="number.equation.block.unconditionally"/>
-            <param name="PRM_EXCLUDE_AUTO_NUMBERING_FROM_EQUATION_FIGURE" expression="${exclude.auto.numbering.from.equation.figure}"
-                if="exclude.auto.numbering.from.equation.figure"/>
-            <param name="PRM_ASSUME_EQUATION_NUMBER_AS_AUTO" expression="${assume.equation.number.as.auto}"
-                if="assume.equation.number.as.auto"/>
-            <param name="PRM_USE_I18N_INDEX_LIB" expression="${use.i18n.index.lib}"
-                if="use.i18n.index.lib"/>
-            <param name="PRM_MAP_DIR_URL" expression="${user.input.dir.url}" if="user.input.dir.url"/>
+            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TOPIC_TITLE" expression="${add.chapter.number.prefix.to.topic.title}" if="add.chapter.numbering.title.prefix.to.topic.title"/>
+            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TABLE_TITLE" expression="${add.chapter.number.prefix.to.table.title}" if="add.chapter.numbering.title.prefix.to.table.title"/>
+            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_FIG_TITLE"   expression="${add.chapter.number.prefix.to.fig.title}"   if="add.chapter.numbering.title.prefix.to.fig.title"/>
+            <param name="PRM_LANG"                                     expression="${xml.lang}"                                 if="xml.lang"/>
+            <param name="PRM_MAP_DIR_URL"                              expression="${user.input.dir.url}"                       if="user.input.dir.url"/>
+            <param name="PRM_DEBUG"                                    expression="${debug}"                                    if="debug"/>
+            <param name="PRM_DEBUG_STYLE"                              expression="${debug.style}"                              if="debug.style"/>
+            <param name="PRM_OUTPUT_TYPE"                              expression="${output.type}"                              if="output.type"/>
+            <param name="PRM_TEMPLATE_DIR_URL"                         expression="${template.dir.url}"                         if="template.dir.url"/>
+            <param name="PRM_DEBUG_MERGED"                             expression="${debug.merged}"                             if="debug.merged"/>
+            <param name="PRM_DEBUG_TABLE"                              expression="${debug.table}"                              if="debug.table"/>
+            <param name="PRM_LIST_INDENT_SIZE"                         expression="${list.indent.size}"                         if="list.indent.size"/>
+            <param name="PRM_OL_BASE_INDENT_SIZE"                      expression="${ol.base.indent.size}"                      if="ol.base.indent.size"/>
+            <param name="PRM_UL_BASE_INDENT_SIZE"                      expression="${ul.base.indent.size}"                      if="ul.base.indent.size"/>
+            <param name="PRM_ADOPT_FIXED_LIST_INDENT"                  expression="${adopt.fixed.list.indent}"                  if="adopt.fixed.list.indent"/>
+            <param name="PRM_MERGED_FINAL_OUTPUT_URL"                  expression="${merged.final.output.url}"                  if="merged.final.output.url"/>
+            <param name="PRM_PLUGIN_DIR_URL"                           expression="${plugin.dir.url}"                           if="plugin.dir.url"/>
+            <param name="PRM_TEMP_DIR_URL"                             expression="${dita.temp.dir.url}"                        if="dita.temp.dir.url"/>
+            <param name="PRM_OUTPUT_FOLIO_PREFIX"                      expression="${output.folio.prefix}"                      if="output.folio.prefix"/>
+            
+            <param name="PRM_PAPER_SIZE"                               expression="${paper.size}"                               if="paper.size"/>
+
+            <!--
+            <param name="PRM_USE_I18N_INDEX_LIB"                       expression="${use.i18n.index.lib}"                       if="use.i18n.index.lib"/>
             <param name="PRM_OUTPUT_DIR_URL" expression="${output.dir.url}" if="output.dir.url"/>
             <param name="PRM_INPUT_MAP_NAME" expression="${dita.map.filename.root}" if="dita.map.filename.root"/>
-            <param name="PRM_DEBUG_INDEX_SORT_RESULT" expression="${debug.index.sort.result}" if="debug.index.sort.result"/>
-            <param name="PRM_OUTPUT_INDEX" expression="${output.index}" if="output.index"/>
-            <param name="PRM_OT_VERSION" expression="${otversion}" if="otversion"/>
-            <param name="PRM_TEMPLATE_DIR_URL" expression="${template.dir.url}" if="template.dir.url"/>
-            <param name="PRM_DEBUG_MERGED" expression="${debug.merged}" if="debug.merged"/>
-            <param name="PRM_DEBUG_TABLE" expression="${debug.table}" if="debug.table"/>
-            <param name="PRM_MERGED_FINAL_OUTPUT_URL" expression="${merged.final.output.url}" if="merged.final.output.url"/>
-            <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
-            <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
-            <param name="PRM_OUTPUT_FOLIO_PREFIX" expression="${output.folio.prefix}" if="output.folio.prefix"/>
+            -->
+            
+            <param name="PRM_OUTPUT_DRAFT_COMMENT"                     expression="${output.draft.comment}"                     if="output.draft.comment"/>
+            <param name="PRM_OUTPUT_REQUIRED_CLEANUP"                  expression="${output.required.cleanup}"                  if="output.required.cleanup"/>
+            <param name="PRM_SORT_GLOSSARY_LIST"                       expression="${sort.glossary.list}"                       if="sort.glossary.list"/>
+            <param name="PRM_MAKE_TOC_FOR_MAP"                         expression="${make.toc.for.map}"                         if="make.toc.for.map"/>
+            <param name="PRM_MAKE_INDEX_FOR_MAP"                       expression="${make.index.for.map}"                       if="make.index.for.map"/>
+            
             <dita:extension id="com.antennahouse.wml.param" behavior="org.dita.dost.platform.InsertAction"/>
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
@@ -297,68 +269,40 @@
                 <attribute name="http://saxon.sf.net/feature/traceListenerClass" value="net.sf.saxon.trace.XSLTTraceListener"/>
             </factory>
             <param name="PRM_STYLE_DEF_FILE" expression="${style.def.file}" if="style.def.file"/>
-            <param name="PRM_INCLUDE_FRONTMATTER_TO_TOC" expression="${include.frontmatter.to.toc}"
-                if="include.frontmatter.to.toc"/>
-            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TOPIC_TITLE" expression="${add.chapter.number.prefix.to.topic.title}"
-                if="add.numbering.title.prefix"/>
-            <param name="PRM_ADD_PART_TO_TITLE" expression="${add.part.to.title}"
-                if="add.part.to.title"/>
-            <param name="PRM_ASSUME_SORTAS_PINYIN" expression="${assume.sortas.pinyin}"
-                if="assume.sortas.pinyin"/>
-            <param name="PRM_LANG" expression="${xml.lang}" if="xml.lang"/>
-            <param name="PRM_MAKE_SEE_LINK" expression="${make.see.link}" if="make.see.link"/>
-            <param name="PRM_OUTPUT_DRAFT_COMMENT" expression="${output.draft.comment}"
-                if="output.draft.comment"/>
-            <param name="PRM_OUTPUT_REQUIRED_CLEANUP" expression="${output.required.cleanup}"
-                if="output.required.cleanup"/>
-            <param name="PRM_USE_OID" expression="${use.oid}" if="use.oid"/>
-            <param name="PRM_FORMAT_DL_AS_BLOCK" expression="${format.dl.as.block}"
-                if="format.dl.as.block"/>
-            <param name="PRM_DEBUG_STYLE" expression="${debug.style}"
-                if="debug.style"/>
-            <!--param name="PRM_APPLY_TOC_ATTR" expression="${apply.toc.attr}" if="apply.toc.attr"/-->
-            <!--param name="PRM_ONLINE_PDF" expression="${online.pdf}" if="online.pdf"/-->
-            <param name="PRM_SORT_GLOSSARY_LIST" expression="${sort.glossary.list}"
-                if="sort.glossary.list"/>
-            <param name="PRM_OUTPUT_START_MESSAGE" expression="${output.start.message}"
-                if="output.start.message"/>
-            <param name="PRM_AUTO_SCALE_DOWN_TO_FIT" expression="${auto.scale.down.to.fit}"
-                if="auto.scale.down.to.fit"/>
-            <param name="PRM_MAKE_TOC_FOR_MAP" expression="${make.toc.for.map}"
-                if="make.toc.for.map"/>
-            <param name="PRM_MAKE_INDEX_FOR_MAP" expression="${make.index.for.map}"
-                if="make.index.for.map"/>
-            <param name="PRM_MAKE_ALT_TEXT" expression="${make.alt.text}" if="make.alt.text"/>
-            <param name="PRM_PAPER_SIZE" expression="${paper.size}" if="paper.size"/>
-            <param name="PRM_IMAGE_IN_OUTPUT_FOLDER" expression="${image.in.output.folder}"
-                if="image.in.output.folder"/>
-            <param name="PRM_OUTPUT_CROP_REGION" expression="${output.crop.region}"
-                if="output.crop.region"/>
-            <param name="PRM_OUTPUT_TYPE" expression="${output.type}"
-                if="output.type"/>
-            <param name="PRM_EXCLUDE_COVER_FROM_COUNTING_PAGE" expression="${exclude.cover.from.counting.page}"
-                if="exclude.cover.from.counting.page"/>
-            <param name="PRM_NUMBER_EQUATION_BLOCK_UNCONDITIONALLY" expression="${number.equation.block.unconditionally}"
-                if="number.equation.block.unconditionally"/>
-            <param name="PRM_EXCLUDE_AUTO_NUMBERING_FROM_EQUATION_FIGURE" expression="${exclude.auto.numbering.from.equation.figure}"
-                if="exclude.auto.numbering.from.equation.figure"/>
-            <param name="PRM_ASSUME_EQUATION_NUMBER_AS_AUTO" expression="${assume.equation.number.as.auto}"
-                if="assume.equation.number.as.auto"/>
-            <param name="PRM_USE_I18N_INDEX_LIB" expression="${use.i18n.index.lib}"
-                if="use.i18n.index.lib"/>
-            <param name="PRM_MAP_DIR_URL" expression="${user.input.dir.url}" if="user.input.dir.url"/>
+            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TOPIC_TITLE" expression="${add.chapter.number.prefix.to.topic.title}" if="add.chapter.numbering.title.prefix.to.topic.title"/>
+            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TABLE_TITLE" expression="${add.chapter.number.prefix.to.table.title}" if="add.chapter.numbering.title.prefix.to.table.title"/>
+            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_FIG_TITLE"   expression="${add.chapter.number.prefix.to.fig.title}"   if="add.chapter.numbering.title.prefix.to.fig.title"/>
+            <param name="PRM_LANG"                                     expression="${xml.lang}"                                 if="xml.lang"/>
+            <param name="PRM_MAP_DIR_URL"                              expression="${user.input.dir.url}"                       if="user.input.dir.url"/>
+            <param name="PRM_DEBUG"                                    expression="${debug}"                                    if="debug"/>
+            <param name="PRM_DEBUG_STYLE"                              expression="${debug.style}"                              if="debug.style"/>
+            <param name="PRM_OUTPUT_TYPE"                              expression="${output.type}"                              if="output.type"/>
+            <param name="PRM_TEMPLATE_DIR_URL"                         expression="${template.dir.url}"                         if="template.dir.url"/>
+            <param name="PRM_DEBUG_MERGED"                             expression="${debug.merged}"                             if="debug.merged"/>
+            <param name="PRM_DEBUG_TABLE"                              expression="${debug.table}"                              if="debug.table"/>
+            <param name="PRM_LIST_INDENT_SIZE"                         expression="${list.indent.size}"                         if="list.indent.size"/>
+            <param name="PRM_OL_BASE_INDENT_SIZE"                      expression="${ol.base.indent.size}"                      if="ol.base.indent.size"/>
+            <param name="PRM_UL_BASE_INDENT_SIZE"                      expression="${ul.base.indent.size}"                      if="ul.base.indent.size"/>
+            <param name="PRM_ADOPT_FIXED_LIST_INDENT"                  expression="${adopt.fixed.list.indent}"                  if="adopt.fixed.list.indent"/>
+            <param name="PRM_MERGED_FINAL_OUTPUT_URL"                  expression="${merged.final.output.url}"                  if="merged.final.output.url"/>
+            <param name="PRM_PLUGIN_DIR_URL"                           expression="${plugin.dir.url}"                           if="plugin.dir.url"/>
+            <param name="PRM_TEMP_DIR_URL"                             expression="${dita.temp.dir.url}"                        if="dita.temp.dir.url"/>
+            <param name="PRM_OUTPUT_FOLIO_PREFIX"                      expression="${output.folio.prefix}"                      if="output.folio.prefix"/>
+            
+            <param name="PRM_PAPER_SIZE"                               expression="${paper.size}"                               if="paper.size"/>
+            
+            <!--
+            <param name="PRM_USE_I18N_INDEX_LIB"                       expression="${use.i18n.index.lib}"                       if="use.i18n.index.lib"/>
             <param name="PRM_OUTPUT_DIR_URL" expression="${output.dir.url}" if="output.dir.url"/>
             <param name="PRM_INPUT_MAP_NAME" expression="${dita.map.filename.root}" if="dita.map.filename.root"/>
-            <param name="PRM_DEBUG_INDEX_SORT_RESULT" expression="${debug.index.sort.result}" if="debug.index.sort.result"/>
-            <param name="PRM_OUTPUT_INDEX" expression="${output.index}" if="output.index"/>
-            <param name="PRM_OT_VERSION" expression="${otversion}" if="otversion"/>
-            <param name="PRM_TEMPLATE_DIR_URL" expression="${template.dir.url}" if="template.dir.url"/>
-            <param name="PRM_DEBUG_MERGED" expression="${debug.merged}" if="debug.merged"/>
-            <param name="PRM_DEBUG_TABLE" expression="${debug.table}" if="debug.table"/>
-            <param name="PRM_MERGED_FINAL_OUTPUT_URL" expression="${merged.final.output.url}" if="merged.final.output.url"/>
-            <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
-            <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
-            <param name="PRM_OUTPUT_FOLIO_PREFIX" expression="${output.folio.prefix}" if="output.folio.prefix"/>
+            -->
+            
+            <param name="PRM_OUTPUT_DRAFT_COMMENT"                     expression="${output.draft.comment}"                     if="output.draft.comment"/>
+            <param name="PRM_OUTPUT_REQUIRED_CLEANUP"                  expression="${output.required.cleanup}"                  if="output.required.cleanup"/>
+            <param name="PRM_SORT_GLOSSARY_LIST"                       expression="${sort.glossary.list}"                       if="sort.glossary.list"/>
+            <param name="PRM_MAKE_TOC_FOR_MAP"                         expression="${make.toc.for.map}"                         if="make.toc.for.map"/>
+            <param name="PRM_MAKE_INDEX_FOR_MAP"                       expression="${make.index.for.map}"                       if="make.index.for.map"/>
+            
             <dita:extension id="com.antennahouse.wml.param" behavior="org.dita.dost.platform.InsertAction"/>
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
@@ -389,68 +333,40 @@
                 <!--attribute name="http://saxon.sf.net/feature/traceListenerClass" value="net.sf.saxon.trace.XSLTTraceListener"/-->
             </factory>
             <param name="PRM_STYLE_DEF_FILE" expression="${style.def.file}" if="style.def.file"/>
-            <param name="PRM_INCLUDE_FRONTMATTER_TO_TOC" expression="${include.frontmatter.to.toc}"
-                if="include.frontmatter.to.toc"/>
-            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TOPIC_TITLE" expression="${add.chapter.number.prefix.to.topic.title}"
-                if="add.numbering.title.prefix"/>
-            <param name="PRM_ADD_PART_OR_CHAPTER_TO_TITLE" expression="${add.part.or.chapter.to.title}"
-                if="add.part.or.chapter.to.title"/>
-            <param name="PRM_ASSUME_SORTAS_PINYIN" expression="${assume.sortas.pinyin}"
-                if="assume.sortas.pinyin"/>
-            <param name="PRM_LANG" expression="${xml.lang}" if="xml.lang"/>
-            <param name="PRM_MAKE_SEE_LINK" expression="${make.see.link}" if="make.see.link"/>
-            <param name="PRM_OUTPUT_DRAFT_COMMENT" expression="${output.draft.comment}"
-                if="output.draft.comment"/>
-            <param name="PRM_OUTPUT_REQUIRED_CLEANUP" expression="${output.required.cleanup}"
-                if="output.required.cleanup"/>
-            <param name="PRM_USE_OID" expression="${use.oid}" if="use.oid"/>
-            <param name="PRM_FORMAT_DL_AS_BLOCK" expression="${format.dl.as.block}"
-                if="format.dl.as.block"/>
-            <param name="PRM_DEBUG_STYLE" expression="${debug.style}"
-                if="debug.style"/>
-            <!--param name="PRM_APPLY_TOC_ATTR" expression="${apply.toc.attr}" if="apply.toc.attr"/-->
-            <!--param name="PRM_ONLINE_PDF" expression="${online.pdf}" if="online.pdf"/-->
-            <param name="PRM_SORT_GLOSSARY_LIST" expression="${sort.glossary.list}"
-                if="sort.glossary.list"/>
-            <param name="PRM_OUTPUT_START_MESSAGE" expression="${output.start.message}"
-                if="output.start.message"/>
-            <param name="PRM_AUTO_SCALE_DOWN_TO_FIT" expression="${auto.scale.down.to.fit}"
-                if="auto.scale.down.to.fit"/>
-            <param name="PRM_MAKE_TOC_FOR_MAP" expression="${make.toc.for.map}"
-                if="make.toc.for.map"/>
-            <param name="PRM_MAKE_INDEX_FOR_MAP" expression="${make.index.for.map}"
-                if="make.index.for.map"/>
-            <param name="PRM_MAKE_ALT_TEXT" expression="${make.alt.text}" if="make.alt.text"/>
-            <param name="PRM_PAPER_SIZE" expression="${paper.size}" if="paper.size"/>
-            <param name="PRM_IMAGE_IN_OUTPUT_FOLDER" expression="${image.in.output.folder}"
-                if="image.in.output.folder"/>
-            <param name="PRM_OUTPUT_CROP_REGION" expression="${output.crop.region}"
-                if="output.crop.region"/>
-            <param name="PRM_OUTPUT_TYPE" expression="${output.type}"
-                if="output.type"/>
-            <param name="PRM_EXCLUDE_COVER_FROM_COUNTING_PAGE" expression="${exclude.cover.from.counting.page}"
-                if="exclude.cover.from.counting.page"/>
-            <param name="PRM_NUMBER_EQUATION_BLOCK_UNCONDITIONALLY" expression="${number.equation.block.unconditionally}"
-                if="number.equation.block.unconditionally"/>
-            <param name="PRM_EXCLUDE_AUTO_NUMBERING_FROM_EQUATION_FIGURE" expression="${exclude.auto.numbering.from.equation.figure}"
-                if="exclude.auto.numbering.from.equation.figure"/>
-            <param name="PRM_ASSUME_EQUATION_NUMBER_AS_AUTO" expression="${assume.equation.number.as.auto}"
-                if="assume.equation.number.as.auto"/>
-            <param name="PRM_USE_I18N_INDEX_LIB" expression="${use.i18n.index.lib}"
-                if="use.i18n.index.lib"/>
-            <param name="PRM_MAP_DIR_URL" expression="${user.input.dir.url}" if="user.input.dir.url"/>
+            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TOPIC_TITLE" expression="${add.chapter.number.prefix.to.topic.title}" if="add.chapter.numbering.title.prefix.to.topic.title"/>
+            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_TABLE_TITLE" expression="${add.chapter.number.prefix.to.table.title}" if="add.chapter.numbering.title.prefix.to.table.title"/>
+            <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_FIG_TITLE"   expression="${add.chapter.number.prefix.to.fig.title}"   if="add.chapter.numbering.title.prefix.to.fig.title"/>
+            <param name="PRM_LANG"                                     expression="${xml.lang}"                                 if="xml.lang"/>
+            <param name="PRM_MAP_DIR_URL"                              expression="${user.input.dir.url}"                       if="user.input.dir.url"/>
+            <param name="PRM_DEBUG"                                    expression="${debug}"                                    if="debug"/>
+            <param name="PRM_DEBUG_STYLE"                              expression="${debug.style}"                              if="debug.style"/>
+            <param name="PRM_OUTPUT_TYPE"                              expression="${output.type}"                              if="output.type"/>
+            <param name="PRM_TEMPLATE_DIR_URL"                         expression="${template.dir.url}"                         if="template.dir.url"/>
+            <param name="PRM_DEBUG_MERGED"                             expression="${debug.merged}"                             if="debug.merged"/>
+            <param name="PRM_DEBUG_TABLE"                              expression="${debug.table}"                              if="debug.table"/>
+            <param name="PRM_LIST_INDENT_SIZE"                         expression="${list.indent.size}"                         if="list.indent.size"/>
+            <param name="PRM_OL_BASE_INDENT_SIZE"                      expression="${ol.base.indent.size}"                      if="ol.base.indent.size"/>
+            <param name="PRM_UL_BASE_INDENT_SIZE"                      expression="${ul.base.indent.size}"                      if="ul.base.indent.size"/>
+            <param name="PRM_ADOPT_FIXED_LIST_INDENT"                  expression="${adopt.fixed.list.indent}"                  if="adopt.fixed.list.indent"/>
+            <param name="PRM_MERGED_FINAL_OUTPUT_URL"                  expression="${merged.final.output.url}"                  if="merged.final.output.url"/>
+            <param name="PRM_PLUGIN_DIR_URL"                           expression="${plugin.dir.url}"                           if="plugin.dir.url"/>
+            <param name="PRM_TEMP_DIR_URL"                             expression="${dita.temp.dir.url}"                        if="dita.temp.dir.url"/>
+            <param name="PRM_OUTPUT_FOLIO_PREFIX"                      expression="${output.folio.prefix}"                      if="output.folio.prefix"/>
+            
+            <param name="PRM_PAPER_SIZE"                               expression="${paper.size}"                               if="paper.size"/>
+            
+            <!--
+            <param name="PRM_USE_I18N_INDEX_LIB"                       expression="${use.i18n.index.lib}"                       if="use.i18n.index.lib"/>
             <param name="PRM_OUTPUT_DIR_URL" expression="${output.dir.url}" if="output.dir.url"/>
             <param name="PRM_INPUT_MAP_NAME" expression="${dita.map.filename.root}" if="dita.map.filename.root"/>
-            <param name="PRM_DEBUG_INDEX_SORT_RESULT" expression="${debug.index.sort.result}" if="debug.index.sort.result"/>
-            <param name="PRM_OUTPUT_INDEX" expression="${output.index}" if="output.index"/>
-            <param name="PRM_OT_VERSION" expression="${otversion}" if="otversion"/>
-            <param name="PRM_TEMPLATE_DIR_URL" expression="${template.dir.url}" if="template.dir.url"/>
-            <param name="PRM_DEBUG_MERGED" expression="${debug.merged}" if="debug.merged"/>
-            <param name="PRM_DEBUG_TABLE" expression="${debug.table}" if="debug.table"/>
-            <param name="PRM_MERGED_FINAL_OUTPUT_URL" expression="${merged.final.output.url}" if="merged.final.output.url"/>
-            <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
-            <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
-            <param name="PRM_OUTPUT_FOLIO_PREFIX" expression="${output.folio.prefix}" if="output.folio.prefix"/>
+            -->
+            
+            <param name="PRM_OUTPUT_DRAFT_COMMENT"                     expression="${output.draft.comment}"                     if="output.draft.comment"/>
+            <param name="PRM_OUTPUT_REQUIRED_CLEANUP"                  expression="${output.required.cleanup}"                  if="output.required.cleanup"/>
+            <param name="PRM_SORT_GLOSSARY_LIST"                       expression="${sort.glossary.list}"                       if="sort.glossary.list"/>
+            <param name="PRM_MAKE_TOC_FOR_MAP"                         expression="${make.toc.for.map}"                         if="make.toc.for.map"/>
+            <param name="PRM_MAKE_INDEX_FOR_MAP"                       expression="${make.index.for.map}"                       if="make.index.for.map"/>
+            
             <dita:extension id="com.antennahouse.wml.param" behavior="org.dita.dost.platform.InsertAction"/>
             <xmlcatalog refid="dita.catalog"/>
         </xslt>

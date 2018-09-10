@@ -221,9 +221,24 @@ URL : http://www.antennahouse.com/
     <xsl:function name="ahf:getListLevel" as="xs:integer">
         <xsl:param name="prmElem" as="element()"/>
         <xsl:variable name="isOl" as="xs:boolean" select="exists($prmElem[contains(@class,' topic/ol ')])"/>
-        <xsl:variable name="startElem" as="element()?" select="$prmElem/ancestor-or-self::*[ahf:seqContains(@class,(' topic/table ',' topic/body ',' topic/abstract '))][1]"/>
+        <xsl:variable name="startElem" as="element()?" select="$prmElem/ancestor-or-self::*[ahf:seqContains(@class,(' topic/entry ',' topic/stentry ',' topic/body ',' topic/abstract ', ' topic/note '))][1]"/>
         <xsl:assert test="exists($startElem)" select="'[getListStartLevel] start element not found $prmElem=',ahf:genHistoryId($prmElem)"/>
         <xsl:variable name="ancestorList" as="element()+" select="$prmElem/ancestor-or-self::*[contains(@class, if ($isOl) then ' topic/ol ' else ' topic/ul ')][. &gt;&gt; $startElem]"/>
+        <xsl:sequence select="count($ancestorList)"/>
+    </xsl:function>
+
+    <!-- 
+     function:	get absolute list nesting level
+     param:		prmElem (ol or ul)
+     return:	list nesting count
+     note:		Nesting count starts from body or table cell or abstract.
+                Count all kind of list (ol or ul)
+    -->
+    <xsl:function name="ahf:getAbsListLevel" as="xs:integer">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:variable name="startElem" as="element()?" select="$prmElem/ancestor-or-self::*[ahf:seqContains(@class,(' topic/entry ',' topic/stentry ',' topic/body ',' topic/abstract ', ' topic/note '))][1]"/>
+        <xsl:assert test="exists($startElem)" select="'[getAbsListStartLevel] start element not found $prmElem=',ahf:genHistoryId($prmElem)"/>
+        <xsl:variable name="ancestorList" as="element()+" select="$prmElem/ancestor-or-self::*[ahf:seqContains(@class, (' topic/ol ',' topic/ul '))][. &gt;&gt; $startElem]"/>
         <xsl:sequence select="count($ancestorList)"/>
     </xsl:function>
 

@@ -298,6 +298,60 @@ URL : http://www.antennahouse.com/
         </xsl:copy>
     </xsl:template>
 
+    <!-- 
+     function:	Genarate updated simpletable adding column/row span information
+     param:		prmSimpleTable 
+     return:	simpletable with span information
+     note:		This template exists only for compatibility with table processing.
+                Newly added attributes for entry:
+                @ahf:colnum : column number
+                @ahf:col-span-count : Not applicable for simpletable
+                @ahf:row-span-count : Not applicable for simpletable
+                @ahf:col-spanned : Not applicable for simpletable
+                @ahf:row-spanned : Not applicable for simpletable 
+                @ahf:is-last-col : 'yes' indicates this cell is last in column
+                @ahf:is-last-row : 'yes' indicates this cell is in last row
+     -->
+    <xsl:template name="expandSimpleTableWithSpanInfo" as="element()">
+        <xsl:param name="prmSimpleTable" as="element()" required="yes"/>
+        <!-- Maintain stentry/@colnum -->
+        <xsl:for-each select="$prmSimpleTable">
+            <xsl:copy>
+                <xsl:copy-of select="@*"/>
+                <xsl:for-each select="*[contains(@class,' topic/sthead ') or contains(@class,' topic/strow ')]">
+                    <xsl:variable name="isLastRow" as="xs:boolean" select="position() eq last()"/>
+                    <xsl:copy>
+                        <xsl:copy-of select="@*"/>
+                        <xsl:apply-templates select="*[contains(@class,' topic/stentry ')]" mode="MODE_ADD_COLNUM">
+                            <xsl:with-param name="prmIsLastRow" tunnel="yes" select="$isLastRow"/>
+                        </xsl:apply-templates>
+                    </xsl:copy>
+                </xsl:for-each>
+            </xsl:copy>
+        </xsl:for-each>
+    </xsl:template>
+
+    <!-- 
+     function:	Add column number information to stentry
+     param:		prmIsLastRow
+     return:	stentry
+     note:		set own namespace attribute 
+     -->
+    <xsl:template match="*[contains(@class,' topic/stentry ')]" mode="MODE_ADD_COLNUM">
+        <xsl:param name="prmIsLastRow" tunnel="yes" required="yes" as="xs:boolean"/>
+        <xsl:copy>
+            <xsl:copy-of select="@* except @dita-ot:*"/>
+            <xsl:if test="empty(following-sibling::*)">
+                <xsl:attribute name="ahf:is-last-col" select="$cYes"/>
+            </xsl:if>
+            <xsl:if test="$prmIsLastRow">
+                <xsl:attribute name="ahf:is-last-row" select="$cYes"/>
+            </xsl:if>
+            <xsl:attribute name="ahf:colnum" select="count(.|preceding-sibling::*)"/>
+            <xsl:copy-of select="node()"/>
+        </xsl:copy>
+    </xsl:template>
+
     <!-- END OF STYLESHEET -->
 
 </xsl:stylesheet>

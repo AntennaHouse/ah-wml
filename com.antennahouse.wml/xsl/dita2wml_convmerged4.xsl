@@ -17,6 +17,7 @@ E-mail : info@antennahouse.com
 >
     <!-- This stylesheet has following functions:
          1. Maintain table/tgroup/thead, tbody adding column/row span information.
+         2. Maintain simpletable/sthead,strow/stentry column number information for make compatibility with table.
      -->
 
     <!-- 
@@ -76,6 +77,18 @@ E-mail : info@antennahouse.com
                 <xsl:with-param name="prmTableHeadOrBodyPart" select="$tGroup/*[contains(@class, ' topic/tbody ')]"/>
             </xsl:call-template>
         </xsl:copy>
+    </xsl:template>
+
+    <!-- 
+     function:	Maintain simpletable
+     param:		none
+     return:	<simpletable>
+     note:		
+     -->
+    <xsl:template match="*[contains(@class, ' topic/simpletable ')]" as="element()">
+        <xsl:call-template name="expandSimpleTableWithSpanInfo">
+            <xsl:with-param name="prmSimpleTable" select="."/>
+        </xsl:call-template>
     </xsl:template>
 
 </xsl:stylesheet>

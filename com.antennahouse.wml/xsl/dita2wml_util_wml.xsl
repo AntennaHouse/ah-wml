@@ -15,7 +15,7 @@ URL : http://www.antennahouse.com/
   xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
   xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
   xmlns:map="http://www.w3.org/2005/xpath-functions/map"
-  exclude-result-prefixes="xs ahf">
+  exclude-result-prefixes="xs ahf map">
   <!-- 
       ============================================
          WordprocessingML utility
@@ -131,13 +131,13 @@ URL : http://www.antennahouse.com/
   <xsl:function name="ahf:getIndentFromIndentLevel" as="xs:integer">
     <xsl:param name="prmIndentLevel" as="xs:integer"/>
     <xsl:param name="prmExtraIndent" as="xs:integer"/>
-    <xsl:sequence select="$pListBaseIndentSizeInTwip + $prmIndentLevel * $pListIndentSizeInTwip + $prmExtraIndent"/>
+    <xsl:sequence select="$prmIndentLevel * $pListIndentSizeInTwip + $prmExtraIndent"/>
   </xsl:function>
 
   <xsl:function name="ahf:getIndentFromIndentLevelInEmu" as="xs:integer">
     <xsl:param name="prmIndentLevel" as="xs:integer"/>
     <xsl:param name="prmExtraIndent" as="xs:integer"/>
-    <xsl:sequence select="$pListBaseIndentSizeInEmu + $prmIndentLevel * $pListIndentSizeInEmu + ahf:toEmu(concat(string($prmExtraIndent),'twip'))"/>
+    <xsl:sequence select="$prmIndentLevel * $pListIndentSizeInEmu + ahf:toEmu(concat(string($prmExtraIndent),'twip'))"/>
   </xsl:function>
 
   <!-- 
@@ -465,5 +465,39 @@ URL : http://www.antennahouse.com/
     </xsl:choose>
   </xsl:function>
 
+  <!-- 
+     function:	Generate space-before/after only paragraph
+     param:		prmSpaceAfter (Variable name defined in style definition)
+     return:	element(w:p)
+     note:		This function generates before/after-space only paragraph for adjusting styles.
+   -->
+  <xsl:function name="ahf:genSpaceBeforeOnlyP" as="element(w:p)" visibility="public">
+    <xsl:param name="prmSpaceBeforeName" as="xs:string"/>
+    <xsl:variable name="spaceBeforeVal" as="xs:string">
+      <xsl:call-template name="getVarValue">
+        <xsl:with-param name="prmVarName" select="$prmSpaceBeforeName"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:call-template name="getWmlObjectReplacing">
+      <xsl:with-param name="prmObjName" select="'wmlSpaceBeforeOnlyP'"/>
+      <xsl:with-param name="prmSrc" select="('%space-before')"/>
+      <xsl:with-param name="prmDst" select="$spaceBeforeVal"/>
+    </xsl:call-template>
+  </xsl:function>
+  
+  <xsl:function name="ahf:genSpaceAfterOnlyP" as="element(w:p)" visibility="public">
+    <xsl:param name="prmSpaceAfterName" as="xs:string"/>
+    <xsl:variable name="spaceAfterVal" as="xs:string">
+      <xsl:call-template name="getVarValue">
+        <xsl:with-param name="prmVarName" select="$prmSpaceAfterName"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:call-template name="getWmlObjectReplacing">
+      <xsl:with-param name="prmObjName" select="'wmlSpaceAfterOnlyP'"/>
+      <xsl:with-param name="prmSrc" select="('%space-after')"/>
+      <xsl:with-param name="prmDst" select="$spaceAfterVal"/>
+    </xsl:call-template>
+  </xsl:function>
+  
   <!-- end of stylesheet -->
 </xsl:stylesheet>

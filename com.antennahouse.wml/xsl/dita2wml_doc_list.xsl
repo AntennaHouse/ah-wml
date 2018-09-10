@@ -28,9 +28,13 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:variable name="id" as="xs:string" select="ahf:generateId(.)"/>
+        <xsl:variable name="occurenceNumber" as="xs:integer?" select="map:get($listNumberMap,$id)"/>
+        <xsl:assert test="exists($occurenceNumber)" select="'[ol/ul] id=',$id,' does not exits in $listNumberMap'"/>
+        <xsl:variable name="isOl" as="xs:boolean" select="contains(@class,' topic/ol ')"/>
         <xsl:variable name="listStyle" as="xs:string">
             <xsl:choose>
-                <xsl:when test="contains(@class,' topic/ol ')">
+                <xsl:when test="$isOl">
                     <xsl:sequence select="$cOlStyleName"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -38,10 +42,8 @@ URL : http://www.antennahouse.com/
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="id" as="xs:string" select="ahf:generateId(.)"/>
-        <xsl:variable name="occurenceNumber" as="xs:integer?" select="map:get($listNumberMap,$id)"/>
-        <xsl:assert test="exists($occurenceNumber)" select="'[ol/ul] id=',$id,' does not exits in $listNumberMap'"/>
         <xsl:variable name="listLevel" as="xs:integer" select="ahf:getListLevel(.)"/>
+        <xsl:variable name="absListLevel" as="xs:integer" select="ahf:getAbsListLevel(.)"/>
         <xsl:apply-templates select="*">
             <xsl:with-param name="prmListOccurenceNumber" tunnel="yes" select="$occurenceNumber"/>
             <xsl:with-param name="prmListLevel" tunnel="yes" select="$listLevel"/>
@@ -54,7 +56,24 @@ URL : http://www.antennahouse.com/
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:variable name="hangingInTwip" as="xs:integer" select="ahf:getHangingFromStyleNameAndLevel($listStyle,$listLevel)"/>
-                        <xsl:sequence select="$hangingInTwip + $prmExtraIndent"/>
+                        <xsl:choose>
+                            <xsl:when test="$absListLevel eq 1">
+                                <xsl:variable name="initialListIndentInTwip" as="xs:integer">
+                                    <xsl:choose>
+                                        <xsl:when test="$isOl">
+                                            <xsl:sequence select="$pOlBaseIndentSizeInTwip"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:sequence select="$pUlBaseIndentSizeInTwip"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:variable>
+                                <xsl:sequence select="$hangingInTwip + $prmExtraIndent + $initialListIndentInTwip"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:sequence select="$hangingInTwip + $prmExtraIndent"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:with-param>
@@ -124,7 +143,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
-        <xsl:variable name="dtStyleName" as="xs:string" select="ahf:getVarValue('Dt_Style_Name')"/>
+        <xsl:variable name="dtStyleName" as="xs:string" select="ahf:getVarValue('DtStyleName')"/>
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName($dtStyleName)}"/>
@@ -138,7 +157,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
-        <xsl:variable name="ddStyleName" as="xs:string" select="ahf:getVarValue('Dd_Style_Name')"/>
+        <xsl:variable name="ddStyleName" as="xs:string" select="ahf:getVarValue('DdStyleName')"/>
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="{ahf:getStyleIdFromName($ddStyleName)}"/>
@@ -165,7 +184,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
-        <xsl:variable name="slStyleName" as="xs:string" select="ahf:getVarValue('Sl_Style_Name')"/>
+        <xsl:variable name="slStyleName" as="xs:string" select="ahf:getVarValue('SlStyleName')"/>
         <w:p>
             <w:pPr>
                 <xsl:if test="string($slStyleName)">

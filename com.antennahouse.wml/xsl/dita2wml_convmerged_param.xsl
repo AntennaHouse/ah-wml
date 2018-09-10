@@ -30,5 +30,17 @@ E-mail : info@antennahouse.com
     <xsl:param name="PRM_SORT_GLOSSARY_LIST" required="no" as="xs:string" select="$cYes"/>
     <xsl:variable name="pSortGlossaryList" select="boolean($PRM_SORT_GLOSSARY_LIST eq $cYes)"
         as="xs:boolean"/>
+
+    <!-- Make toc for simple map (not for bookmap)
+     -->
+    <xsl:param name="PRM_MAKE_TOC_FOR_MAP" required="no" as="xs:string" select="$cYes"/>
+    <xsl:variable name="pMakeTocForMap" select="boolean($PRM_MAKE_TOC_FOR_MAP eq $cYes)"
+        as="xs:boolean"/>
+    
+    <!-- Make index for simple map (not for bookmap)
+     -->
+    <xsl:param name="PRM_MAKE_INDEX_FOR_MAP" required="no" as="xs:string" select="$cYes"/>
+    <xsl:variable name="pMakeIndexForMap" select="boolean($PRM_MAKE_INDEX_FOR_MAP eq $cYes)"
+        as="xs:boolean"/>
     
 </xsl:stylesheet>

@@ -26,17 +26,19 @@ URL : http://www.antennahouse.com/
      note:		Initial implementation.
                 - toc="no" and nested topic are not considered.
                 - XE field from indexterm should be generated outside the bookmark
-                  because bookmark referenced from toc, related-links/link and xref.
+                  because bookmark is referenced from toc, related-links/link and xref.
      -->
     <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
         <xsl:param name="prmTopicRef"       tunnel="yes" required="yes" as="element()"/>
         <xsl:param name="prmTopicRefLevel"  tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmTopic"          tunnel="yes" required="yes" as="element()"/>
+        <xsl:variable name="title" as="element()" select="."/>
+        <xsl:variable name="topicLevel" as="xs:integer" select="count($title/parent::*/ancestor::*[contains(@class,' topic/topic ')])"/>
         <xsl:variable name="isInFrontmatterOrBackmatter" as="xs:boolean" select="exists($prmTopicRef/ancestor-or-self::*[ahf:seqContains(@class,(' bookmap/frontmatter',' bookmap/backmatter '))])"/>
         <w:p>
             <w:pPr>
                 <w:pStyle>
-                    <xsl:attribute name="w:val" select="ahf:getStyleIdFromName(concat('heading ',string($prmTopicRefLevel)))"/>
+                    <xsl:attribute name="w:val" select="ahf:getStyleIdFromName(concat('heading ',string($prmTopicRefLevel + $topicLevel)))"/>
                 </w:pStyle>
                 <xsl:if test="$pAddChapterNumberPrefixToTopicTitle and not($isInFrontmatterOrBackmatter)">
                     <w:numPr>
@@ -101,7 +103,7 @@ URL : http://www.antennahouse.com/
     </xsl:template>
     
     <!-- 
-     function:	topiref title for indexlist, etc
+     function:	topicref title for indexlist, etc
      param:		prmTopicRef, prmTopicRefLevel
      return:	w:p
      note:		
@@ -153,85 +155,6 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:template name="genTitlePrefix" as="xs:string">
         <xsl:param name="prmTopicRef" required="yes" as="element()"/>
-        
-        <xsl:variable name="prefixPart" as="xs:string">
-            <xsl:choose>
-                <xsl:when test="$pAddPartOrChapterToTitle">
-                    <xsl:choose>
-                        <xsl:when test="$isBookMap">
-                            <xsl:choose>
-                                <xsl:when test="$prmTopicRef/ancestor::*[contains(@class, ' bookmap/frontmatter ')]">
-                                    <xsl:sequence select="''"/>
-                                </xsl:when>
-                                <xsl:when test="$prmTopicRef/self::*[contains(@class, ' bookmap/part ')]">
-                                    <xsl:sequence select="$cPartTitlePrefix"/>
-                                </xsl:when>
-                                <xsl:when test="$prmTopicRef/self::*[contains(@class, ' bookmap/chapter ')]">
-                                    <xsl:sequence select="$cChapterTitlePrefix"/>
-                                </xsl:when>
-                                <xsl:when test="$prmTopicRef/self::*[contains(@class, ' bookmap/appendix ')]">
-                                    <xsl:sequence select="$cAppendixTitle"/>
-                                </xsl:when>
-                                <xsl:when test="$prmTopicRef/ancestor::*[contains(@class, ' bookmap/backmatter ')]">
-                                    <xsl:sequence select="''"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <!-- May be appendice -->
-                                    <xsl:sequence select="''"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <!-- map -->
-                            <xsl:sequence select="''"/>
-                        </xsl:otherwise>
-                    </xsl:choose>                    
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="''"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        
-        <xsl:variable name="suffixPart" as="xs:string">
-            <xsl:choose>
-                <xsl:when test="$pAddPartOrChapterToTitle">
-                    <xsl:choose>
-                        <xsl:when test="$isBookMap">
-                            <xsl:choose>
-                                <xsl:when test="$prmTopicRef/ancestor::*[contains(@class, ' bookmap/frontmatter ')]">
-                                    <xsl:sequence select="''"/>
-                                </xsl:when>
-                                <xsl:when test="$prmTopicRef/self::*[contains(@class, ' bookmap/part ')]">
-                                    <xsl:sequence select="$cPartTitleSuffix"/>
-                                </xsl:when>
-                                <xsl:when test="$prmTopicRef/self::*[contains(@class, ' bookmap/chapter ')]">
-                                    <xsl:sequence select="$cChapterTitleSuffix"/>
-                                </xsl:when>
-                                <xsl:when test="$prmTopicRef/self::*[contains(@class, ' bookmap/appendix ')]">
-                                    <xsl:sequence select="''"/>
-                                </xsl:when>
-                                <xsl:when test="$prmTopicRef/ancestor::*[contains(@class, ' bookmap/backmatter ')]">
-                                    <xsl:sequence select="''"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <!-- May be appendice -->
-                                    <xsl:sequence select="''"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <!-- map -->
-                            <xsl:value-of select="''"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="''"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        
         <xsl:variable name="numberPart" as="xs:string">
             <xsl:choose>
                 <xsl:when test="$isBookMap">
@@ -263,9 +186,7 @@ URL : http://www.antennahouse.com/
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        
-        <xsl:variable name="result" select="concat($prefixPart,$numberPart,$suffixPart)"/>
-        <xsl:sequence select="$result"/>
+        <xsl:sequence select="$numberPart"/>
     </xsl:template>
 
     <!-- 
@@ -403,8 +324,8 @@ URL : http://www.antennahouse.com/
                             <xsl:number format="{$chapterCountFormat}" value="$chapterCount"/>
                         </xsl:when>
                         <xsl:when test="$topicRef[contains(@class, ' bookmap/appendix ')]">
-                            <xsl:variable name="appendixCount" select="count($topicRef/preceding-sibling::*[contains(@class, ' map/topicref ')][contains(@class, ' bookmap/appendix ')][ahf:isToc(.)]|$topicRef)"/>
-                            <xsl:variable name="appendixCountFormat" as="xs:string" select="ahf:getVarValue('Appendix_Count_Format')"/>
+                            <xsl:variable name="appendixCount" select="count($topicRef/preceding-sibling::*[contains(@class, ' map/topicref ')][ahf:seqContains(@class, (' bookmap/appendix ',' bookmap/chapter ',' bookmap/part '))][ahf:isToc(.)]|$topicRef)"/>
+                            <xsl:variable name="appendixCountFormat" as="xs:string" select="ahf:getVarValue('Chapter_Count_Format')"/>
                             <xsl:number format="{$appendixCountFormat}" value="$appendixCount"/>
                         </xsl:when>
                         <xsl:otherwise>

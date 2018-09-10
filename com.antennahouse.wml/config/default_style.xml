@@ -134,24 +134,6 @@ URL : http://www.antennahouse.com/
         <variable name="General_Table_Border_Width">0.5pt</variable>
         <variable name="Table_Outer_Border_Width">$General_Table_Border_Width</variable>
         <variable name="Table_Header_Border_After_Width">1pt</variable>
-        
-        <!-- Table cell padding -->
-        <variable name="General_Table_Cell_Padding">1mm</variable>
-        
-        <!-- Spacing & indent: probably defined in template .docx -->
-        <!--space-before: 2mm for 11pt, 1.2mm for 9.5pt (in table) -\->
-        <variable name="Para_Space_Before">1.5122em - 3.8673mm</variable>
-        <!-\-start-indent: 7mm for 11pt, 5mm for 9.5pt (in table) -\->
-        <variable name="General_Indent_Value">3.7807em - 7.669mm</variable>
-        <!-\-dl indent: 7mm for 11pt, 3mm for 9.5pt (in table) -\->
-        <variable name="Dl_Indent_Value">7.5614em - 22.338mm</variable>
-        <!-\-dd indent: 5mm for 11pt, 2mm for 9.5pt (in table) -\->
-        <variable name="Dl_Dd_Indent_Value">5.671em - 17.003mm</variable>
-
-        <!-\- space-before: 5mm for 11pt, 2mm for 9.5pt (in table) -\->
-        <variable name="Dl_Dt_Block_Space_Before">5.6693em - 16.9997mm</variable>
-        <variable name="Dl_Dd_Block_Space_Before">$Para_Space_Before</variable>
-        -->
 
         <!-- Bookmark -->
         <variable name="Starting_State">hide</variable>
@@ -194,15 +176,17 @@ URL : http://www.antennahouse.com/
         <!-- Should be &#x25CF; 6C-->
 
         <!-- User interface -->
-        <variable name="MenuCascadeSymbol">&gt;</variable>
+        <variable name="MenuCascadeSymbol"> &gt; </variable>
         <variable name="UiControlPrefix">[&#x200D;</variable>
         <variable name="UiControlSuffix">&#x200D;]</variable>
 
-        <!-- Title Literals -->
-        <variable name="Part_Title_Prefix">Part </variable>
+        <!-- Title Literals
+             The commented titles are not supported in Word conversion.
+         -->
+        <!--variable name="Part_Title_Prefix">Part </variable>
         <variable name="Part_Title_Suffix"/>
         <variable name="Chapter_Title_Prefix">Chapter </variable>
-        <variable name="Chapter_Title_Suffix"/>
+        <variable name="Chapter_Title_Suffix"/-->
 
         <variable name="Toc_Title">Contents</variable>
         <variable name="Figure_List_Title">Figures</variable>
@@ -211,8 +195,8 @@ URL : http://www.antennahouse.com/
         <variable name="Trademark_List_Title">Trademarks</variable>
         <variable name="Bibliographic_List_Title">Bibliography</variable>
         <variable name="Glossary_List_Title">Glossary</variable>
-        <variable name="Appendices_Title">Appendices</variable>
-        <variable name="Appendix_Title">Appendix </variable>
+        <!--variable name="Appendices_Title">Appendices</variable>
+        <variable name="Appendix_Title">Appendix </variable-->
         <variable name="Index_Title">Index</variable>
 
         <variable name="Front_Matter_Title">Forward</variable>
@@ -221,7 +205,7 @@ URL : http://www.antennahouse.com/
         <variable name="Preface_Title">Preface</variable>
 
         <variable name="Blank_Page_Title">&#x00A0;Blank&#x00A0;Page&#x00A0;</variable>
-        <variable name="Relatedlink_Title">RELATED LINK</variable>
+        <variable name="RelatedlinksTitle">RELATED LINK</variable>
         <variable name="Postnote_Title">&#x00A0;NOTES&#x00A0;</variable>
 
         <variable name="Table_Title">Table&#x00A0;</variable>
@@ -393,39 +377,40 @@ URL : http://www.antennahouse.com/
         
         <!-- List indent size 
           -->
-        <variable name="List_Indent_Size">6.5mm</variable>
+        <variable name="ListIndentSize">6.5mm</variable>
         
         <!-- List indent base size 
              Apply first level list 
           -->
-        <variable name="List_Base_Indent_Size">0mm</variable>
-
+        <variable name="OlBaseIndentSize">0pt</variable>
+        <variable name="UlBaseIndentSize">2pt</variable>
+        
         <!-- Style Names 
              Mandatory!
           -->
-        <variable name="Shortdesc_Style_Name"></variable>
-        <variable name="Ol_Style_Name">ol</variable>
-        <variable name="Ul_Style_Name">ul</variable>
-        <variable name="Dt_Style_Name">dt</variable>
-        <variable name="Dd_Style_Name">dd</variable>
-        <variable name="Sl_Style_Name"></variable>
+        <variable name="ShortdescStyleName">Body Text</variable>
+        <variable name="OlStyleName">ol</variable>
+        <variable name="UlStyleName">ul</variable>
+        <variable name="DtStyleName">dt</variable>
+        <variable name="DdStyleName">dd</variable>
+        <variable name="SlStyleName"></variable>
         
-        <variable name="Topic_Title_Style_Name">heading </variable>
+        <variable name="TopicTitleStyleName">heading </variable>
         
-        <variable name="Table_Style_Name"></variable>
+        <variable name="TableStyleName"></variable>
 
-        <variable name="P_Style">Body Text</variable>
-        <variable name="Pre_Style">HTML Preformatted</variable>
-        <variable name="Lines_Style">Body Text</variable>
-        <variable name="Example_Style">caption</variable>
-        <variable name="Fig_Style">caption</variable>
-        <variable name="Section_Style">section</variable>
-        <variable name="Desc_Style">Body Text</variable>
+        <variable name="PStyle">Body Text</variable>
+        <variable name="PreStyle">HTML Preformatted</variable>
+        <variable name="LinesStyle">Body Text</variable>
+        <variable name="ExampleStyle">caption</variable>
+        <variable name="FigStyle">caption</variable>
+        <variable name="SectionStyle">section</variable>
+        <variable name="DescStyle">Body Text</variable>
         
         <!-- w:num/w:numId base -->
-        <variable name="Abstract_NumId_For_Topic_Title">5000</variable>
-        <variable name="NumId_For_Topic_Title">5000</variable>
-        <variable name="NumId_Base_For_List">10000</variable>
+        <variable name="AbstractNumIdForTopicTitle">5000</variable>
+        <variable name="NumIdForTopicTitle">5000</variable>
+        <variable name="NumIdBaseForList">10000</variable>
         
         <variable name="DivldIdBase">10000</variable>
         
@@ -461,6 +446,9 @@ URL : http://www.antennahouse.com/
              "autofit" or "fixed"
           -->
         <variable name="Table_Layout_Type">autofit</variable>
+        
+        <!-- Default padding of table cell -->
+        <variable name="TableCellMargin">1mm</variable>
         
         <!-- Default image resolution -->
         <variable name="Default_Image_Dpi">96</variable>
@@ -542,6 +530,11 @@ URL : http://www.antennahouse.com/
         <!-- 100% table width -->
         <attribute-set name="atsPgWidthTblW">
             <attribute name="w:w">100%</attribute>
+            <attribute name="w:type">pct</attribute>
+        </attribute-set>
+
+        <attribute-set name="atsRelativeWidthTblW">
+            <attribute name="w:w">%width</attribute>
             <attribute name="w:type">pct</attribute>
         </attribute-set>
         
@@ -1173,7 +1166,7 @@ URL : http://www.antennahouse.com/
         
         <!-- w:abstractNum for topic/title -->
         <wml-object name="wmlTopicTitleAbstractNum">
-            <w:abstractNum w:abstractNumId="$Abstract_NumId_For_Topic_Title">
+            <w:abstractNum w:abstractNumId="$AbstractNumIdForTopicTitle">
                 <w:multiLevelType w:val="multilevel"/>
                 <w:lvl w:ilvl="0">
                     <w:start w:val="1"/>
@@ -1265,8 +1258,8 @@ URL : http://www.antennahouse.com/
 
         <!-- w:num for topic/title numbering -->
         <wml-object name="wmlTopicTitleNum">
-            <w:num w:numId="$NumId_For_Topic_Title">
-                <w:abstractNumId w:val="$Abstract_NumId_For_Topic_Title"/>
+            <w:num w:numId="$NumIdForTopicTitle">
+                <w:abstractNumId w:val="$AbstractNumIdForTopicTitle"/>
             </w:num>
         </wml-object>
         
@@ -1366,8 +1359,8 @@ URL : http://www.antennahouse.com/
         
         <!-- Hazardstatement table -->
         <variable name="HazardStatementTableStyleName">Table Grid</variable>
-        <variable name="HazardStatementTableBeforeSpace">6pt</variable>
-        <variable name="HazardStatementTableBeforePHeight">0.1pt</variable>
+        <variable name="HazardStatementTableAfterSpace">6pt</variable>
+        <variable name="HazardStatementTableAfterPHeight">0.1pt</variable>
         <variable name="HazardStatementTableBorderWidth">1.5pt</variable>
         <variable name="HazardSymbolCellWidth">15.18mm</variable>
         <variable name="HazardStatementTitleRowHeight">7.7mm</variable>
@@ -1376,12 +1369,6 @@ URL : http://www.antennahouse.com/
         <variable name="HazardStatementSignalWordFontSize">15pt</variable>
         
         <wml-object name="wmlHazardStatementTable">
-            <w:p>
-                <w:pPr>
-                    <w:keepNext/>
-                    <w:spacing w:line="{ahf:toTwipStr('$HazardStatementTableBeforePHeight')}" w:lineRule="exact" w:before="{ahf:toTwipStr('$HazardStatementTableBeforeSpace')}"/>
-                </w:pPr>
-            </w:p>
             <w:tbl>
                 <w:tblPr>
                     <w:tblStyle w:val="{ahf:getStyleIdFromName('$HazardStatementTableStyleName')}"/>
@@ -1449,7 +1436,11 @@ URL : http://www.antennahouse.com/
                 </w:tr>
                 <ahr:rows/>
             </w:tbl>
-            
+            <w:p>
+                <w:pPr>
+                    <w:spacing w:line="{ahf:toTwipStr('$HazardStatementTableAfterPHeight')}" w:lineRule="exact" w:before="{ahf:toTwipStr('$HazardStatementTableAfterSpace')}"/>
+                </w:pPr>
+            </w:p>
         </wml-object>
         
         <!-- Hazardstatement row -->
@@ -1520,7 +1511,7 @@ URL : http://www.antennahouse.com/
         <wml-object name="wmlMessgaPanelChildElement">
             <w:p>
                 <w:pPr>
-                    <w:pStyle w:val="$Ul_Style_Name"/>
+                    <w:pStyle w:val="$UlStyleName"/>
                     <w:numPr>
                         <w:ilvl w:val="0"/>
                         <w:numId w:val="%num-id"/>
@@ -1632,13 +1623,11 @@ URL : http://www.antennahouse.com/
              param: %title title
                     %end-pos line end position
           -->
-        <variable name="RelatedLinksFontFamily">major</variable>
         <variable name="RelatedLinksTitleStartPos">3mm</variable>
-        
         <wml-object name="wmlRelatedLinksTitle">
             <w:p>
                 <w:pPr>
-                    <w:pStyle w:val="note-line"/>
+                    <w:pStyle w:val="{ahf:getStyleIdFromName('note-line')}"/>
                     <w:keepNext/>
                     <w:tabs>
                         <w:tab w:val="left" w:pos="{ahf:toTwipStr('$RelatedLinksTitleStartPos')}"/>
@@ -1647,14 +1636,12 @@ URL : http://www.antennahouse.com/
                 </w:pPr>
                 <w:r>
                     <w:rPr>
-                        <w:rFonts w:asciiTheme="{concat('$RelatedLinksFontFamily','Ascii')}" w:eastAsia="{concat('$RelatedLinksFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$RelatedLinksFontFamily','HAnsi')}" w:cstheme="{concat('$RelatedLinksFontFamily','Bidi')}"/>
                         <w:strike w:val="true"/>
                     </w:rPr>
                     <w:tab/>
                 </w:r>
                 <w:r>
                     <w:rPr>
-                        <w:rFonts w:asciiTheme="{concat('$RelatedLinksFontFamily','Ascii')}" w:eastAsia="{concat('$RelatedLinksFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$RelatedLinksFontFamily','HAnsi')}" w:cstheme="{concat('$RelatedLinksFontFamily','Bidi')}"/>
                         <w:b w:val="true"/>
                         <w:strike w:val="false"/>
                     </w:rPr>
@@ -1662,7 +1649,6 @@ URL : http://www.antennahouse.com/
                 </w:r>
                 <w:r>
                     <w:rPr>
-                        <w:rFonts w:asciiTheme="{concat('$RelatedLinksFontFamily','Ascii')}" w:eastAsia="{concat('$RelatedLinksFontFamily','EastAsia')}" w:hAnsiTheme="{concat('$RelatedLinksFontFamily','HAnsi')}" w:cstheme="{concat('$RelatedLinksFontFamily','Bidi')}"/>
                         <w:strike w:val="true"/>
                     </w:rPr>
                     <w:tab/>
@@ -1951,6 +1937,39 @@ URL : http://www.antennahouse.com/
                     <w:br w:type="column"/>
                 </w:r>
             </w:p>
+        </wml-object>
+
+        <!-- Space-before only paragraph -->
+        <variable name="SpaceBeforePHeight">0.1pt</variable>
+        <wml-object name="wmlSpaceBeforeOnlyP">
+            <w:p>
+                <w:pPr>
+                    <w:spacing w:line="{ahf:toTwipStr('$SpaceAfterPHeight')}" w:lineRule="exact" w:before="{ahf:toTwipStr('%space-before')}"/>
+                    <w:keepNext/>
+                </w:pPr>
+            </w:p>
+        </wml-object>
+
+        <!-- Space-after only paragraph -->
+        <variable name="SpaceAfterPHeight">0.1pt</variable>
+        <variable name="SpaceAfterForTable">2mm</variable>
+        <variable name="SpaceAfterForImage">5pt</variable>
+        <wml-object name="wmlSpaceAfterOnlyP">
+            <w:p>
+                <w:pPr>
+                    <w:spacing w:line="{ahf:toTwipStr('$SpaceAfterPHeight')}" w:lineRule="exact" w:after="{ahf:toTwipStr('%space-after')}"/>
+                </w:pPr>
+            </w:p>
+        </wml-object>
+
+        <!-- Table cell padding -->
+        <wml-object name="TableCellPaddingDefault">
+            <w:tblCellMar>
+                <w:top w:w="{ahf:toTwipStr('$TableCellMargin')}" w:type="dxa"/>
+                <w:start w:w="{ahf:toTwipStr('$TableCellMargin')}" w:type="dxa"/>
+                <w:bottom w:w="{ahf:toTwipStr('$TableCellMargin')}" w:type="dxa"/>
+                <w:end w:w="{ahf:toTwipStr('$TableCellMargin')}" w:type="dxa"/>
+            </w:tblCellMar>
         </wml-object>
 
     </wml-objects>

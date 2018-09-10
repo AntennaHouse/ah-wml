@@ -32,11 +32,6 @@ URL : http://www.antennahouse.com/
                 <!-- Make cover -->
                 <!--xsl:call-template name="genCover"/-->
                 
-                <!-- Make toc for map -->
-                <xsl:if test="$isMap and $pMakeTocForMap">
-                    <!--xsl:call-template name="genMapToc"/-->
-                </xsl:if>
-                
                 <!-- Process main contents -->
                 <xsl:choose>
                     <xsl:when test="$isBookMap">
@@ -50,12 +45,6 @@ URL : http://www.antennahouse.com/
                         <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')]"/>
                     </xsl:otherwise>
                 </xsl:choose>
-                
-                <!-- Make index for map -->
-                <xsl:if test="$isMap and $pMakeIndexForMap and $pOutputIndex">
-                    <!--xsl:call-template name="genMapIndex"/-->
-                </xsl:if>
-                
             </w:body>
         </w:document>        
     </xsl:template>

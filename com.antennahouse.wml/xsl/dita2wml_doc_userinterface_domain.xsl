@@ -48,7 +48,7 @@ URL : http://www.antennahouse.com/
                         </w:rPr>
                     </xsl:if>
                     <!-- append '&gt;' -->
-                    <w:t><xsl:value-of select="$cMenuCascadeSymbol"/></w:t>
+                    <w:t xml:space="preserve"><xsl:value-of select="$cMenuCascadeSymbol"/></w:t>
                 </w:r>
             </xsl:if>
         </xsl:if>
