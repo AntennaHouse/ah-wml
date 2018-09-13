@@ -221,12 +221,10 @@
             <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_FIG_TITLE"   expression="${add.chapter.number.prefix.to.fig.title}"   if="add.chapter.numbering.title.prefix.to.fig.title"/>
             <param name="PRM_LANG"                                     expression="${xml.lang}"                                 if="xml.lang"/>
             <param name="PRM_MAP_DIR_URL"                              expression="${user.input.dir.url}"                       if="user.input.dir.url"/>
-            <param name="PRM_DEBUG"                                    expression="${debug}"                                    if="debug"/>
             <param name="PRM_DEBUG_STYLE"                              expression="${debug.style}"                              if="debug.style"/>
             <param name="PRM_OUTPUT_TYPE"                              expression="${output.type}"                              if="output.type"/>
             <param name="PRM_TEMPLATE_DIR_URL"                         expression="${template.dir.url}"                         if="template.dir.url"/>
             <param name="PRM_DEBUG_MERGED"                             expression="${debug.merged}"                             if="debug.merged"/>
-            <param name="PRM_DEBUG_TABLE"                              expression="${debug.table}"                              if="debug.table"/>
             <param name="PRM_LIST_INDENT_SIZE"                         expression="${list.indent.size}"                         if="list.indent.size"/>
             <param name="PRM_OL_BASE_INDENT_SIZE"                      expression="${ol.base.indent.size}"                      if="ol.base.indent.size"/>
             <param name="PRM_UL_BASE_INDENT_SIZE"                      expression="${ul.base.indent.size}"                      if="ul.base.indent.size"/>
@@ -235,6 +233,7 @@
             <param name="PRM_PLUGIN_DIR_URL"                           expression="${plugin.dir.url}"                           if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL"                             expression="${dita.temp.dir.url}"                        if="dita.temp.dir.url"/>
             <param name="PRM_OUTPUT_FOLIO_PREFIX"                      expression="${output.folio.prefix}"                      if="output.folio.prefix"/>
+            <param name="PRM_DEBUG_SECT"                               expression="${debug.sect}"                               if="debug.sect"/>
             
             <param name="PRM_PAPER_SIZE"                               expression="${paper.size}"                               if="paper.size"/>
 
@@ -274,12 +273,10 @@
             <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_FIG_TITLE"   expression="${add.chapter.number.prefix.to.fig.title}"   if="add.chapter.numbering.title.prefix.to.fig.title"/>
             <param name="PRM_LANG"                                     expression="${xml.lang}"                                 if="xml.lang"/>
             <param name="PRM_MAP_DIR_URL"                              expression="${user.input.dir.url}"                       if="user.input.dir.url"/>
-            <param name="PRM_DEBUG"                                    expression="${debug}"                                    if="debug"/>
             <param name="PRM_DEBUG_STYLE"                              expression="${debug.style}"                              if="debug.style"/>
             <param name="PRM_OUTPUT_TYPE"                              expression="${output.type}"                              if="output.type"/>
             <param name="PRM_TEMPLATE_DIR_URL"                         expression="${template.dir.url}"                         if="template.dir.url"/>
             <param name="PRM_DEBUG_MERGED"                             expression="${debug.merged}"                             if="debug.merged"/>
-            <param name="PRM_DEBUG_TABLE"                              expression="${debug.table}"                              if="debug.table"/>
             <param name="PRM_LIST_INDENT_SIZE"                         expression="${list.indent.size}"                         if="list.indent.size"/>
             <param name="PRM_OL_BASE_INDENT_SIZE"                      expression="${ol.base.indent.size}"                      if="ol.base.indent.size"/>
             <param name="PRM_UL_BASE_INDENT_SIZE"                      expression="${ul.base.indent.size}"                      if="ul.base.indent.size"/>
@@ -288,6 +285,7 @@
             <param name="PRM_PLUGIN_DIR_URL"                           expression="${plugin.dir.url}"                           if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL"                             expression="${dita.temp.dir.url}"                        if="dita.temp.dir.url"/>
             <param name="PRM_OUTPUT_FOLIO_PREFIX"                      expression="${output.folio.prefix}"                      if="output.folio.prefix"/>
+            <param name="PRM_DEBUG_SECT"                               expression="${debug.sect}"                               if="debug.sect"/>
             
             <param name="PRM_PAPER_SIZE"                               expression="${paper.size}"                               if="paper.size"/>
             
@@ -338,12 +336,10 @@
             <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_FIG_TITLE"   expression="${add.chapter.number.prefix.to.fig.title}"   if="add.chapter.numbering.title.prefix.to.fig.title"/>
             <param name="PRM_LANG"                                     expression="${xml.lang}"                                 if="xml.lang"/>
             <param name="PRM_MAP_DIR_URL"                              expression="${user.input.dir.url}"                       if="user.input.dir.url"/>
-            <param name="PRM_DEBUG"                                    expression="${debug}"                                    if="debug"/>
             <param name="PRM_DEBUG_STYLE"                              expression="${debug.style}"                              if="debug.style"/>
             <param name="PRM_OUTPUT_TYPE"                              expression="${output.type}"                              if="output.type"/>
             <param name="PRM_TEMPLATE_DIR_URL"                         expression="${template.dir.url}"                         if="template.dir.url"/>
             <param name="PRM_DEBUG_MERGED"                             expression="${debug.merged}"                             if="debug.merged"/>
-            <param name="PRM_DEBUG_TABLE"                              expression="${debug.table}"                              if="debug.table"/>
             <param name="PRM_LIST_INDENT_SIZE"                         expression="${list.indent.size}"                         if="list.indent.size"/>
             <param name="PRM_OL_BASE_INDENT_SIZE"                      expression="${ol.base.indent.size}"                      if="ol.base.indent.size"/>
             <param name="PRM_UL_BASE_INDENT_SIZE"                      expression="${ul.base.indent.size}"                      if="ul.base.indent.size"/>
@@ -352,6 +348,7 @@
             <param name="PRM_PLUGIN_DIR_URL"                           expression="${plugin.dir.url}"                           if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL"                             expression="${dita.temp.dir.url}"                        if="dita.temp.dir.url"/>
             <param name="PRM_OUTPUT_FOLIO_PREFIX"                      expression="${output.folio.prefix}"                      if="output.folio.prefix"/>
+            <param name="PRM_DEBUG_SECT"                               expression="${debug.sect}"                               if="debug.sect"/>
             
             <param name="PRM_PAPER_SIZE"                               expression="${paper.size}"                               if="paper.size"/>
             

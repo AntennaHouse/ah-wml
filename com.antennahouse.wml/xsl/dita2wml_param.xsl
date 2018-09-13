@@ -44,11 +44,6 @@ E-mail : info@antennahouse.com
     <xsl:param name="PRM_MAP_DIR_URL" required="yes" as="xs:string"/>
     <xsl:variable name="pMapDirUrl" as="xs:string" select="$PRM_MAP_DIR_URL"/>
 
-    <!-- Debug parameter
-     -->
-    <xsl:param name="PRM_DEBUG" required="no" as="xs:string" select="$cNo"/>
-    <xsl:variable name="pDebug" as="xs:boolean" select="$PRM_DEBUG eq $cYes"/>
-
     <!-- Debug style parameter
          2014-11-02 t.makita
      -->
@@ -73,10 +68,6 @@ E-mail : info@antennahouse.com
     <!-- Debug merged middle file processing -->
     <xsl:param name="PRM_DEBUG_MERGED" required="no" as="xs:string"/>
     <xsl:variable name="pDebugMerged" as="xs:boolean" select="$PRM_DEBUG_MERGED eq $cYes"/>
-    
-    <!-- Debug table expansion -->
-    <xsl:param name="PRM_DEBUG_TABLE" required="no" as="xs:string"/>
-    <xsl:variable name="pDebugTable" as="xs:boolean" select="$PRM_DEBUG_TABLE eq $cYes"/>
     
     <!-- List indent size
          Used in dita2wml_param_var.xsl

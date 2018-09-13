@@ -934,7 +934,7 @@
 	     note:
 	  -->
 	<xsl:template name="styleDump">
-		<xsl:message>[styleDump] Saving $glVarDefs, glWmlObjects to file.</xsl:message>
+		<xsl:message>[styleDump] Saving $glVarDefs, $glStyleDefs, $glWmlObjects to file.</xsl:message>
 
 		<!-- varibale -->
 		<xsl:result-document 
