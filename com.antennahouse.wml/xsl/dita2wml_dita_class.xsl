@@ -26,6 +26,7 @@ E-mail : info@antennahouse.com
         ' topic/div ',
         ' topic/dl ',
         ' topic/draft-comment ',
+        ' topic/example ',
         ' topic/fig ',
         (:' topic/fn ',:)
         ' topic/itemgroup ',
@@ -37,6 +38,7 @@ E-mail : info@antennahouse.com
         ' topic/p ',
         ' topic/pre ',
         ' topic/required-cleanup ',
+        ' topic/section ',
         ' topic/sectiondiv ',
         ' topic/simpletable ',
         ' topic/sl ',
@@ -84,6 +86,7 @@ E-mail : info@antennahouse.com
         ' topic/dthd ',
         ' topic/div ',
         ' topic/draft-comment ',
+        ' topic/entry ',
         ' topic/example ',
         ' topic/fn ',
         ' topic/fig ',
@@ -92,11 +95,10 @@ E-mail : info@antennahouse.com
         ' topic/lq ',
         ' topic/note ',
         ' topic/p ',
+        ' topic/required-cleanup ',
         ' topic/section ',
         ' topic/sectiondiv ',
-        ' topic/entry ',
-        ' topic/stentry ',
-        ' topic/required-cleanup '
+        ' topic/stentry '
         )"/>
     
     <xsl:variable name="mixedContentElementClassesException" as="xs:string+" select="
