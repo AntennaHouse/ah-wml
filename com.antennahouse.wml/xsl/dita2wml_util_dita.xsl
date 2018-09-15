@@ -323,6 +323,18 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmValue" as="xs:string"/>
         <xsl:sequence select="$prmValue = ahf:getOutputClass($prmElem)"/>
     </xsl:function>
-
+    
+    <!-- 
+     function:	Checkt @outputclass value has one of specified value
+     param:		prmElem, prmValueSeq
+     return:	xs:boolean
+     note:		
+     -->
+    <xsl:function name="ahf:hasOneOfOutputclassValue" as="xs:boolean">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:param name="prmValueSeq" as="xs:string+"/>
+        <xsl:sequence select="$prmValueSeq = ahf:getOutputClass($prmElem)"/>
+    </xsl:function>
+    
     <!-- end of stylesheet -->
 </xsl:stylesheet>
