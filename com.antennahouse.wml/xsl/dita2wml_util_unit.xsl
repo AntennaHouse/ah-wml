@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 **************************************************************
-Utility Templates For Unit
+Utility Templates For Unit And Numeric Value
 **************************************************************
 File Name : dita2wml_unit_util.xsl
 **************************************************************
@@ -314,7 +314,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmProperty" as="xs:string"/>
         <xsl:sequence select="replace($prmProperty,'[\.\p{Nd}]','')"/>
     </xsl:function>
-    
+
     <!--
      function:	Get calculated the property value with specified ratio
      param:		prmProperty, prmRatio
@@ -332,6 +332,17 @@ URL : http://www.antennahouse.com/
         
         <xsl:sequence select="concat('(',$prmProperty, ') * ',string($prmRatio))"/>
         
+    </xsl:function>
+
+    <!--
+     function:	Judge the input is any numeric type
+     param:		prmValue
+     return:	xs:boolean
+     note:		
+     -->
+    <xsl:function name="ahf:isNumericValue" as="xs:boolean" visibility="public">
+        <xsl:param name="prmValue" as="xs:string"/>
+        <xsl:sequence select="$prmValue castable as xs:numeric"/>
     </xsl:function>
     
     <!-- end of stylesheet -->
