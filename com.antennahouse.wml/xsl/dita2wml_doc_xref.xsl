@@ -83,12 +83,12 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmHref" as="xs:string" required="yes"/>
         <xsl:variable name="targetElemInfo" as="item()*" select="map:get($bookmarkTargetMap,$prmHref)"/>
         <xsl:variable name="targetId" as="xs:string?" select="$targetElemInfo[1]"/>
-        <xsl:variable name="targetElem" as="element()?" select="$targetElemInfo[2]"/>
+        <xsl:variable name="targetElem" as="node()?" select="$targetElemInfo[2]"/>
         <xsl:variable name="targetTopic" as="element()?" select="$targetElem/ancestor-or-self::*[contains(@class,' topic/topic ')][last()]"/>
         <xsl:variable name="topicRef" as="element()?" select="ahf:getTopicRef($targetTopic)"/>
         <xsl:variable name="targetElemNumber" as="xs:integer?" select="map:get($targetElemIdAndNumberMap,$targetId)"/>
         <xsl:choose>
-            <xsl:when test="empty($targetElemInfo) or not(string($targetId))">
+            <xsl:when test="empty($targetElemInfo) or not(string($targetId)) or not($targetElem instance of element())">
                 <xsl:call-template name="warningContinue">
                     <xsl:with-param name="prmMes" select="ahf:replace($stMes2032,('%xref','%href'),(ahf:getNodeXPathStr(.),$prmHref))"/>
                 </xsl:call-template>
@@ -98,7 +98,7 @@ URL : http://www.antennahouse.com/
                 <xsl:call-template name="xrefToTopic">
                     <xsl:with-param name="prmXref"     select="$prmXref"/>
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
-                    <xsl:with-param name="prmTopic"    select="$targetElem"/>
+                    <xsl:with-param name="prmTopic"    select="$targetElem treat as element()"/>
                     <xsl:with-param name="prmTargetElemNumber"    select="$targetElemNumber"/>
                 </xsl:call-template>                    
             </xsl:when>
@@ -107,7 +107,7 @@ URL : http://www.antennahouse.com/
                 <xsl:call-template name="xrefToSection">
                     <xsl:with-param name="prmXref"     select="$prmXref"/>
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
-                    <xsl:with-param name="prmTargetElem"  select="$targetElem"/>
+                    <xsl:with-param name="prmTargetElem"  select="$targetElem treat as element()"/>
                     <xsl:with-param name="prmTargetElemNumber"  select="$targetElemNumber"/>
                 </xsl:call-template>                    
             </xsl:when>
@@ -116,7 +116,7 @@ URL : http://www.antennahouse.com/
                 <xsl:call-template name="xrefToTable">
                     <xsl:with-param name="prmXref"     select="$prmXref"/>
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
-                    <xsl:with-param name="prmTargetElem"  select="$targetElem"/>
+                    <xsl:with-param name="prmTargetElem"  select="$targetElem treat as element()"/>
                     <xsl:with-param name="prmTargetElemNumber"  select="$targetElemNumber"/>
                 </xsl:call-template>                    
             </xsl:when>
@@ -125,7 +125,7 @@ URL : http://www.antennahouse.com/
                 <xsl:call-template name="xrefToFig">
                     <xsl:with-param name="prmXref"     select="$prmXref"/>
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
-                    <xsl:with-param name="prmTargetElem"  select="$targetElem"/>
+                    <xsl:with-param name="prmTargetElem"  select="$targetElem treat as element()"/>
                     <xsl:with-param name="prmTargetElemNumber"  select="$targetElemNumber"/>
                 </xsl:call-template>                    
             </xsl:when>
@@ -142,7 +142,7 @@ URL : http://www.antennahouse.com/
                 <xsl:call-template name="xrefToFn">
                     <xsl:with-param name="prmXref" select="$prmXref"/>
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
-                    <xsl:with-param name="prmTargetElem"  select="$targetElem"/>
+                    <xsl:with-param name="prmTargetElem"  select="$targetElem treat as element()"/>
                     <xsl:with-param name="prmTargetElemNumber"  select="$targetElemNumber"/>
                 </xsl:call-template>                    
             </xsl:when>

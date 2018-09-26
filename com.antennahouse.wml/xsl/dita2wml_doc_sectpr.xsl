@@ -52,7 +52,7 @@ URL : http://www.antennahouse.com/
                             <w:pPr>
                                 <xsl:call-template name="getWmlObjectReplacing">
                                     <xsl:with-param name="prmObjName" select="'wmlSectPr'"/>
-                                    <xsl:with-param name="prmSrc" select="('node:hdrFtrReference','%type','node:pgNumType','%col','$sep')"/>
+                                    <xsl:with-param name="prmSrc" select="('node:hdrFtrReference','%type','node:pgNumType','%col','%sep')"/>
                                     <xsl:with-param name="prmDst" select="($cElemNull,$sectTypeContinuous,$cElemNull,string($currentCol),string($colsep))"/>
                                 </xsl:call-template>
                             </w:pPr>
