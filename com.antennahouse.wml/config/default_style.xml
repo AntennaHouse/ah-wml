@@ -522,7 +522,11 @@ URL : http://www.antennahouse.com/
         <variable name="PHeight">10.5pt</variable>
         <variable name="PHeightInEmu">{ahf:toEmuStr('$PHeight')}</variable>
         
-        
+        <!-- Inline image size constraint
+             One of two must be zero!
+          -->
+        <variable name="InlineImageWidthConstraint">{ahf:toEmuStr('15pt')}</variable>        
+        <variable name="InlineImageHeightConstraint">{ahf:toEmuStr('0pt')}</variable>
         
     </variables>
     

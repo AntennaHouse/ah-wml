@@ -23,13 +23,120 @@ URL : http://www.antennahouse.com/
     version="3.0">
 
     <!-- 
-     function:	Inline image element processing
+     function:	Block image element processing
+     param:		none
+     return:	
+     note:      handle column break
+     -->
+    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break'][empty(ancestor::*[ahf:seqContains(string(@class),(' floatfig-d/floatfig ',' floatfig-d/floatfig-group '))][string(@float) = ('left','right')])]" priority="20">
+        <xsl:call-template name="getSectionPropertyElemBefore"/>
+        <xsl:next-match/>
+        <xsl:call-template name="getSectionPropertyElemAfter"/>
+    </xsl:template>
+    
+    <!-- 
+     function:	Block image element processing
+     param:		none
+     return:	w:p
+     note:      
+     -->
+    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break']" name="processBlockImage" as="element(w:p)+" priority="5">
+        <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
+        <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
+        <xsl:param name="prmTcAttr" tunnel="yes" as="element()?" select="()"/>
+        
+        <w:p>
+            <w:pPr>
+                <xsl:call-template name="getWmlObject">
+                    <xsl:with-param name="prmObjName" select="'wmlSingleLineHeight'"/>
+                </xsl:call-template>
+                <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
+                <xsl:copy-of select="ahf:getAlignAttrElem(if (exists(@align)) then @align else $prmTcAttr/@align)"/>
+            </w:pPr>
+            <xsl:next-match/>
+        </w:p>
+        <xsl:copy-of select="ahf:genSpaceAfterOnlyP('SpaceAfterForImage')"/>
+    </xsl:template>
+
+    <!-- 
+     function:	General block image element processing
      param:		none
      return:	w:r
      note:      This template also called form block image processing.
-                If it is block level image, adjust the image size to fit the body domain.
+                Adjust the image size to fit the body domain.
      -->
-    <xsl:template match="*[contains(@class,' topic/image ')]" name="processImageInline" as="element(w:r)?">
+    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break']" name="processBlockImageGenaral" as="element(w:r)?">
+        <xsl:variable name="imageSize" as="xs:integer+">
+            <xsl:call-template name="ahf:getImageSizeInEmu">
+                <xsl:with-param name="prmImage" select="."/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="imageFileName" as="xs:string" select="ahf:substringAfterLast(ahf:bsToSlash(@href),'/')"/>
+        <xsl:variable name="imageIdKey" as="xs:string" select="string(@href)"/>
+        <xsl:variable name="imageId" as="xs:string" select="xs:string(map:get($imageIdMap,$imageIdKey))"/>
+        <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId(.)"/>
+        <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
+        <xsl:choose>
+            <xsl:when test="($imageSize[1] gt 0) and ($imageSize[2] gt 0)">
+                <xsl:variable name="adjustImageSize" as="xs:integer+">
+                    <xsl:call-template name="ahf:adjustBlockImageSize">
+                        <xsl:with-param name="prmImage" select="."/>
+                        <xsl:with-param name="prmImageSize" select="$imageSize"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <w:r>
+                    <xsl:call-template name="getWmlObjectReplacing">
+                        <xsl:with-param name="prmObjName" select="'wmlImage'"/>
+                        <xsl:with-param name="prmSrc" select="('%width','%height','%id','%name','%desc','%rid')"/>
+                        <xsl:with-param name="prmDst" select="(string($adjustImageSize[1]),string($adjustImageSize[2]),$drawingId,$imageFileName,$imageFileName,concat($rIdPrefix,$imageId))"/>
+                    </xsl:call-template>
+                </w:r>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="warningContinue">
+                    <xsl:with-param name="prmMes" select="ahf:replace($stMes2020,('%href'),(string(@href)))"/>                    
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <!-- 
+     function:	Inline image element processing
+     param:		none
+     return:	w:r
+     note:      Call general templates by passing implicit inline image size constraint by EMU size.   
+     -->
+    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'inline']" as="element(w:r)?" priority="5">
+        <xsl:next-match>
+            <xsl:with-param name="prmInlineImageWidthConstraint" as="xs:integer?">
+                <xsl:variable name="inlineImageWidthConstraint" as="xs:integer">
+                    <xsl:call-template name="getVarValueAsInteger">
+                        <xsl:with-param name="prmVarName" select="'InlineImageWidthConstraint'"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:sequence select="if ($inlineImageWidthConstraint eq 0) then () else $inlineImageWidthConstraint"/>
+            </xsl:with-param>
+            <xsl:with-param name="prmInlineImageHeightConstraint" as="xs:integer?">
+                <xsl:variable name="inlineImageHeightConstraint" as="xs:integer">
+                    <xsl:call-template name="getVarValueAsInteger">
+                        <xsl:with-param name="prmVarName" select="'InlineImageHeightConstraint'"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:sequence select="if ($inlineImageHeightConstraint eq 0) then () else $inlineImageHeightConstraint"/>
+            </xsl:with-param>
+        </xsl:next-match>
+    </xsl:template>
+    
+    <!-- 
+     function:	Inline image element processing
+     param:		$prmInlineImageWidthConstraint, $prmInlineImageHeightConstraint and $prmRunProps 
+     return:	w:r
+     note:      This template is for inline image only.
+     -->
+    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'inline']"  as="element(w:r)?">
+        <xsl:param name="prmInlineImageWidthConstraint" as="xs:integer?" required="yes"/>
+        <xsl:param name="prmInlineImageHeightConstraint" as="xs:integer?" required="yes"/>
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="imageSize" as="xs:integer+">
             <xsl:call-template name="ahf:getImageSizeInEmu">
@@ -44,17 +151,12 @@ URL : http://www.antennahouse.com/
         <xsl:choose>
             <xsl:when test="($imageSize[1] gt 0) and ($imageSize[2] gt 0)">
                 <xsl:variable name="adjustImageSize" as="xs:integer+">
-                    <xsl:choose>
-                        <xsl:when test="string(@placement) eq 'break'">
-                            <xsl:call-template name="ahf:adjustImageSize">
-                                <xsl:with-param name="prmImage" select="."/>
-                                <xsl:with-param name="prmImageSize" select="$imageSize"/>
-                            </xsl:call-template>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:sequence select="$imageSize"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:call-template name="ahf:adjustInlineImageSize">
+                        <xsl:with-param name="prmImage" select="."/>
+                        <xsl:with-param name="prmImageSize" select="$imageSize"/>
+                        <xsl:with-param name="prmInlineImageWidthConstraint" select="$prmInlineImageWidthConstraint"/>
+                        <xsl:with-param name="prmInlineImageHeightConstraint" select="$prmInlineImageHeightConstraint"/>
+                    </xsl:call-template>
                 </xsl:variable>
                 <w:r>
                     <xsl:variable name="mergedRunProps" as="element()*">
@@ -243,7 +345,7 @@ URL : http://www.antennahouse.com/
     </xsl:function>
 
     <!-- 
-     function:	adjust a image size considering the body text domain width
+     function:	adjust block image size considering the body text domain width
      param:		prmImage,prmImageSize,prmIndentLevel,prmExtraIndent,prmWidthConstraintInEmu 
      return:	image size (width, height) in EMU
      note:		references tunnel parameter $prmIndentLevel, $prmExtraIndent
@@ -251,7 +353,7 @@ URL : http://www.antennahouse.com/
                 If the image is in floatfig $prmWidthConstraintInEmu is passed not to over the text box size.
                 The body width is calculated via bodyWidth/column - gap * (column - 1)/column
      -->
-    <xsl:template name="ahf:adjustImageSize" as="xs:integer+">
+    <xsl:template name="ahf:adjustBlockImageSize" as="xs:integer+">
         <xsl:param name="prmImage" required="yes" as="element()"/>
         <xsl:param name="prmImageSize" required="yes" as="xs:integer+" />
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
@@ -309,40 +411,44 @@ URL : http://www.antennahouse.com/
     </xsl:template>
 
     <!-- 
-     function:	Block image element processing
-     param:		none
-     return:	
-     note:      handle column break
+     function:	adjust inline image size considering the constraint width & height
+     param:		$prmImage, $prmImageSize, prmInlineImageWidthConstraint and $prmInlineImageHeightConstraint (one of two is empty)
+                All of the image size is EMU unit
+     return:	image size (width, height) in EMU
+     note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break'][empty(ancestor::*[ahf:seqContains(string(@class),(' floatfig-d/floatfig ',' floatfig-d/floatfig-group '))][string(@float) = ('left','right')])]" priority="20">
-        <xsl:call-template name="getSectionPropertyElemBefore"/>
-        <xsl:next-match/>
-        <xsl:call-template name="getSectionPropertyElemAfter"/>
-    </xsl:template>
-
-    <!-- 
-     function:	Block image element processing
-     param:		none
-     return:	w:p
-     note:      
-     -->
-    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break']" name="processBlockImage" as="element(w:p)+" priority="5">
-        <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
-        <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
-        <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
-        <xsl:param name="prmTcAttr" tunnel="yes" as="element()?" select="()"/>
-        
-        <w:p>
-            <w:pPr>
-                <xsl:call-template name="getWmlObject">
-                    <xsl:with-param name="prmObjName" select="'wmlSingleLineHeight'"/>
-                </xsl:call-template>
-                <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
-                <xsl:copy-of select="ahf:getAlignAttrElem(if (exists(@align)) then @align else $prmTcAttr/@align)"/>
-            </w:pPr>
-            <xsl:next-match/>
-        </w:p>
-        <xsl:copy-of select="ahf:genSpaceAfterOnlyP('SpaceAfterForImage')"/>
+    <xsl:template name="ahf:adjustInlineImageSize" as="xs:integer+">
+        <xsl:param name="prmImage" required="yes" as="element()"/>
+        <xsl:param name="prmImageSize" required="yes" as="xs:integer+" />
+        <xsl:param name="prmInlineImageWidthConstraint" as="xs:integer?" required="yes"/>
+        <xsl:param name="prmInlineImageHeightConstraint" as="xs:integer?" required="yes"/>
+        <xsl:variable name="imageWidth" as="xs:integer" select="$prmImageSize[1]"/>
+        <xsl:variable name="imageHeight" as="xs:integer" select="$prmImageSize[2]"/>
+        <xsl:variable name="resultImageSize" as="xs:integer+">
+            <xsl:choose>
+                <xsl:when test="exists($prmInlineImageHeightConstraint)">
+                    <xsl:choose>
+                        <xsl:when test="$imageHeight gt $prmInlineImageHeightConstraint">
+                            <xsl:sequence select="(xs:integer(round($imageWidth * $prmInlineImageHeightConstraint div $imageHeight)),$prmInlineImageHeightConstraint)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="($imageWidth,$imageHeight)"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:choose>
+                        <xsl:when test="$imageWidth gt $prmInlineImageWidthConstraint">
+                            <xsl:sequence select="($prmInlineImageWidthConstraint,xs:integer(round($imageHeight * $prmInlineImageWidthConstraint div $imageWidth)))"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="($imageWidth,$imageHeight)"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:sequence select="$resultImageSize"/>
     </xsl:template>
 
     <!-- END OF STYLESHEET -->
