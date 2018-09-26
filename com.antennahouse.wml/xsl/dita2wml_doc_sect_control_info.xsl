@@ -19,7 +19,7 @@ URL : http://www.antenna.co.jp/
     version="3.0">
 
     <!--Debugging switch for section information grouping -->
-    <xsl:param name="PRM_DEBUG_SECT" as="xs:string" required="no" select="$cYes"/>
+    <xsl:param name="PRM_DEBUG_SECT" as="xs:string" required="no" select="$cNo"/>
     <xsl:variable name="pDebugSect" as="xs:boolean" select="$PRM_DEBUG_SECT eq $cYes"/>
 
     <!--

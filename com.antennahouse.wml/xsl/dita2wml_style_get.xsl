@@ -332,9 +332,6 @@
             </xsl:for-each>
         </xsl:variable>
         <xsl:sequence select="$style"/>
-        <xsl:if test="$pDebug">
-            <xsl:message select="'ahf:getAncestorStyleNames()=',$style"/>
-        </xsl:if>
     </xsl:template>
 
     <!-- 
@@ -685,9 +682,6 @@
             </xsl:if>
             <xsl:variable name="attr" as="attribute()" select="$attrs[name() eq $attrName][position() eq last()]"/>
             <xsl:attribute name="{name($attr)}" select="ahf:evaluateXpath(string($attr))"/>
-            <xsl:if test="$pDebug">
-                <xsl:message select="concat('[getAttribute] attribute-name=',name($attr),' value=',string($attr))"/>
-            </xsl:if>
         </xsl:for-each>
 
     </xsl:template>
@@ -727,9 +721,6 @@
         </xsl:if>
         <xsl:variable name="attr" as="attribute()" select="$attrs[name() eq $prmAttrName][position() eq last()]"/>
         <xsl:attribute name="{$prmAltAttrName}" select="ahf:evaluateXpath(string($attr))"/>
-        <xsl:if test="$pDebug">
-            <xsl:message select="concat('[getAttributeAs]      attribute-name=',$prmAltAttrName,' value=',string($attr))"/>
-        </xsl:if>
     </xsl:template>
 
     <!-- 
@@ -778,9 +769,6 @@
         </xsl:if>
         <xsl:variable name="attr" select="$attrs[name() eq $prmAttrName][position() eq last()]"/>
         <xsl:sequence select="ahf:evaluateXpath(string($attr))"/>
-        <xsl:if test="$pDebug">
-            <xsl:message select="concat('[getAttributeValue]   attribute-name=',name($attr),' value=',string($attr))"/>
-        </xsl:if>
     </xsl:template>
     
     <xsl:template name="getAttributeValueWithLang" as="xs:string">
@@ -810,9 +798,6 @@
         </xsl:if>
         <xsl:variable name="attr" select="$attrs[name() eq $prmAttrName][position() eq last()]"/>
         <xsl:sequence select="ahf:evaluateXpath(string($attr))"/>
-        <xsl:if test="$pDebug">
-            <xsl:message select="concat('[getAttributeValue]   attribute-name=',name($attr),' value=',string($attr))"/>
-        </xsl:if>
     </xsl:template>
 
     <!-- 

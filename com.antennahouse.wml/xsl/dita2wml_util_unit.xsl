@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 **************************************************************
-Utility Templates For Unit
+Utility Templates For Unit And Numeric Value
 **************************************************************
 File Name : dita2wml_unit_util.xsl
 **************************************************************
@@ -29,6 +29,7 @@ URL : http://www.antennahouse.com/
     <xsl:variable name="cUnitMm"   select="'mm'" as="xs:string"/>
     <xsl:variable name="cUnitEm"   select="'em'" as="xs:string"/>
     <xsl:variable name="cUnitTwip" select="'twip'" as="xs:string"/>
+    <xsl:variable name="cUnitEmu"  select="'emu'"  as="xs:string"/>
     
     <!-- Ratios -->
     <xsl:variable name="cPtPerPc" as="xs:integer" select="12"/>
@@ -38,20 +39,21 @@ URL : http://www.antennahouse.com/
     <xsl:variable name="cMmPerIn" as="xs:double"  select="25.4"/>
     <xsl:variable name="cMmPerCm" as="xs:integer" select="10"/>
     <xsl:variable name="cTwipPerPt" as="xs:integer" select="20"/>
+    <xsl:variable name="cTwipPerIn" as="xs:integer" select="1440"/>
     <xsl:variable name="cEmuPerPt" as="xs:integer" select="12700"/>
     <xsl:variable name="cEmuPerIn" as="xs:integer" select="914400"/>
     <xsl:variable name="cEmuPerTwip" as="xs:integer" select="635"/>
     
     <!--
-    function:   Check length pattern
+    function:   Check unit value pattern
     param:      prmUnitVal any numeric value with length unit
     return:     xs:boolean
-    note:       If $prmUnitVal is valid value returns true().
+    note:       If $prmUnitVal is valid unit value, returns true().
     -->
     <xsl:function name="ahf:isUnitValue" as="xs:boolean">
         <xsl:param name="prmUnitVal" as="xs:string"/>
         <xsl:choose>
-            <xsl:when test="matches($prmUnitVal,'^([+-]?[1-9][\d]*|0)(\.\d+)?(pc|pt|px|in|cm|mm)$')">
+            <xsl:when test="matches($prmUnitVal,'^([+-]?[1-9][\d]*|0)(\.\d+)?(pc|pt|px|in|cm|mm|twip|emu)$')">
                 <xsl:sequence select="true()"/>
             </xsl:when>
             <xsl:otherwise>
@@ -87,6 +89,12 @@ URL : http://www.antennahouse.com/
                 </xsl:when>
                 <xsl:when test="ends-with($prmUnitValue,$cUnitMm)">
                     <xsl:sequence select="xs:double(substring($prmUnitValue, 1, string-length($prmUnitValue) - string-length($cUnitMm)))"/>
+                </xsl:when>
+                <xsl:when test="ends-with($prmUnitValue,$cUnitTwip)">
+                    <xsl:sequence select="xs:double(substring($prmUnitValue, 1, string-length($prmUnitValue) - string-length($cUnitTwip))) div $cTwipPerIn * $cMmPerIn"/>
+                </xsl:when>
+                <xsl:when test="ends-with($prmUnitValue,$cUnitEmu)">
+                    <xsl:sequence select="xs:double(substring($prmUnitValue, 1, string-length($prmUnitValue) - string-length($cUnitEmu))) div $cEmuPerTwip div $cTwipPerIn * $cMmPerIn"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:call-template name="warningContinue">
@@ -134,6 +142,12 @@ URL : http://www.antennahouse.com/
                 </xsl:when>
                 <xsl:when test="ends-with($prmUnitValue,$cUnitMm)">
                     <xsl:sequence select="xs:double(xs:double(substring($prmUnitValue, 1, string-length($prmUnitValue) - string-length($cUnitMm))) div $cMmPerCm div $cCmPerIn * $cPtPerIn)"/>
+                </xsl:when>
+                <xsl:when test="ends-with($prmUnitValue,$cUnitTwip)">
+                    <xsl:sequence select="xs:double(xs:double(substring($prmUnitValue, 1, string-length($prmUnitValue) - string-length($cUnitTwip))) div $cTwipPerPt)"/>
+                </xsl:when>
+                <xsl:when test="ends-with($prmUnitValue,$cUnitEmu)">
+                    <xsl:sequence select="xs:double(xs:double(substring($prmUnitValue, 1, string-length($prmUnitValue) - string-length($cUnitEmu))) div $cEmuPerPt)"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:call-template name="warningContinue">
@@ -230,6 +244,9 @@ URL : http://www.antennahouse.com/
                 <xsl:when test="ends-with($prmUnitValue,$cUnitTwip)">
                     <xsl:sequence select="xs:integer(xs:double(substring($prmUnitValue, 1, string-length($prmUnitValue) - string-length($cUnitTwip)))  * $cEmuPerTwip)"/>
                 </xsl:when>
+                <xsl:when test="ends-with($prmUnitValue,$cUnitEmu)">
+                    <xsl:sequence select="xs:integer(xs:double(substring($prmUnitValue, 1, string-length($prmUnitValue) - string-length($cUnitEmu))))"/>
+                </xsl:when>
                 <xsl:otherwise>
                     <xsl:call-template name="warningContinue">
                         <xsl:with-param name="prmMes" select="ahf:replace($stMes2002,('%value'),($prmUnitValue))"/>
@@ -297,7 +314,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmProperty" as="xs:string"/>
         <xsl:sequence select="replace($prmProperty,'[\.\p{Nd}]','')"/>
     </xsl:function>
-    
+
     <!--
      function:	Get calculated the property value with specified ratio
      param:		prmProperty, prmRatio
@@ -315,6 +332,17 @@ URL : http://www.antennahouse.com/
         
         <xsl:sequence select="concat('(',$prmProperty, ') * ',string($prmRatio))"/>
         
+    </xsl:function>
+
+    <!--
+     function:	Judge the input is any numeric type
+     param:		prmValue
+     return:	xs:boolean
+     note:		
+     -->
+    <xsl:function name="ahf:isNumericValue" as="xs:boolean" visibility="public">
+        <xsl:param name="prmValue" as="xs:string"/>
+        <xsl:sequence select="$prmValue castable as xs:numeric"/>
     </xsl:function>
     
     <!-- end of stylesheet -->
