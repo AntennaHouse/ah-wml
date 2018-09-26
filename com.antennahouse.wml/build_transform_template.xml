@@ -210,6 +210,8 @@
             style="${prmStylesheetFile}" classpathref="project.class.path" force="true">
             <factory name="net.sf.saxon.TransformerFactoryImpl">
                 <attribute name="http://saxon.sf.net/feature/timing" value="true"/>
+                <!-- Suppress namespace warning -->
+                <attribute name="http://saxon.sf.net/feature/suppressXsltNamespaceCheck" value="true"/>
                 <!--Assert-->
                 <attribute name="http://saxon.sf.net/feature/enableAssertions" value="true"/>
                 <!-- Trace -->
@@ -264,6 +266,10 @@
             style="${prmStylesheetFile}" classpathref="project.class.path" force="true">
             <factory name="net.sf.saxon.TransformerFactoryImpl">
                 <attribute name="http://saxon.sf.net/feature/timing" value="true"/>
+                <!-- Suppress namespace warning -->
+                <attribute name="http://saxon.sf.net/feature/suppressXsltNamespaceCheck" value="true"/>
+                <!--Assert-->
+                <attribute name="http://saxon.sf.net/feature/enableAssertions" value="true"/>
                 <!-- Trace -->
                 <attribute name="http://saxon.sf.net/feature/traceListenerClass" value="net.sf.saxon.trace.XSLTTraceListener"/>
             </factory>
@@ -325,6 +331,8 @@
             filenameparameter="PRM_FILE_NAME" filedirparameter="PRM_FILE_DIR">
             <factory name="net.sf.saxon.TransformerFactoryImpl">
                 <attribute name="http://saxon.sf.net/feature/timing" value="true"/>
+                <!-- Suppress namespace warning -->
+                <attribute name="http://saxon.sf.net/feature/suppressXsltNamespaceCheck" value="true"/>
                 <!--Assert-->
                 <attribute name="http://saxon.sf.net/feature/enableAssertions" value="true"/>
                 <!-- Trace -->
