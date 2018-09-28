@@ -32,6 +32,9 @@ URL : http://www.antennahouse.com/
             <xsl:call-template name="columnMapTreeDump"/>
             <xsl:call-template name="sectMapDump"/>
         </xsl:if>
+        <xsl:if test="$pDebugClearElemMap">
+            <xsl:call-template name="clearElemMapDump"/>
+        </xsl:if>
         <w:document>
             <w:body>
                 <!-- Make cover -->

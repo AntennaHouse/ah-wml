@@ -33,34 +33,28 @@ E-mail : info@antennahouse.com
            <w:br w:type="textWrapping" w:clear="XXX"/>
          ******************************************************************************-->
 
+    <!-- Debug parameter -->
+    <xsl:param name="PRM_DEBUG_CLEAR_ELEM_MAP" as="xs:string" select="$cYes"/>
+    <xsl:variable name="pDebugClearElemMap" as="xs:boolean" select="$PRM_DEBUG_CLEAR_ELEM_MAP eq $cYes"/>
+
     <!-- Elements that has @clear or clear text wrapping is default.
          1. Elements that has @clear attribute.
          2. task/step that has info/floatfig.
          3. li that has floatfig
-         4. section, example, topic that follows floatfig. 
+         4. section, example, topic (unconditionally) 
      -->
     <xsl:variable name="cmClearCandidateElements" as="element()*">
         <xsl:sequence select="$root/descendant::*[string(@clear) = ('both','right','left')][ahf:isBlockElement(.)]/preceding-sibling::*[1]"/>
         <xsl:sequence select="$root/descendant::*[contains(@class,' task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]/preceding-sibling::*[1]"/>
         <xsl:sequence select="$root/descendant::*[contains(@class,' topic/li ')][descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]/preceding-sibling::*[1]"/>
-        <xsl:variable name="floatFigs" as="element()*" select="$root/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]"/>
         <xsl:variable name="targetClass" as="xs:string*" select="(' topic/topic ',' topic/section ',' topic/example ')"/>
         <xsl:variable name="targetElements" as="element()*">
-            <xsl:for-each select="$floatFigs">
-                <xsl:variable name="floatFig" as="element()" select="."/>
-                <xsl:variable name="lastParentTopic" as="element()" select="$floatFig/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
-                <xsl:variable name="lastParentTopicDescendant" as="element()*" select="$lastParentTopic/descendant-or-self::*"/>
-                <xsl:variable name="targetElemCandidates" as="element()*" select="($floatFig/preceding::* | $floatFig/ancestor::*) intersect $lastParentTopicDescendant"/>
-                <xsl:variable name="targetElem" as="element()?" select="$targetElemCandidates[ahf:seqContains(@class,$targetClass)][last()]"/>
-                <xsl:choose>
-                    <xsl:when test="exists($targetElem)">
-                        <xsl:sequence select="$targetElem"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:variable name="topicRef" as="element()" select="ahf:getTopicRef($lastParentTopic)"/>
-                        <xsl:sequence select="$topicRef"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+            <xsl:variable name="clearCandidates" as="element()*" select="$root/descendant::*[ahf:seqContains(@class,$targetClass)]"/>
+            <xsl:for-each select="$clearCandidates">
+                <xsl:variable name="clearCandidate" as="element()" select="."/>
+                <xsl:variable name="targetElem" select="if ($clearCandidate[contains(@class,' topic/topic ')]) then $clearCandidate else $clearCandidate/preceding-sibling::*[1]"/>
+                <xsl:message select="'$targetElem=',if (exists($targetElem)) then ahf:getNodeXPathStr($targetElem) else ''''''"/>
+                <xsl:sequence select="$targetElem"/>
             </xsl:for-each>
         </xsl:variable>
         <xsl:sequence select="$targetElements"/>
@@ -170,6 +164,7 @@ E-mail : info@antennahouse.com
      return:	
      note:		
      -->
+    <!--
     <xsl:template name="ahf:dumpClearElemMap">
         <xsl:variable name="mapEntrySeq" as="xs:string*" select="map:for-each($clearElemMap,function($k, $v){string($k),string($v)})"/>
         <xsl:result-document href="{concat($pTempDirUrl,'ClearElemMap.xml')}" method="xml" indent="yes">
@@ -184,5 +179,31 @@ E-mail : info@antennahouse.com
             </map>
         </xsl:result-document>
     </xsl:template>
-    
+    -->
+
+    <!-- 
+     function:	dump clearElemMap by sequence
+     param:		none
+     return:	debugClear.xml
+     note:      
+     -->
+    <xsl:template name="clearElemMapDump">
+        <xsl:variable name="clearElemSeq" as="element()*">
+            <xsl:for-each select="$cmDistinctClearCandidateElements">
+                <xsl:variable name="xpath" as="xs:string" select="ahf:getNodeXPathStr(.)"/>
+                <xsl:variable name="pos" as="xs:integer" select="position()"/>
+                <xsl:variable name="clear" as="xs:string" select="$cmDistinctClearCandidateElements[$pos]/string(@clear)"/>
+                <entry seq="{$pos}" xpath="{$xpath}" clear="{$clear}"/>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:result-document href="{concat($pTempDirUrl,'/DebugClearElemMap.xml')}" encoding="UTF-8" indent="yes">
+            <map>
+                <xsl:for-each select="$clearElemSeq">
+                    <xsl:sort select="@seq" data-type="number"/>
+                    <xsl:copy-of select="."/>
+                </xsl:for-each>
+            </map>
+        </xsl:result-document>
+    </xsl:template>
+
 </xsl:stylesheet>
