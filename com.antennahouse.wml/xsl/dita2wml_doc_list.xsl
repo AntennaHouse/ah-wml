@@ -103,6 +103,10 @@ URL : http://www.antennahouse.com/
             <w:p>
                 <w:pPr>
                     <w:pStyle w:val="{ahf:getStyleIdFromName($prmListStyle)}"/>
+                    <xsl:if test="empty(preceding-sibling::*)">
+                        <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(parent::*[1])"/>
+                    </xsl:if>
+                    <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(.)"/>
                     <w:numPr>
                         <w:ilvl w:val="{string(ahf:getIlvlFromListLevel($prmListLevel))}"/>
                         <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>

@@ -123,6 +123,10 @@ E-mail : info@antennahouse.com
                                         <!-- Parent is non-paragraph block elements -->
                                         <p>
                                             <xsl:copy-of select="$pAttr"/>
+                                            <xsl:if test="position() eq 1">
+                                                <!--copy @outputclass to handle breaking --> 
+                                                <xsl:copy-of select="./parent::*/@outputclass"/>
+                                            </xsl:if>
                                             <xsl:call-template name="ahf:processInline">
                                                 <xsl:with-param name="prmInline" select="current-group()"/>
                                             </xsl:call-template>
