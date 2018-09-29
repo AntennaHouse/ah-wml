@@ -100,13 +100,27 @@ URL : http://www.antennahouse.com/
         <xsl:assert test="exists($prmListStyle)" select="'[topic/li] $prmListStyle is empty. current=',ahf:generateId(.)"/>
         <xsl:if test="empty(child::*[1][contains(@class,' topic/p ')])">
             <!-- generate dummmy w:p -->
+            <xsl:variable name="listLevelBreakElem" as="element()?">
+                <xsl:choose>
+                    <xsl:when test="empty(preceding-sibling::*)">
+                        <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(parent::*[1])"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:sequence select="()"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
             <w:p>
                 <w:pPr>
                     <w:pStyle w:val="{ahf:getStyleIdFromName($prmListStyle)}"/>
-                    <xsl:if test="empty(preceding-sibling::*)">
-                        <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(parent::*[1])"/>
-                    </xsl:if>
-                    <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(.)"/>
+                    <xsl:choose>
+                        <xsl:when test="exists($listLevelBreakElem)">
+                            <xsl:copy-of select="$listLevelBreakElem"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(.)"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                     <w:numPr>
                         <w:ilvl w:val="{string(ahf:getIlvlFromListLevel($prmListLevel))}"/>
                         <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>
