@@ -85,14 +85,13 @@ URL : http://www.antennahouse.com/
      param:		prmListOccurenceNumber, prmListLevel, prmIndentLevel, prmExtraIndent
      return:	
      note:      In WordprocessingML an list is special form of paragraph (w:p with w:pPr/w;num).
-                DITA allows block element as the first child of li sucha as <table>, <ul>, <codeblock>.
+                DITA allows block element as the first child of li such as <table>, <ul>, <codeblock>.
                 But it cannot be expressed in WordprocessingML.
                 For this reason, this template inserts dummy w:p if li/*[1] is not a <p> element.
      -->
     <xsl:template match="*[contains(@class,' topic/li ')]">
         <xsl:param name="prmListOccurenceNumber" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmListLevel" tunnel="yes" required="yes" as="xs:integer"/>
-        <!--xsl:param name="prmListStyle" tunnel="yes" required="yes" as="xs:string"/-->
         <xsl:param name="prmListStyle" tunnel="yes" required="no" as="xs:string?"/>
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>

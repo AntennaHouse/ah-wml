@@ -152,6 +152,8 @@ URL : http://www.antennahouse.com/
                     <xsl:with-param name="prmElem" select="parent::*"/>
                 </xsl:call-template>
             </xsl:if>
+            <!-- Clear text wrapping if needed -->
+            <xsl:call-template name="ahf:genClearTextWrapR"/>
         </w:p>
         <xsl:call-template name="ahf:genPFromOutputClass">
             <xsl:with-param name="prmRegx" select="'(after)(\d+)(p)'"/>

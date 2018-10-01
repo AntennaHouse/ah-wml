@@ -1598,7 +1598,8 @@ URL : http://www.antennahouse.com/
             </a:ln>
         </wml-object>
         
-        <wml-object name="wmlClearTextWrapping">
+        <!-- Clear text wrapping -->
+        <wml-object name="wmlClearTextWrappingR">
             <w:r>
                 <w:br w:type="textWrapping" w:clear="%clear-val"/>
             </w:r>
