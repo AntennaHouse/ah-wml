@@ -1924,6 +1924,11 @@ URL : http://www.antennahouse.com/
             <w:b w:val="true"/>
         </wml-object>
         
+        <!-- Keep next (w:pPr Paragraph property) -->
+        <wml-object name="wmlKeepNext">
+            <w:keepNext/>
+        </wml-object>
+        
         <!-- Column break -->
         <wml-object name="wmlColumnBreak">
             <w:p>
