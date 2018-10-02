@@ -92,6 +92,7 @@ URL : http://www.antennahouse.com/
           -->
         <!--variable name="General_Paper_Width">%paper-width</variable>
         <variable name="General_Paper_Height">%paper-height</variable-->
+        <!--
         <variable name="Paper_Margin_Top">25mm</variable>
         <variable name="Paper_Margin_Bottom">25mm</variable>
         <variable name="Paper_Margin_Outer">25mm</variable>
@@ -101,24 +102,15 @@ URL : http://www.antennahouse.com/
         <variable name="Paper_Header_Height">20mm</variable>
         <variable name="Paper_Footer_Height">20mm</variable>
         <variable name="Paper_Column_Gap">10mm</variable>
-        
-        <variable name="Paper_Margin_Left_For_Left_Page">$Paper_Margin_Outer</variable>
-        <variable name="Paper_Margin_Left_For_Right_Page">$Paper_Margin_Inner</variable>
-        <variable name="Paper_Margin_Right_For_Left_Page">$Paper_Margin_Inner</variable>
-        <variable name="Paper_Margin_Right_For_Right_Page">$Paper_Margin_Outer</variable>
+        -->
+        <!--variable name="Paper_Margin_Left_For_Left_Page">{$PaperMarginOuter}</variable>
+        <variable name="Paper_Margin_Left_For_Right_Page">{$PaperMarginInner}</variable>
+        <variable name="Paper_Margin_Right_For_Left_Page">{$PaperMarginInner}</variable>
+        <variable name="Paper_Margin_Right_For_Right_Page">{$PaperMarginOuter}</variable>
 
-        <variable name="Paper_Region_Before_Extent">$Paper_Margin_Top</variable>
-        <variable name="Paper_Region_After_Extent">$Paper_Margin_Bottom</variable>
-        
-        <!-- Region before/after alignment: probably defined as template .docx-->
-        <!--variable name="General_Region_Before_Align">right</variable>
-        <variable name="General_Region_Before_Align" output-type="print-color print-mono">outside</variable>
-        <variable name="General_Region_After_Align">right</variable>
-        <variable name="General_Region_After_Align" output-type="print-color print-mono">outside</variable>
-        <variable name="General_Region_Before_Left_Align">$General_Region_Before_Align</variable>
-        <variable name="General_Region_Before_Right_Align">$General_Region_Before_Align</variable>
-        <variable name="General_Region_After_Left_Align">$General_Region_After_Align</variable>
-        <variable name="General_Region_After_Right_Align">$General_Region_After_Align</variable-->
+        <variable name="Paper_Region_Before_Extent">{$PaperMarginTop}</variable>
+        <variable name="Paper_Region_After_Extent">{$PaperMarginBottom}</variable>
+        -->
 
         <!-- Body text -->
         <variable name="Base_Font_Size">11pt</variable>
@@ -441,11 +433,6 @@ URL : http://www.antennahouse.com/
 
         <variable name="Table_Cell_Border_Bottom_Color">$Table_Border_Common_Color</variable>
         <variable name="Table_Cell_Border_End_Color">$Table_Border_Common_Color</variable>
-
-        <!-- Table layout type
-             "autofit" or "fixed"
-          -->
-        <variable name="Table_Layout_Type">autofit</variable>
         
         <!-- Default padding of table cell -->
         <variable name="TableCellMargin">1mm</variable>
@@ -522,7 +509,11 @@ URL : http://www.antennahouse.com/
         <variable name="PHeight">10.5pt</variable>
         <variable name="PHeightInEmu">{ahf:toEmuStr('$PHeight')}</variable>
         
-        
+        <!-- Inline image size constraint
+             One of two must be zero!
+          -->
+        <variable name="InlineImageWidthConstraint">{ahf:toEmuStr('15pt')}</variable>        
+        <variable name="InlineImageHeightConstraint">{ahf:toEmuStr('0pt')}</variable>
         
     </variables>
     
@@ -573,11 +564,15 @@ URL : http://www.antennahouse.com/
             <attribute name="w:color">$Table_Border_End_Color</attribute>
         </attribute-set>
         
-        <attribute-set name="atsTableLayout">
-            <attribute name="w:type">$Table_Layout_Type</attribute>
+        <attribute-set name="atsTableLayoutAutoFit">
+            <attribute name="w:type">autofit</attribute>
         </attribute-set>
-
-        <attribute-set name="atsTcW">
+        
+        <attribute-set name="atsTableLayoutFixed">
+            <attribute name="w:type">fixed</attribute>
+        </attribute-set>
+        
+        <attribute-set name="atsTcWAuto">
             <attribute name="w:w">0</attribute>
             <attribute name="w:type">auto</attribute>
         </attribute-set>
@@ -1321,7 +1316,7 @@ URL : http://www.antennahouse.com/
                 <ahr:hdrFtrReference/>
                 <w:type w:val="%type"/>
                 <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
-                <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginLeft)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
+                <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginOuter)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginInner)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
                     w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
                 <ahr:pgNumType/>
                 <w:cols w:num="%col" w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
@@ -1333,7 +1328,7 @@ URL : http://www.antennahouse.com/
                 <ahr:hdrFtrReference/>
                 <w:type w:val="%type"/>
                 <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
-                <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginRight)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginLeft)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
+                <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginOuter)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginInner)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
                     w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
                 <ahr:pgNumType/>
                 <w:cols w:num="%col" w:sep="%sep" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
@@ -1602,7 +1597,8 @@ URL : http://www.antennahouse.com/
             </a:ln>
         </wml-object>
         
-        <wml-object name="wmlClearTextWrapping">
+        <!-- Clear text wrapping -->
+        <wml-object name="wmlClearTextWrappingR">
             <w:r>
                 <w:br w:type="textWrapping" w:clear="%clear-val"/>
             </w:r>
@@ -1925,6 +1921,11 @@ URL : http://www.antennahouse.com/
         <!-- Stepsection run property -->
         <wml-object name="wmlStepSectionRunProp">
             <w:b w:val="true"/>
+        </wml-object>
+        
+        <!-- Keep next (w:pPr Paragraph property) -->
+        <wml-object name="wmlKeepNext">
+            <w:keepNext/>
         </wml-object>
         
         <!-- Column break -->

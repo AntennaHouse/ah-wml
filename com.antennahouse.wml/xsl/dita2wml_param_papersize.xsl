@@ -43,19 +43,21 @@ E-mail : info@antennahouse.com
         </xsl:choose>
     </xsl:variable>
 
-    <!-- Margin -->
-    <xsl:variable name="cPaperMarginTopDefault"    as="xs:string" select="ahf:getVarValue('Paper_Margin_Top')"/>
-    <xsl:variable name="cPaperMarginRightDefault"  as="xs:string" select="ahf:getVarValue('Paper_Margin_Outer')"/>
-    <xsl:variable name="cPaperMarginBottomDefault" as="xs:string" select="ahf:getVarValue('Paper_Margin_Bottom')"/>
-    <xsl:variable name="cPaperMarginLeftDefault"   as="xs:string" select="ahf:getVarValue('Paper_Margin_Inner')"/>
-    <xsl:variable name="cPaperHeaderHeightDefault" as="xs:string" select="ahf:getVarValue('Paper_Header_Height')"/>
-    <xsl:variable name="cPaperFooterHeightDefault" as="xs:string" select="ahf:getVarValue('Paper_Footer_Height')"/>
-    <xsl:variable name="cPaperColumnGapDefault"    as="xs:string" select="ahf:getVarValue('Paper_Column_Gap')"/>
+    <!-- Margin
+         Defined as variable because it is used for XPath evaluation in style definition file.
+     -->
+    <xsl:variable name="cPaperMarginTopDefault"    as="xs:string" select="'25mm'"/>
+    <xsl:variable name="cPaperMarginBottomDefault" as="xs:string" select="'25mm'"/>
+    <xsl:variable name="cPaperMarginInnerDefault"   as="xs:string" select="'25mm'"/>
+    <xsl:variable name="cPaperMarginOuterDefault"  as="xs:string" select="'25mm'"/>
+    <xsl:variable name="cPaperHeaderHeightDefault" as="xs:string" select="'20mm'"/>
+    <xsl:variable name="cPaperFooterHeightDefault" as="xs:string" select="'20mm'"/>
+    <xsl:variable name="cPaperColumnGapDefault"    as="xs:string" select="'10mm'"/>
     
     <xsl:param name="PRM_PAPER_MARGIN_TOP"    required="no" as="xs:string" select="$cPaperMarginTopDefault"/>
-    <xsl:param name="PRM_PAPER_MARGIN_RIGHT"  required="no" as="xs:string" select="$cPaperMarginRightDefault"/>
+    <xsl:param name="PRM_PAPER_MARGIN_OUTER"  required="no" as="xs:string" select="$cPaperMarginOuterDefault"/>
     <xsl:param name="PRM_PAPER_MARGIN_BOTTOM" required="no" as="xs:string" select="$cPaperMarginBottomDefault"/>
-    <xsl:param name="PRM_PAPER_MARGIN_LEFT"   required="no" as="xs:string" select="$cPaperMarginLeftDefault"/>
+    <xsl:param name="PRM_PAPER_MARGIN_INNER"  required="no" as="xs:string" select="$cPaperMarginInnerDefault"/>
     <xsl:param name="PRM_PAPER_HEADER_HEIGHT" required="no" as="xs:string" select="$cPaperHeaderHeightDefault"/>
     <xsl:param name="PRM_PAPER_FOOTER_HEIGHT" required="no" as="xs:string" select="$cPaperFooterHeightDefault"/>
     <xsl:param name="PRM_PAPER_COLUMN_GAP"    required="no" as="xs:string" select="$cPaperColumnGapDefault"/>
@@ -66,18 +68,8 @@ E-mail : info@antennahouse.com
                 <xsl:sequence select="$PRM_PAPER_MARGIN_TOP"/>
             </xsl:when>
             <xsl:otherwise>
+                <xsl:message select="'[dita2wml_param_papersize] Invalid unit value $PRM_PAPER_MARGIN_TOP=',$PRM_PAPER_MARGIN_TOP"/>
                 <xsl:sequence select="$cPaperMarginTopDefault"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    
-    <xsl:variable name="pPaperMarginRight" as="xs:string">
-        <xsl:choose>
-            <xsl:when test="ahf:isUnitValue($PRM_PAPER_MARGIN_RIGHT)">
-                <xsl:sequence select="$PRM_PAPER_MARGIN_RIGHT"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="$cPaperMarginRightDefault"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -88,18 +80,32 @@ E-mail : info@antennahouse.com
                 <xsl:sequence select="$PRM_PAPER_MARGIN_BOTTOM"/>
             </xsl:when>
             <xsl:otherwise>
+                <xsl:message select="'[dita2wml_param_papersize] Invalid unit value $PRM_PAPER_MARGIN_BOTTOM=',$PRM_PAPER_MARGIN_BOTTOM"/>
                 <xsl:sequence select="$cPaperMarginBottomDefault"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
     
-    <xsl:variable name="pPaperMarginLeft" as="xs:string">
+    <xsl:variable name="pPaperMarginOuter" as="xs:string">
         <xsl:choose>
-            <xsl:when test="ahf:isUnitValue($PRM_PAPER_MARGIN_LEFT)">
-                <xsl:sequence select="$PRM_PAPER_MARGIN_LEFT"/>
+            <xsl:when test="ahf:isUnitValue($PRM_PAPER_MARGIN_OUTER)">
+                <xsl:sequence select="$PRM_PAPER_MARGIN_OUTER"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:sequence select="$cPaperMarginLeftDefault"/>
+                <xsl:message select="'[dita2wml_param_papersize] Invalid unit value $PRM_PAPER_MARGIN_OUTER=',$PRM_PAPER_MARGIN_OUTER"/>
+                <xsl:sequence select="$cPaperMarginOuterDefault"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="pPaperMarginInner" as="xs:string">
+        <xsl:choose>
+            <xsl:when test="ahf:isUnitValue($PRM_PAPER_MARGIN_INNER)">
+                <xsl:sequence select="$PRM_PAPER_MARGIN_INNER"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message select="'[dita2wml_param_papersize] Invalid unit value $PRM_PAPER_MARGIN_INNER=',$PRM_PAPER_MARGIN_INNER"/>
+                <xsl:sequence select="$cPaperMarginInnerDefault"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -110,6 +116,7 @@ E-mail : info@antennahouse.com
                 <xsl:sequence select="$PRM_PAPER_HEADER_HEIGHT"/>
             </xsl:when>
             <xsl:otherwise>
+                <xsl:message select="'[dita2wml_param_papersize] Invalid unit value $PRM_PAPER_HEADER_HEIGHT=',$PRM_PAPER_HEADER_HEIGHT"/>
                 <xsl:sequence select="$cPaperHeaderHeightDefault"/>
             </xsl:otherwise>
         </xsl:choose>
@@ -121,6 +128,7 @@ E-mail : info@antennahouse.com
                 <xsl:sequence select="$PRM_PAPER_FOOTER_HEIGHT"/>
             </xsl:when>
             <xsl:otherwise>
+                <xsl:message select="'[dita2wml_param_papersize] Invalid unit value $PRM_PAPER_FOOTER_HEIGHT=',$PRM_PAPER_FOOTER_HEIGHT"/>
                 <xsl:sequence select="$cPaperFooterHeightDefault"/>
             </xsl:otherwise>
         </xsl:choose>
@@ -132,6 +140,7 @@ E-mail : info@antennahouse.com
                 <xsl:sequence select="$PRM_PAPER_COLUMN_GAP"/>
             </xsl:when>
             <xsl:otherwise>
+                <xsl:message select="'[dita2wml_param_papersize] Invalid unit value $PRM_PAPER_COLUMN_GAP=',$PRM_PAPER_COLUMN_GAP"/>
                 <xsl:sequence select="$cPaperColumnGapDefault"/>
             </xsl:otherwise>
         </xsl:choose>
@@ -140,6 +149,6 @@ E-mail : info@antennahouse.com
     <!-- paper related variables used here -->
     <xsl:variable name="pPaperWidth" as="xs:string" select="$cPaperInfo[$paperIndex + 1]"/>
     <xsl:variable name="pPaperHeight" as="xs:string" select="$cPaperInfo[$paperIndex + 2]"/>
-    <xsl:variable name="pPaperBodyWidth" as="xs:string" select="concat(string(ahf:toMm($pPaperWidth) - ahf:toMm($pPaperMarginLeft) - ahf:toMm($pPaperMarginRight)),'mm')"/>
+    <xsl:variable name="pPaperBodyWidth" as="xs:string" select="concat(string(ahf:toMm($pPaperWidth) - ahf:toMm($pPaperMarginInner) - ahf:toMm($pPaperMarginOuter)),'mm')"/>
     
 </xsl:stylesheet>

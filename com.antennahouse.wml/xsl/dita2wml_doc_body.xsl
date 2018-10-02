@@ -74,6 +74,7 @@ URL : http://www.antennahouse.com/
                     <xsl:assert test="exists($prmListLevel)" select="'[ASSERT: topic/p] $prmListLevel is empty!'"/>
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
+                        <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(.)"/>
                         <xsl:copy-of select="ahf:getIndentAttrElem(0,$prmEndIndent,0,0)"/>
                         <xsl:copy-of select="$divId"/>
                     </w:pPr>                    
@@ -84,6 +85,7 @@ URL : http://www.antennahouse.com/
                     <xsl:assert test="exists($prmListOccurenceNumber)" select="'[ASSERT: topic/p] $prmListOccurenceNumber is empty!'"/>
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($prmListStyle)}"/>
+                        <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(.)"/>
                         <w:numPr>
                             <w:ilvl w:val="{string(ahf:getIlvlFromListLevel($prmListLevel))}"/>
                             <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>
@@ -99,6 +101,7 @@ URL : http://www.antennahouse.com/
                     <!-- Generate initial indent -->
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
+                        <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(.)"/>
                         <xsl:copy-of select="ahf:getIndentAttrElem(0,0,0,0)"/>
                         <xsl:copy-of select="ahf:getAlignAttrElem($prmTcAttr/@align)"/>
                         <xsl:copy-of select="$divId"/>
@@ -108,6 +111,7 @@ URL : http://www.antennahouse.com/
                     <!-- Generate left indent take into account list nesting level -->
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
+                        <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(.)"/>
                         <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
                         <xsl:copy-of select="ahf:getAlignAttrElem($prmTcAttr/@align)"/>
                         <xsl:copy-of select="$divId"/>
@@ -171,6 +175,23 @@ URL : http://www.antennahouse.com/
         </xsl:for-each>        
     </xsl:template>
     
+    <!-- 
+     function:	generate <w:pageBreakBefore> for given position
+     param:		prmElem (that has @outputclass)
+     return:	element(w:pageBreakBefore)?
+     note:		
+     -->
+    <xsl:function name="ahf:getPageBreakBeforeAttrElem" as="element(w:pageBreakBefore)?">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="ahf:hasFoProperty($prmElem,'break-before','page')">
+                <w:pageBreakBefore w:val="true"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
 
     <!-- 
      function:	div element processing

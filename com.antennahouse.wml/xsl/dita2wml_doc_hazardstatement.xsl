@@ -221,10 +221,12 @@ URL : http://www.antennahouse.com/
                             <xsl:sequence select="()"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:variable name="childInlines" as="node()+">
-                                <xsl:apply-templates select="$panelChild/node()">
-                                    <xsl:with-param name="prmRunProps" tunnel="yes" select="()"/>
-                                </xsl:apply-templates>
+                            <xsl:variable name="childInlines" as="document-node()">
+                                <xsl:document>
+                                    <xsl:apply-templates select="$panelChild/node()">
+                                        <xsl:with-param name="prmRunProps" tunnel="yes" select="()"/>
+                                    </xsl:apply-templates>
+                                </xsl:document>
                             </xsl:variable>
                             <xsl:variable name="lineHeight" as="xs:string">
                                 <xsl:call-template name="getVarValueWithLang">
@@ -235,7 +237,7 @@ URL : http://www.antennahouse.com/
                             <xsl:call-template name="getWmlObjectReplacing">
                                 <xsl:with-param name="prmObjName" select="'wmlMessgaPanelChildElement'"/>
                                 <xsl:with-param name="prmSrc" select="('%num-id','node:panelChild')"/>
-                                <xsl:with-param name="prmDst" select="($numId,if (empty($childInlines)) then $cElemNull else $childInlines)"/>
+                                <xsl:with-param name="prmDst" select="($numId,if (empty($childInlines/*)) then $cElemNull else $childInlines)"/>
                             </xsl:call-template>
                         </xsl:otherwise>
                     </xsl:choose>

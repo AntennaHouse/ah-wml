@@ -729,6 +729,7 @@ URL : http://www.antenna.co.jp/
     param:      prmElement
     return:     xs:string
     note:       returns grouping key
+                If $prmElem is image, each image has another key to control column spanning.
     -->
     <xsl:function name="ahf:genSectGroupKey" as="xs:string">
         <xsl:param name="prmElem" as="element()"/>
@@ -737,7 +738,8 @@ URL : http://www.antenna.co.jp/
         <xsl:variable name="colSepKey" as="xs:string" select="string($prmElem/@colsep)"/>
         <xsl:variable name="breakKey" as="xs:integer" select="ahf:genBreakGroupKey($prmElem)"/>
         <xsl:variable name="breakKeyStr" as="xs:string" select="format-integer($breakKey,'00000')"/>
-        <xsl:sequence select="concat($columnKeyStr,' ',$colSepKey,' ',$breakKeyStr)"/>
+        <xsl:variable name="spannedImageKey" as="xs:string" select="if (exists($prmElem[self::image])) then string($prmElem/@id) else ''"/>
+        <xsl:sequence select="concat($columnKeyStr,' ',$colSepKey,' ',$breakKeyStr, ' ',$spannedImageKey)"/>
     </xsl:function>
     
     <!--

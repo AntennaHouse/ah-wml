@@ -85,14 +85,13 @@ URL : http://www.antennahouse.com/
      param:		prmListOccurenceNumber, prmListLevel, prmIndentLevel, prmExtraIndent
      return:	
      note:      In WordprocessingML an list is special form of paragraph (w:p with w:pPr/w;num).
-                DITA allows block element as the first child of li sucha as <table>, <ul>, <codeblock>.
+                DITA allows block element as the first child of li such as <table>, <ul>, <codeblock>.
                 But it cannot be expressed in WordprocessingML.
                 For this reason, this template inserts dummy w:p if li/*[1] is not a <p> element.
      -->
     <xsl:template match="*[contains(@class,' topic/li ')]">
         <xsl:param name="prmListOccurenceNumber" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmListLevel" tunnel="yes" required="yes" as="xs:integer"/>
-        <!--xsl:param name="prmListStyle" tunnel="yes" required="yes" as="xs:string"/-->
         <xsl:param name="prmListStyle" tunnel="yes" required="no" as="xs:string?"/>
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
@@ -100,9 +99,27 @@ URL : http://www.antennahouse.com/
         <xsl:assert test="exists($prmListStyle)" select="'[topic/li] $prmListStyle is empty. current=',ahf:generateId(.)"/>
         <xsl:if test="empty(child::*[1][contains(@class,' topic/p ')])">
             <!-- generate dummmy w:p -->
+            <xsl:variable name="listLevelBreakElem" as="element()?">
+                <xsl:choose>
+                    <xsl:when test="empty(preceding-sibling::*)">
+                        <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(parent::*[1])"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:sequence select="()"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
             <w:p>
                 <w:pPr>
                     <w:pStyle w:val="{ahf:getStyleIdFromName($prmListStyle)}"/>
+                    <xsl:choose>
+                        <xsl:when test="exists($listLevelBreakElem)">
+                            <xsl:copy-of select="$listLevelBreakElem"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(.)"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                     <w:numPr>
                         <w:ilvl w:val="{string(ahf:getIlvlFromListLevel($prmListLevel))}"/>
                         <w:numId w:val="{ahf:getNumIdFromListOccurenceNumber($prmListOccurenceNumber)}"/>

@@ -33,34 +33,27 @@ E-mail : info@antennahouse.com
            <w:br w:type="textWrapping" w:clear="XXX"/>
          ******************************************************************************-->
 
+    <!-- Debug parameter -->
+    <xsl:param name="PRM_DEBUG_CLEAR_ELEM_MAP" as="xs:string" select="$cYes"/>
+    <xsl:variable name="pDebugClearElemMap" as="xs:boolean" select="$PRM_DEBUG_CLEAR_ELEM_MAP eq $cYes"/>
+
     <!-- Elements that has @clear or clear text wrapping is default.
          1. Elements that has @clear attribute.
          2. task/step that has info/floatfig.
          3. li that has floatfig
-         4. section, example, topic that follows floatfig. 
+         4. section, example, topic (unconditionally) 
      -->
     <xsl:variable name="cmClearCandidateElements" as="element()*">
         <xsl:sequence select="$root/descendant::*[string(@clear) = ('both','right','left')][ahf:isBlockElement(.)]/preceding-sibling::*[1]"/>
-        <xsl:sequence select="$root/descendant::*[contains(@class,' task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]/preceding-sibling::*[1]"/>
-        <xsl:sequence select="$root/descendant::*[contains(@class,' topic/li ')][descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]/preceding-sibling::*[1]"/>
-        <xsl:variable name="floatFigs" as="element()*" select="$root/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]"/>
-        <xsl:variable name="targetClass" as="xs:string*" select="(' topic/topic ',' topic/section ',' topic/example ')"/>
+        <xsl:sequence select="$root/descendant::*[contains(@class,' task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]/preceding-sibling::*[not(contains(@class,' task/stepsection '))][1]"/>
+        <xsl:sequence select="$root/descendant::*[contains(@class,' topic/li ')][not(contains(@class,' task/step '))][descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]/preceding-sibling::*[1]"/>
+        <xsl:variable name="targetClass" as="xs:string*" select="(' topic/topic ',' topic/section ',' topic/example ',' task/stepsection ', ' topic/related-links ')"/>
         <xsl:variable name="targetElements" as="element()*">
-            <xsl:for-each select="$floatFigs">
-                <xsl:variable name="floatFig" as="element()" select="."/>
-                <xsl:variable name="lastParentTopic" as="element()" select="$floatFig/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
-                <xsl:variable name="lastParentTopicDescendant" as="element()*" select="$lastParentTopic/descendant-or-self::*"/>
-                <xsl:variable name="targetElemCandidates" as="element()*" select="($floatFig/preceding::* | $floatFig/ancestor::*) intersect $lastParentTopicDescendant"/>
-                <xsl:variable name="targetElem" as="element()?" select="$targetElemCandidates[ahf:seqContains(@class,$targetClass)][last()]"/>
-                <xsl:choose>
-                    <xsl:when test="exists($targetElem)">
-                        <xsl:sequence select="$targetElem"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:variable name="topicRef" as="element()" select="ahf:getTopicRef($lastParentTopic)"/>
-                        <xsl:sequence select="$topicRef"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+            <xsl:variable name="clearCandidates" as="element()*" select="$root/descendant::*[ahf:seqContains(@class,$targetClass)]"/>
+            <xsl:for-each select="$clearCandidates">
+                <xsl:variable name="clearCandidate" as="element()" select="."/>
+                <xsl:variable name="targetElem" select="if ($clearCandidate[contains(@class,' topic/topic ')]) then $clearCandidate else $clearCandidate/preceding-sibling::*[1]"/>
+                <xsl:sequence select="$targetElem"/>
             </xsl:for-each>
         </xsl:variable>
         <xsl:sequence select="$targetElements"/>
@@ -104,35 +97,43 @@ E-mail : info@antennahouse.com
     <!-- 
      function:	generate <w:br w:type="textWrapping" w:clear="XXX"/>
                 if target is in $clearElemMap 
-     param:		prmElem
+     param:		prmClearElem(tunnel)
      return:	element(w:r)*
-     note:		
+     note:		Used only for <p>
      -->
-    <xsl:template name="ahf:genClearTextWrap" as="element(w:r)?">
-        <xsl:param name="prmElem" as="element()" required="no" select="."/>
-        <xsl:message select="'[ahf:genClearTextWrap] id=',ahf:generateId($prmElem)"/>
-        <xsl:variable name="clearVal" as="xs:string?" select="map:get($clearElemMap,ahf:generateId($prmElem))"/>
-        <xsl:if test="exists($clearVal)">
-            <xsl:call-template name="getWmlObjectReplacing">
-                <xsl:with-param name="prmObjName" select="'wmlClearTextWrapping'"/>
-                <xsl:with-param name="prmSrc" select="('%clear-val')"/>
-                <xsl:with-param name="prmDst" select="if ($clearVal = ('both','')) then 'all' else $clearVal"/>
-            </xsl:call-template>
-        </xsl:if>
+    <xsl:template name="ahf:genClearTextWrapR" as="element(w:r)?">
+        <xsl:param name="prmP" as="element()" required="no" select="."/>
+        <xsl:param name="prmClearElem" as="element()?" tunnel="yes" required="no"  select="()"/>
+        <xsl:param name="prmClearVal" as="xs:string" tunnel="yes" required="no" select="''"/>
+        <xsl:choose>
+            <xsl:when test="$prmClearElem is $prmP">
+                <xsl:call-template name="getWmlObjectReplacing">
+                    <xsl:with-param name="prmObjName" select="'wmlClearTextWrappingR'"/>
+                    <xsl:with-param name="prmSrc" select="('%clear-val')"/>
+                    <xsl:with-param name="prmDst" select="if ($prmClearVal = ('both','')) then 'all' else $prmClearVal"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="()"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
+    <!-- 
+     function:	generate <w:br w:type="textWrapping" w:clear="XXX"/> with w:p
+                if target is in $clearElemMap 
+     param:		prmClearElem(tunnel)
+     return:	element(w:r)*
+     note:		Used for element except for <p>
+     -->
     <xsl:template name="ahf:genClearTextWrapP" as="element(w:p)?">
-        <xsl:param name="prmElem" as="element()" required="no" select="."/>
-        <!--xsl:message select="'[ahf:genClearTextWrapP] id=',ahf:generateId($prmElem)"/-->
-        <xsl:variable name="clearVal" as="xs:string?" select="map:get($clearElemMap,ahf:generateId($prmElem))"/>
-        <!--xsl:message select="if (exists($clearVal)) then 'Matched!' else 'Unmatched!'"/-->
-        <xsl:if test="exists($clearVal)">
-            <xsl:call-template name="getWmlObjectReplacing">
-                <xsl:with-param name="prmObjName" select="'wmlClearTextWrappingP'"/>
-                <xsl:with-param name="prmSrc" select="('%clear-val')"/>
-                <xsl:with-param name="prmDst" select="if ($clearVal = ('both','')) then 'all' else $clearVal"/>
-            </xsl:call-template>
-        </xsl:if>
+        <xsl:param name="prmClearElem" as="element()" required="no" select="."/>
+        <xsl:variable name="clearVal" as="xs:string" select="string(map:get($clearElemMap,ahf:generateId($prmClearElem)))"/>
+        <xsl:call-template name="getWmlObjectReplacing">
+            <xsl:with-param name="prmObjName" select="'wmlClearTextWrappingP'"/>
+            <xsl:with-param name="prmSrc" select="('%clear-val')"/>
+            <xsl:with-param name="prmDst" select="if ($clearVal = ('both','')) then 'all' else $clearVal"/>
+        </xsl:call-template>
     </xsl:template>
     
     <!-- 
@@ -151,38 +152,40 @@ E-mail : info@antennahouse.com
      param:		prmElem
      return:	w:p
      note:		Very important because this template precedes all of other templates.
-                If this template is overridden from other plug-in, $prmSkipClear should be true()
+                If this template is overridden from other plug-in, the template should use $xsl:apply-imports
                 to prevent multiple clear text wrapping generation.
      -->
     <xsl:template match="*[ahf:isClearTextTarget(.)]" priority="50">
-        <xsl:param name="prmSkipClear" tunnel="yes" required="no" select="false()"/>
-        <xsl:next-match>
-            <xsl:with-param name="prmSkipClear" tunnel="yes" select="false()"/>
-        </xsl:next-match>
-        <xsl:if test="not($prmSkipClear)">
+        <xsl:param name="prmProcessClearTextMap" as="xs:boolean" tunnel="yes" required="no" select="true()"/>
+        <xsl:next-match/>
+        <xsl:if test="$prmProcessClearTextMap">
             <xsl:call-template name="ahf:genClearTextWrapP"/>
         </xsl:if>
     </xsl:template>
 
     <!-- 
-     function:	Dump $clearElemMap
+     function:	dump clearElemMap by sequence
      param:		none
-     return:	
-     note:		
+     return:	debugClear.xml
+     note:      
      -->
-    <xsl:template name="ahf:dumpClearElemMap">
-        <xsl:variable name="mapEntrySeq" as="xs:string*" select="map:for-each($clearElemMap,function($k, $v){string($k),string($v)})"/>
-        <xsl:result-document href="{concat($pTempDirUrl,'ClearElemMap.xml')}" method="xml" indent="yes">
+    <xsl:template name="clearElemMapDump">
+        <xsl:variable name="clearElemSeq" as="element()*">
+            <xsl:for-each select="$cmDistinctClearCandidateElements">
+                <xsl:variable name="xpath" as="xs:string" select="ahf:getNodeXPathStr(.)"/>
+                <xsl:variable name="pos" as="xs:integer" select="position()"/>
+                <xsl:variable name="clear" as="xs:string" select="$cmDistinctClearCandidateElements[$pos]/string(@clear)"/>
+                <entry seq="{$pos}" xpath="{$xpath}" clear="{$clear}"/>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:result-document href="{concat($pTempDirUrl,'/DebugClearElemMap.xml')}" encoding="UTF-8" indent="yes">
             <map>
-                <xsl:for-each select="1 to count($mapEntrySeq) div 2">
-                    <xsl:variable name="pos" as="xs:integer" select="position()"/>
-                    <entry>
-                        <xsl:attribute name="key" select="$mapEntrySeq[$pos * 2 -1]"/>
-                        <xsl:attribute name="val" select="$mapEntrySeq[$pos * 2]"/>
-                    </entry>
+                <xsl:for-each select="$clearElemSeq">
+                    <xsl:sort select="@seq" data-type="number"/>
+                    <xsl:copy-of select="."/>
                 </xsl:for-each>
             </map>
         </xsl:result-document>
     </xsl:template>
-    
+
 </xsl:stylesheet>

@@ -36,7 +36,7 @@ URL : http://www.antennahouse.com/
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="$isInTwoColumn">
-        <xsl:sequence select="(ahf:toTwip($pPaperBodyWidth) - ahf:toTwip($pPaperColumnGap) ) div 2"/>
+        <xsl:sequence select="xs:integer(round((ahf:toTwip($pPaperBodyWidth) - ahf:toTwip($pPaperColumnGap) ) div 2))"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:sequence select="ahf:toTwip($pPaperBodyWidth)"/>

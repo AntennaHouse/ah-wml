@@ -97,7 +97,7 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="isNotInTable" as="xs:boolean" select="empty(ancestor::*[ahf:seqContains(@class,(' topic/entry',' topic/stentry '))])"/>
         
         <!-- w:tabs for note rule -->
-        <xsl:variable name="bodyRightEdgeInTwip" as="xs:integer" select="ahf:toTwip($pPaperWidth) - ahf:toTwip($pPaperMarginLeft) - ahf:toTwip($pPaperMarginRight)"/>
+        <xsl:variable name="bodyRightEdgeInTwip" as="xs:integer" select="ahf:toTwip($pPaperWidth) - ahf:toTwip($pPaperMarginInner) - ahf:toTwip($pPaperMarginOuter)"/>
         <xsl:variable name="pPrTabs" as="node()">
             <xsl:choose>
                 <xsl:when test="$isNotInTable">
