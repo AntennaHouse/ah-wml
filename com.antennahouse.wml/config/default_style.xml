@@ -433,11 +433,6 @@ URL : http://www.antennahouse.com/
 
         <variable name="Table_Cell_Border_Bottom_Color">$Table_Border_Common_Color</variable>
         <variable name="Table_Cell_Border_End_Color">$Table_Border_Common_Color</variable>
-
-        <!-- Table layout type
-             "autofit" or "fixed"
-          -->
-        <variable name="Table_Layout_Type">autofit</variable>
         
         <!-- Default padding of table cell -->
         <variable name="TableCellMargin">1mm</variable>
@@ -569,10 +564,14 @@ URL : http://www.antennahouse.com/
             <attribute name="w:color">$Table_Border_End_Color</attribute>
         </attribute-set>
         
-        <attribute-set name="atsTableLayout">
-            <attribute name="w:type">$Table_Layout_Type</attribute>
+        <attribute-set name="atsTableLayoutAutoFit">
+            <attribute name="w:type">autofit</attribute>
         </attribute-set>
-
+        
+        <attribute-set name="atsTableLayoutFixed">
+            <attribute name="w:type">fixed</attribute>
+        </attribute-set>
+        
         <attribute-set name="atsTcWAuto">
             <attribute name="w:w">0</attribute>
             <attribute name="w:type">auto</attribute>

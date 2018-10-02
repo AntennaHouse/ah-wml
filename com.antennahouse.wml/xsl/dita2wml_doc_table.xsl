@@ -236,11 +236,22 @@ URL : http://www.antennahouse.com/
         
         <!-- w:tblLayout -->
         <w:tblLayout>
-            <xsl:call-template name="getAttributeSet">
-                <xsl:with-param name="prmAttrSetName" as="xs:string">
-                    <xsl:sequence select="'atsTableLayout'"/>
-                </xsl:with-param>
-            </xsl:call-template>
+            <xsl:choose>
+                <xsl:when test="ahf:isPageWidthTable($prmTgroupAttr) or exists($prmTgroupAttr/@ahf:width)">
+                    <xsl:call-template name="getAttributeSet">
+                        <xsl:with-param name="prmAttrSetName" as="xs:string">
+                            <xsl:sequence select="'atsTableLayoutFixed'"/>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="getAttributeSet">
+                        <xsl:with-param name="prmAttrSetName" as="xs:string">
+                            <xsl:sequence select="'atsTableLayoutAutoFit'"/>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
         </w:tblLayout>
         
         <!--tblCellMar-->
