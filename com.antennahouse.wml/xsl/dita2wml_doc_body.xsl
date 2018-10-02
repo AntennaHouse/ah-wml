@@ -41,6 +41,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmTcAttr" tunnel="yes" as="element()?" select="()"/>
         <xsl:param name="prmFrameId" tunnel="yes" as="xs:integer?" select="()"/>
         
+        <xsl:variable name="p" as="element()" select="."/>
         <xsl:variable name="isChildOfStepSection" as="xs:boolean" select="exists(parent::*[contains(@class,' task/stepsection ')])"/>
         <xsl:variable name="isChildOfStep" as="xs:boolean" select="exists(parent::*[contains(@class,' task/step ') and parent::*[contains(@class,' task/steps ')]])"/>
         <xsl:variable name="isFirstChildOfLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/*[1][. is current()])"/>
@@ -74,6 +75,7 @@ URL : http://www.antennahouse.com/
                     <xsl:assert test="exists($prmListLevel)" select="'[ASSERT: topic/p] $prmListLevel is empty!'"/>
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
+                        <xsl:copy-of select="ahf:getKeepNextAttrElem($p)"/>
                         <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(.)"/>
                         <xsl:copy-of select="ahf:getIndentAttrElem(0,$prmEndIndent,0,0)"/>
                         <xsl:copy-of select="$divId"/>
@@ -85,6 +87,7 @@ URL : http://www.antennahouse.com/
                     <xsl:assert test="exists($prmListOccurenceNumber)" select="'[ASSERT: topic/p] $prmListOccurenceNumber is empty!'"/>
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($prmListStyle)}"/>
+                        <xsl:copy-of select="ahf:getKeepNextAttrElem($p)"/>
                         <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(.)"/>
                         <w:numPr>
                             <w:ilvl w:val="{string(ahf:getIlvlFromListLevel($prmListLevel))}"/>
@@ -101,6 +104,7 @@ URL : http://www.antennahouse.com/
                     <!-- Generate initial indent -->
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
+                        <xsl:copy-of select="ahf:getKeepNextAttrElem($p)"/>
                         <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(.)"/>
                         <xsl:copy-of select="ahf:getIndentAttrElem(0,0,0,0)"/>
                         <xsl:copy-of select="ahf:getAlignAttrElem($prmTcAttr/@align)"/>
@@ -111,6 +115,7 @@ URL : http://www.antennahouse.com/
                     <!-- Generate left indent take into account list nesting level -->
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>
+                        <xsl:copy-of select="ahf:getKeepNextAttrElem($p)"/>
                         <xsl:copy-of select="ahf:getPageBreakBeforeAttrElem(.)"/>
                         <xsl:copy-of select="ahf:getIndentAttrElem(ahf:getIndentFromIndentLevel($prmIndentLevel, $prmExtraIndent),$prmEndIndent,0,0)"/>
                         <xsl:copy-of select="ahf:getAlignAttrElem($prmTcAttr/@align)"/>
@@ -192,7 +197,25 @@ URL : http://www.antennahouse.com/
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
-
+    
+    <!-- 
+     function:	generate <w:keepNext/> for given position
+     param:		prmElem (that has @outputclass)
+     return:	element(w:keepNext)?
+     note:		
+     -->
+    <xsl:function name="ahf:getKeepNextAttrElem" as="element(w:keepNext)?">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="ahf:hasFoProperty($prmElem,'keep-with-next.within-column','always') or ahf:hasFoProperty($prmElem,'keep-with-next.within-page','always')">
+                <w:keepNext w:val="true"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
     <!-- 
      function:	div element processing
      param:		none
