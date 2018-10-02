@@ -573,7 +573,7 @@ URL : http://www.antennahouse.com/
             <attribute name="w:type">$Table_Layout_Type</attribute>
         </attribute-set>
 
-        <attribute-set name="atsTcW">
+        <attribute-set name="atsTcWAuto">
             <attribute name="w:w">0</attribute>
             <attribute name="w:type">auto</attribute>
         </attribute-set>

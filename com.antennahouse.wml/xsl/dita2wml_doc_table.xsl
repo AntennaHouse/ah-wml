@@ -469,7 +469,6 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/entry ')]">
         <xsl:param name="prmRowAttr" as="element()"  required="yes"/>
         <xsl:param name="prmColSpec" as="element()+" required="yes"/>
-        <xsl:param name="prmTgroupAttr" as="element()" required="yes" tunnel="yes"/>
         <xsl:param name="prmTblGrid" as="element()+" required="yes" tunnel="yes"/>
         <xsl:variable name="entry" as="element()" select="."/>
         <xsl:variable name="entryAttr" as="element()" select="ahf:getEntryAttr($entry,$prmRowAttr,$prmColSpec)"/>
@@ -492,7 +491,7 @@ URL : http://www.antennahouse.com/
                                 <xsl:when test="empty($entry/descendant::*[contains(@class,' topic/image ')][string(@placement) eq 'break'])">
                                     <xsl:sequence select="()"/>
                                 </xsl:when>
-                                <xsl:when test="(string($prmTgroupAttr/@pgwide) eq '1') or exists($prmTgroupAttr/@ahf:width)">
+                                <xsl:when test="(string($entryAttr/@pgwide) eq '1') or exists($entryAttr/@ahf:width)">
                                     <xsl:sequence select="ahf:getFixedTableCellWidthInEmu($entry,$prmTblGrid)"/>
                                 </xsl:when>
                                 <xsl:otherwise>
@@ -592,10 +591,9 @@ URL : http://www.antennahouse.com/
         
         <!-- w:tcW -->
         <w:tcW>
-            <xsl:call-template name="getAttributeSet">
-                <xsl:with-param name="prmAttrSetName" as="xs:string">
-                    <xsl:sequence select="'atsTcW'"/>
-                </xsl:with-param>
+            <xsl:call-template name="getTcWAttr">
+                <xsl:with-param name="prmEntry" select="$prmEntry"/>
+                <xsl:with-param name="prmEntryAttr" select="$prmEntryAttr"/>
             </xsl:call-template>
         </w:tcW>
         
@@ -669,6 +667,83 @@ URL : http://www.antennahouse.com/
         </xsl:if>
     </xsl:template>
         
+    <!-- 
+     function:	Generate w:tc's w:tcW attribute
+     param:		prmTopicRef, prmTable
+     return:	Table title prefix
+     note:		
+     -->
+    <xsl:template name="getTcWAttr" as="attribute()+">
+        <xsl:param name="prmEntry" as="element()" required="yes"/>
+        <xsl:param name="prmEntryAttr" as="element()" required="yes"/>
+        <xsl:param name="prmTblGrid" as="element()+" required="yes" tunnel="yes"/>
+        
+        <xsl:variable name="isFixedTable" as="xs:boolean">
+            <xsl:choose>
+                <xsl:when test="string($prmEntryAttr/@pgwidte) eq '1'">
+                    <xsl:sequence select="true()"/>
+                </xsl:when>
+                <xsl:when test="exists($prmEntryAttr/@ahf:width)">
+                    <xsl:sequence select="true()"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="false()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="$isFixedTable">
+                <!-- Fixed cell width -->
+                <xsl:call-template name="ahf:getFixedTcWAttr">
+                    <xsl:with-param name="prmEntry" select="$prmEntry"/>
+                    <xsl:with-param name="prmEntryAttr" select="$prmEntryAttr"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- Auto cell width -->
+                <xsl:call-template name="getAttributeSet">
+                    <xsl:with-param name="prmAttrSetName" as="xs:string">
+                        <xsl:sequence select="'atsTcWAuto'"/>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <!-- 
+     function:	Generate fixed table cell attribute for w:tcW
+     param:		prmEntry, prmEntryAttr,prmTgroupAttr,prmTblGrid
+     return:	table cell width in twip unit with w:w and w:type="dxa"
+     note:		
+     -->
+    <xsl:template name="ahf:getFixedTcWAttr" as="attribute()+">
+        <xsl:param name="prmEntry" as="element()" required="yes"/>
+        <xsl:param name="prmEntryAttr" as="element()" required="yes"/>
+        <xsl:param name="prmTblGrid" as="element()+" required="yes" tunnel="yes"/>
+        <xsl:variable name="colNum" as="xs:integer" select="xs:integer($prmEntryAttr/@ahf:colnum)"/>
+        <xsl:variable name="colSpan" as="xs:integer" select="if (exists($prmEntryAttr/@ahf:col-span-count)) then xs:integer($prmEntryAttr/@ahf:col-span-count) else 0"/>
+        <xsl:variable name="tcWAttr" as="attribute()+">
+            <xsl:choose>
+                <xsl:when test="$colSpan eq 0">
+                    <xsl:variable name="colWidthNoSpan" as="xs:integer" select="xs:integer(string($prmTblGrid[$colNum]/@w:w))"/>
+                    <xsl:attribute name="w:w" select="string($colWidthNoSpan)"/>
+                    <xsl:attribute name="w:type" select="'dxa'"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="colWidthSeqSpanned" as="xs:integer+">
+                        <xsl:for-each select="$colNum to ($colNum + $colSpan)">
+                            <xsl:sequence select="xs:integer(string($prmTblGrid[.]/@w:w))"/>
+                        </xsl:for-each>
+                    </xsl:variable>
+                    <xsl:variable name="colWidthSpanned" as="xs:integer" select="xs:integer(sum($colWidthSeqSpanned))"/>
+                    <xsl:attribute name="w:w" select="string($colWidthSpanned)"/>
+                    <xsl:attribute name="w:type" select="'dxa'"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:sequence select="$tcWAttr"/>
+    </xsl:template>
+
     <!-- 
      function:	Generate table title prefix
      param:		prmTopicRef, prmTable
@@ -964,11 +1039,12 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmSimpleTableAttr" as="element()" required="yes" tunnel="yes"/>
         <xsl:param name="prmTblGrid" as="element()+" required="yes" tunnel="yes"/>
         <xsl:variable name="stentry" as="element()" select="."/>
+        <xsl:variable name="stEntryAttr" as="element()" select="ahf:getStEntryAttr($stentry,$prmSimpleTableAttr)"/>
         <w:tc>
             <w:tcPr>
                 <xsl:call-template name="genStTcPr">
                     <xsl:with-param name="prmStEntry" select="$stentry"/>
-                    <xsl:with-param name="prmStEntryAttr" select="$prmSimpleTableAttr"/>
+                    <xsl:with-param name="prmStEntryAttr" select="$stEntryAttr"/>
                 </xsl:call-template>
             </w:tcPr>
             <xsl:choose>
@@ -998,7 +1074,24 @@ URL : http://www.antennahouse.com/
         </w:tc>
         
     </xsl:template>
-    
+
+    <!-- 
+     function:	Generate stentry attribute
+     param:		prmStEntry, prmSimpleTableAttr
+     return:	element()
+     note:		Add @ahf:colnum
+     -->
+    <xsl:function name="ahf:getStEntryAttr" as="element()">
+        <xsl:param name="prmStEntry" as="element()"/>
+        <xsl:param name="prmSimpleTableAttr" as="element()"/>
+        <dummy>
+            <xsl:copy-of select="$prmSimpleTableAttr/@*"/>
+            <xsl:attribute name="ahf:colNum" select="string(count($prmStEntry | $prmStEntry/preceding-sibling::*))"/>
+            <xsl:attribute name="ahf:is-last-col" select="if ($prmStEntry/following-sibling::*) then $cNo else $cYes"/>
+            <xsl:attribute name="ahf:is-last-row" select="if ($prmStEntry/parent::*/following-sibling::*) then $cNo else $cYes"/>
+        </dummy>
+    </xsl:function>
+
     <!-- 
      function:	Generate w:tcPr from stentry
      param:		prmEntry, prmEntryAttr
@@ -1010,7 +1103,7 @@ URL : http://www.antennahouse.com/
     <xsl:template name="genStTcPr">
         <xsl:param name="prmStEntry" as="element()" required="yes"/>
         <xsl:param name="prmStEntryAttr" as="element()" required="yes"/>
-        <xsl:variable name="colNum" as="xs:integer" select="count($prmStEntry | $prmStEntry/preceding-sibling::*)"/>
+        <xsl:variable name="colNum" as="xs:integer" select="xs:integer($prmStEntryAttr/@ahf:colnum)"/>
         <xsl:variable name="keyColNum" as="xs:integer">
             <xsl:variable name="keycol" as="xs:string" select="string($prmStEntryAttr/@keycol)"/>
             <xsl:choose>
@@ -1026,18 +1119,17 @@ URL : http://www.antennahouse.com/
         
         <!-- w:tcW -->
         <w:tcW>
-            <xsl:call-template name="getAttributeSet">
-                <xsl:with-param name="prmAttrSetName" as="xs:string">
-                    <xsl:sequence select="'atsTcW'"/>
-                </xsl:with-param>
+            <xsl:call-template name="getTcWAttr">
+                <xsl:with-param name="prmEntry" select="$prmStEntry"/>
+                <xsl:with-param name="prmEntryAttr" select="$prmStEntryAttr"/>
             </xsl:call-template>
         </w:tcW>
         
         <!-- w:tcBorders -->
         <xsl:variable name="hasColSep" as="xs:boolean" select="string($prmStEntryAttr/@colsep) eq '1'"/>
         <xsl:variable name="hasRowSep" as="xs:boolean" select="string($prmStEntryAttr/@rowsep) eq '1'"/>
-        <xsl:variable name="isLastCol" as="xs:boolean" select="empty($prmStEntry/following-sibling::*)"/>
-        <xsl:variable name="isLastRow" as="xs:boolean" select="empty($prmStEntry/parent::*/following-sibling::*)"/>
+        <xsl:variable name="isLastCol" as="xs:boolean" select="string($prmStEntryAttr/@ahf:is-last-col) eq $cYes"/>
+        <xsl:variable name="isLastRow" as="xs:boolean" select="string($prmStEntryAttr/@ahf:is-last-row) eq $cYes"/>
         <xsl:variable name="isNotLastRow" as="xs:boolean" select="not($isLastRow)"/>
         <xsl:variable name="drawBottomBorder" as="xs:boolean" select="$hasRowSep and $isNotLastRow"/>
         <xsl:variable name="drawEndBorder" as="xs:boolean" select="$hasColSep and not($isLastCol)"/>
