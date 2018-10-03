@@ -1880,11 +1880,6 @@ URL : http://www.antennahouse.com/
                         <w:fldChar w:fldCharType="end"/>
                     </w:r>
                 </w:p>
-                <w:p>
-                    <w:pPr>
-                        <w:pStyle w:val="Footer"/>
-                    </w:pPr>
-                </w:p>
             </w:ftr>
         </wml-object>
         
@@ -1905,11 +1900,6 @@ URL : http://www.antennahouse.com/
                     <w:r>
                         <w:fldChar w:fldCharType="end"/>
                     </w:r>
-                </w:p>
-                <w:p>
-                    <w:pPr>
-                        <w:pStyle w:val="Footer"/>
-                    </w:pPr>
                 </w:p>
             </w:ftr>
         </wml-object>
