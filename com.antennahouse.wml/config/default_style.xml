@@ -512,8 +512,8 @@ URL : http://www.antennahouse.com/
         <!-- Inline image size constraint
              One of two must be zero!
           -->
-        <variable name="InlineImageWidthConstraint">{ahf:toEmuStr('15pt')}</variable>        
-        <variable name="InlineImageHeightConstraint">{ahf:toEmuStr('0pt')}</variable>
+        <variable name="InlineImageWidthConstraint">{ahf:toEmuStr('0pt')}</variable>        
+        <variable name="InlineImageHeightConstraint">{ahf:toEmuStr('15pt')}</variable>
         
         <!-- Vertical margin for sequence of images in floatfig-->
         <variable name="MultiFloatFigImageVMargin">{ahf:toEmuStr('5mm')}</variable>
