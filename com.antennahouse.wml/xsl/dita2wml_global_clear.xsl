@@ -39,13 +39,23 @@ E-mail : info@antennahouse.com
 
     <!-- Elements that has @clear or clear text wrapping is default.
          1. Elements that has @clear attribute.
-         2. task/step that has info/floatfig.
+         2. task/step that has info[1]/floatfig.
          3. li that has floatfig
          4. section, example, topic (unconditionally) 
      -->
     <xsl:variable name="cmClearCandidateElements" as="element()*">
         <xsl:sequence select="$root/descendant::*[string(@clear) = ('both','right','left')][ahf:isBlockElement(.)]/preceding-sibling::*[1]"/>
-        <xsl:sequence select="$root/descendant::*[contains(@class,' task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]/preceding-sibling::*[not(contains(@class,' task/stepsection '))][1]"/>
+        <xsl:for-each select="$root/descendant::*[contains(@class,' task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]">
+            <xsl:variable name="step" as="element()" select="."/>
+            <xsl:choose>
+                <xsl:when test="$step/preceding-sibling::*[not(contains(@class,' task/stepsection '))]">
+                    <xsl:sequence select="$step/preceding-sibling::*[not(contains(@class,' task/stepsection '))][1]"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="$step/parent::*[1]/preceding-sibling::*[1]"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each>
         <xsl:sequence select="$root/descendant::*[contains(@class,' topic/li ')][not(contains(@class,' task/step '))][descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]/preceding-sibling::*[1]"/>
         <xsl:variable name="targetClass" as="xs:string*" select="(' topic/topic ',' topic/section ',' topic/example ',' task/stepsection ', ' topic/related-links ')"/>
         <xsl:variable name="targetElements" as="element()*">
