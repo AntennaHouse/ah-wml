@@ -77,6 +77,22 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="imageId" as="xs:string" select="xs:string(map:get($imageIdMap,$imageIdKey))"/>
         <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId(.)"/>
         <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
+        <xsl:variable name="isFloatFigImage" as="xs:boolean" select="exists(self::*[ancestor::*[contains(@class,' floatfig-d/floatfig ')]][following-sibling::*[1][contains(@class,' topic/image ')][string(@placement) eq 'break']])"/>
+        <xsl:variable name="vMargin" as="xs:integer">
+            <xsl:choose>
+                <xsl:when test="$isFloatFigImage">
+                    <xsl:variable name="vMarginVal" as="xs:integer">
+                        <xsl:call-template name="getVarValueAsInteger">
+                            <xsl:with-param name="prmVarName" select="'MultiFloatFigImageVMargin'"/>
+                        </xsl:call-template>
+                    </xsl:variable>
+                    <xsl:sequence select="$vMarginVal"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="0"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:choose>
             <xsl:when test="($imageSize[1] gt 0) and ($imageSize[2] gt 0)">
                 <xsl:variable name="adjustImageSize" as="xs:integer+">
@@ -87,9 +103,9 @@ URL : http://www.antennahouse.com/
                 </xsl:variable>
                 <w:r>
                     <xsl:call-template name="getWmlObjectReplacing">
-                        <xsl:with-param name="prmObjName" select="'wmlImage'"/>
-                        <xsl:with-param name="prmSrc" select="('%width','%height','%id','%name','%desc','%rid')"/>
-                        <xsl:with-param name="prmDst" select="(string($adjustImageSize[1]),string($adjustImageSize[2]),$drawingId,$imageFileName,$imageFileName,concat($rIdPrefix,$imageId))"/>
+                        <xsl:with-param name="prmObjName" select="'wmlImageWithHMargin'"/>
+                        <xsl:with-param name="prmSrc" select="('%width','%height','%id','%name','%desc','%rid','%v-margin')"/>
+                        <xsl:with-param name="prmDst" select="(string($adjustImageSize[1]),string($adjustImageSize[2]),$drawingId,$imageFileName,$imageFileName,concat($rIdPrefix,$imageId),string($vMargin))"/>
                     </xsl:call-template>
                 </w:r>
             </xsl:when>

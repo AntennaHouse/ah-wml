@@ -512,8 +512,11 @@ URL : http://www.antennahouse.com/
         <!-- Inline image size constraint
              One of two must be zero!
           -->
-        <variable name="InlineImageWidthConstraint">{ahf:toEmuStr('15pt')}</variable>        
-        <variable name="InlineImageHeightConstraint">{ahf:toEmuStr('0pt')}</variable>
+        <variable name="InlineImageWidthConstraint">{ahf:toEmuStr('0pt')}</variable>        
+        <variable name="InlineImageHeightConstraint">{ahf:toEmuStr('15pt')}</variable>
+        
+        <!-- Vertical margin for sequence of images in floatfig-->
+        <variable name="MultiFloatFigImageVMargin">{ahf:toEmuStr('5mm')}</variable>
         
     </variables>
     
@@ -834,7 +837,43 @@ URL : http://www.antennahouse.com/
                 </wp:inline>
             </w:drawing>
         </wml-object>
+
+        <wml-object name="wmlImageWithHMargin">
+            <w:drawing>
+                <wp:inline distT="0" distB="0" distL="0" distR="0">
+                    <wp:extent cx="%width" cy="{string(xs:integer(%height) + xs:integer(%v-margin))}"/>
+                    <wp:effectExtent l="0" t="0" r="0" b="0"/>
+                    <wp:docPr id="%id" name="%name" descr="%desc"/>
+                    <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+                        <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                            <pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                                <pic:nvPicPr>
+                                    <pic:cNvPr id="%id" name="%name" descr="%desc"/>
+                                    <pic:cNvPicPr/>
+                                </pic:nvPicPr>
+                                <pic:blipFill>
+                                    <a:blip r:embed="%rid"/>
+                                    <a:stretch>
+                                        <a:fillRect/>
+                                    </a:stretch>
+                                </pic:blipFill>
+                                <pic:spPr>
+                                    <a:xfrm>
+                                        <a:off x="0" y="0"/>
+                                        <a:ext cx="%width" cy="%height"/>
+                                    </a:xfrm>
+                                    <a:prstGeom prst="rect">
+                                        <a:avLst/>
+                                    </a:prstGeom>
+                                </pic:spPr>
+                            </pic:pic>
+                        </a:graphicData>
+                    </a:graphic>
+                </wp:inline>
+            </w:drawing>
+        </wml-object>
         
+
         <!-- Inline image baseline shift -->
         <variable name="InlineImageBaslineShift">-5pt</variable>
         <wml-object name="wmlInlineImageBaselineShift">
@@ -1841,11 +1880,6 @@ URL : http://www.antennahouse.com/
                         <w:fldChar w:fldCharType="end"/>
                     </w:r>
                 </w:p>
-                <w:p>
-                    <w:pPr>
-                        <w:pStyle w:val="Footer"/>
-                    </w:pPr>
-                </w:p>
             </w:ftr>
         </wml-object>
         
@@ -1866,11 +1900,6 @@ URL : http://www.antennahouse.com/
                     <w:r>
                         <w:fldChar w:fldCharType="end"/>
                     </w:r>
-                </w:p>
-                <w:p>
-                    <w:pPr>
-                        <w:pStyle w:val="Footer"/>
-                    </w:pPr>
                 </w:p>
             </w:ftr>
         </wml-object>
