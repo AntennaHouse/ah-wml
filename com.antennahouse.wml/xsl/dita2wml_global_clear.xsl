@@ -48,8 +48,11 @@ E-mail : info@antennahouse.com
         <xsl:for-each select="$root/descendant::*[contains(@class,' task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]">
             <xsl:variable name="step" as="element()" select="."/>
             <xsl:choose>
-                <xsl:when test="$step/preceding-sibling::*[not(contains(@class,' task/stepsection '))]">
-                    <xsl:sequence select="$step/preceding-sibling::*[not(contains(@class,' task/stepsection '))][1]"/>
+                <xsl:when test="$step/preceding-sibling::*[1][not(contains(@class,' task/stepsection '))]">
+                    <xsl:sequence select="$step/preceding-sibling::*[1]"/>
+                </xsl:when>
+                <xsl:when test="$step/preceding-sibling::*[1][contains(@class,' task/stepsection ')][descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]">
+                    <xsl:sequence select="$step/preceding-sibling::*[1]"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:sequence select="$step/parent::*[1]/preceding-sibling::*[1]"/>
