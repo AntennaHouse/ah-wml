@@ -1095,7 +1095,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmSimpleTableAttr" as="element()"/>
         <dummy>
             <xsl:copy-of select="$prmSimpleTableAttr/@*"/>
-            <xsl:attribute name="ahf:colNum" select="string(count($prmStEntry | $prmStEntry/preceding-sibling::*))"/>
+            <xsl:attribute name="ahf:colnum" select="string(count($prmStEntry | $prmStEntry/preceding-sibling::*))"/>
             <xsl:attribute name="ahf:is-last-col" select="if ($prmStEntry/following-sibling::*) then $cNo else $cYes"/>
             <xsl:attribute name="ahf:is-last-row" select="if ($prmStEntry/parent::*/following-sibling::*) then $cNo else $cYes"/>
         </dummy>
