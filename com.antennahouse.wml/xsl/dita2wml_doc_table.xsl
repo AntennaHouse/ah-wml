@@ -1070,8 +1070,6 @@ URL : http://www.antennahouse.com/
                                     <xsl:sequence select="()"/>
                                 </xsl:when>
                                 <xsl:when test="(string($prmSimpleTableAttr/@pgwide) eq '1') or exists($prmSimpleTableAttr/@ahf:width)">
-                                    <xsl:message select="'$stentry=',$stentry"/>
-                                    <xsl:message select="'$prmTblGrid=',$prmTblGrid"/>
                                     <xsl:sequence select="ahf:getFixedTableCellWidthInEmu($stentry,$prmTblGrid)"/>
                                 </xsl:when>
                                 <xsl:otherwise>
