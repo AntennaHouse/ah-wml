@@ -743,7 +743,8 @@ URL : http://www.antennahouse.com/
                 <xsl:otherwise>
                     <xsl:variable name="colWidthSeqSpanned" as="xs:integer+">
                         <xsl:for-each select="$colNum to ($colNum + $colSpan)">
-                            <xsl:sequence select="xs:integer(string($prmTblGrid[.]/@w:w))"/>
+                            <xsl:variable name="currentColnum" as="xs:integer" select="."/>
+                            <xsl:sequence select="xs:integer(string($prmTblGrid[position() eq $currentColnum]/@w:w))"/>
                         </xsl:for-each>
                     </xsl:variable>
                     <xsl:variable name="colWidthSpanned" as="xs:integer" select="xs:integer(sum($colWidthSeqSpanned))"/>
