@@ -157,12 +157,16 @@ URL : http://www.antennahouse.com/
             <xsl:for-each select="$prmRowSpanInfo">
                 <xsl:variable name="rowSpanInfo" as="xs:integer" select="."/>
                 <xsl:variable name="colnum" as="xs:integer" select="position()"/>
+                <xsl:variable name="isLastColumn" as="xs:boolean" select="position() eq last()"/>
                 <xsl:variable name="emptyColnum" as="xs:integer" select="count($prmRowSpanInfo[position() lt $colnum][. gt 0])"/>
                 <xsl:choose>
                     <xsl:when test="$rowSpanInfo gt 0">
                         <entry class=" topic/entry " ahf:colnum="{string($colnum)}" ahf:row-spanned="yes">
                             <xsl:if test="$isLastRow">
                                 <xsl:attribute name="ahf:is-last-row" select="$cYes"/>
+                            </xsl:if>
+                            <xsl:if test="$isLastColumn">
+                                <xsl:attribute name="ahf:is-last-col" select="$cYes"/>
                             </xsl:if>
                         </entry>
                     </xsl:when>
