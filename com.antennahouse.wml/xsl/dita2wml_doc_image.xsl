@@ -73,6 +73,7 @@ URL : http://www.antennahouse.com/
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="imageFileName" as="xs:string" select="ahf:substringAfterLast(ahf:bsToSlash(@href),'/')"/>
+        <xsl:variable name="isSvg" as="xs:boolean" select="ends-with(lower-case($imageFileName),'.svg')"/>
         <xsl:variable name="imageIdKey" as="xs:string" select="string(@href)"/>
         <xsl:variable name="imageId" as="xs:string" select="xs:string(map:get($imageIdMap,$imageIdKey))"/>
         <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId(.)"/>
@@ -103,7 +104,7 @@ URL : http://www.antennahouse.com/
                 </xsl:variable>
                 <w:r>
                     <xsl:call-template name="getWmlObjectReplacing">
-                        <xsl:with-param name="prmObjName" select="'wmlImageWithHMargin'"/>
+                        <xsl:with-param name="prmObjName" select="if ($isSvg) then 'wmlImageWithHMarginSvg' else 'wmlImageWithHMargin'"/>
                         <xsl:with-param name="prmSrc" select="('%width','%height','%id','%name','%desc','%rid','%v-margin')"/>
                         <xsl:with-param name="prmDst" select="(string($adjustImageSize[1]),string($adjustImageSize[2]),$drawingId,$imageFileName,$imageFileName,concat($rIdPrefix,$imageId),string($vMargin))"/>
                     </xsl:call-template>
@@ -160,6 +161,7 @@ URL : http://www.antennahouse.com/
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="imageFileName" as="xs:string" select="ahf:substringAfterLast(ahf:bsToSlash(@href),'/')"/>
+        <xsl:variable name="isSvg" as="xs:boolean" select="ends-with(lower-case($imageFileName),'.svg')"/>
         <xsl:variable name="imageIdKey" as="xs:string" select="string(@href)"/>
         <xsl:variable name="imageId" as="xs:string" select="xs:string(map:get($imageIdMap,$imageIdKey))"/>
         <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId(.)"/>
@@ -196,7 +198,7 @@ URL : http://www.antennahouse.com/
                         </w:rPr>
                     </xsl:if>
                     <xsl:call-template name="getWmlObjectReplacing">
-                        <xsl:with-param name="prmObjName" select="'wmlImage'"/>
+                        <xsl:with-param name="prmObjName" select="if ($isSvg) then 'wmlImageSvg' else 'wmlImage'"/>
                         <xsl:with-param name="prmSrc" select="('%width','%height','%id','%name','%desc','%rid')"/>
                         <xsl:with-param name="prmDst" select="(string($adjustImageSize[1]),string($adjustImageSize[2]),$drawingId,$imageFileName,$imageFileName,concat($rIdPrefix,$imageId))"/>
                     </xsl:call-template>

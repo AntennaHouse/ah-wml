@@ -280,6 +280,7 @@ URL : http://www.antennahouse.com/
                     </xsl:call-template>
                 </xsl:variable>
                 <xsl:variable name="imageFileName" as="xs:string" select="ahf:substringAfterLast(ahf:bsToSlash($prmHazardSymbol/@href),'/')"/>
+                <xsl:variable name="isSvg" as="xs:boolean" select="ends-with(lower-case($imageFileName),'.svg')"/>
                 <xsl:variable name="imageIdKey" as="xs:string" select="string($prmHazardSymbol/@href)"/>
                 <xsl:variable name="imageId" as="xs:string" select="xs:string(map:get($imageIdMap,$imageIdKey))"/>
                 <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId($prmHazardSymbol)"/>
@@ -297,7 +298,7 @@ URL : http://www.antennahouse.com/
                         <xsl:variable name="widthToHeightRatio" as="xs:double" select="$imageSize[2] div $imageSize[1]"/>
                         <xsl:variable name="hazardSymbolHeightInEmu" as="xs:integer" select="xs:integer(round($proposedHazardSymbolWidthInEmu * $widthToHeightRatio))"/>
                         <xsl:call-template name="getWmlObjectReplacing">
-                            <xsl:with-param name="prmObjName" select="'wmlImage'"/>
+                            <xsl:with-param name="prmObjName" select="if ($isSvg) then 'wmlImageSvg' else 'wmlImage'"/>
                             <xsl:with-param name="prmSrc" select="('%width','%height','%id','%name','%desc','%rid')"/>
                             <xsl:with-param name="prmDst" select="(string($proposedHazardSymbolWidthInEmu),string($hazardSymbolHeightInEmu),$drawingId,$imageFileName,$imageFileName,concat($rIdPrefix,$imageId))"/>
                         </xsl:call-template>
