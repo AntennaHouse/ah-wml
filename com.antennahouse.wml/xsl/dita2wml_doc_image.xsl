@@ -114,6 +114,7 @@ URL : http://www.antennahouse.com/
                 <xsl:call-template name="warningContinue">
                     <xsl:with-param name="prmMes" select="ahf:replace($stMes2020,('%href'),(string(@href)))"/>                    
                 </xsl:call-template>
+                <xsl:message select="'image-size=',$imageSize"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -208,6 +209,7 @@ URL : http://www.antennahouse.com/
                 <xsl:call-template name="warningContinue">
                     <xsl:with-param name="prmMes" select="ahf:replace($stMes2020,('%href'),(string(@href)))"/>                    
                 </xsl:call-template>
+                <xsl:message select="'image-size=',$imageSize"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -312,10 +314,42 @@ URL : http://www.antennahouse.com/
                 <xsl:with-param name="prmVarName" select="'Default_Image_Dpi'"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="orgImageWidth" as="xs:integer" select="if (string($prmImage/@dita-ot:image-width) castable as xs:integer) then xs:integer($prmImage/@dita-ot:image-width) else 0"/>
-        <xsl:variable name="orgImageHeight" as="xs:integer" select="if (string($prmImage/@dita-ot:image-height) castable as xs:integer) then xs:integer($prmImage/@dita-ot:image-height) else 0"/>
         <xsl:variable name="horizontalDpi" as="xs:integer" select="if (string($prmImage/@dita-ot:horizontal-dpi) castable as xs:integer) then xs:integer($prmImage/@dita-ot:horizontal-dpi) else $defaultDpi"/>
         <xsl:variable name="verticalDpi" as="xs:integer" select="if (string($prmImage/@dita-ot:vertical-dpi) castable as xs:integer) then xs:integer($prmImage/@dita-ot:vertical-dpi) else $defaultDpi"/>
+        <xsl:variable name="orgImageWidth" as="xs:integer">
+            <xsl:variable name="imageWidth" as="xs:string" select="string($prmImage/@dita-ot:image-width)"/>
+            <xsl:choose>
+                <xsl:when test="$imageWidth castable as xs:integer">
+                    <xsl:sequence select="xs:integer($imageWidth)"/>
+                </xsl:when>
+                <xsl:when test="$imageWidth castable as xs:double">
+                    <xsl:sequence select="xs:integer(round(xs:double($imageWidth)))"/>
+                </xsl:when>
+                <xsl:when test="ahf:isUnitValue($imageWidth)">
+                    <xsl:sequence select="xs:integer(round(xs:double(ahf:toIn($imageWidth) * $horizontalDpi)))"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="0"/>
+                </xsl:otherwise>
+            </xsl:choose>            
+        </xsl:variable>
+        <xsl:variable name="orgImageHeight" as="xs:integer">
+            <xsl:variable name="imageHeight" as="xs:string" select="string($prmImage/@dita-ot:image-height)"/>
+            <xsl:choose>
+                <xsl:when test="$imageHeight castable as xs:integer">
+                    <xsl:sequence select="xs:integer($imageHeight)"/>
+                </xsl:when>
+                <xsl:when test="$imageHeight castable as xs:double">
+                    <xsl:sequence select="xs:integer(round(xs:double($imageHeight)))"/>
+                </xsl:when>
+                <xsl:when test="ahf:isUnitValue($imageHeight)">
+                    <xsl:sequence select="xs:integer(round(xs:double(ahf:toIn($imageHeight) * $verticalDpi)))"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="0"/>
+                </xsl:otherwise>
+            </xsl:choose>            
+        </xsl:variable>
         <xsl:variable name="scale" as="xs:double" select="if (string($prmImage/@scale)) then (xs:integer($prmImage/@scale) div 100) else 1"/>
         
         <xsl:choose>
