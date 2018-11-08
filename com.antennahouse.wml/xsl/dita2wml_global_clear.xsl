@@ -67,6 +67,12 @@ E-mail : info@antennahouse.com
             </xsl:choose>
         </xsl:for-each>
         <xsl:sequence select="$root/descendant::*[contains(@class,' topic/li ')][not(contains(@class,' task/step '))][descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]/preceding-sibling::*[1]"/>
+        <xsl:for-each select="$root/descendant::*[contains(@class,' topic/dd ')][descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]">
+            <xsl:variable name="dd" select="."/>
+            <xsl:if test="$dd/preceding-sibling::*[1][contains(@class,' topic/dt ')]">
+                <xsl:sequence select="parent::*/preceding-sibling::*[1]"/>
+            </xsl:if>
+        </xsl:for-each>
         <xsl:variable name="targetClass" as="xs:string*" select="(' topic/topic ',' topic/section ',' topic/example ',' task/stepsection ', ' topic/related-links ')"/>
         <xsl:variable name="targetElements" as="element()*">
             <xsl:variable name="clearCandidates" as="element()*" select="$root/descendant::*[ahf:seqContains(@class,$targetClass)]"/>
