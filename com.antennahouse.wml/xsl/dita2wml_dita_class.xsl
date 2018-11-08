@@ -50,8 +50,7 @@ E-mail : info@antennahouse.com
      function:	Return $prmElem/@class has value in $textToParaElementClasses
      param:		$prmElem
      return:	xs:boolean
-     note:		abstract/shortdesc is assumed inline level.
-                topic/shortdesc is assumed as block level.
+     note:		abstract/shortdesc is assumed as block level.
                 floatfig is assumed as inline level.
      -->
     <xsl:function name="ahf:isBlockElement" as="xs:boolean">

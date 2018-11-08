@@ -23,6 +23,9 @@ URL : http://www.antennahouse.com/
      param:		prmIndentLevel
      return:	
      note:		Shortdesc is composed of inline elements.
+                The DITA Spec described at http://docs.oasis-open.org/dita/dita/v1.3/errata02/os/complete/part3-all-inclusive/langRef/base/shortdesc.html#shortdesc
+                is very vague when should the template treat shortdesc as inline or block.
+                This template assumes the shortdesc as block that should generate w:p element.
      -->
     <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/shortdesc ')][empty(child::node())]" priority="5"/>
     <xsl:template match="*[contains(@class,' topic/abstract ')]/*[contains(@class,' topic/shortdesc ')][empty(child::node())]" priority="5"/>
