@@ -150,7 +150,8 @@ E-mail : info@antennahouse.com
         <xsl:variable name="class" as="xs:string" select="string($prmElem/@class)"/>
         <xsl:variable name="isOneOfPElement" as="xs:boolean" select="some $c in $pElementClasses satisfies contains($class,$c)"/>
         <xsl:variable name="isPContentDesc" as="xs:boolean" select="$prmElem[contains(@class,' topic/desc ')] and ahf:seqContains($prmElem/parent::*/@class/string(.),(' topic/fig ',' topic/table ',' topic/object '))"/>
-        <xsl:sequence select="$isOneOfPElement or $isPContentDesc"/>
+        <xsl:variable name="isPContentShortDesc" as="xs:boolean" select="$prmElem[contains(@class,' topic/shortdesc ')] and $prmElem/parent::*[contains(@class, ' topic/abstract ')]"/>
+        <xsl:sequence select="$isOneOfPElement or $isPContentDesc or $isPContentShortDesc"/>
     </xsl:function>
 
 </xsl:stylesheet>
