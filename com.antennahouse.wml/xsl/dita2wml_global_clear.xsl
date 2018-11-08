@@ -70,7 +70,8 @@ E-mail : info@antennahouse.com
         <xsl:for-each select="$root/descendant::*[contains(@class,' topic/dd ')][descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]]">
             <xsl:variable name="dd" select="."/>
             <xsl:if test="$dd/preceding-sibling::*[1][contains(@class,' topic/dt ')]">
-                <xsl:sequence select="parent::*/preceding-sibling::*[1]"/>
+                <!-- select dlentry -->
+                <xsl:sequence select="$dd/parent::*/preceding-sibling::*[1]"/>
             </xsl:if>
         </xsl:for-each>
         <xsl:variable name="targetClass" as="xs:string*" select="(' topic/topic ',' topic/section ',' topic/example ',' task/stepsection ', ' topic/related-links ')"/>
