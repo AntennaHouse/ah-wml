@@ -743,7 +743,8 @@ URL : http://www.antennahouse.com/
                 <xsl:otherwise>
                     <xsl:variable name="colWidthSeqSpanned" as="xs:integer+">
                         <xsl:for-each select="$colNum to ($colNum + $colSpan)">
-                            <xsl:sequence select="xs:integer(string($prmTblGrid[.]/@w:w))"/>
+                            <xsl:variable name="currentColnum" as="xs:integer" select="."/>
+                            <xsl:sequence select="xs:integer(string($prmTblGrid[position() eq $currentColnum]/@w:w))"/>
                         </xsl:for-each>
                     </xsl:variable>
                     <xsl:variable name="colWidthSpanned" as="xs:integer" select="xs:integer(sum($colWidthSeqSpanned))"/>
@@ -1095,7 +1096,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmSimpleTableAttr" as="element()"/>
         <dummy>
             <xsl:copy-of select="$prmSimpleTableAttr/@*"/>
-            <xsl:attribute name="ahf:colNum" select="string(count($prmStEntry | $prmStEntry/preceding-sibling::*))"/>
+            <xsl:attribute name="ahf:colnum" select="string(count($prmStEntry | $prmStEntry/preceding-sibling::*))"/>
             <xsl:attribute name="ahf:is-last-col" select="if ($prmStEntry/following-sibling::*) then $cNo else $cYes"/>
             <xsl:attribute name="ahf:is-last-row" select="if ($prmStEntry/parent::*/following-sibling::*) then $cNo else $cYes"/>
         </dummy>

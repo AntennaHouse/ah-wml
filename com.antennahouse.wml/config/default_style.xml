@@ -645,6 +645,7 @@ URL : http://www.antennahouse.com/
             <ctype:Default Extension="eps" ContentType="application/postscript"/>
             <ctype:Default Extension="pct" ContentType="image/x-pict"/>
             <ctype:Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+            <ctype:Default Extension="svg" ContentType="image/svg+xml"/>
             <ctype:Default Extension="xml" ContentType="application/xml"/>
         </wml-object>
         
@@ -809,6 +810,96 @@ URL : http://www.antennahouse.com/
                     <wp:extent cx="%width" cy="%height"/>
                     <wp:effectExtent l="0" t="0" r="0" b="0"/>
                     <wp:docPr id="%id" name="%name" descr="%desc"/>
+                    <wp:cNvGraphicFramePr>
+                        <a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/>
+                    </wp:cNvGraphicFramePr>
+                    <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+                        <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                            <pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                                <pic:nvPicPr>
+                                    <pic:cNvPr id="%id" name="%name" descr="%desc"/>
+                                    <pic:cNvPicPr/>
+                                </pic:nvPicPr>
+                                <pic:blipFill>
+                                    <a:blip r:embed="%rid"/>
+                                    <a:stretch>
+                                        <a:fillRect/>
+                                    </a:stretch>
+                                </pic:blipFill>
+                                <pic:spPr>
+                                    <a:xfrm>
+                                        <a:off x="0" y="0"/>
+                                        <a:ext cx="%width" cy="%height"/>
+                                    </a:xfrm>
+                                    <a:prstGeom prst="rect">
+                                        <a:avLst/>
+                                    </a:prstGeom>
+                                </pic:spPr>
+                            </pic:pic>
+                        </a:graphicData>
+                    </a:graphic>
+                </wp:inline>
+            </w:drawing>
+        </wml-object>
+        
+        <!-- SVG image -->
+        <wml-object name="wmlImageSvg">
+            <w:drawing>
+                <wp:inline distT="0" distB="0" distL="0" distR="0">
+                    <wp:extent cx="%width" cy="%height"/>
+                    <wp:effectExtent l="0" t="0" r="0" b="0"/>
+                    <wp:docPr id="%id" name="%name" descr="%desc"/>
+                    <wp:cNvGraphicFramePr>
+                        <a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/>
+                    </wp:cNvGraphicFramePr>
+                    <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+                        <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                            <pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                                <pic:nvPicPr>
+                                    <pic:cNvPr id="%id" name="%name" descr="%desc"/>
+                                    <pic:cNvPicPr/>
+                                </pic:nvPicPr>
+                                <pic:blipFill>
+                                    <a:blip>
+                                        <a:extLst>
+                                            <a:ext uri="\{28A0092B-C50C-407E-A947-70E740481C1C\}">
+                                                <a14:useLocalDpi xmlns:a14="http://schemas.microsoft.com/office/drawing/2010/main" val="0"/>
+                                            </a:ext>
+                                            <a:ext uri="\{96DAC541-7B7A-43D3-8B79-37D633B846F1\}">
+                                                <asvg:svgBlip xmlns:asvg="http://schemas.microsoft.com/office/drawing/2016/SVG/main" r:embed="%rid"/>
+                                            </a:ext>
+                                        </a:extLst>
+                                    </a:blip>
+                                    <a:stretch>
+                                        <a:fillRect/>
+                                    </a:stretch>
+                                </pic:blipFill>
+                                <pic:spPr>
+                                    <a:xfrm>
+                                        <a:off x="0" y="0"/>
+                                        <a:ext cx="%width" cy="%height"/>
+                                    </a:xfrm>
+                                    <a:prstGeom prst="rect">
+                                        <a:avLst/>
+                                    </a:prstGeom>
+                                </pic:spPr>
+                            </pic:pic>
+                        </a:graphicData>
+                    </a:graphic>
+                </wp:inline>
+            </w:drawing>
+        </wml-object>
+        
+        <!-- Image with vertical margin -->
+        <wml-object name="wmlImageWithHMargin">
+            <w:drawing>
+                <wp:inline distT="0" distB="0" distL="0" distR="0">
+                    <wp:extent cx="%width" cy="{string(xs:integer(%height) + xs:integer(%v-margin))}"/>
+                    <wp:effectExtent l="0" t="0" r="0" b="0"/>
+                    <wp:docPr id="%id" name="%name" descr="%desc"/>
+                    <wp:cNvGraphicFramePr>
+                        <a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/>
+                    </wp:cNvGraphicFramePr>
                     <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
                         <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
                             <pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
@@ -838,12 +929,16 @@ URL : http://www.antennahouse.com/
             </w:drawing>
         </wml-object>
 
-        <wml-object name="wmlImageWithHMargin">
+        <!-- SVG image with vertical margin -->
+        <wml-object name="wmlImageWithHMarginSvg">
             <w:drawing>
                 <wp:inline distT="0" distB="0" distL="0" distR="0">
                     <wp:extent cx="%width" cy="{string(xs:integer(%height) + xs:integer(%v-margin))}"/>
                     <wp:effectExtent l="0" t="0" r="0" b="0"/>
                     <wp:docPr id="%id" name="%name" descr="%desc"/>
+                    <wp:cNvGraphicFramePr>
+                        <a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/>
+                    </wp:cNvGraphicFramePr>
                     <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
                         <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
                             <pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
@@ -852,7 +947,16 @@ URL : http://www.antennahouse.com/
                                     <pic:cNvPicPr/>
                                 </pic:nvPicPr>
                                 <pic:blipFill>
-                                    <a:blip r:embed="%rid"/>
+                                    <a:blip>
+                                        <a:extLst>
+                                            <a:ext uri="\{28A0092B-C50C-407E-A947-70E740481C1C\}">
+                                                <a14:useLocalDpi xmlns:a14="http://schemas.microsoft.com/office/drawing/2010/main" val="0"/>
+                                            </a:ext>
+                                            <a:ext uri="\{96DAC541-7B7A-43D3-8B79-37D633B846F1\}">
+                                                <asvg:svgBlip xmlns:asvg="http://schemas.microsoft.com/office/drawing/2016/SVG/main" r:embed="%rid"/>
+                                            </a:ext>
+                                        </a:extLst>
+                                    </a:blip>
                                     <a:stretch>
                                         <a:fillRect/>
                                     </a:stretch>

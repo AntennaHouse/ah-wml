@@ -103,4 +103,11 @@ E-mail : info@antennahouse.com
     <xsl:variable name="pOutputFolioPrefix" select="$PRM_OUTPUT_FOLIO_PREFIX" as="xs:string"/>
     <xsl:variable name="pHasOutputFolioPrefix" select="$pOutputFolioPrefix ne ''" as="xs:boolean"/>
     
+    <!-- Debug no text map output
+         If the value is "yes", no white-space character will be removed.
+     -->
+    <xsl:param name="PRM_DEBUG_NO_TEXT_MAP" as="xs:string" select="$cNo"/>
+    <xsl:variable name="pDebugNoTextmap" as="xs:boolean" select="$PRM_DEBUG_NO_TEXT_MAP eq $cYes"/>
+    <xsl:variable name="pDebugGenTextmap" as="xs:boolean" select="not($pDebugNoTextmap)"/>
+    
 </xsl:stylesheet>

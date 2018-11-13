@@ -204,9 +204,9 @@ E-mail : info@antennahouse.com
     <xsl:template name="ahf:processInline" as="node()*">
         <xsl:param name="prmInline" as="node()+" required="yes"/>
         <xsl:param name="prmTextMap" as="document-node()?" tunnel="yes" required="no" select="()"/>
-        <xsl:variable name="textMap" as="document-node()">
+        <xsl:variable name="textMap" as="document-node()?">
             <xsl:choose>
-                <xsl:when test="empty($prmTextMap)">
+                <xsl:when test="empty($prmTextMap) and $pDebugGenTextmap">
                     <xsl:call-template name="ahf:getRevisedTextMap">
                         <xsl:with-param name="prmNode" select="$prmInline"/>
                         <xsl:with-param name="prmBase" select="$prmInline[1]/parent::*"/>

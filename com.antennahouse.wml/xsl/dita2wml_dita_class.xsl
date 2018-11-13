@@ -50,8 +50,7 @@ E-mail : info@antennahouse.com
      function:	Return $prmElem/@class has value in $textToParaElementClasses
      param:		$prmElem
      return:	xs:boolean
-     note:		abstract/shortdesc is assumed inline level.
-                topic/shortdesc is assumed as block level.
+     note:		abstract/shortdesc is assumed as block level.
                 floatfig is assumed as inline level.
      -->
     <xsl:function name="ahf:isBlockElement" as="xs:boolean">
@@ -135,7 +134,8 @@ E-mail : info@antennahouse.com
         ' topic/sli ',
         ' hazard-d/typeofhazard ',
         ' hazard-d/consequence ',
-        ' hazard-d/howtoavoid '
+        ' hazard-d/howtoavoid ',
+        ' topic/linktext '
         )"/>
     
     <!-- 
@@ -149,7 +149,8 @@ E-mail : info@antennahouse.com
         <xsl:variable name="class" as="xs:string" select="string($prmElem/@class)"/>
         <xsl:variable name="isOneOfPElement" as="xs:boolean" select="some $c in $pElementClasses satisfies contains($class,$c)"/>
         <xsl:variable name="isPContentDesc" as="xs:boolean" select="$prmElem[contains(@class,' topic/desc ')] and ahf:seqContains($prmElem/parent::*/@class/string(.),(' topic/fig ',' topic/table ',' topic/object '))"/>
-        <xsl:sequence select="$isOneOfPElement or $isPContentDesc"/>
+        <xsl:variable name="isPContentShortDesc" as="xs:boolean" select="$prmElem[contains(@class,' topic/shortdesc ')] and $prmElem/parent::*[contains(@class, ' topic/abstract ')]"/>
+        <xsl:sequence select="$isOneOfPElement or $isPContentDesc or $isPContentShortDesc"/>
     </xsl:function>
 
 </xsl:stylesheet>

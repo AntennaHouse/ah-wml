@@ -172,6 +172,17 @@ URL : http://www.antennahouse.com/
     </xsl:function>
 
     <!--
+    function:   Convert to inch
+    param:      prmUnitVal any numeric value with length unit
+    return:     the computed inch value
+    note:       Used to express DPI
+    -->
+    <xsl:function name="ahf:toIn" as="xs:double" visibility="public">
+        <xsl:param name="prmUnitValue" as="xs:string"/>
+        <xsl:sequence select="ahf:toPt($prmUnitValue) div $cPtPerIn"/>
+    </xsl:function>
+    
+    <!--
     function:   Convert to half point
     param:      prmUnitVal any numeric value with length unit
     return:     the computed half point value

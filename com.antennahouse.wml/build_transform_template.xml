@@ -236,6 +236,7 @@
             <param name="PRM_TEMP_DIR_URL"                             expression="${dita.temp.dir.url}"                        if="dita.temp.dir.url"/>
             <param name="PRM_OUTPUT_FOLIO_PREFIX"                      expression="${output.folio.prefix}"                      if="output.folio.prefix"/>
             <param name="PRM_DEBUG_SECT"                               expression="${debug.sect}"                               if="debug.sect"/>
+            <param name="PRM_DEBUG_NO_TEXT_MAP"                        expression="${debug.no.text.map}"                        if="debug.no.text.map"/>
             
             <param name="PRM_PAPER_SIZE"                               expression="${paper.size}"                               if="paper.size"/>
 
@@ -292,6 +293,7 @@
             <param name="PRM_TEMP_DIR_URL"                             expression="${dita.temp.dir.url}"                        if="dita.temp.dir.url"/>
             <param name="PRM_OUTPUT_FOLIO_PREFIX"                      expression="${output.folio.prefix}"                      if="output.folio.prefix"/>
             <param name="PRM_DEBUG_SECT"                               expression="${debug.sect}"                               if="debug.sect"/>
+            <param name="PRM_DEBUG_NO_TEXT_MAP"                        expression="${debug.no.text.map}"                        if="debug.no.text.map"/>
             
             <param name="PRM_PAPER_SIZE"                               expression="${paper.size}"                               if="paper.size"/>
             
@@ -357,6 +359,7 @@
             <param name="PRM_TEMP_DIR_URL"                             expression="${dita.temp.dir.url}"                        if="dita.temp.dir.url"/>
             <param name="PRM_OUTPUT_FOLIO_PREFIX"                      expression="${output.folio.prefix}"                      if="output.folio.prefix"/>
             <param name="PRM_DEBUG_SECT"                               expression="${debug.sect}"                               if="debug.sect"/>
+            <param name="PRM_DEBUG_NO_TEXT_MAP"                        expression="${debug.no.text.map}"                        if="debug.no.text.map"/>
             
             <param name="PRM_PAPER_SIZE"                               expression="${paper.size}"                               if="paper.size"/>
             
