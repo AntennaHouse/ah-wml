@@ -1,6 +1,6 @@
 # Antenna House AH-WML plug-in
 
-AH-WML is the [DITA-OT](http://dita-ot.org) plug-in that generates Microsoft Word Document (.docx) from DITA instances .
+AH-WML is the [DITA-OT](http://dita-ot.org) plug-in that generates Microsoft Word Document (.docx) from DITA contents.
 
 ## Requirements ##
 
@@ -10,13 +10,17 @@ AH-WML is the [DITA-OT](http://dita-ot.org) plug-in that generates Microsoft Wor
 
 ## Features ##
 
-* Supported images: GIF, PNG, JPEG, TIFF, EMF 
+* Supported images: GIF, PNG, JPEG, TIFF (JRE 9.0 or later), EMF, SVG (Word 2016 or later) 
 * CALS table rendering
 * Standard DITA elements, &lt;p&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;dl&gt;, &lt;pre&gt;
 
 ## Example ##
 
 ![Table formatting](./image/table-span.png)
+
+## How to run this plug-in ##
+
+Refer to mHowToRunAhWmlPlugInWithSaxonPeEe.docx for details.
 
 ## Notes ##
 
