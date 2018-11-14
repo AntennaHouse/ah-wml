@@ -43,9 +43,7 @@ URL : http://www.antennahouse.com/
         
         <xsl:variable name="p" as="element()" select="."/>
         <xsl:variable name="isChildOfStepSection" as="xs:boolean" select="exists(parent::*[contains(@class,' task/stepsection ')])"/>
-        <xsl:variable name="isChildOfStep" as="xs:boolean" select="exists(parent::*[contains(@class,' task/step ') and parent::*[contains(@class,' task/steps ')]])"/>
         <xsl:variable name="isFirstChildOfLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/*[1][. is current()])"/>
-        <xsl:variable name="isChildOfOlLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/parent::*[contains(@class,' topic/ol ')])"/>
         <xsl:variable name="isChildOfEntry" as="xs:boolean" select="exists(parent::*[ahf:seqContains(@class,(' topic/entry ',' topic/stentry '))])"/>
         <xsl:variable name="isInThead" as="xs:boolean" select="$isChildOfEntry and (exists(parent::*/parent::*[contains(@class,' topic/sthead ')]) or exists(parent::*/parent::*/parent::*[contains(@class,' topic/thead ')]))"/>
         <xsl:variable name="floatFigs" as="element()*" select="parent::*[contains(@class,' task/step ')]/*[contains(@class,' task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][ahf:isNotEmptyElement(.)]"/>
@@ -206,8 +204,14 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:function name="ahf:getKeepNextAttrElem" as="element(w:keepNext)?">
         <xsl:param name="prmElem" as="element()"/>
+        <xsl:variable name="isP" as="xs:boolean" select="exists($prmElem/self::*[contains(@class,' topic/p ')])"/>
+        <xsl:variable name="hasCmdOfStep" as="xs:boolean" select="exists($prmElem/child::*[contains(@class,' task/cmd ')])"/>
+        <xsl:variable name="hasFollowingItemGroup" as="xs:boolean" select="exists($prmElem/following-sibling::*[contains(@class,' topic/itemgroup ')])"/>
         <xsl:choose>
             <xsl:when test="ahf:hasFoProperty($prmElem,'keep-with-next.within-column','always') or ahf:hasFoProperty($prmElem,'keep-with-next.within-page','always')">
+                <w:keepNext w:val="true"/>
+            </xsl:when>
+            <xsl:when test="$isP and $hasCmdOfStep and $hasFollowingItemGroup">
                 <w:keepNext w:val="true"/>
             </xsl:when>
             <xsl:otherwise>
