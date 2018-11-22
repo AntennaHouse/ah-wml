@@ -20,7 +20,10 @@ E-mail : info@antennahouse.com
      -->
     <xsl:param name="PRM_PAPER_SIZE" required="no" as="xs:string" select="'Letter'"/>
     <xsl:variable name="pPaperSize" as="xs:string" select="$PRM_PAPER_SIZE"/>
-    
+
+    <xsl:param name="PRM_BASE_PAPER_SIZE" required="no" as="xs:string" select="'Letter'"/>
+    <xsl:variable name="pBasePaperSize" as="xs:string" select="$PRM_PAPER_SIZE"/>
+
     <xsl:param name="cPaperInfo" as="xs:string+">
         <xsl:call-template name="getVarValueAsStringSequence">
             <xsl:with-param name="prmVarName" select="'Paper_Info'"/>
@@ -42,6 +45,22 @@ E-mail : info@antennahouse.com
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+
+    <xsl:variable name="basePaperIndex" as="xs:integer" >
+        <xsl:variable name="tempPaperIndex" as="xs:integer?" select="index-of($cPaperInfo,$pBasePaperSize)[1]"/>
+        <xsl:choose>
+            <xsl:when test="empty($tempPaperIndex)">
+                <xsl:call-template name="errorExit">
+                    <xsl:with-param name="prmMes" select="ahf:replace($stMes1500,('%param','%sptval'),($pPaperSize,string-join($cPaperInfo[(position() mod 5) eq 1],',')))"/>
+                </xsl:call-template>
+                <xsl:sequence select="1"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$tempPaperIndex"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    
 
     <!-- Margin
          Defined as variable because it is used for XPath evaluation in style definition file.
@@ -150,5 +169,11 @@ E-mail : info@antennahouse.com
     <xsl:variable name="pPaperWidth" as="xs:string" select="$cPaperInfo[$paperIndex + 1]"/>
     <xsl:variable name="pPaperHeight" as="xs:string" select="$cPaperInfo[$paperIndex + 2]"/>
     <xsl:variable name="pPaperBodyWidth" as="xs:string" select="concat(string(ahf:toMm($pPaperWidth) - ahf:toMm($pPaperMarginInner) - ahf:toMm($pPaperMarginOuter)),'mm')"/>
+
+    <xsl:variable name="pBasePaperWidth" as="xs:string" select="$cPaperInfo[$basePaperIndex + 1]"/>
+    <xsl:variable name="pBasePaperHeight" as="xs:string" select="$cPaperInfo[$basePaperIndex + 2]"/>
+
+    <xsl:variable name="paperHeightRatioToBase" as="xs:double" select="ahf:toMm($pPaperHeight) div ahf:toMm($pBasePaperHeight)"/>
+    <xsl:variable name="paperWidthRatioToBase"  as="xs:double" select="ahf:toMm($pPaperWidth) div ahf:toMm($pBasePaperWidth)"/>
     
 </xsl:stylesheet>

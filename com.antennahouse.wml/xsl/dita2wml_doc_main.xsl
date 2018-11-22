@@ -38,7 +38,17 @@ URL : http://www.antennahouse.com/
         <w:document>
             <w:body>
                 <!-- Make cover -->
-                <!--xsl:call-template name="genCover"/-->
+                <xsl:choose>
+                    <xsl:when test="ahf:hasCover($map)">
+                        <xsl:call-template name="genCoverN">
+                            <xsl:with-param name="prmMap" select="$map"/>
+                            <xsl:with-param name="prmCoverN" select="('1','2')"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!--xsl:call-template name="genNormalCover"/-->
+                    </xsl:otherwise>
+                </xsl:choose>
                 
                 <!-- Process main contents -->
                 <xsl:choose>
@@ -53,6 +63,14 @@ URL : http://www.antennahouse.com/
                         <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')]"/>
                     </xsl:otherwise>
                 </xsl:choose>
+
+                <!-- Make cover -->
+                <xsl:if test="ahf:hasCover($map)">
+                    <xsl:call-template name="genCoverN">
+                        <xsl:with-param name="prmMap" select="$map"/>
+                        <xsl:with-param name="prmCoverN" select="('3','4')"/>
+                    </xsl:call-template>
+                </xsl:if>
             </w:body>
         </w:document>        
     </xsl:template>

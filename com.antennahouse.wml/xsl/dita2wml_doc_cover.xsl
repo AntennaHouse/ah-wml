@@ -13,6 +13,7 @@ URL : http://www.antennahouse.com/
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     xmlns:array="http://www.w3.org/2005/xpath-functions/array"
     exclude-result-prefixes="xs ahf array"
@@ -23,13 +24,67 @@ URL : http://www.antennahouse.com/
     <xsl:variable name="pSupportCover" as="xs:boolean" select="$PRM_SUPPORT_COVER eq $cYes"/>
     
     <!-- Cover topicref/@outputclass value -->
-    <xsl:variable name="coverOutputClassValue" as="xs:string+" select="('cover1','cover2','cover3','cover4')"/>
+    <xsl:variable name="cCover1" as="xs:string" select="'cover1'"/>
+    <xsl:variable name="cCover2" as="xs:string" select="'cover2'"/>
+    <xsl:variable name="cCover3" as="xs:string" select="'cover3'"/>
+    <xsl:variable name="cCover4" as="xs:string" select="'cover4'"/>
+    <xsl:variable name="coverOutputClassValue" as="xs:string+" select="($cCover1,$cCover2,$cCover3,$cCover4)"/>
 
     <!-- Text Box defaults -->
     <xsl:variable name="cTxtBoxDefaultTop"    as="xs:integer" select="0"/>
     <xsl:variable name="cTxtBoxDefaultLeft"   as="xs:integer" select="0"/>
     <xsl:variable name="cTxtBoxDefaultWidth"  as="xs:integer" select="ahf:toEmu('20mm')"/>
     <xsl:variable name="cTxtBoxDefaultHeight" as="xs:integer" select="ahf:toEmu('20mm')"/>
+
+    <!-- 
+     function:	Generate cover N
+     param:		prmMap, prmCoverN
+     return:	See probe
+     note:		 
+     -->
+    <xsl:template name="genCoverN" as="element(w:p)*">
+        <xsl:param name="prmMap" as="element()" required="yes"/>
+        <xsl:param name="prmCoverN" as="xs:string+" required="yes"/>
+        <xsl:choose>
+            <xsl:when test="$isBookMap">
+                <xsl:for-each select="$prmCoverN">
+                    <xsl:variable name="coverN" as="xs:string" select="."/>
+                    <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                    <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:for-each select="$prmCoverN">
+                    <xsl:variable name="coverN" as="xs:string" select="."/>
+                    <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>            
+    </xsl:template>
+
+    <!-- 
+        function:	Cover topicref template
+        param:		none
+        return:	    none
+        note:		Call cover generation template
+    -->
+    <xsl:template match="*[contains(@class,' map/topicref ')]" mode="MODE_MAKE_COVER">
+        <xsl:variable name="topicRef" select="."/>
+        <xsl:variable name="topicContent"  as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
+        <xsl:choose>
+            <xsl:when test="exists($topicContent)">
+                <xsl:apply-templates select="$topicContent/*[contains(@class,' topic/body ')]/*[contains(@class,' topic/bodydiv ')]" mode="MODE_MAKE_COVER">
+                    <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="warningContinue">
+                    <xsl:with-param name="prmMes" 
+                        select="ahf:replace($stMes070,('%href','%file'),(string(@href),string(@xtrf)))"/>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
     
     <!-- 
      function:	bodydiv processing
@@ -38,18 +93,11 @@ URL : http://www.antennahouse.com/
      note:		bodydiv is assumed as container that should generate absolute positioning fo:block-container in PDF.
                 In .docx processing this template generates absolute positioned text-box. 
      -->
-    <xsl:template match="*[contains(@class,' topic/bodydiv ')][$pSupportCover]" priority="20">
+    <xsl:template match="*[contains(@class,' topic/bodydiv ')]" mode="MODE_MAKE_COVER">
         <xsl:param name="prmTopicRef" as="element()" tunnel="yes" required="yes"/>
-        <xsl:choose>
-            <xsl:when test="ahf:hasOneOfOutputclassValue($prmTopicRef,$coverOutputClassValue)">
-                <xsl:call-template name="genAbsTextBoxForCover">
-                    <xsl:with-param name="prmElem" select="."/>
-                </xsl:call-template>                
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:next-match/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:call-template name="genAbsTextBoxForCover">
+            <xsl:with-param name="prmElem" select="."/>
+        </xsl:call-template>                
     </xsl:template>
     
     <!-- 

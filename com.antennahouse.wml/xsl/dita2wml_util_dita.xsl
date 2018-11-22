@@ -155,7 +155,39 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="outputClass" as="xs:string" select="if (exists($prmTopicRef)) then string($prmTopicRef/@outputclass) else ''"/>
         <xsl:sequence select="matches($outputClass,'cover[1-4]')"/>
     </xsl:function>
+
+    <xsl:function name="ahf:isNotCoverTopicRef" as="xs:boolean">
+        <xsl:param name="prmTopicRef" as="element()?"/>
+        <xsl:sequence select="not(ahf:isCoverTopicRef($prmTopicRef))"/>
+    </xsl:function>
     
+    <xsl:function name="ahf:hasCover" as="xs:boolean">
+        <xsl:param name="prmMap" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="$isBookMap">
+                <xsl:sequence select="exists($map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)]) or 
+                                      exists($map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)])"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="exists($map/*[contains(@class, ' map/topicref ')][ahf:isCoverTopicRef(.)])"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="ahf:isCoverN" as="xs:boolean">
+        <xsl:param name="prmTopicRef" as="element()"/>
+        <xsl:param name="prmCoverN" as="xs:string"/>
+        <xsl:choose>
+            <xsl:when test="$isBookMap">
+                <xsl:sequence select="exists($map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,concat('cover',$prmCoverN))])"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="exists($map/*[contains(@class, ' map/topicref ')][ahf:hasOutputClassValue(.,concat('cover',$prmCoverN))])"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
+
     <!-- 
      function:	topicref count template
      param:		prmTopicRef
@@ -318,7 +350,7 @@ URL : http://www.antennahouse.com/
      return:	xs:boolean
      note:		
      -->
-    <xsl:function name="ahf:hasOutputclassValue" as="xs:boolean">
+    <xsl:function name="ahf:hasOutputClassValue" as="xs:boolean">
         <xsl:param name="prmElem" as="element()"/>
         <xsl:param name="prmValue" as="xs:string"/>
         <xsl:sequence select="$prmValue = ahf:getOutputClass($prmElem)"/>
@@ -330,7 +362,7 @@ URL : http://www.antennahouse.com/
      return:	xs:boolean
      note:		
      -->
-    <xsl:function name="ahf:hasOneOfOutputclassValue" as="xs:boolean">
+    <xsl:function name="ahf:hasOneOfOutputClassValue" as="xs:boolean">
         <xsl:param name="prmElem" as="element()"/>
         <xsl:param name="prmValueSeq" as="xs:string+"/>
         <xsl:sequence select="$prmValueSeq = ahf:getOutputClass($prmElem)"/>

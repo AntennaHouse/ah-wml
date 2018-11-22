@@ -65,6 +65,11 @@ URL : http://www.antenna.co.jp/
     <xsl:template match="*[contains(@class,' bookmap/booklists ')]" mode="MODE_MAKE_SECT_INFO" priority="5">
         <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="#current"/>
     </xsl:template>
+
+    <!-- Ignore cover
+         Cover topicref is supposed to exist at the child of frontmatter/backmatter
+     -->
+    <xsl:template match="*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)]" mode="MODE_MAKE_SECT_INFO" priority="5"/>
     
     <xsl:template match="*[contains(@class,' map/topicref ')]" mode="MODE_MAKE_SECT_INFO">
         <xsl:param name="prmIsInFrontMatter" tunnel="yes" required="false" select="false()"/>
@@ -208,7 +213,7 @@ URL : http://www.antenna.co.jp/
      -->
     <xsl:function name="ahf:isSpannedImage" as="xs:boolean">
         <xsl:param name="prmImage" as="element()"/>
-        <xsl:sequence select="ahf:hasOutputclassValue($prmImage,'span-all')"/>
+        <xsl:sequence select="ahf:hasOutputClassValue($prmImage,'span-all')"/>
     </xsl:function>    
 
     <!--General image-->
