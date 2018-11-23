@@ -175,5 +175,9 @@ E-mail : info@antennahouse.com
 
     <xsl:variable name="paperHeightRatioToBase" as="xs:double" select="ahf:toMm($pPaperHeight) div ahf:toMm($pBasePaperHeight)"/>
     <xsl:variable name="paperWidthRatioToBase"  as="xs:double" select="ahf:toMm($pPaperWidth) div ahf:toMm($pBasePaperWidth)"/>
+    <xsl:variable name="paperHeightRatioToBaseStr" as="xs:string" select="string($paperHeightRatioToBase)"/>
+    <xsl:variable name="paperWidthRatioToBaseStr"  as="xs:string" select="string($paperWidthRatioToBase)"/>
+    <xsl:variable name="paperHeightPctToBaseStr" as="xs:string" select="concat(string($paperHeightRatioToBase * 100),'%')"/>
+    <xsl:variable name="paperWidthPctToBaseStr"  as="xs:string" select="concat(string($paperWidthRatioToBase * 100),'%')"/>
     
 </xsl:stylesheet>

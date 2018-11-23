@@ -285,7 +285,27 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:function name="ahf:convertVariableInFoProp" as="xs:string">
         <xsl:param name="prmVariable" as="xs:string"/>
-        <xsl:sequence select="'1'"/>
+        <xsl:variable name="replaceResult" as="xs:string" select="
+            ahf:replace($prmVariable,
+            ('%paper-width-rate-to-std', 
+             concat('%paper-width-rate-to-',$pBasePaperSize),
+             '%paper-height-rate-to-std',
+             concat('%paper-width-rate-to-',$pBasePaperSize),
+             '%paper-width-percentage-to-std', 
+             concat('%paper-width-percentage-to-',$pBasePaperSize),
+             '%paper-height-percentage-to-std',
+             concat('%paper-width-percentage-to-',$pBasePaperSize)
+             ),
+             ($paperWidthRatioToBaseStr,
+             $paperWidthRatioToBaseStr,
+             $paperHeightRatioToBaseStr,
+             $paperHeightRatioToBaseStr,
+             $paperWidthPctToBaseStr,
+             $paperWidthPctToBaseStr,
+             $paperHeightPctToBaseStr,
+             $paperHeightPctToBaseStr
+             ))"/>
+        <xsl:sequence select="$replaceResult"/>
     </xsl:function>
 
     <!-- ==== END OF STYLESHEET === -->
