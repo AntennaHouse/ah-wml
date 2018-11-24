@@ -151,9 +151,8 @@ URL : http://www.antennahouse.com/
      note:		
      -->
     <xsl:function name="ahf:isCoverTopicRef" as="xs:boolean">
-        <xsl:param name="prmTopicRef" as="element()?"/>
-        <xsl:variable name="outputClass" as="xs:string" select="if (exists($prmTopicRef)) then string($prmTopicRef/@outputclass) else ''"/>
-        <xsl:sequence select="matches($outputClass,'cover[1-4]')"/>
+        <xsl:param name="prmTopicRef" as="element()"/>
+        <xsl:sequence select="ahf:hasOneOfOutputClassValue($prmTopicRef,$coverOutputClassValue)"/>
     </xsl:function>
 
     <xsl:function name="ahf:isNotCoverTopicRef" as="xs:boolean">
@@ -186,7 +185,6 @@ URL : http://www.antennahouse.com/
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
-    
 
     <!-- 
      function:	topicref count template

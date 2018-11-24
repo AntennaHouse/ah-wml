@@ -13,6 +13,7 @@ URL : http://www.antennahouse.com/
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     xmlns:array="http://www.w3.org/2005/xpath-functions/array"
@@ -22,13 +23,6 @@ URL : http://www.antennahouse.com/
     <!-- Parameter For Debug -->
     <xsl:variable name="PRM_SUPPORT_COVER" as="xs:string" select="$cNo"/>
     <xsl:variable name="pSupportCover" as="xs:boolean" select="$PRM_SUPPORT_COVER eq $cYes"/>
-    
-    <!-- Cover topicref/@outputclass value -->
-    <xsl:variable name="cCover1" as="xs:string" select="'cover1'"/>
-    <xsl:variable name="cCover2" as="xs:string" select="'cover2'"/>
-    <xsl:variable name="cCover3" as="xs:string" select="'cover3'"/>
-    <xsl:variable name="cCover4" as="xs:string" select="'cover4'"/>
-    <xsl:variable name="coverOutputClassValue" as="xs:string+" select="($cCover1,$cCover2,$cCover3,$cCover4)"/>
 
     <!-- Text Box defaults -->
     <xsl:variable name="cTxtBoxDefaultTop"    as="xs:integer" select="0"/>
@@ -73,9 +67,12 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="topicContent"  as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
         <xsl:choose>
             <xsl:when test="exists($topicContent)">
-                <xsl:apply-templates select="$topicContent/*[contains(@class,' topic/body ')]/*[contains(@class,' topic/bodydiv ')]" mode="MODE_MAKE_COVER">
-                    <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
-                </xsl:apply-templates>
+                <w:p>
+                    <xsl:apply-templates select="$topicContent/*[contains(@class,' topic/body ')]/*[contains(@class,' topic/bodydiv ')]" mode="MODE_MAKE_COVER">
+                        <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
+                    </xsl:apply-templates>
+                </w:p>
+                <!-- FIX ME!: needs section break for cover here! -->
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="warningContinue">
@@ -112,8 +109,21 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="foValue" as="xs:string" select="ahf:getFoProps($prmElem)"/>
         <xsl:variable name="foProp" as="attribute()*" select="ahf:getFoPropertyWithPageVariables($foValue,$prmElem)"/>
         <xsl:variable name="textBoxSpec" as="array(xs:integer)" select="ahf:getTextBoxSpec($foProp)"/>
+        <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId($prmElem)"/>
+        <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
+        <xsl:variable name="txbxContent" as="document-node()">
+            <xsl:document>
+                <xsl:apply-templates>
+                    <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
+                    <xsl:with-param name="prmExtraIndent" tunnel="yes" select="0"/>
+                    <xsl:with-param name="prmWidthConstraintInEmu" tunnel="yes" as="xs:integer" select="$textBoxSpec[3]"/>
+                </xsl:apply-templates>
+            </xsl:document>
+        </xsl:variable>
         <!--Dummy-->
-        <xsl:sequence select="()"/>
+        <w:r>
+            
+        </w:r>
     </xsl:template>
     
     <!-- 
