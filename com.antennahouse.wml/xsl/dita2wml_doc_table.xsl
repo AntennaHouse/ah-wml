@@ -345,15 +345,16 @@ URL : http://www.antennahouse.com/
      param:		none
      return:	w:gridCol
      note:		w:gridCol/@w:w only expresses temporary column width. 
-                It is not a actual width. See ECMA Spc p.1496 "17.18.87  ST_TblLayoutType (Table Layout Type)"
+                It is not a actual width. See ECMA Spec p.1496 "17.18.87  ST_TblLayoutType (Table Layout Type)"
                 If table/@pgwide="1" or table/@outputclass="widthNN", w:gridCol/w:w will become actual width in twip.
+                If table exists in cover topic, $colInfo become empty sequence.
      -->
     <xsl:template name="genGridCol" as="element()+">
         <xsl:param name="prmColSpec" as="element()+" required="yes"/>
         <xsl:param name="prmTgroupAttr" as="element()" required="yes"/>
         <xsl:variable name="ancestorColElem" as="element()" select="if (exists($prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')])) then $prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')] else $prmColSpec[1]/ancestor::*[contains(@class,' topic/topic ')][1]"/>
-        <xsl:variable name="colInfo" as="item()+" select="map:get($columnMap,ahf:generateId($ancestorColElem))"/>
-        <xsl:variable name="columnCount" as="xs:integer" select="xs:integer($colInfo[2])"/>
+        <xsl:variable name="colInfo" as="item()*" select="map:get($columnMap,ahf:generateId($ancestorColElem))"/>
+        <xsl:variable name="columnCount" as="xs:integer" select="if (exists($colInfo)) then xs:integer($colInfo[2]) else 1"/>
         <xsl:variable name="tblWidth" as="xs:integer?">
             <xsl:choose>
                 <xsl:when test="string($prmTgroupAttr/@pgwide) eq '1'">

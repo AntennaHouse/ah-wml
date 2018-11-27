@@ -21,6 +21,7 @@ URL : http://www.antennahouse.com/
     <xsl:include href="dita2wml_util_error.xsl"/>
     <xsl:include href="dita2wml_util.xsl"/>
     <xsl:include href="dita2wml_util_dita.xsl"/>
+    <xsl:include href="dita2wml_util_cover.xsl"/>
     <xsl:include href="dita2wml_util_doc.xsl"/>
     <xsl:include href="dita2wml_util_related_links.xsl"/>
     <xsl:include href="dita2wml_util_fo.xsl"/>

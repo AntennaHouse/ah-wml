@@ -111,6 +111,23 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="textBoxSpec" as="array(xs:integer)" select="ahf:getTextBoxSpec($foProp)"/>
         <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId($prmElem)"/>
         <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
+        <xsl:variable name="frame" as="element()">
+            <xsl:variable name="alwaysDrawFrame" as="xs:boolean">
+                <xsl:call-template name="getVarValueAsBoolean">
+                    <xsl:with-param name="prmVarName" select="'CoverTextBoxSetFrame'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$alwaysDrawFrame">
+                    <xsl:call-template name="getWmlObject">
+                        <xsl:with-param name="prmObjName" select="'wmlCoverTextBoxFrame'"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="$cElemNull"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="txbxContent" as="document-node()">
             <xsl:document>
                 <xsl:apply-templates>
@@ -120,9 +137,15 @@ URL : http://www.antennahouse.com/
                 </xsl:apply-templates>
             </xsl:document>
         </xsl:variable>
-        <!--Dummy-->
+        <!--Generate text-box-->
         <w:r>
-            
+            <xsl:call-template name="getWmlObjectReplacing">
+                <xsl:with-param name="prmObjName" select="'wmlCoverTextBox'"/>
+                <xsl:with-param name="prmSrc" select="('%pos-x','%pos-y','%width','%height','%id','node:frame','node:txbxContent')"/>
+                <xsl:with-param name="prmDst"
+                    select="(string($textBoxSpec[1]), string($textBoxSpec[2]), string($textBoxSpec[3]), string($textBoxSpec[4]), string($drawingId), $frame, $txbxContent)"
+                />
+            </xsl:call-template>
         </w:r>
     </xsl:template>
     

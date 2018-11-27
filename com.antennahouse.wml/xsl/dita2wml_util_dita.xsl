@@ -145,48 +145,6 @@ URL : http://www.antennahouse.com/
     </xsl:function>
 
     <!-- 
-     function:	Return topicref is for cover 
-     param:		prmTopicRef
-     return:	xs:boolean
-     note:		
-     -->
-    <xsl:function name="ahf:isCoverTopicRef" as="xs:boolean">
-        <xsl:param name="prmTopicRef" as="element()"/>
-        <xsl:sequence select="ahf:hasOneOfOutputClassValue($prmTopicRef,$coverOutputClassValue)"/>
-    </xsl:function>
-
-    <xsl:function name="ahf:isNotCoverTopicRef" as="xs:boolean">
-        <xsl:param name="prmTopicRef" as="element()?"/>
-        <xsl:sequence select="not(ahf:isCoverTopicRef($prmTopicRef))"/>
-    </xsl:function>
-    
-    <xsl:function name="ahf:hasCover" as="xs:boolean">
-        <xsl:param name="prmMap" as="element()"/>
-        <xsl:choose>
-            <xsl:when test="$isBookMap">
-                <xsl:sequence select="exists($map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)]) or 
-                                      exists($map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)])"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="exists($map/*[contains(@class, ' map/topicref ')][ahf:isCoverTopicRef(.)])"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:function>
-
-    <xsl:function name="ahf:isCoverN" as="xs:boolean">
-        <xsl:param name="prmTopicRef" as="element()"/>
-        <xsl:param name="prmCoverN" as="xs:string"/>
-        <xsl:choose>
-            <xsl:when test="$isBookMap">
-                <xsl:sequence select="exists($map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,concat('cover',$prmCoverN))])"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="exists($map/*[contains(@class, ' map/topicref ')][ahf:hasOutputClassValue(.,concat('cover',$prmCoverN))])"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:function>
-
-    <!-- 
      function:	topicref count template
      param:		prmTopicRef
      return:	topicref count that have same @href

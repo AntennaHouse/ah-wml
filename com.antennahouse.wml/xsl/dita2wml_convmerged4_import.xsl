@@ -11,6 +11,7 @@ E-mail : info@antennahouse.com
 -->
 <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:include href="dita2wml_constants.xsl"/>
+  <xsl:include href="dita2wml_const_cover.xsl"/>
   <xsl:include href="dita2wml_history_id.xsl"/>
 
   <xsl:include href="dita2wml_convmerged4.xsl"/>
