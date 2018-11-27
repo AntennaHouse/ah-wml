@@ -84,7 +84,7 @@ E-mail : info@antennahouse.com
                 <xsl:value-of select="format-dateTime($createdDateTime, '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01][Z]')"/>
             </dcterms:created>
             <xsl:variable name="revised" as="attribute()*" select="$critdates/*[contains(@class, ' topic/revised ')]/@modified"/>
-            <xsl:variable name="revisedDateTime" as="xs:dateTime?" select="ahf:toDateTime(string($revised))"/>
+            <xsl:variable name="revisedDateTime" as="xs:dateTime?" select="ahf:toDateTime(string($revised[1]))"/>
             <xsl:if test="exists($revisedDateTime)">
                 <dcterms:modified xsi:type="dcterms:W3CDTF">
                     <xsl:value-of select="format-dateTime($revisedDateTime, '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01][Z]')"/>
