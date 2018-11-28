@@ -128,6 +128,28 @@ URL : http://www.antennahouse.com/
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:variable name="zIndex" as="xs:integer">
+            <xsl:choose>
+                <xsl:when test="$foProp[name() eq 'z-index']">
+                    <xsl:variable name="tempZIndex" as="xs:string" select="string($foProp[name() eq 'z-index'])"/>
+                    <xsl:choose>
+                        <xsl:when test="$tempZIndex castable as xs:integer">
+                            <xsl:sequence select="if (xs:integer($tempZIndex) lt 0) then xs:integer($tempZIndex) * -1 else xs:integer($tempZIndex)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="1"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="1"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="background" as="xs:string">
+            <xsl:variable name="tempBackground" as="xs:boolean" select="ahf:getOutputClass($prmElem) = 'background'"/>
+            <xsl:sequence select="if ($tempBackground) then '1' else '0'"/>
+        </xsl:variable>
         <xsl:variable name="txbxContent" as="document-node()">
             <xsl:document>
                 <xsl:apply-templates select="$prmElem/*">
@@ -142,9 +164,9 @@ URL : http://www.antennahouse.com/
         <w:r>
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlCoverTextBox'"/>
-                <xsl:with-param name="prmSrc" select="('%pos-x','%pos-y','%width','%height','%id','node:frame','node:txbxContent')"/>
+                <xsl:with-param name="prmSrc" select="('%pos-x','%pos-y','%width','%height','%id','%zindex','%background','node:frame','node:txbxContent')"/>
                 <xsl:with-param name="prmDst"
-                    select="(string($textBoxSpec(1)), string($textBoxSpec(2)), string($textBoxSpec(3)), string($textBoxSpec(4)), string($drawingId), $frame, $txbxContent)"
+                    select="(string($textBoxSpec(1)), string($textBoxSpec(2)), string($textBoxSpec(3)), string($textBoxSpec(4)), string($drawingId),string($zIndex),$background, $frame, $txbxContent)"
                 />
             </xsl:call-template>
         </w:r>

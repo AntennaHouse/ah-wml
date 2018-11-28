@@ -640,7 +640,7 @@ URL : http://www.antenna.co.jp/
                 This grouping is needed to construct two column layout in Word.
     -->
     <xsl:variable name="sectMap" as="map(xs:string,xs:integer+)">
-        <xsl:variable name="sectMapElems" as="element()+" select="$columnMapTreeWithAdjacentInfo/*"/>
+        <xsl:variable name="sectMapElems" as="element()*" select="$columnMapTreeWithAdjacentInfo/*"/>
         <xsl:variable name="sectMapElemsTree" as="document-node()">
             <xsl:document>
                 <xsl:for-each select="$sectMapElems">
@@ -781,7 +781,7 @@ URL : http://www.antenna.co.jp/
                 Used to get column information from any element.
     -->
     <xsl:variable name="columnMap" as="map(xs:string,xs:integer+)">
-        <xsl:variable name="columnMapElems" as="element()+" select="$columnMapTreeWithAdjacentInfo/*"/>
+        <xsl:variable name="columnMapElems" as="element()*" select="$columnMapTreeWithAdjacentInfo/*"/>
         <xsl:map>
             <xsl:for-each select="$columnMapElems">
                 <xsl:variable name="columnMapElem" as="element()" select="."/>
