@@ -2107,7 +2107,7 @@ URL : http://www.antennahouse.com/
         </wml-object>
         
         <!-- Cover text-box -->
-        <variable name="CoverTextBoxSetFrame">yes</variable>
+        <variable name="CoverTextBoxSetFrame">no</variable>
         <wml-object name="wmlCoverTextBox">
             <w:drawing>
                 <wp:anchor distT="0" distB="0"

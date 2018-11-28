@@ -183,7 +183,7 @@ URL : http://www.antennahouse.com/
                     <xsl:sequence select="$propTop"/>
                 </xsl:when>
                 <xsl:when test="exists($propBottom) and exists($propHeight)">
-                    <xsl:sequence select="round(ahf:toEmu($pPaperHeight) - $propBottom)"/>
+                    <xsl:sequence select="round(ahf:toEmu($pPaperHeight) - $propBottom - $propHeight)"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:sequence select="$cTxtBoxDefaultTop"/>
@@ -196,7 +196,7 @@ URL : http://www.antennahouse.com/
                     <xsl:sequence select="$propLeft"/>
                 </xsl:when>
                 <xsl:when test="exists($propRight) and exists($propWidth)">
-                    <xsl:sequence select="round(ahf:toEmu($pPaperWidth) - $propRight)"/>
+                    <xsl:sequence select="round(ahf:toEmu($pPaperWidth) - $propRight - $propWidth)"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:sequence select="$cTxtBoxDefaultLeft"/>
@@ -209,7 +209,7 @@ URL : http://www.antennahouse.com/
                     <xsl:sequence select="$propWidth"/>
                 </xsl:when>
                 <xsl:when test="empty($propLeft) and exists($propRight)">
-                    <xsl:sequence select="round(ahf:toEmu($pPaperWidth) - $propRight)"/>
+                    <xsl:sequence select="round(ahf:toEmu($pPaperWidth) - $propRight - $left)"/>
                 </xsl:when>
                 <xsl:when test="exists($propLeft) and empty($propRight)">
                     <xsl:sequence select="round(ahf:toEmu($pPaperWidth) - $propLeft)"/>
@@ -241,7 +241,7 @@ URL : http://www.antennahouse.com/
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:sequence select="[$top,$left,$width,$height]"/>
+        <xsl:sequence select="[$left,$top,$width,$height]"/>
     </xsl:function>
     
     <!-- 
@@ -256,11 +256,13 @@ URL : http://www.antennahouse.com/
             <xsl:when test="exists($prmFoProp)">
                 <xsl:variable name="foProp" as="xs:string" select="string($prmFoProp)"/>
                 <xsl:variable name="foPropXpath" as="xs:string" select="ahf:convertToEmuXpath($foProp)"/>
+                <xsl:message select="'$foPropXpath=',$foPropXpath"/>
                 <xsl:try>
                     <xsl:variable name="xpathResult" as="xs:numeric">
                         <xsl:evaluate xpath="$foPropXpath" as="xs:numeric"/>
                     </xsl:variable>
                     <xsl:sequence select="xs:integer(round($xpathResult))"/>
+                    <xsl:message select="'EMU val=',xs:integer(round($xpathResult))"/>
                     <xsl:catch>
                         <xsl:call-template name="warningContinue">
                             <xsl:with-param name="prmMes" select="ahf:replace($stMes2015,('%xpath'),($foPropXpath))"/>
