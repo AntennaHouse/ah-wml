@@ -63,9 +63,10 @@ URL : http://www.antennahouse.com/
                         <!--"castable as xs:NAME" can be used only in Saxon PE or EE.
                             If $propName does not satisfy above, xsl:attribute instruction will be faild!
                             2014-04-22 t.makita
+                            This restriction has removed because this stylesheet is compiled with Saxon PE/EE.
+                            2018-11-28 t.makita
                          -->
-                        <!--xsl:when test="$propName castable as xs:NAME"-->
-                        <xsl:when test="true()">
+                        <xsl:when test="$propName castable as xs:Name">
                             <xsl:attribute name="{$propName}" select="$propValue"/>
                         </xsl:when>
                         <xsl:otherwise>

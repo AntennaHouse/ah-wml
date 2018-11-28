@@ -99,15 +99,15 @@ URL : http://www.antennahouse.com/
     
     <!-- 
      function:	generate absolute positioned text box
-     param:		prmTopicRef
+     param:		prmElem (bodyDiv)
      return:	See probe
      note:		bodydiv is assumed as container that should generate absolute positioning fo:block-container in PDF.
                 In .docx processing this template generates absolute positioned text-box. 
      -->
     <xsl:template name="genAbsTextBoxForCover" as="node()*">
         <xsl:param name="prmElem" as="element()" required="yes"/>
-        <xsl:variable name="foValue" as="xs:string" select="ahf:getFoProps($prmElem)"/>
-        <xsl:variable name="foProp" as="attribute()*" select="ahf:getFoPropertyWithPageVariables($foValue,$prmElem)"/>
+        <xsl:variable name="foAtt" as="attribute()?" select="ahf:getFoAtt($prmElem)"/>
+        <xsl:variable name="foProp" as="attribute()*" select="ahf:getFoProperty($foAtt,$prmElem)"/>
         <xsl:variable name="textBoxSpec" as="array(xs:integer)" select="ahf:getTextBoxSpec($foProp)"/>
         <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId($prmElem)"/>
         <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
@@ -130,20 +130,21 @@ URL : http://www.antennahouse.com/
         </xsl:variable>
         <xsl:variable name="txbxContent" as="document-node()">
             <xsl:document>
-                <xsl:apply-templates>
+                <xsl:apply-templates select="$prmElem/*">
                     <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
                     <xsl:with-param name="prmExtraIndent" tunnel="yes" select="0"/>
-                    <xsl:with-param name="prmWidthConstraintInEmu" tunnel="yes" as="xs:integer" select="$textBoxSpec[3]"/>
+                    <xsl:with-param name="prmWidthConstraintInEmu" tunnel="yes" as="xs:integer" select="$textBoxSpec(3)"/>
                 </xsl:apply-templates>
             </xsl:document>
         </xsl:variable>
         <!--Generate text-box-->
+        <xsl:message select="'$frame=',$frame"></xsl:message>
         <w:r>
             <xsl:call-template name="getWmlObjectReplacing">
                 <xsl:with-param name="prmObjName" select="'wmlCoverTextBox'"/>
                 <xsl:with-param name="prmSrc" select="('%pos-x','%pos-y','%width','%height','%id','node:frame','node:txbxContent')"/>
                 <xsl:with-param name="prmDst"
-                    select="(string($textBoxSpec[1]), string($textBoxSpec[2]), string($textBoxSpec[3]), string($textBoxSpec[4]), string($drawingId), $frame, $txbxContent)"
+                    select="(string($textBoxSpec(1)), string($textBoxSpec(2)), string($textBoxSpec(3)), string($textBoxSpec(4)), string($drawingId), $frame, $txbxContent)"
                 />
             </xsl:call-template>
         </w:r>
@@ -155,9 +156,9 @@ URL : http://www.antennahouse.com/
      return:	xs:string
      note:		The FO property name will be different by vocabulary. 
      -->
-    <xsl:function name="ahf:getFoProps" as="xs:string">
+    <xsl:function name="ahf:getFoAtt" as="attribute()?">
         <xsl:param name="prmElem" as="element()"/>
-        <xsl:sequence select="string($prmElem/@fo)"/>
+        <xsl:sequence select="$prmElem/@fo"/>
     </xsl:function>
 
     <!-- 
@@ -301,7 +302,15 @@ URL : http://www.antennahouse.com/
                             <xsl:sequence select="."/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:sequence select="ahf:convertVariableInFoProp(.)"/>
+                            <xsl:variable name="convertedToken" select="ahf:convertVariableInFoProp(.)"/>
+                            <xsl:choose>
+                                <xsl:when test="ahf:isUnitValue($convertedToken)">
+                                    <xsl:sequence select="concat('ahf:toEmu(''',$convertedToken,''')')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:sequence select="$convertedToken"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:non-matching-substring>
@@ -323,11 +332,14 @@ URL : http://www.antennahouse.com/
             ('%paper-width-rate-to-std', 
              concat('%paper-width-rate-to-',$pBasePaperSize),
              '%paper-height-rate-to-std',
-             concat('%paper-width-rate-to-',$pBasePaperSize),
+             concat('%paper-height-rate-to-',$pBasePaperSize),
              '%paper-width-percentage-to-std', 
              concat('%paper-width-percentage-to-',$pBasePaperSize),
              '%paper-height-percentage-to-std',
-             concat('%paper-width-percentage-to-',$pBasePaperSize)
+             concat('%paper-height-percentage-to-',$pBasePaperSize),
+             '%paper-width',
+             '%paper-height',
+             '%bleed-size'
              ),
              ($paperWidthRatioToBaseStr,
              $paperWidthRatioToBaseStr,
@@ -336,7 +348,10 @@ URL : http://www.antennahouse.com/
              $paperWidthPctToBaseStr,
              $paperWidthPctToBaseStr,
              $paperHeightPctToBaseStr,
-             $paperHeightPctToBaseStr
+             $paperHeightPctToBaseStr,
+             $pPaperWidth,
+             $pPaperHeight,
+             '0'
              ))"/>
         <xsl:sequence select="$replaceResult"/>
     </xsl:function>
