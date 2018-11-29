@@ -134,7 +134,7 @@ URL : http://www.antennahouse.com/
                     <xsl:variable name="tempZIndex" as="xs:string" select="string($foProp[name() eq 'z-index'])"/>
                     <xsl:choose>
                         <xsl:when test="$tempZIndex castable as xs:integer">
-                            <xsl:sequence select="if (xs:integer($tempZIndex) lt 0) then xs:integer($tempZIndex) * -1 else xs:integer($tempZIndex)"/>
+                            <xsl:sequence select="xs:integer($tempZIndex) + 65536"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:sequence select="1"/>

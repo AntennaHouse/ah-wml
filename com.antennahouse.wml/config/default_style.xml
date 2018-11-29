@@ -2140,9 +2140,9 @@ URL : http://www.antennahouse.com/
                                     <a:prstGeom prst="rect">
                                         <a:avLst/>
                                     </a:prstGeom>
-                                    <a:solidFill>
+                                    <!--a:solidFill>
                                         <a:schemeClr val="lt1"/>
-                                    </a:solidFill>
+                                    </a:solidFill-->
                                     <ahr:frame/>
                                 </wps:spPr>
                                 <wps:txbx>

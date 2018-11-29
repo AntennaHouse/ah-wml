@@ -22,7 +22,7 @@ E-mail : info@antennahouse.com
     <xsl:variable name="pPaperSize" as="xs:string" select="$PRM_PAPER_SIZE"/>
 
     <xsl:param name="PRM_BASE_PAPER_SIZE" required="no" as="xs:string" select="'Letter'"/>
-    <xsl:variable name="pBasePaperSize" as="xs:string" select="$PRM_PAPER_SIZE"/>
+    <xsl:variable name="pBasePaperSize" as="xs:string" select="$PRM_BASE_PAPER_SIZE"/>
 
     <xsl:param name="cPaperInfo" as="xs:string+">
         <xsl:call-template name="getVarValueAsStringSequence">
