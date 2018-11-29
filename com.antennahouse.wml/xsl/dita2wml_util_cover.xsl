@@ -47,7 +47,7 @@ URL : http://www.antennahouse.com/
         <xsl:choose>
             <xsl:when test="$isBookMap">
                 <xsl:sequence select="exists($map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)]) or 
-                                      exists($map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)])"/>
+                    exists($map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)])"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="exists($map/*[contains(@class, ' map/topicref ')][ahf:isCoverTopicRef(.)])"/>
@@ -55,17 +55,51 @@ URL : http://www.antennahouse.com/
         </xsl:choose>
     </xsl:function>
 
-    <xsl:function name="ahf:isCoverN" as="xs:boolean">
-        <xsl:param name="prmTopicRef" as="element()"/>
+    <xsl:function name="ahf:hasCoverN" as="xs:boolean">
+        <xsl:param name="prmMap" as="element()"/>
         <xsl:param name="prmCoverN" as="xs:string"/>
         <xsl:choose>
             <xsl:when test="$isBookMap">
-                <xsl:sequence select="exists($map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,concat('cover',$prmCoverN))])"/>
+                <xsl:sequence select="exists($map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverN(.,$prmCoverN)]) or 
+                    exists($map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverN(.,$prmCoverN)])"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:sequence select="exists($map/*[contains(@class, ' map/topicref ')][ahf:hasOutputClassValue(.,concat('cover',$prmCoverN))])"/>
+                <xsl:sequence select="exists($map/*[contains(@class, ' map/topicref ')][ahf:isCoverN(.,$prmCoverN)])"/>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:function>
+    
+    <xsl:function name="ahf:hasCover12" as="xs:boolean">
+        <xsl:param name="prmMap" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="$isBookMap">
+                <xsl:sequence select="exists($map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverN(.,$cCover1) or ahf:isCoverN(.,$cCover2)]) or 
+                    exists($map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverN(.,$cCover1) or ahf:isCoverN(.,$cCover2)])"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="exists($map/*[contains(@class, ' map/topicref ')][ahf:isCoverN(.,$cCover1) or ahf:isCoverN(.,$cCover2)])"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="ahf:hasCover34" as="xs:boolean">
+        <xsl:param name="prmMap" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="$isBookMap">
+                <xsl:sequence select="exists($map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverN(.,$cCover3) or ahf:isCoverN(.,$cCover4)]) or 
+                    exists($map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverN(.,$cCover3) or ahf:isCoverN(.,$cCover4)])"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="exists($map/*[contains(@class, ' map/topicref ')][ahf:isCoverN(.,$cCover3) or ahf:isCoverN(.,$cCover4)])"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
+    <xsl:function name="ahf:isCoverN" as="xs:boolean">
+        <xsl:param name="prmTopicRef" as="element()"/>
+        <xsl:param name="prmCoverN" as="xs:string"/>
+        <xsl:sequence
+            select="exists($prmTopicRef[ahf:hasOutputClassValue(., $prmCoverN)])"/>
     </xsl:function>
     
     <!-- end of stylesheet -->

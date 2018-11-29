@@ -32,28 +32,89 @@ URL : http://www.antennahouse.com/
 
     <!-- 
      function:	Generate cover N
-     param:		prmMap, prmCoverN
+     param:		prmMap, prmCoverN (Sequence of "coverN")
      return:	See probe
      note:		 
      -->
-    <xsl:template name="genCoverN" as="element(w:p)*">
+    <xsl:template name="genCoverN" as="element()*">
         <xsl:param name="prmMap" as="element()" required="yes"/>
         <xsl:param name="prmCoverN" as="xs:string+" required="yes"/>
         <xsl:choose>
             <xsl:when test="$isBookMap">
                 <xsl:for-each select="$prmCoverN">
                     <xsl:variable name="coverN" as="xs:string" select="."/>
-                    <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
-                    <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                    <xsl:choose>
+                        <xsl:when test="ahf:hasCoverN($map,$coverN)">
+                            <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                            <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                            <xsl:call-template name="genSectprForCover">
+                                <xsl:with-param name="prmCoverN" select="$coverN"/>
+                            </xsl:call-template>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="()"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:for-each select="$prmCoverN">
                     <xsl:variable name="coverN" as="xs:string" select="."/>
-                    <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                    <xsl:choose>
+                        <xsl:when test="ahf:hasCoverN($map,$coverN)">
+                            <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                            <xsl:call-template name="genSectprForCover">
+                                <xsl:with-param name="prmCoverN" select="$coverN"/>
+                            </xsl:call-template>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="()"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>            
+    </xsl:template>
+
+    <!-- 
+        function:	Generate w:sectPr for cover
+        param:		prmCoverN
+        return:	    element()
+        note:		If $prmCoverN=$cCover4, generate row w:sectPr as document last element
+    -->
+    <xsl:template name="genSectprForCover">
+        <xsl:param name="prmCoverN" as="xs:string" required="yes"/>
+        <xsl:variable name="sectType" as="xs:string">
+            <xsl:choose>
+                <xsl:when test="$prmCoverN = ($cCover1,$cCover2,$cCover3)">
+                    <xsl:sequence select="$sectTypeNextPage"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="$sectTypeContinuous"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="isLast" as="xs:boolean" select="$prmCoverN eq $cCover4"/>
+        <xsl:choose>
+            <xsl:when test="$isLast">
+                <xsl:call-template name="getWmlObjectReplacing">
+                    <xsl:with-param name="prmObjName" select="'wmlCoverSectPr'"/>
+                    <xsl:with-param name="prmSrc" select="('%type')"/>
+                    <xsl:with-param name="prmDst" select="($sectType)"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <w:p>
+                    <w:pPr>
+                        <xsl:call-template name="getWmlObjectReplacing">
+                            <xsl:with-param name="prmObjName" select="'wmlCoverSectPr'"/>
+                            <xsl:with-param name="prmSrc" select="('%type')"/>
+                            <xsl:with-param name="prmDst" select="($sectType)"/>
+                        </xsl:call-template>
+                    </w:pPr>
+                </w:p>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <!-- 

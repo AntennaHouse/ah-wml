@@ -1453,19 +1453,8 @@ URL : http://www.antennahouse.com/
         <!-- w:sectPr
              param: %type section break type
                     %col  column count
+                    %sep  column rule
          -->
-        <wml-object name="wmlSectPrDprecated">
-            <w:sectPr>
-                <ahr:hdrFtrReference/>
-                <w:type w:val="%type"/>
-                <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
-                <w:pgMar w:top="{ahf:toTwipStr(\$PaperMarginTop)}" w:right="{ahf:toTwipStr(\$PaperMarginOuter)}" w:bottom="{ahf:toTwipStr(\$PaperMarginBottom)}" w:left="{ahf:toTwipStr(\$PaperMarginInner)}" w:header="{ahf:toTwipStr(\$PaperHeaderHeight)}"
-                    w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
-                <ahr:pgNumType/>
-                <w:cols w:num="%col" w:sep="1" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
-            </w:sectPr>
-        </wml-object>
-        
         <wml-object name="wmlSectPr">
             <w:sectPr>
                 <ahr:hdrFtrReference/>
@@ -1477,7 +1466,20 @@ URL : http://www.antennahouse.com/
                 <w:cols w:num="%col" w:sep="%sep" w:space="{ahf:toTwipStr(\$PaperColumnGap)}"/>
             </w:sectPr>
         </wml-object>
-        
+
+        <!-- w:sectPr for cover page
+             param: %type section break type
+         -->
+        <wml-object name="wmlCoverSectPr">
+            <w:sectPr>
+                <w:type w:val="%type"/>
+                <w:pgSz w:w="{ahf:toTwipStr(\$PaperWidth)}" w:h="{ahf:toTwipStr(\$PaperHeight)}"/>
+                <w:pgMar w:top="0" w:right="0" w:bottom="0" w:left="0" w:header="0"
+                    w:footer="{ahf:toTwipStr(\$PaperFooterHeight)}" w:gutter="0"/>
+                <w:cols w:num="1" w:sep="0" w:space="0"/>
+            </w:sectPr>
+        </wml-object>
+
         <!-- Page number format -->
         <wml-object name="wmlPgNumTypeFrontMatter">
             <w:pgNumType w:start="1" w:fmt="lowerRoman"/>
