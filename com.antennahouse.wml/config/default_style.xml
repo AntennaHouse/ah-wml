@@ -2106,7 +2106,10 @@ URL : http://www.antennahouse.com/
             </w:tblCellMar>
         </wml-object>
         
-        <!-- Cover text-box -->
+        <!-- Cover text-box
+             a:solidFill was removed because text-box container should not have any fill.
+             It should be transparent.
+         -->
         <variable name="CoverTextBoxSetFrame">no</variable>
         <wml-object name="wmlCoverTextBox">
             <w:drawing>
@@ -2140,9 +2143,6 @@ URL : http://www.antennahouse.com/
                                     <a:prstGeom prst="rect">
                                         <a:avLst/>
                                     </a:prstGeom>
-                                    <!--a:solidFill>
-                                        <a:schemeClr val="lt1"/>
-                                    </a:solidFill-->
                                     <ahr:frame/>
                                 </wps:spPr>
                                 <wps:txbx>
