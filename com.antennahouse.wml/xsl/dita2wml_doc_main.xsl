@@ -53,11 +53,11 @@ URL : http://www.antennahouse.com/
                 <!-- Process main contents -->
                 <xsl:choose>
                     <xsl:when test="$isBookMap">
-                        <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')]"/>
+                        <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:isNotCoverTopicRef(.)]"/>
                         <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/part ') or contains(@class, ' bookmap/chapter ')]"/>
                         <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/appendices ')]/*[contains(@class, ' bookmap/appendix ')]"/>
                         <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/appendix ')]"/>
-                        <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')]"/>
+                        <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:isNotCoverTopicRef(.)]"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')]"/>
