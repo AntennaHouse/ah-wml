@@ -20,6 +20,9 @@ URL : http://www.antennahouse.com/
     xmlns="http://www.antennahouse.com/names/XSLT/Document/Layout">
     
     <variables>
+        <!-- FO property name -->
+        <variable name="foPropName">fo</variable>
+
         <!-- Fonts -->
         <variable name="General_Serif_Font">serif</variable>
         <variable name="General_Sans_Serif_Font">sans-serif</variable>
@@ -1287,9 +1290,14 @@ URL : http://www.antennahouse.com/
              \b field-argument: The text in this switch's field-argument is an integer that specifies the background color of the barcode symbol.  
                                 Valid values are in the range [0, 0xFFFFFF]
              \t: Display barcode data (text) along with image
+             
+             - The minimum size of \h may be 20mm in Word.
+             - This size can be adhusted by \s parameter.
+             2018-11-30 t.makita
           -->
-        <variable name="QrCodeHeight">2cm</variable>
-        <variable name="QrCodeOpt">\h {ahf:toTwipStr('$QrCodeHeight')} \s 100 \q 3 \f 0 \b 0xFFFFFF</variable>
+        <variable name="QrCodeHeightDefault">2cm</variable>
+        <variable name="QrCodeScaleDefault">70</variable>
+        <variable name="QrCodeOpt">\h %height \s %scale \q 3 \f 0 \b 0xFFFFFF</variable>
         <wml-object name="wmlQrCodeField">
             <w:r>
                 <w:fldChar w:fldCharType="begin"/>

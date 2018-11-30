@@ -232,17 +232,6 @@ URL : http://www.antennahouse.com/
             </xsl:call-template>
         </w:r>
     </xsl:template>
-    
-    <!-- 
-     function:	Get FO property string
-     param:		prmElem
-     return:	xs:string
-     note:		The FO property name will be different by vocabulary. 
-     -->
-    <xsl:function name="ahf:getFoAtt" as="attribute()?">
-        <xsl:param name="prmElem" as="element()"/>
-        <xsl:sequence select="$prmElem/@fo"/>
-    </xsl:function>
 
     <!-- 
      function:	Get text-box property top, left, width, height in EMU unit

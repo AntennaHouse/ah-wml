@@ -5,8 +5,21 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:axf="http://www.antennahouse.com/names/XSL/Extensions"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
+    xmlns:ahs="http://www.antennahouse.com/names/XSLT/Document/Layout"
     exclude-result-prefixes="xs ahf fo axf">
 
+    <!--
+         function:	Get FO property name
+         note:		The FO property name will be different by specialization.
+                    If ah-dita specialization is used, the name is 'fo:prop'.
+                    Another user uses no namespace attribute 'fo'.
+    -->
+    <xsl:variable name="foPropName" as="xs:string">
+        <xsl:call-template name="getVarValue">
+            <xsl:with-param name="prmVarName" select="'foPropName'"/>
+        </xsl:call-template>
+    </xsl:variable>
+    
     <!-- 
          function:	Judge that specified element's FO property has specified value
          param:		prmElem
@@ -21,31 +34,30 @@
         <xsl:variable name="targetFoProp" as="attribute()?" select="$foProp[name() eq $prmName]"/>
         <xsl:sequence select="string($targetFoProp) eq $prmValue"/>
     </xsl:function>
-
-    <!-- 
-         function:	Expand FO style & property into attribute()*
-         param:		prmElem
-         return:	Attribute node
-         note:		Style is authored in $prmElem/@fo:prop
-                    XSL-FO attribute is authored in $prmElem/@fo:prop in CSS notation.
-    -->
-    <xsl:template name="ahf:getFoProperty" as="attribute()*">
-        <xsl:param name="prmElem" required="no" as="element()" select="."/>
-        <xsl:sequence select="ahf:getFoProperty($prmElem)"/>
-    </xsl:template>
-
+    
     <!-- 
          function:	Expand FO property into attribute()*
          param:		prmElem
          return:	Attribute node
-         note:		XSL-FO attribute is authored in $prmElem/@fo:prop in CSS notation.
+         note:		XSL-FO attribute is authored in $prmElem/@fo:prop in CSS notation if document type is specialized by ah-dita.
                     Remove stylesheet specific style (starts with "ahs-").
     -->
     <xsl:function name="ahf:getFoProperty" as="attribute()*">
         <xsl:param name="prmElem" as="element()"/>
-        <xsl:sequence select="ahf:getFoPropertyInner($prmElem,$prmElem/@fo:prop)"/>
+        <xsl:sequence select="ahf:getFoPropertyInner($prmElem,ahf:getFoAtt($prmElem))"/>
     </xsl:function>
-    
+
+    <!-- 
+     function:	Get FO property string
+     param:		prmElem
+     return:	xs:string
+     note:		The FO property name will be different by specialization. 
+     -->
+    <xsl:function name="ahf:getFoAtt" as="attribute()?">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:sequence select="$prmElem/@*[name(.) eq $foPropName]"/>
+    </xsl:function>
+
     <xsl:function name="ahf:getFoPropertyInner" as="attribute()*">
         <xsl:param name="prmElem" as="element()"/>
         <xsl:param name="prmProp" as="attribute()?"/>
@@ -64,7 +76,7 @@
                                 <xsl:sequence select="concat('axf:',substring-after($tempPropName,$axfExt))"/>
                             </xsl:when>
                             <xsl:when test="starts-with($tempPropName,$ahsExt)">
-                                <xsl:sequence select="''"/>
+                                <xsl:sequence select="concat('ahs:',substring-after($tempPropName,$ahsExt))"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:sequence select="$tempPropName"/>
@@ -73,7 +85,6 @@
                     </xsl:variable>                            
                     <xsl:variable name="propValue" as="xs:string" select="normalize-space(substring-after($propDesc,':'))"/>
                     <xsl:choose>
-                        <xsl:when test="not(string($propName))"/>
                         <!--"castable as xs:Name" can be used only in Saxon PE or EE.
                          -->
                         <xsl:when test="$propName castable as xs:Name">
