@@ -167,8 +167,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:template name="genAbsTextBoxForCover" as="node()*">
         <xsl:param name="prmElem" as="element()" required="yes"/>
-        <xsl:variable name="foAtt" as="attribute()?" select="ahf:getFoAtt($prmElem)"/>
-        <xsl:variable name="foProp" as="attribute()*" select="ahf:getFoProperty($foAtt,$prmElem)"/>
+        <xsl:variable name="foProp" as="attribute()*" select="ahf:getFoProperty($prmElem)"/>
         <xsl:variable name="textBoxSpec" as="array(xs:integer)" select="ahf:getTextBoxSpec($foProp)"/>
         <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId($prmElem)"/>
         <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
@@ -327,7 +326,7 @@ URL : http://www.antennahouse.com/
         <xsl:choose>
             <xsl:when test="exists($prmFoProp)">
                 <xsl:variable name="foProp" as="xs:string" select="string($prmFoProp)"/>
-                <xsl:variable name="foPropXpath" as="xs:string" select="ahf:convertToEmuXpath($foProp)"/>
+                <xsl:variable name="foPropXpath" as="xs:string" select="ahf:convertExpToEmuXpath($foProp)"/>
                 <xsl:message select="'$foPropXpath=',$foPropXpath"/>
                 <xsl:try>
                     <xsl:variable name="xpathResult" as="xs:numeric">
@@ -355,7 +354,7 @@ URL : http://www.antennahouse.com/
      return:	xs:string
      note:		 
      -->
-    <xsl:function name="ahf:convertToEmuXpath" as="xs:string">
+    <xsl:function name="ahf:convertExpToEmuXpath" as="xs:string">
         <xsl:param name="prmFoPropExp" as="xs:string"/>
         <xsl:variable name="expandExpRegX" as="xs:string" select="'[\s\(\),\*\+'']+?'"/>
         <xsl:variable name="tempExpandedExp" as="xs:string*">
@@ -376,7 +375,7 @@ URL : http://www.antennahouse.com/
                             <xsl:sequence select="."/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:variable name="convertedToken" select="ahf:convertVariableInFoProp(.)"/>
+                            <xsl:variable name="convertedToken" select="ahf:convertPageVariablesInFoProp(.)"/>
                             <xsl:choose>
                                 <xsl:when test="ahf:isUnitValue($convertedToken)">
                                     <xsl:sequence select="concat('ahf:toEmu(''',$convertedToken,''')')"/>
@@ -394,12 +393,12 @@ URL : http://www.antennahouse.com/
     </xsl:function>
     
     <!-- 
-     function:	Convert variable to value
+     function:	Convert page variables to value
      param:		prmVariable
      return:	xs:string
      note:		 
      -->
-    <xsl:function name="ahf:convertVariableInFoProp" as="xs:string">
+    <xsl:function name="ahf:convertPageVariablesInFoProp" as="xs:string">
         <xsl:param name="prmVariable" as="xs:string"/>
         <xsl:variable name="replaceResult" as="xs:string" select="
             ahf:replace($prmVariable,
