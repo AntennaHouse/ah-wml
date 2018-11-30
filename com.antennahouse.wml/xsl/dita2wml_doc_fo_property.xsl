@@ -106,43 +106,5 @@
         </xsl:for-each>
     </xsl:function>
 
-    <!-- 
-         function:	Expand FO property into attribute()*
-                    Replacing text() with given parameters ($prmSrc, $prmDst).
-         param:		prmElem,$prmSrc,$prmDst
-         return:	Attribute node
-         note:		
-    -->
-    <xsl:function name="ahf:getFoPropertyReplacing" as="attribute()*">
-        <xsl:param name="prmElem" as="element()"/>
-        <xsl:param name="prmSrc" as="xs:string+"/>
-        <xsl:param name="prmDst" as="xs:string+"/>
-        <xsl:variable name="foProps" as="attribute()*" select="ahf:getFoProperty($prmElem)"/>
-        <xsl:for-each select="$foProps">
-            <xsl:variable name="foProp" as="attribute()" select="."/>
-            <xsl:variable name="propName" as="xs:Name" select="name($foProp)"/>
-            <xsl:variable name="propValue" as="xs:string" select="string($foProp)"/>
-            <xsl:variable name="replacedPropValue" as="xs:string" select="ahf:replace($propValue,$prmSrc,$prmDst)"/>
-            <xsl:attribute name="{$propName}" select="$replacedPropValue"/>
-        </xsl:for-each>
-    </xsl:function>
-    
-    <!-- 
-         function:	Expand FO property into attribute()*
-                    Replacing text() with given page related parameters.
-                    %paper-width is replaced with $pPaperWidth
-                    %paper-height is replaced with $pPaperHeight
-         param:		prmElem
-         return:	Attribute node
-         note:		Used for making cover page：page size (width,height), cop size (horizontal,vertical), bleed size are replaced by actual value and returned as attribute()*.
-                    This function refers global variable $pPaperWidth,$pPaperHeight,$pCropSizeH,$pCropSizeV,$pBleedSize.（dita2fo_param.xsl)
-                    Authoring "0.5 * %paper-width" will get half width of page size.
-    -->
-    <xsl:function name="ahf:getFoPropertyWithPageVariables" as="attribute()*">
-        <xsl:param name="prmElem" as="element()"/>
-        <xsl:sequence select="ahf:getFoPropertyReplacing($prmElem,
-            ('%paper-width','%paper-height'),
-            ($pPaperWidth,$pPaperHeight))"/>
-    </xsl:function>
 
 </xsl:stylesheet>

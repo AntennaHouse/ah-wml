@@ -27,8 +27,8 @@ URL : http://www.antennahouse.com/
     <!-- Text Box defaults -->
     <xsl:variable name="cTxtBoxDefaultTop"    as="xs:integer" select="0"/>
     <xsl:variable name="cTxtBoxDefaultLeft"   as="xs:integer" select="0"/>
-    <xsl:variable name="cTxtBoxDefaultWidth"  as="xs:integer" select="ahf:toEmu('20mm')"/>
-    <xsl:variable name="cTxtBoxDefaultHeight" as="xs:integer" select="ahf:toEmu('20mm')"/>
+    <xsl:variable name="cTxtBoxDefaultWidth"  as="xs:integer" select="ahf:toEmu($pPaperWidth)"/>
+    <xsl:variable name="cTxtBoxDefaultHeight" as="xs:integer" select="ahf:toEmu($pPaperHeight)"/>
 
     <!-- 
      function:	Generate cover N
