@@ -3,6 +3,7 @@
     xmlns:fo="http://www.w3.org/1999/XSL/Format" 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
     xmlns:axf="http://www.antennahouse.com/names/XSL/Extensions"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     xmlns:ahs="http://www.antennahouse.com/names/XSLT/Document/Layout"
@@ -10,7 +11,7 @@
 
     <!--
          function:	Get FO property name
-         note:		The FO property name will be different by specialization.
+         note:	    The FO property name will be different by specialization.
                     If ah-dita specialization is used, the name is 'fo:prop'.
                     Another user uses no namespace attribute 'fo'.
     -->
@@ -22,7 +23,7 @@
     
     <!-- 
          function:	Judge that specified element's FO property has specified value
-         param:		prmElem
+         param:	    prmElem
          return:	xs:boolean
          note:		
     -->
@@ -34,10 +35,24 @@
         <xsl:variable name="targetFoProp" as="attribute()?" select="$foProp[name() eq $prmName]"/>
         <xsl:sequence select="string($targetFoProp) eq $prmValue"/>
     </xsl:function>
+
+    <!-- 
+         function:	Get FO property value
+         param:	    prmElem, prmName
+         return:	xs:string
+         note:		Get FO property value by specified $prmName
+    -->
+    <xsl:function name="ahf:getFoPropertyValue" as="xs:string?">
+        <xsl:param name="prmElem" as="element()"/>
+        <xsl:param name="prmName" as="xs:string"/>
+        <xsl:variable name="foProp" as="attribute()*" select="ahf:getFoProperty($prmElem)"/>
+        <xsl:variable name="targetFoProp" as="attribute()?" select="$foProp[name() eq $prmName]"/>
+        <xsl:sequence select="if (exists($targetFoProp)) then string($targetFoProp) else ()"/>
+    </xsl:function>
     
     <!-- 
          function:	Expand FO property into attribute()*
-         param:		prmElem
+         param:     prmElem
          return:	Attribute node
          note:		XSL-FO attribute is authored in $prmElem/@fo:prop in CSS notation if document type is specialized by ah-dita.
                     Remove stylesheet specific style (starts with "ahs-").
@@ -49,7 +64,7 @@
 
     <!-- 
      function:	Get FO property string
-     param:		prmElem
+     param:	    prmElem
      return:	xs:string
      note:		The FO property name will be different by specialization. 
      -->
@@ -106,5 +121,94 @@
         </xsl:for-each>
     </xsl:function>
 
-
+    <!-- 
+     function:	Convert start-indent to WML
+     param:	    prmStartIndent
+     return:	xs:string
+     note:		prmStartIndent must be written as length notation 
+     -->
+    <xsl:function name="ahf:convertStartIndentToWml" as="element()?">
+        <xsl:param name="prmStartIndent" as="xs:string"/>
+        <xsl:variable name="startIndentTwipVal" as="xs:string" select="string(ahf:convertFoExpToUnitValue($prmStartIndent,'twip'))"/>
+        <w:ind w:start="{$startIndentTwipVal}"/>
+    </xsl:function>
+    
+    <!-- 
+     function:	Convert expression in variable to specified unit value
+     param:	    prmFoPropExp (XSL-FO property expression), prmUnit
+     return:	xs:integer?
+     note:		 
+     -->
+    <xsl:function name="ahf:convertFoExpToUnitValue" as="xs:integer?">
+        <xsl:param name="prmFoPropExp" as="xs:string?"/>
+        <xsl:param name="prmUnit" as="xs:string"/>
+        <xsl:choose>
+            <xsl:when test="exists($prmFoPropExp)">
+                <xsl:variable name="foPropExpXpath" as="xs:string" select="ahf:convertFoPropExpToXpath($prmFoPropExp,$prmUnit)"/>
+                <xsl:try>
+                    <xsl:variable name="xpathResult" as="xs:numeric">
+                        <xsl:evaluate xpath="$foPropExpXpath" as="xs:numeric"/>
+                    </xsl:variable>
+                    <xsl:sequence select="xs:integer(round($xpathResult))"/>
+                    <xsl:catch>
+                        <xsl:call-template name="warningContinue">
+                            <xsl:with-param name="prmMes" select="ahf:replace($stMes2015,('%xpath'),($foPropExpXpath))"/>
+                        </xsl:call-template>
+                        <xsl:sequence select="()"/>
+                    </xsl:catch>
+                </xsl:try>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
+    <!-- 
+     function:	Convert XSL-FO property value expression to XPath string that returns specified unit value
+     param:	    prmFoPropExp, prmUnit
+     return:	xs:string
+     note:		Conversion function is supposed to be "ahf:to[Uppercase of first unit string][lowercase of remain unit string]"
+                They are implemented in dita2wml_util_unit.xsl
+     -->
+    <xsl:function name="ahf:convertFoPropExpToXpath" as="xs:string">
+        <xsl:param name="prmFoPropExp" as="xs:string"/>
+        <xsl:param name="prmUnit" as="xs:string"/>
+        <xsl:variable name="unitFunc" as="xs:string" select="concat('ahf:to',upper-case(substring($prmUnit,1,1)),substring($prmUnit,2))"/>
+        <xsl:variable name="expandExpRegX" as="xs:string" select="'[\s\(\),\*\+'']+?'"/>
+        <xsl:variable name="tempExpandedExp" as="xs:string*">
+            <!-- Analyze string using regular expression -->
+            <xsl:analyze-string select="normalize-space($prmFoPropExp)" regex="{$expandExpRegX}">
+                <!-- White-space, operation symbol or parentheses-->
+                <xsl:matching-substring>
+                    <xsl:sequence select="."/>
+                </xsl:matching-substring>
+                <!-- Token that is delimited by white-space or symbol-->
+                <xsl:non-matching-substring>
+                    <xsl:variable name="token" as="xs:string" select="."/>
+                    <xsl:choose>
+                        <xsl:when test="ahf:isUnitValue(.)">
+                            <xsl:sequence select="concat($unitFunc,'(''',.,''')')"/>
+                        </xsl:when>
+                        <xsl:when test="ahf:isNumericValue(.)">
+                            <xsl:sequence select="."/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:variable name="convertedToken" select="ahf:convertPageVariablesInFoProp(.)"/>
+                            <xsl:choose>
+                                <xsl:when test="ahf:isUnitValue($convertedToken)">
+                                    <xsl:sequence select="concat($unitFunc,'(''',$convertedToken,''')')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:sequence select="$convertedToken"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:non-matching-substring>
+            </xsl:analyze-string>
+        </xsl:variable>
+        <xsl:sequence select="string-join($tempExpandedExp,'')"/>
+    </xsl:function>
+    
 </xsl:stylesheet>

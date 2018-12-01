@@ -129,7 +129,7 @@ URL : http://www.antennahouse.com/
         <xsl:choose>
             <xsl:when test="exists($topicContent)">
                 <w:p>
-                    <xsl:apply-templates select="$topicContent/*[contains(@class,' topic/body ')]/*[contains(@class,' topic/bodydiv ')]" mode="MODE_MAKE_COVER">
+                    <xsl:apply-templates select="$topicContent/*[contains(@class,' topic/body ')]" mode="MODE_MAKE_COVER">
                         <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
                     </xsl:apply-templates>
                 </w:p>
@@ -143,6 +143,67 @@ URL : http://www.antennahouse.com/
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+
+    <!-- 
+     function:	body processing
+     param:		prmTopicRef
+     return:	See probe
+     note:		Group bodydiv (assumed as fo:block-container) by it is position="absolute" or not.
+                Generate w:p for each position="auto" bodydiv because the text-tbox is generated as inline.
+     -->
+    <xsl:template match="*[contains(@class,' topic/body ')]" mode="MODE_MAKE_COVER">
+        <xsl:param name="prmTopicRef" as="element()" tunnel="yes" required="yes"/>
+        <xsl:for-each-group select="*[contains(@class,' topic/bodyDiv ')]" group-adjacent="ahf:genGroupKeyForCoverBodydiv(.)">
+            <w:p>
+                <xsl:variable name="lastBodyDiv" as="element()" select="current-group()[last()]"/>
+                <xsl:variable name="startIndent" as="xs:string?" select="ahf:getFoPropertyValue($lastBodyDiv,'start-indent')"/>
+                <xsl:if test="exists($startIndent)">
+                    <w:pPr>
+                        <xsl:copy-of select="ahf:convertFoExpToUnitValue($startIndent,'twip')"/>
+                    </w:pPr>
+                </xsl:if>
+                <xsl:for-each select="current-group()">
+                    <xsl:call-template name="genAbsTextBoxForCover">
+                        <xsl:with-param name="prmElem" select="."/>
+                    </xsl:call-template>                
+                </xsl:for-each>
+            </w:p>
+        </xsl:for-each-group>
+    </xsl:template>
+    
+    <!-- 
+     function:	Generate bodydiv key for grouping
+     param:		prmBodyDiv
+     return:	xs:integer
+     note:		 
+     -->
+    <xsl:function name="ahf:genGroupKeyForCoverBodydiv" as="xs:integer">
+        <xsl:param name="prmBodyDiv" as="element()"/>
+        <xsl:variable name="absolutePositionCount" as="xs:integer*">
+            <xsl:for-each select="$prmBodyDiv|$prmBodyDiv/following-sibling::*[contains(@class,' topic/bodydiv ')]">
+                <xsl:sequence select="ahf:isAbsoluteBodyDiv(.)"/>
+            </xsl:for-each>        
+        </xsl:variable>
+        <xsl:sequence select="xs:integer(sum($absolutePositionCount))"/>
+    </xsl:function>
+    
+    <!-- 
+     function:	Return bodydiv has absolute-position="absolute" as xs:integer
+     param:		prmBodyDiv
+     return:	xs:integer (1: absolute, 0: not absolute)
+     note:		Bodydiv is assumed as fo:block-container 
+     -->
+    <xsl:function name="ahf:isAbsoluteBodyDiv" as="xs:integer">
+        <xsl:param name="prmBodyDiv" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="ahf:hasFoProperty($prmBodyDiv,'absolute-position','absolute')">
+                <xsl:sequence select="1"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="0"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
     
     <!-- 
      function:	bodydiv processing
