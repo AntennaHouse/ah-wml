@@ -150,22 +150,33 @@ URL : http://www.antennahouse.com/
      return:	See probe
      note:		Group bodydiv (assumed as fo:block-container) by it is position="absolute" or not.
                 Generate w:p for each position="auto" bodydiv because the text-tbox is generated as inline.
+                The left indentation of inline text-box is expressed w:ind element in w:pPr element in WML.
      -->
     <xsl:template match="*[contains(@class,' topic/body ')]" mode="MODE_MAKE_COVER">
         <xsl:param name="prmTopicRef" as="element()" tunnel="yes" required="yes"/>
         <xsl:for-each-group select="*[contains(@class,' topic/bodyDiv ')]" group-adjacent="ahf:genGroupKeyForCoverBodydiv(.)">
             <w:p>
-                <xsl:variable name="lastBodyDiv" as="element()" select="current-group()[last()]"/>
-                <xsl:variable name="startIndent" as="xs:string?" select="ahf:getFoPropertyValue($lastBodyDiv,'start-indent')"/>
+                <xsl:variable name="lastBodyDiv" as="element()" select="current-group()[last()][not(ahf:hasFoProperty(.,'absolute-position','absolute'))]"/>
+                <xsl:variable name="startIndent" as="xs:string?" select="if (exists($lastBodyDiv)) then ahf:getFoPropertyValue($lastBodyDiv,'start-indent') else ()"/>
                 <xsl:if test="exists($startIndent)">
                     <w:pPr>
-                        <xsl:copy-of select="ahf:convertFoExpToUnitValue($startIndent,'twip')"/>
+                        <w:ind w:left="{ahf:convertFoExpToUnitValue($startIndent,'twip')}"/>
                     </w:pPr>
                 </xsl:if>
                 <xsl:for-each select="current-group()">
-                    <xsl:call-template name="genAbsTextBoxForCover">
-                        <xsl:with-param name="prmElem" select="."/>
-                    </xsl:call-template>                
+                    <xsl:variable name="bodyDiv" as="element()" select="."/>
+                    <xsl:choose>
+                        <xsl:when test="ahf:isAbsoluteBodyDiv($bodyDiv)">
+                            <xsl:call-template name="genAbsTextBoxForCover">
+                                <xsl:with-param name="prmElem" select="."/>
+                            </xsl:call-template>                
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:call-template name="genInlineTextBoxForCover">
+                                <xsl:with-param name="prmElem" select="."/>
+                            </xsl:call-template>                
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:for-each>
             </w:p>
         </xsl:for-each-group>
@@ -179,12 +190,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:function name="ahf:genGroupKeyForCoverBodydiv" as="xs:integer">
         <xsl:param name="prmBodyDiv" as="element()"/>
-        <xsl:variable name="absolutePositionCount" as="xs:integer*">
-            <xsl:for-each select="$prmBodyDiv|$prmBodyDiv/following-sibling::*[contains(@class,' topic/bodydiv ')]">
-                <xsl:sequence select="ahf:isAbsoluteBodyDiv(.)"/>
-            </xsl:for-each>        
-        </xsl:variable>
-        <xsl:sequence select="xs:integer(sum($absolutePositionCount))"/>
+        <xsl:sequence select="xs:integer(sum(ahf:isAbsoluteBodyDiv($prmBodyDiv) + $prmBodyDiv/following-sibling::*[contains(@class,' topic/bodydiv ')]/ahf:isAbsoluteBodyDiv(.)))"/>
     </xsl:function>
     
     <!-- 
@@ -204,20 +210,6 @@ URL : http://www.antennahouse.com/
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
-    
-    <!-- 
-     function:	bodydiv processing
-     param:		prmTopicRef
-     return:	See probe
-     note:		bodydiv is assumed as container that should generate absolute positioning fo:block-container in PDF.
-                In .docx processing this template generates absolute positioned text-box. 
-     -->
-    <xsl:template match="*[contains(@class,' topic/bodydiv ')]" mode="MODE_MAKE_COVER">
-        <xsl:param name="prmTopicRef" as="element()" tunnel="yes" required="yes"/>
-        <xsl:call-template name="genAbsTextBoxForCover">
-            <xsl:with-param name="prmElem" select="."/>
-        </xsl:call-template>                
-    </xsl:template>
     
     <!-- 
      function:	generate absolute positioned text box
@@ -293,6 +285,80 @@ URL : http://www.antennahouse.com/
         </w:r>
     </xsl:template>
 
+    <!-- 
+     function:	generate inline positioned text box
+     param:		prmElem (bodyDiv)
+     return:	See probe
+     note:		bodydiv is assumed as container that should generate stacked positioning fo:block-container in PDF.
+                In .docx processing this template generates inline positioned text-box. 
+     -->
+    <xsl:template name="genInlineTextBoxForCover" as="node()*">
+        <xsl:param name="prmElem" as="element()" required="yes"/>
+        <xsl:variable name="foProp" as="attribute()*" select="ahf:getFoProperty($prmElem)"/>
+        <xsl:variable name="textBoxSpec" as="array(xs:integer)" select="ahf:getTextBoxSpec($foProp)"/>
+        <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId($prmElem)"/>
+        <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
+        <xsl:variable name="frame" as="element()">
+            <xsl:variable name="alwaysDrawFrame" as="xs:boolean">
+                <xsl:call-template name="getVarValueAsBoolean">
+                    <xsl:with-param name="prmVarName" select="'CoverTextBoxSetFrame'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$alwaysDrawFrame">
+                    <xsl:call-template name="getWmlObject">
+                        <xsl:with-param name="prmObjName" select="'wmlCoverTextBoxFrame'"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="$cElemNull"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="zIndex" as="xs:integer">
+            <xsl:choose>
+                <xsl:when test="$foProp[name() eq 'z-index']">
+                    <xsl:variable name="tempZIndex" as="xs:string" select="string($foProp[name() eq 'z-index'])"/>
+                    <xsl:choose>
+                        <xsl:when test="$tempZIndex castable as xs:integer">
+                            <xsl:sequence select="xs:integer($tempZIndex) + 65536"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="1"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="1"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="background" as="xs:string">
+            <xsl:variable name="tempBackground" as="xs:boolean" select="ahf:getOutputClass($prmElem) = 'background'"/>
+            <xsl:sequence select="if ($tempBackground) then '1' else '0'"/>
+        </xsl:variable>
+        <xsl:variable name="txbxContent" as="document-node()">
+            <xsl:document>
+                <xsl:apply-templates select="$prmElem/*">
+                    <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
+                    <xsl:with-param name="prmExtraIndent" tunnel="yes" select="0"/>
+                    <xsl:with-param name="prmWidthConstraintInEmu" tunnel="yes" as="xs:integer" select="$textBoxSpec(3)"/>
+                </xsl:apply-templates>
+            </xsl:document>
+        </xsl:variable>
+        <!--Generate text-box-->
+        <xsl:message select="'$frame=',$frame"></xsl:message>
+        <w:r>
+            <xsl:call-template name="getWmlObjectReplacing">
+                <xsl:with-param name="prmObjName" select="'wmlCoverTextBox'"/>
+                <xsl:with-param name="prmSrc" select="('%pos-x','%pos-y','%width','%height','%id','%zindex','%background','node:frame','node:txbxContent')"/>
+                <xsl:with-param name="prmDst"
+                    select="(string($textBoxSpec(1)), string($textBoxSpec(2)), string($textBoxSpec(3)), string($textBoxSpec(4)), string($drawingId),string($zIndex),$background, $frame, $txbxContent)"
+                />
+            </xsl:call-template>
+        </w:r>
+    </xsl:template>
+    
     <!-- 
      function:	Get text-box property top, left, width, height in EMU unit
      param:		prmFoProp
