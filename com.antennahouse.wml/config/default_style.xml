@@ -2120,7 +2120,6 @@ URL : http://www.antennahouse.com/
              a:solidFill was removed because text-box container should not have any fill.
              It should be transparent.
          -->
-        <variable name="CoverTextBoxSetFrame">no</variable>
         <wml-object name="wmlCoverTextBox">
             <w:drawing>
                 <wp:anchor distT="0" distB="0"
@@ -2139,10 +2138,8 @@ URL : http://www.antennahouse.com/
                     <wp:wrapSquare wrapText="bothSides"/>
                     <wp:docPr id="%id" name="Text Box %id"/>
                     <wp:cNvGraphicFramePr/>
-                    <a:graphic
-                        xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
-                        <a:graphicData
-                            uri="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">
+                    <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+                        <a:graphicData uri="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">
                             <wps:wsp>
                                 <wps:cNvSpPr txBox="1"/>
                                 <wps:spPr>
@@ -2179,6 +2176,7 @@ URL : http://www.antennahouse.com/
         </wml-object>
         
         <!-- Cover text box frame (for debug usage) -->
+        <variable name="CoverTextBoxSetFrame">no</variable>
         <variable name="CoverTextBoxFrameWidth">0.75pt</variable>
         <variable name="CoverTextBoxFrameColor">black</variable>
         <wml-object name="wmlCoverTextBoxFrame">
@@ -2192,11 +2190,10 @@ URL : http://www.antennahouse.com/
         <!-- Inline text box for cover -->
         <wml-object name="wmlCoverInlineTextBox">
             <w:drawing>
-                <wp:inline distT="0" distB="0" distL="0"
-                    distR="0">
-                    <wp:extent cx="3949700" cy="4787900"/>
+                <wp:inline distT="0" distB="0" distL="0" distR="0">
+                    <wp:extent cx="%width" cy="%height"/>
                     <wp:effectExtent l="0" t="0" r="12700" b="12700"/>
-                    <wp:docPr id="217" name="テキスト ボックス 2"/>
+                    <wp:docPr id="%id" name="Inline Text Box %1"/>
                     <wp:cNvGraphicFramePr>
                         <a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"/>
                     </wp:cNvGraphicFramePr>
@@ -2209,14 +2206,12 @@ URL : http://www.antennahouse.com/
                                 <wps:spPr bwMode="auto">
                                     <a:xfrm>
                                         <a:off x="0" y="0"/>
-                                        <a:ext cx="3949700" cy="4787900"/>
+                                        <a:ext cx="%width" cy="%height"/>
                                     </a:xfrm>
                                     <a:prstGeom prst="rect">
                                         <a:avLst/>
                                     </a:prstGeom>
-                                    <a:solidFill>
-                                        <a:srgbClr val="FFFFFF"/>
-                                    </a:solidFill>
+                                    <ahr:frame/>
                                     <a:ln w="9525">
                                         <a:solidFill>
                                             <a:srgbClr val="000000"/>
@@ -2228,15 +2223,11 @@ URL : http://www.antennahouse.com/
                                 </wps:spPr>
                                 <wps:txbx>
                                     <w:txbxContent>
-                                        <w:p>
-                                            <w:r>
-                                                <w:t>Text</w:t>
-                                            </w:r>
-                                        </w:p>
+                                        <ahr:txbxContent/>
                                     </w:txbxContent>
                                 </wps:txbx>
                                 <wps:bodyPr rot="0" vert="horz" wrap="square"
-                                    lIns="91440" tIns="45720" rIns="91440" bIns="45720"
+                                    lIns="0" tIns="0" rIns="0" bIns="0"
                                     anchor="t" anchorCtr="0">
                                     <a:noAutofit/>
                                 </wps:bodyPr>
@@ -2246,7 +2237,19 @@ URL : http://www.antennahouse.com/
                 </wp:inline>
             </w:drawing>
         </wml-object>
-        
+
+        <!-- Cover inline text-box frame (for debug usage) -->
+        <variable name="CoverInlineTextBoxSetFrame">no</variable>
+        <variable name="CoverInlineTextBoxFrameWidth">0.75pt</variable>
+        <variable name="CoverInlineTextBoxFrameColor">black</variable>
+        <wml-object name="wmlCoverInlineTextBoxFrame">
+            <a:ln w="{ahf:toEmuStr('$CoverInlineTextBoxFrameWidth')}">
+                <a:solidFill>
+                    <a:prstClr val="$CoverInlineTextBoxFrameColor"/>
+                </a:solidFill>
+            </a:ln>
+        </wml-object>
+
     </wml-objects>
 
     <!-- DO NOT REMOVE! Style customize inclusion -->

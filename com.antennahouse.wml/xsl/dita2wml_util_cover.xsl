@@ -41,20 +41,13 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmTopicRef" as="element()?"/>
         <xsl:sequence select="not(ahf:isCoverTopicRef($prmTopicRef))"/>
     </xsl:function>
-    
-    <xsl:function name="ahf:hasCover" as="xs:boolean">
-        <xsl:param name="prmMap" as="element()"/>
-        <xsl:choose>
-            <xsl:when test="$isBookMap">
-                <xsl:sequence select="exists($map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)]) or 
-                    exists($map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)])"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="exists($map/*[contains(@class, ' map/topicref ')][ahf:isCoverTopicRef(.)])"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:function>
 
+    <!-- 
+     function:	Return map has the topicref is for cover 
+     param:		prmMap
+     return:	xs:boolean
+     note:		
+     -->
     <xsl:function name="ahf:hasCoverN" as="xs:boolean">
         <xsl:param name="prmMap" as="element()"/>
         <xsl:param name="prmCoverN" as="xs:string"/>

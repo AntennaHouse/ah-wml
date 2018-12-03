@@ -17,7 +17,7 @@ URL : http://www.antennahouse.com/
     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" 
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     xmlns:array="http://www.w3.org/2005/xpath-functions/array"
-    exclude-result-prefixes="xs ahf array"
+    exclude-result-prefixes="xs ahf array map"
     version="3.0">
 
     <!-- Parameter For Debug -->
@@ -29,7 +29,8 @@ URL : http://www.antennahouse.com/
     <xsl:variable name="cTxtBoxDefaultLeft"   as="xs:integer" select="0"/>
     <xsl:variable name="cTxtBoxDefaultWidth"  as="xs:integer" select="ahf:toEmu($pPaperWidth)"/>
     <xsl:variable name="cTxtBoxDefaultHeight" as="xs:integer" select="ahf:toEmu($pPaperHeight)"/>
-
+    <xsl:variable name="cInlineTxtBoxDefaultHeight" as="xs:integer" select="xs:integer(round(ahf:toEmu($pPaperHeight) div 2))"/>
+    
     <!-- 
      function:	Generate cover N
      param:		prmMap, prmCoverN (Sequence of "coverN")
@@ -44,9 +45,9 @@ URL : http://www.antennahouse.com/
                 <xsl:for-each select="$prmCoverN">
                     <xsl:variable name="coverN" as="xs:string" select="."/>
                     <xsl:choose>
-                        <xsl:when test="ahf:hasCoverN($map,$coverN)">
-                            <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
-                            <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                        <xsl:when test="ahf:hasCoverN($prmMap,$coverN)">
+                            <xsl:apply-templates select="$prmMap/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                            <xsl:apply-templates select="$prmMap/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
                             <xsl:call-template name="genSectprForCover">
                                 <xsl:with-param name="prmCoverN" select="$coverN"/>
                             </xsl:call-template>
@@ -61,8 +62,8 @@ URL : http://www.antennahouse.com/
                 <xsl:for-each select="$prmCoverN">
                     <xsl:variable name="coverN" as="xs:string" select="."/>
                     <xsl:choose>
-                        <xsl:when test="ahf:hasCoverN($map,$coverN)">
-                            <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                        <xsl:when test="ahf:hasCoverN($prmMap,$coverN)">
+                            <xsl:apply-templates select="$prmMap/*[contains(@class, ' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
                             <xsl:call-template name="genSectprForCover">
                                 <xsl:with-param name="prmCoverN" select="$coverN"/>
                             </xsl:call-template>
@@ -128,12 +129,9 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="topicContent"  as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
         <xsl:choose>
             <xsl:when test="exists($topicContent)">
-                <w:p>
-                    <xsl:apply-templates select="$topicContent/*[contains(@class,' topic/body ')]" mode="MODE_MAKE_COVER">
-                        <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
-                    </xsl:apply-templates>
-                </w:p>
-                <!-- FIX ME!: needs section break for cover here! -->
+                <xsl:apply-templates select="$topicContent/*[contains(@class,' topic/body ')]" mode="#current">
+                    <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
+                </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="warningContinue">
@@ -154,13 +152,27 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:template match="*[contains(@class,' topic/body ')]" mode="MODE_MAKE_COVER">
         <xsl:param name="prmTopicRef" as="element()" tunnel="yes" required="yes"/>
-        <xsl:for-each-group select="*[contains(@class,' topic/bodyDiv ')]" group-adjacent="ahf:genGroupKeyForCoverBodydiv(.)">
+        <xsl:for-each-group select="*[contains(@class,' topic/bodydiv ')]" group-adjacent="ahf:genGroupKeyForCoverBodydiv(.)">
             <w:p>
-                <xsl:variable name="lastBodyDiv" as="element()" select="current-group()[last()][not(ahf:hasFoProperty(.,'absolute-position','absolute'))]"/>
-                <xsl:variable name="startIndent" as="xs:string?" select="if (exists($lastBodyDiv)) then ahf:getFoPropertyValue($lastBodyDiv,'start-indent') else ()"/>
-                <xsl:if test="exists($startIndent)">
+                <xsl:variable name="lastStackBodyDiv" as="element()?" select="current-group()[last()][not(ahf:hasFoProperty(.,'absolute-position','absolute'))]"/>
+                <xsl:variable name="startIndent" as="xs:string?" select="if (exists($lastStackBodyDiv)) then ahf:getFoPropertyValue($lastStackBodyDiv,'start-indent') else ()"/>
+                <xsl:variable name="spaceBefore" as="xs:string?" select="if (exists($lastStackBodyDiv)) then ahf:getFoPropertyValue($lastStackBodyDiv,'space-before') else ()"/>
+                <xsl:variable name="spaceAfter"  as="xs:string?" select="if (exists($lastStackBodyDiv)) then ahf:getFoPropertyValue($lastStackBodyDiv,'space-after') else ()"/>
+                <xsl:if test="exists($lastStackBodyDiv) and (exists($startIndent) or exists($spaceBefore))">
                     <w:pPr>
-                        <w:ind w:left="{ahf:convertFoExpToUnitValue($startIndent,'twip')}"/>
+                        <xsl:if test="exists($spaceBefore) or exists($spaceAfter)">
+                            <w:spacing w:before="{ahf:convertFoExpToUnitValue($spaceBefore,'twip')}">
+                                <xsl:if test="exists($spaceBefore)">
+                                    <xsl:attribute name="w:before" select="string(ahf:convertFoExpToUnitValue($spaceBefore,'twip'))"/>
+                                </xsl:if>
+                                <xsl:if test="exists($spaceAfter)">
+                                    <xsl:attribute name="w:after" select="string(ahf:convertFoExpToUnitValue($spaceAfter,'twip'))"/>
+                                </xsl:if>
+                            </w:spacing>
+                        </xsl:if>
+                        <xsl:if test="exists($startIndent)">
+                            <w:ind w:left="{ahf:convertFoExpToUnitValue($startIndent,'twip')}"/>
+                        </xsl:if>
                     </w:pPr>
                 </xsl:if>
                 <xsl:for-each select="current-group()">
@@ -168,12 +180,12 @@ URL : http://www.antennahouse.com/
                     <xsl:choose>
                         <xsl:when test="ahf:isAbsoluteBodyDiv($bodyDiv)">
                             <xsl:call-template name="genAbsTextBoxForCover">
-                                <xsl:with-param name="prmElem" select="."/>
+                                <xsl:with-param name="prmElem" select="$bodyDiv"/>
                             </xsl:call-template>                
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:call-template name="genInlineTextBoxForCover">
-                                <xsl:with-param name="prmElem" select="."/>
+                                <xsl:with-param name="prmElem" select="$bodyDiv"/>
                             </xsl:call-template>                
                         </xsl:otherwise>
                     </xsl:choose>
@@ -186,31 +198,49 @@ URL : http://www.antennahouse.com/
      function:	Generate bodydiv key for grouping
      param:		prmBodyDiv
      return:	xs:integer
-     note:		 
+     note:		Return following-sibling stack bodydiv count. (stack bodydiv = not absolutely positioned bodydiv)  
      -->
     <xsl:function name="ahf:genGroupKeyForCoverBodydiv" as="xs:integer">
         <xsl:param name="prmBodyDiv" as="element()"/>
-        <xsl:sequence select="xs:integer(sum(ahf:isAbsoluteBodyDiv($prmBodyDiv) + $prmBodyDiv/following-sibling::*[contains(@class,' topic/bodydiv ')]/ahf:isAbsoluteBodyDiv(.)))"/>
+        <xsl:sequence select="xs:integer(sum((ahf:stackBodyDivCount($prmBodyDiv), $prmBodyDiv/following-sibling::*[contains(@class,' topic/bodydiv ')]/ahf:stackBodyDivCount(.))))"/>
     </xsl:function>
     
     <!-- 
-     function:	Return bodydiv has absolute-position="absolute" as xs:integer
+     function:	Return bodydiv has absolute-position≠"absolute" as xs:integer
      param:		prmBodyDiv
-     return:	xs:integer (1: absolute, 0: not absolute)
+     return:	xs:integer (0: absolute, 1: not absolute)
      note:		Bodydiv is assumed as fo:block-container 
      -->
-    <xsl:function name="ahf:isAbsoluteBodyDiv" as="xs:integer">
+    <xsl:function name="ahf:stackBodyDivCount" as="xs:integer">
         <xsl:param name="prmBodyDiv" as="element()"/>
         <xsl:choose>
             <xsl:when test="ahf:hasFoProperty($prmBodyDiv,'absolute-position','absolute')">
-                <xsl:sequence select="1"/>
+                <xsl:sequence select="0"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:sequence select="0"/>
+                <xsl:sequence select="1"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
-    
+
+    <!-- 
+     function:	Return bodydiv has absolute-position="absolute"
+     param:		prmBodyDiv
+     return:	xs:boolean
+     note:		Bodydiv is assumed as fo:block-container 
+     -->
+    <xsl:function name="ahf:isAbsoluteBodyDiv" as="xs:boolean">
+        <xsl:param name="prmBodyDiv" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="ahf:hasFoProperty($prmBodyDiv,'absolute-position','absolute')">
+                <xsl:sequence select="true()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="false()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
     <!-- 
      function:	generate absolute positioned text box
      param:		prmElem (bodyDiv)
@@ -301,41 +331,19 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="frame" as="element()">
             <xsl:variable name="alwaysDrawFrame" as="xs:boolean">
                 <xsl:call-template name="getVarValueAsBoolean">
-                    <xsl:with-param name="prmVarName" select="'CoverTextBoxSetFrame'"/>
+                    <xsl:with-param name="prmVarName" select="'CoverInlineTextBoxSetFrame'"/>
                 </xsl:call-template>
             </xsl:variable>
             <xsl:choose>
                 <xsl:when test="$alwaysDrawFrame">
                     <xsl:call-template name="getWmlObject">
-                        <xsl:with-param name="prmObjName" select="'wmlCoverTextBoxFrame'"/>
+                        <xsl:with-param name="prmObjName" select="'wmlCoverInlineTextBoxFrame'"/>
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:sequence select="$cElemNull"/>
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="zIndex" as="xs:integer">
-            <xsl:choose>
-                <xsl:when test="$foProp[name() eq 'z-index']">
-                    <xsl:variable name="tempZIndex" as="xs:string" select="string($foProp[name() eq 'z-index'])"/>
-                    <xsl:choose>
-                        <xsl:when test="$tempZIndex castable as xs:integer">
-                            <xsl:sequence select="xs:integer($tempZIndex) + 65536"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:sequence select="1"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="1"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="background" as="xs:string">
-            <xsl:variable name="tempBackground" as="xs:boolean" select="ahf:getOutputClass($prmElem) = 'background'"/>
-            <xsl:sequence select="if ($tempBackground) then '1' else '0'"/>
         </xsl:variable>
         <xsl:variable name="txbxContent" as="document-node()">
             <xsl:document>
@@ -350,11 +358,9 @@ URL : http://www.antennahouse.com/
         <xsl:message select="'$frame=',$frame"></xsl:message>
         <w:r>
             <xsl:call-template name="getWmlObjectReplacing">
-                <xsl:with-param name="prmObjName" select="'wmlCoverTextBox'"/>
-                <xsl:with-param name="prmSrc" select="('%pos-x','%pos-y','%width','%height','%id','%zindex','%background','node:frame','node:txbxContent')"/>
-                <xsl:with-param name="prmDst"
-                    select="(string($textBoxSpec(1)), string($textBoxSpec(2)), string($textBoxSpec(3)), string($textBoxSpec(4)), string($drawingId),string($zIndex),$background, $frame, $txbxContent)"
-                />
+                <xsl:with-param name="prmObjName" select="'wmlCoverInlineTextBox'"/>
+                <xsl:with-param name="prmSrc" select="('%width','%height','%id','node:frame','node:txbxContent')"/>
+                <xsl:with-param name="prmDst" select="(string($textBoxSpec(1)), string($textBoxSpec(2)), string($drawingId), $frame, $txbxContent)"/>
             </xsl:call-template>
         </w:r>
     </xsl:template>
@@ -441,7 +447,55 @@ URL : http://www.antennahouse.com/
         </xsl:variable>
         <xsl:sequence select="[$left,$top,$width,$height]"/>
     </xsl:function>
-    
+
+    <!-- 
+     function:	Get inline text-box property width, height in EMU unit
+     param:		prmFoProp
+     return:	attribute()+
+     note:		Return appropriate initial value if not specified.
+                The most important problem is height. The stylesheet cannot automatically determine this value.
+                It is recommended to specify height in Word output.
+     -->
+    <xsl:function name="ahf:getInlineTextBoxSpec" as="array(xs:integer)">
+        <xsl:param name="prmFoProps" as="attribute()+"/>
+        <!-- Calculate EMU value from FO property -->
+        <xsl:variable name="propStartIndent" as="xs:integer?" select="ahf:convertFoPropToEmu($prmFoProps[name() eq 'start-indent'][1])"/>
+        <xsl:variable name="propEndIndent"   as="xs:integer?" select="ahf:convertFoPropToEmu($prmFoProps[name() eq 'end-indent'][1])"/>
+        <xsl:variable name="propWidth"       as="xs:integer?" select="ahf:convertFoPropToEmu($prmFoProps[name() eq 'width'][1])"/>
+        <xsl:variable name="propHeight"      as="xs:integer?" select="ahf:convertFoPropToEmu($prmFoProps[name() eq 'height'][1])"/>
+        <!-- Select width, height -->
+        <xsl:variable name="width" as="xs:integer">
+            <xsl:choose>
+                <xsl:when test="exists($propWidth)">
+                    <xsl:sequence select="$propWidth"/>
+                </xsl:when>
+                <xsl:when test="exists($propStartIndent) and exists($propEndIndent)">
+                    <xsl:sequence select="round(ahf:toEmu($pPaperWidth) - $propStartIndent - $propEndIndent)"/>
+                </xsl:when>
+                <xsl:when test="exists($propStartIndent) and empty($propEndIndent)">
+                    <xsl:sequence select="round(ahf:toEmu($pPaperWidth) - $propStartIndent)"/>
+                </xsl:when>
+                <xsl:when test="empty($propStartIndent) and exists($propEndIndent)">
+                    <xsl:sequence select="round(ahf:toEmu($pPaperWidth) - $propEndIndent)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="round(ahf:toEmu($pPaperWidth))"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="height" as="xs:integer">
+            <xsl:choose>
+                <xsl:when test="exists($propHeight)">
+                    <xsl:sequence select="$propHeight"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="$cInlineTxtBoxDefaultHeight"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:sequence select="[$width,$height]"/>
+    </xsl:function>
+
     <!-- 
      function:	Convert expression to EMU value
      param:		prmFoProp
