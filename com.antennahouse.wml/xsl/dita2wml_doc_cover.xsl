@@ -317,7 +317,7 @@ URL : http://www.antennahouse.com/
 
     <!-- 
      function:	generate inline positioned text box
-     param:		prmElem (bodyDiv)
+     param:		prmElem (bodydiv)
      return:	See probe
      note:		bodydiv is assumed as container that should generate stacked positioning fo:block-container in PDF.
                 In .docx processing this template generates inline positioned text-box. 
@@ -325,7 +325,7 @@ URL : http://www.antennahouse.com/
     <xsl:template name="genInlineTextBoxForCover" as="node()*">
         <xsl:param name="prmElem" as="element()" required="yes"/>
         <xsl:variable name="foProp" as="attribute()*" select="ahf:getFoProperty($prmElem)"/>
-        <xsl:variable name="textBoxSpec" as="array(xs:integer)" select="ahf:getTextBoxSpec($foProp)"/>
+        <xsl:variable name="textBoxSpec" as="array(xs:integer)" select="ahf:getInlineTextBoxSpec($foProp)"/>
         <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId($prmElem)"/>
         <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
         <xsl:variable name="frame" as="element()">
@@ -350,7 +350,7 @@ URL : http://www.antennahouse.com/
                 <xsl:apply-templates select="$prmElem/*">
                     <xsl:with-param name="prmIndentLevel" tunnel="yes" select="0"/>
                     <xsl:with-param name="prmExtraIndent" tunnel="yes" select="0"/>
-                    <xsl:with-param name="prmWidthConstraintInEmu" tunnel="yes" as="xs:integer" select="$textBoxSpec(3)"/>
+                    <xsl:with-param name="prmWidthConstraintInEmu" tunnel="yes" as="xs:integer" select="$textBoxSpec(1)"/>
                 </xsl:apply-templates>
             </xsl:document>
         </xsl:variable>
