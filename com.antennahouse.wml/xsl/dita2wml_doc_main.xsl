@@ -39,7 +39,7 @@ URL : http://www.antennahouse.com/
             <w:body>
                 <!-- Make cover -->
                 <xsl:choose>
-                    <xsl:when test="ahf:hasCover12($map)">
+                    <xsl:when test="ahf:hasCover12($map) and $pSupportCover">
                         <xsl:call-template name="genCoverN">
                             <xsl:with-param name="prmMap" select="$map"/>
                             <xsl:with-param name="prmCoverN" select="($cCover1,$cCover2)"/>
@@ -65,7 +65,7 @@ URL : http://www.antennahouse.com/
                 </xsl:choose>
 
                 <!-- Make cover -->
-                <xsl:if test="ahf:hasCover34($map)">
+                <xsl:if test="ahf:hasCover34($map) and $pSupportCover">
                     <xsl:call-template name="genCoverN">
                         <xsl:with-param name="prmMap" select="$map"/>
                         <xsl:with-param name="prmCoverN" select="($cCover3,$cCover4)"/>

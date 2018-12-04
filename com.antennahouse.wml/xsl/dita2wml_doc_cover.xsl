@@ -20,10 +20,6 @@ URL : http://www.antennahouse.com/
     exclude-result-prefixes="xs ahf array map"
     version="3.0">
 
-    <!-- Parameter For Debug -->
-    <xsl:variable name="PRM_SUPPORT_COVER" as="xs:string" select="$cNo"/>
-    <xsl:variable name="pSupportCover" as="xs:boolean" select="$PRM_SUPPORT_COVER eq $cYes"/>
-
     <!-- Text Box defaults -->
     <xsl:variable name="cTxtBoxDefaultTop"    as="xs:integer" select="0"/>
     <xsl:variable name="cTxtBoxDefaultLeft"   as="xs:integer" select="0"/>

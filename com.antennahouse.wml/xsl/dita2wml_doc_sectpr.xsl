@@ -88,7 +88,9 @@ URL : http://www.antennahouse.com/
                 <xsl:variable name="content" as="xs:integer" select="$sectInfo[5]"/>
                 <xsl:variable name="colsep" as="xs:integer?" select="$sectInfo[6]"/>
                 <xsl:variable name="seq" as="xs:integer" select="$sectInfo[7]"/>
-                <xsl:variable name="sectType" as="xs:string" select="ahf:getSectTypeFromBreak($break)"/>
+                <xsl:variable name="isFirst" as="xs:boolean" select="$seq eq 1"/>
+                <xsl:variable name="isLast" as="xs:boolean" select="$nextCol eq 0"/>
+                <xsl:variable name="sectType" as="xs:string" select="ahf:getSectTypeFromBreakAndPosition($break,$isFirst)"/>
                 <xsl:choose>
                     <xsl:when test="$prmElem/self::*[contains(@class, ' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]">
                         <!-- Restore sect info -->
@@ -104,8 +106,6 @@ URL : http://www.antennahouse.com/
                     </xsl:when>
                     <xsl:when test="$prmElem/self::*[contains(@class, ' topic/body ')][$currentCol gt 1][exists(descendant::*[contains(@class, ' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)])][exists(following-sibling::*[contains(@class, ' topic/related-links ')][ahf:isEffectiveRelatedLinks(.)])]"/>
                     <xsl:otherwise>
-                        <xsl:variable name="isFirst" as="xs:boolean" select="$seq eq 1"/>
-                        <xsl:variable name="isLast" as="xs:boolean" select="$nextCol eq 0"/>
                         <xsl:variable name="hdrFtrReference" as="node()" select="ahf:genHdrFtrReference($isFirst,$content)"/>
                         <xsl:variable name="pgNumType" as="node()" select="ahf:genPgNumType($isFirst,$content)"/>
                         <xsl:choose>
@@ -135,12 +135,13 @@ URL : http://www.antennahouse.com/
     </xsl:template>
     
     <!-- 
-     function:	Generate @type attribute of w:sectPr/w:type from break information
-     param:		  prmBreakInfo
+     function:	Generate @type attribute of w:sectPr/w:type from break & position information
+     param:		  prmBreakInfo, prmIsFirst
      return:	  xs:string
      note:		  0 (auto)   ⇒ continuous
                 1 (page)   ⇒ nextPage
                 2 (column) ⇒ nextColumn
+                If document has cover 1 or 2, the first section must begin with $sectTypeNextPage.
     -->
     <xsl:variable name="sectTypeContinuous" as="xs:string" select="'continuous'"/>
     <xsl:variable name="sectTypeNextPage" as="xs:string" select="'nextPage'"/>
@@ -148,9 +149,13 @@ URL : http://www.antennahouse.com/
     <xsl:variable name="sectTypeEvenPage" as="xs:string" select="'evenPage'"/>
     <xsl:variable name="sectTypeOddPage" as="xs:string" select="'oddPage'"/>
     
-    <xsl:function name="ahf:getSectTypeFromBreak" as="xs:string">
+    <xsl:function name="ahf:getSectTypeFromBreakAndPosition" as="xs:string">
         <xsl:param name="prmBreakInfo" as="xs:integer"/>
+        <xsl:param name="prmIsFirst" as="xs:boolean"/>
         <xsl:choose>
+            <xsl:when test="$prmIsFirst and ahf:hasCover12($map)">
+                <xsl:sequence select="$sectTypeNextPage"/>
+            </xsl:when>
             <xsl:when test="$prmBreakInfo eq $cBreakAuto">
                 <xsl:sequence select="$sectTypeContinuous"/>
             </xsl:when>

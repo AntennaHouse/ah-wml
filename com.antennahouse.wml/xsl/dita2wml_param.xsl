@@ -109,5 +109,9 @@ E-mail : info@antennahouse.com
     <xsl:param name="PRM_DEBUG_NO_TEXT_MAP" as="xs:string" select="$cNo"/>
     <xsl:variable name="pDebugNoTextmap" as="xs:boolean" select="$PRM_DEBUG_NO_TEXT_MAP eq $cYes"/>
     <xsl:variable name="pDebugGenTextmap" as="xs:boolean" select="not($pDebugNoTextmap)"/>
+
+    <!-- Cover generation support -->
+    <xsl:variable name="PRM_SUPPORT_COVER" as="xs:string" select="$cYes"/>
+    <xsl:variable name="pSupportCover" as="xs:boolean" select="$PRM_SUPPORT_COVER eq $cYes"/>
     
 </xsl:stylesheet>
