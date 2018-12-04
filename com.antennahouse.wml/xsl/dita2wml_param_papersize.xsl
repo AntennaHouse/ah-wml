@@ -16,13 +16,13 @@ E-mail : info@antennahouse.com
     exclude-result-prefixes="#all">
 
     <!-- Paper size
-         2015-04-23 t.makita
+         Set base paper size to paper size if not specified.
      -->
     <xsl:param name="PRM_PAPER_SIZE" required="no" as="xs:string" select="'Letter'"/>
     <xsl:variable name="pPaperSize" as="xs:string" select="$PRM_PAPER_SIZE"/>
 
-    <xsl:param name="PRM_BASE_PAPER_SIZE" required="no" as="xs:string" select="'Letter'"/>
-    <xsl:variable name="pBasePaperSize" as="xs:string" select="$PRM_BASE_PAPER_SIZE"/>
+    <xsl:param name="PRM_BASE_PAPER_SIZE" required="no" as="xs:string" select="''"/>
+    <xsl:variable name="pBasePaperSize" as="xs:string" select="if (string($PRM_BASE_PAPER_SIZE)) then $PRM_BASE_PAPER_SIZE else $pPaperSize"/>
 
     <xsl:param name="cPaperInfo" as="xs:string+">
         <xsl:call-template name="getVarValueAsStringSequence">
