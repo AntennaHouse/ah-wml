@@ -7,7 +7,7 @@
     xmlns:axf="http://www.antennahouse.com/names/XSL/Extensions"
     xmlns:ahf="http://www.antennahouse.com/names/XSLT/Functions/Document"
     xmlns:ahs="http://www.antennahouse.com/names/XSLT/Document/Layout"
-    exclude-result-prefixes="xs ahf fo axf">
+    exclude-result-prefixes="xs ahf fo axf ahs">
 
     <!--
          function:	Get FO property name
@@ -103,7 +103,7 @@
                         <!--"castable as xs:Name" can be used only in Saxon PE or EE.
                          -->
                         <xsl:when test="$propName castable as xs:Name">
-                            <xsl:attribute name="{$propName}" select="$propValue"/>
+                            <xsl:attribute name="{xs:Name($propName)}" select="$propValue"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:call-template name="warningContinue">
