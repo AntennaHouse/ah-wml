@@ -18,6 +18,68 @@
     -->
     <xsl:function name="ahf:foPropToPprChild" as="element()*">
         <xsl:param name="prmFoProp" as="attribute()*"/>
+        <!-- keep-next.within-page/column -->
+        <xsl:if test="$prmFoProp[name() = ('keep-next.within-page','keep-next.within-column')][last()][string(.) eq 'always']">
+            <w:keepNext w:val="true"/>
+        </xsl:if>
+        
+        <!-- keep-together.within-page/column -->
+        <xsl:if test="$prmFoProp[name() eq 'keep-together.within-page'][last()][string(.) eq 'always']">
+            <w:keepLines w:val="true"/>
+        </xsl:if>
+        
+        <!-- break-before="page" -->
+        <xsl:if test="$prmFoProp[name() eq 'break-before'][last()][string(.) eq 'page']">
+            <w:pageBreakBefore w:val="true"/>
+        </xsl:if>
+        
+        <!-- hyphenate="true/false" -->
+        <xsl:if test="$prmFoProp[name() eq 'hyphenate'][last()][string(.) = ('true','false')]">
+            <xsl:variable name="hyphenatePropVal" as="xs:string" select="string($prmFoProp[name() eq 'hyphenate'][last()][string(.) = ('true','false')])"/>
+            <xsl:variable name="noHyphenateVal" as="xs:boolean" select="$hyphenatePropVal eq 'false'"/>
+            <w:suppressAutoHyphens>
+                <xsl:attribute name="w:val" select="string($noHyphenateVal)"/>
+            </w:suppressAutoHyphens>
+        </xsl:if>
+
+        <!-- axf:word-break="break-all" -->
+        <xsl:if test="$prmFoProp[name() eq 'axf:word-break'][last()][string(.) eq 'break-all']">
+            <w:wordWrap w:val="false"/>
+        </xsl:if>
+
+        <!-- space-before, space-after, line-height
+             XSL-FO line-height notation is too difficult to convert into Word's w:line and w:lineRule
+         -->
+        <xsl:if test="$prmFoProp[name() = ('space-before', 'space-after')]">
+            <w:spacing>
+                <xsl:if test="$prmFoProp[name() eq 'space-before']">
+                    <xsl:variable name="spaceBeforeProp" as="xs:string" select="string($prmFoProp[name() eq 'space-before'][last()])"/>
+                    <xsl:variable name="spaceBeforeTwipVal" as="xs:integer?" select="ahf:convertFoExpToUnitValue($spaceBeforeProp,$cUnitTwip)"/>
+                    <xsl:attribute name="w:before" select="if (exists($spaceBeforeTwipVal)) then string($spaceBeforeTwipVal) else '0'"/>
+                </xsl:if>
+                <xsl:if test="$prmFoProp[name() eq 'space-after']">
+                    <xsl:variable name="spaceAfterProp" as="xs:string" select="string($prmFoProp[name() eq 'space-after'][last()])"/>
+                    <xsl:variable name="spaceAfterTwipVal" as="xs:integer?" select="ahf:convertFoExpToUnitValue($spaceAfterProp,$cUnitTwip)"/>
+                    <xsl:attribute name="w:after" select="if (exists($spaceAfterTwipVal)) then string($spaceAfterTwipVal) else '0'"/>
+                </xsl:if>
+            </w:spacing>
+        </xsl:if>
+        
+        <!-- start-indent, end-indent, text-indent -->
+        <xsl:if test="$prmFoProp[name() = ('start-indent', 'end-indent', 'text-indent')]">
+            <w:spacing>
+                <xsl:if test="$prmFoProp[name() eq 'start-indent']">
+                    <xsl:variable name="startIndentProp" as="xs:string" select="string($prmFoProp[name() eq 'start-indent'][last()])"/>
+                    <xsl:variable name="startIndentTwipVal" as="xs:integer?" select="ahf:convertFoExpToUnitValue($startIndentProp,$cUnitTwip)"/>
+                    <xsl:attribute name="w:before" select="if (exists($startIndentTwipVal)) then string($startIndentTwipVal) else '0'"/>
+                </xsl:if>
+                <xsl:if test="$prmFoProp[name() eq 'end-indent']">
+                    <xsl:variable name="endIndentProp" as="xs:string" select="string($prmFoProp[name() eq 'end-indent'][last()])"/>
+                    <xsl:variable name="endIndentTwipVal" as="xs:integer?" select="ahf:convertFoExpToUnitValue($endIndentProp,$cUnitTwip)"/>
+                    <xsl:attribute name="w:after" select="if (exists($endIndentTwipVal)) then string($endIndentTwipVal) else '0'"/>
+                </xsl:if>
+            </w:spacing>
+        </xsl:if>
     </xsl:function>
     
 </xsl:stylesheet>
