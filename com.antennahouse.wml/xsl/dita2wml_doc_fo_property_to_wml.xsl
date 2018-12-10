@@ -67,19 +67,56 @@
         
         <!-- start-indent, end-indent, text-indent -->
         <xsl:if test="$prmFoProp[name() = ('start-indent', 'end-indent', 'text-indent')]">
-            <w:spacing>
+            <w:ind>
                 <xsl:if test="$prmFoProp[name() eq 'start-indent']">
                     <xsl:variable name="startIndentProp" as="xs:string" select="string($prmFoProp[name() eq 'start-indent'][last()])"/>
                     <xsl:variable name="startIndentTwipVal" as="xs:integer?" select="ahf:convertFoExpToUnitValue($startIndentProp,$cUnitTwip)"/>
-                    <xsl:attribute name="w:before" select="if (exists($startIndentTwipVal)) then string($startIndentTwipVal) else '0'"/>
+                    <xsl:attribute name="w:start" select="if (exists($startIndentTwipVal)) then string($startIndentTwipVal) else '0'"/>
                 </xsl:if>
                 <xsl:if test="$prmFoProp[name() eq 'end-indent']">
                     <xsl:variable name="endIndentProp" as="xs:string" select="string($prmFoProp[name() eq 'end-indent'][last()])"/>
                     <xsl:variable name="endIndentTwipVal" as="xs:integer?" select="ahf:convertFoExpToUnitValue($endIndentProp,$cUnitTwip)"/>
-                    <xsl:attribute name="w:after" select="if (exists($endIndentTwipVal)) then string($endIndentTwipVal) else '0'"/>
+                    <xsl:attribute name="w:end" select="if (exists($endIndentTwipVal)) then string($endIndentTwipVal) else '0'"/>
                 </xsl:if>
-            </w:spacing>
+                <xsl:if test="$prmFoProp[name() eq 'text-indent']">
+                    <xsl:variable name="textIndentProp" as="xs:string" select="string($prmFoProp[name() eq 'text-indent'][last()])"/>
+                    <xsl:variable name="textIndentTwipVal" as="xs:integer?" select="ahf:convertFoExpToUnitValue($textIndentProp,$cUnitTwip)"/>
+                    <xsl:choose>
+                        <xsl:when test="empty($textIndentTwipVal)"/>
+                        <xsl:when test="$textIndentTwipVal gt 0">
+                            <xsl:attribute name="w:firstLine" select="string($textIndentTwipVal)"/>
+                        </xsl:when>
+                        <xsl:when test="$textIndentTwipVal lt 0">
+                            <xsl:attribute name="w:hanging" select="string(-1 * $textIndentTwipVal)"/>
+                        </xsl:when>
+                        <xsl:otherwise/>
+                    </xsl:choose>
+                </xsl:if>
+            </w:ind>
         </xsl:if>
+
+        <!-- text-align="start | center | end | justify | inside | outside | left | right" -->
+        <xsl:if test="$prmFoProp[name() eq 'text-align'][last()][string(.) = ('start','center','end','justify','left','right')]">
+            <xsl:variable name="textAlignPropVal" as="xs:string" select="string($prmFoProp[name() eq 'text-align'][last()][string(.) = ('start','center','end','justify','left','right')])"/>
+            <xsl:variable name="textAlignVal" as="xs:string">
+                <xsl:choose>
+                    <xsl:when test="$textAlignPropVal = ('start','left')">
+                        <xsl:sequence select="'start'"/>
+                    </xsl:when>
+                    <xsl:when test="$textAlignPropVal = ('end','right')">
+                        <xsl:sequence select="'end'"/>
+                    </xsl:when>
+                    <xsl:when test="$textAlignPropVal eq 'center'">
+                        <xsl:sequence select="'center'"/>
+                    </xsl:when>
+                    <xsl:when test="$textAlignPropVal eq 'justify'">
+                        <xsl:sequence select="'both'"/>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:variable>
+            <w:jc w:val="{$textAlignVal}"/>
+        </xsl:if>
+        
     </xsl:function>
     
 </xsl:stylesheet>
