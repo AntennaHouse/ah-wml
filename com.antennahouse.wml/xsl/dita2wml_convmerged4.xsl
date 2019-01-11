@@ -46,7 +46,8 @@ E-mail : info@antennahouse.com
      function:	Maintain table
      param:		none
      return:	<thead> or <tbody>
-     note:		
+     note:      DEBUG: There is tgroup/@cols that is not match the actual column count.
+                       2019-01-08 t.makita
      -->
     <xsl:template match="*[contains(@class, ' topic/tgroup ')]">
         <xsl:variable name="tGroup" as="element()" select="."/>
@@ -58,6 +59,34 @@ E-mail : info@antennahouse.com
                 <xsl:with-param name="prmTgroup" select="$tGroup"/>
             </xsl:call-template>
         </xsl:variable>
+        
+        <!-- debug -->
+        <!--
+        <xsl:for-each select="$tGroup/descendant::*[contains(@class,' topic/entry ')]">
+            <xsl:variable name="entry" as="element()" select="."/>
+            <xsl:variable name="colname" as="xs:string" select="string($entry/@colname)"/>
+            <xsl:if test="string($colname)">
+                <xsl:variable name="result" as="xs:boolean" select="some $colspec in $colspecNormalized/* satisfies string($colspec/@colname) eq $colname"/>
+                <xsl:if test="not($result)">
+                    <xsl:message select="'Invalid colname=',$colname, 'tgroup=', $tGroup"></xsl:message>
+                </xsl:if>
+            </xsl:if>
+            <xsl:variable name="namest" as="xs:string" select="string($entry/@namest)"/>
+            <xsl:if test="string($namest)">
+                <xsl:variable name="result" as="xs:boolean" select="some $colspec in $colspecNormalized/* satisfies string($colspec/@colname) eq $namest"/>
+                <xsl:if test="not($result)">
+                    <xsl:message select="'Invalid namest=',$namest, 'tgroup=', $tGroup"></xsl:message>
+                </xsl:if>
+            </xsl:if>
+            <xsl:variable name="nameend" as="xs:string" select="string($entry/@nameend)"/>
+            <xsl:if test="string($nameend)">
+                <xsl:variable name="result" as="xs:boolean" select="some $colspec in $colspecNormalized/* satisfies string($colspec/@colname) eq $nameend"/>
+                <xsl:if test="not($result)">
+                    <xsl:message select="'Invalid nameend=',$nameend, 'tgroup=', $tGroup"></xsl:message>
+                </xsl:if>
+            </xsl:if>
+        </xsl:for-each>
+        -->
 
         <xsl:copy>
             <xsl:apply-templates select="@*"/>

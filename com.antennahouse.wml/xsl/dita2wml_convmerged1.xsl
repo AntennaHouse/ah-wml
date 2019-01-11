@@ -392,6 +392,14 @@ E-mail : info@antennahouse.com
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+
+    <!-- 
+     function:	empty strow template
+     param:		none
+     return:	empty
+     note:		DITA DTD allows empty strow, but it influences wrong in convmerged step 4.
+     -->
+    <xsl:template match="*[contains(@class,' topic/strow ')][empty(*[contains(@class,' topic/stentry ')])]"/>
     
     <!-- 
      function:	comment template

@@ -613,9 +613,12 @@
 								<xsl:message select="'$prmPaperSize=',$prmPaperSize"/>
 								<xsl:message select="'$prmOutputType=',$prmOutputType"/>
 							</xsl:if>
-							<!-- Adopt last defined one -->
+							<!-- Adopt last defined one
+								 BUG-FIX: normalize-space(string($varValueElement))⇒string($varValueElement)
+								          2019-01-09 t.makita
+							 -->
 							<xsl:variable name="varValueElement" select="$varValueElements[position() eq last()]" as="element()"/>
-							<xsl:variable name="varValue" select="normalize-space(string($varValueElement))" as="xs:string"/>
+							<xsl:variable name="varValue" select="string($varValueElement)" as="xs:string"/>
 							<xsl:choose>
 								<xsl:when test="contains($varValue,$varRefChar)">
 									<!-- Variable reference still exits. Call recursively myself. -->

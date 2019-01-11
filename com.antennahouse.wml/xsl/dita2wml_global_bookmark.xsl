@@ -19,11 +19,20 @@ E-mail : info@antennahouse.com
 >
     <!-- Bookmark id map for whole document.
      -->
-    <!-- Bookmark targets: All xref, link and topicref element that reference internal target -->
+    <!-- Bookmark targets: All xref, link and topicref element that reference internal target
+         BUGFIX: Limit the target that is referenced from map.
+                 2019-01-08 t.makita
+      -->
     <xsl:variable name="bookmarkTargets" as="xs:string*">
-        <xsl:sequence select="$map/*[not(contains(@class,' map/reltable '))]/descendant-or-self::*[contains(@class,' map/topicref ')][starts-with(@href,'#')]/string(@href)"/>
-        <xsl:sequence select="$topics/descendant::*[contains(@class,' topic/xref ')][starts-with(@href,'#')]/string(@href)"/>
-        <xsl:sequence select="$topics/descendant::*[contains(@class,' topic/link ')][starts-with(@href,'#')]/string(@href)"/>
+        <xsl:for-each select="$map/*[not(contains(@class,' map/reltable '))]/descendant-or-self::*[contains(@class,' map/topicref ')][starts-with(@href,'#')]">
+            <xsl:variable name="topicRef" as="element()" select="."/>
+            <xsl:sequence select="string($topicRef/@href)"/>
+            <xsl:variable name="topic" as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
+            <xsl:if test="exists($topic)">
+                <xsl:sequence select="$topic/descendant::*[contains(@class,' topic/xref ')][starts-with(@href,'#')]/string(@href)"/>
+                <xsl:sequence select="$topic/descendant::*[contains(@class,' topic/link ')][starts-with(@href,'#')]/string(@href)"/>
+            </xsl:if>
+        </xsl:for-each>
     </xsl:variable>
 
     <xsl:variable name="uniqueBookmarkTargets" as="xs:string*" select="distinct-values($bookmarkTargets)"/>
