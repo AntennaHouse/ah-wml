@@ -46,7 +46,11 @@ E-mail : info@antennahouse.com
         <xsl:apply-templates mode="#current"/>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class,' topic/fn ')]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
+    <xsl:template match="*[contains(@class,' topic/fn ')][exists(@id)]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
+    <xsl:template match="*[contains(@class,' topic/fn ')][empty(@id)]" priority="5" mode="MODE_GEN_TEXT_MAP">
+        <xsl:call-template name="ahf:genInlineElement"/>
+    </xsl:template>
+
     <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
     <xsl:template match="*[ahf:seqContains(string(@class),(' topic/data ',' topic/data-about ',' topic/unknown '))]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
     <xsl:template match="*[ahf:seqContains(string(@class),(' topic/indexterm ',' indexing-d/index-see ',' indexing-d/index-see-also '))]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
