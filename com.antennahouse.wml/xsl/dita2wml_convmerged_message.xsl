@@ -48,5 +48,10 @@ URL : http://www.antennahouse.com/
     <xsl:variable name="stMes1020" as="xs:string">
         <xsl:text>[convmerged 1020F] $prmTextMap is not passed to text() template text="%text" id=%id</xsl:text>
     </xsl:variable>
+
+    <xsl:variable name="stMes1022" as="xs:string">
+        <xsl:text>[getColNumFromColName 1022F] colname='%colname' does not exists in table/tgroup/colspec. Probably table/tgroup/@cols='%cols' is not match actual column count. file=%file</xsl:text>
+    </xsl:variable>
     
+
 </xsl:stylesheet>

@@ -24,6 +24,8 @@ URL : http://www.antennahouse.com/
      param:		
      return:	w:footnotes
      note:		w:footnote/@id is obtained from $fnIdMap.
+                BUG-FIX: Limit the target fn in topic that is referenced from map.
+                         2019-01-18 t.makita
      -->
     <xsl:template match="/">
         <w:footnotes>
@@ -34,7 +36,15 @@ URL : http://www.antennahouse.com/
                 <xsl:with-param name="prmObjName" select="'wmlFootnoteContinuationSeparator'"/>
             </xsl:call-template>
             
-            <xsl:variable name="fns" select="/descendant::*[contains(@class,' topic/fn ')]" as="element()*"/>
+            <xsl:variable name="fns" as="element()*">
+                <xsl:for-each select="$map/*[not(contains(@class,' map/reltable '))]/descendant-or-self::*[contains(@class,' map/topicref ')][starts-with(@href,'#')]">
+                    <xsl:variable name="topicRef" as="element()" select="."/>
+                    <xsl:variable name="topic" as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
+                    <xsl:if test="exists($topic)">
+                        <xsl:sequence select="$topic/descendant::*[contains(@class,' topic/fn ')]"/>
+                    </xsl:if>
+                </xsl:for-each>
+            </xsl:variable>
 
             <!-- Generate w:footnote entry -->
             <xsl:for-each select="$fns">

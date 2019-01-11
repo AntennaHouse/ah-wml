@@ -49,6 +49,7 @@ URL : http://www.antennahouse.com/
                                 <xsl:with-param name="prmColSpec" tunnel="yes" select="$prmColSpec"/>
                                 <xsl:with-param name="prmIsLastRow" tunnel="yes" select="$isLastRow"/>
                                 <xsl:with-param name="prmColNumber" tunnel="yes" select="$prmColNumber"/>
+                                <xsl:with-param name="prmTableHeadOrBodyPart" tunnel="yes" select="$prmTableHeadOrBodyPart"/>
                             </xsl:apply-templates>
                         </xsl:copy>
                     </xsl:for-each>
@@ -97,8 +98,9 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmColSpec" tunnel="yes" required="yes" as="document-node()"/>
         <xsl:param name="prmIsLastRow" tunnel="yes" required="yes" as="xs:boolean"/>
         <xsl:param name="prmColNumber" tunnel="yes" required="yes" as="xs:integer"/>
-        <xsl:variable name="colnum" as="xs:integer" select="ahf:getColNumFromColName(if (exists(@namest)) then @namest else @colname ,$prmColSpec)"/>
-        <xsl:variable name="colSpanCount" as="xs:integer" select="if (exists(@namest) and exists(@nameend)) then ahf:getColumSpanCount(@namest,@nameend,$prmColSpec) else 0"/>
+        <xsl:param name="prmTableHeadOrBodyPart" tunnel="yes" required="yes" as="element()"/>
+        <xsl:variable name="colnum" as="xs:integer" select="ahf:getColNumFromColName(if (exists(@namest)) then @namest else @colname ,$prmColSpec,$prmTableHeadOrBodyPart)"/>
+        <xsl:variable name="colSpanCount" as="xs:integer" select="if (exists(@namest) and exists(@nameend)) then ahf:getColumSpanCount(@namest,@nameend,$prmColSpec,$prmTableHeadOrBodyPart) else 0"/>
         <xsl:variable name="rowSpanCount" as="xs:integer" select="if (exists(@morerows)) then xs:integer(@morerows) else 0"/>
         <xsl:copy>
             <xsl:copy-of select="@* except @dita-ot:*"/>
@@ -241,10 +243,20 @@ URL : http://www.antennahouse.com/
      param:		colname
      return:	column number
      note:		Use colspec temporary tree
+                DEBUG: Report message when tgroup/@cols is not match the actual table column count.
+                       2019-01-08 t.makita
      -->
     <xsl:function name="ahf:getColNumFromColName" as="xs:integer">
         <xsl:param name="prmColName" as="xs:string"/>
         <xsl:param name="prmColSpec" as="document-node()"/>
+        <xsl:param name="prmTableHeadOrBodyPart" as="element()"/>
+        <!-- DEBUG -->
+        <xsl:variable name="colnum" as="xs:integer?" select="xs:integer($prmColSpec/colspec[string(@colname) eq $prmColName]/@colnum)"/>
+        <xsl:if test="empty($colnum)">
+            <xsl:call-template name="errorExit">
+                <xsl:with-param name="prmMes" select="ahf:replace($stMes1022,('%colname','%cols','%file'),($prmColName,string($prmTableHeadOrBodyPart/parent::*[1]/@cols),string($prmTableHeadOrBodyPart/parent::*[1]/@xtrf)))"/>
+            </xsl:call-template>
+        </xsl:if>
         <xsl:sequence select="xs:integer($prmColSpec/colspec[string(@colname) eq $prmColName]/@colnum)"/>
     </xsl:function>
 
@@ -258,7 +270,8 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmNameSt" as="xs:string"/>
         <xsl:param name="prmNameEnd" as="xs:string"/>
         <xsl:param name="prmColSpec" as="document-node()"/>
-        <xsl:sequence select="ahf:getColNumFromColName($prmNameEnd,$prmColSpec) - ahf:getColNumFromColName($prmNameSt,$prmColSpec)"/>
+        <xsl:param name="prmTableHeadOrBodyPart" as="element()"/>
+        <xsl:sequence select="ahf:getColNumFromColName($prmNameEnd,$prmColSpec,$prmTableHeadOrBodyPart) - ahf:getColNumFromColName($prmNameSt,$prmColSpec,$prmTableHeadOrBodyPart)"/>
     </xsl:function>
 
     <!-- 
