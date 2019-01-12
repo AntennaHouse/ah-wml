@@ -59,7 +59,25 @@ URL : http://www.antennahouse.com/
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
-
+    
+    <!-- 
+     function:	Check nested topic 
+     param:		prmTopic
+     return:	xs:boolean
+     note:		
+     -->
+    <xsl:function name="ahf:isNestedTopic" as="xs:boolean">
+        <xsl:param name="prmTopic" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="exists($prmTopic/ancestor::*[contains(@class,' topic/topic ')])">
+                <xsl:sequence select="true()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="false()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
     <!-- 
      function:	Get topic from topicref 
      param:		prmTopicRef
