@@ -22,13 +22,13 @@ URL : http://www.antennahouse.com/
     <!-- 
      function:	Topic/title processing
      param:		none
-     return:	
+     return:	w:p
      note:		Initial implementation.
                 - toc="no" and nested topic are not considered.
                 - XE field from indexterm should be generated outside the bookmark
                   because bookmark is referenced from toc, related-links/link and xref.
      -->
-    <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
+    <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" as="element(w:p)">
         <xsl:param name="prmTopicRef"       tunnel="yes" required="yes" as="element()"/>
         <xsl:param name="prmTopicRefLevel"  tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmTopic"          tunnel="yes" required="yes" as="element()"/>
@@ -57,7 +57,7 @@ URL : http://www.antennahouse.com/
             </xsl:call-template>
         </w:p>
     </xsl:template>
-
+    
     <!-- 
      function:	topichead (including chapter or part) title processing
      param:		prmTopicRef, prmDefaultTitle
