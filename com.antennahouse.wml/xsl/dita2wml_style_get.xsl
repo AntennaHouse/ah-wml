@@ -1091,6 +1091,52 @@
         
     </xsl:template>
     
+    <!-- 
+         getVarValueReplacingn template
+         function: Get variable value specified by $prmVarName, $prmXmlLang, $prmDocType, $prmPaperSize replacing $prmSrc by $prmDst
+         parameter: prmVarName：Variable name
+                    prmXmlLang: Target xml:lang
+                    prmDocType: Document type
+                    prmPaperSize: Paper size
+                    prmSrc: Target strings 
+                            - usually prefixed by '%'. 
+                    prmDst: Replace strings
+         note: 
+      -->
+    <xsl:function name="ahf:getVarValueReplacing" as="xs:string">
+        <xsl:param name="prmVarName" as="xs:string"/>
+        <xsl:param name="prmSrc" as="xs:string+"/>
+        <xsl:param name="prmDst" as="xs:string+"/>
+        <xsl:call-template name="getVarValueReplacing">
+            <xsl:with-param name="prmVarName" select="$prmVarName"/>
+            <xsl:with-param name="prmXmlLang" select="$defaultXmlLang"/>
+            <xsl:with-param name="prmDocType" select="$defaultDocType"/>
+            <xsl:with-param name="prmPaperSize" select="$defaultPaperSize"/>
+            <xsl:with-param name="prmOutputType" select="$defaultOutputType"/>
+            <xsl:with-param name="prmSrc" select="$prmSrc"/>
+            <xsl:with-param name="prmDst" select="$prmDst"/>
+        </xsl:call-template>
+    </xsl:function>
+    
+    <xsl:template name="getVarValueReplacing" as="xs:string">
+        <xsl:param name="prmVarName" as="xs:string"/>
+        <xsl:param name="prmXmlLang" as="xs:string?" required="no" select="$defaultXmlLang"/>
+        <xsl:param name="prmDocType" as="xs:string?" required="no" select="$defaultDocType"/>
+        <xsl:param name="prmPaperSize" as="xs:string?" required="no" select="$defaultPaperSize"/>
+        <xsl:param name="prmOutputType" as="xs:string?" required="no" select="$defaultOutputType"/>
+        <xsl:param name="prmSrc" as="xs:string+"/>
+        <xsl:param name="prmDst" as="xs:string+"/>
+        <xsl:variable name="varValue" as="xs:string">
+            <xsl:call-template name="getVarValue">
+                <xsl:with-param name="prmVarName" select="$prmVarName"/>
+                <xsl:with-param name="prmXmlLang" select="$prmXmlLang"/>
+                <xsl:with-param name="prmDocType" select="$prmDocType"/>
+                <xsl:with-param name="prmPaperSize" select="$prmPaperSize"/>
+                <xsl:with-param name="prmOutputType" select="$prmOutputType"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:sequence select="ahf:replace($varValue,$prmSrc,$prmDst)"/>
+    </xsl:template>
     
     <!-- 
          getVarValueAsStringSequence template

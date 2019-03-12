@@ -163,18 +163,6 @@ URL : http://www.antennahouse.com/
     </xsl:function>
 
     <!-- 
-     function:	Return topicref is for cover 
-     param:		prmTopicRef
-     return:	xs:boolean
-     note:		
-     -->
-    <xsl:function name="ahf:isCoverTopicRef" as="xs:boolean">
-        <xsl:param name="prmTopicRef" as="element()?"/>
-        <xsl:variable name="outputClass" as="xs:string" select="if (exists($prmTopicRef)) then string($prmTopicRef/@outputclass) else ''"/>
-        <xsl:sequence select="matches($outputClass,'cover[1-4]')"/>
-    </xsl:function>
-    
-    <!-- 
      function:	topicref count template
      param:		prmTopicRef
      return:	topicref count that have same @href
@@ -336,7 +324,7 @@ URL : http://www.antennahouse.com/
      return:	xs:boolean
      note:		
      -->
-    <xsl:function name="ahf:hasOutputclassValue" as="xs:boolean">
+    <xsl:function name="ahf:hasOutputClassValue" as="xs:boolean">
         <xsl:param name="prmElem" as="element()"/>
         <xsl:param name="prmValue" as="xs:string"/>
         <xsl:sequence select="$prmValue = ahf:getOutputClass($prmElem)"/>
@@ -348,7 +336,7 @@ URL : http://www.antennahouse.com/
      return:	xs:boolean
      note:		
      -->
-    <xsl:function name="ahf:hasOneOfOutputclassValue" as="xs:boolean">
+    <xsl:function name="ahf:hasOneOfOutputClassValue" as="xs:boolean">
         <xsl:param name="prmElem" as="element()"/>
         <xsl:param name="prmValueSeq" as="xs:string+"/>
         <xsl:sequence select="$prmValueSeq = ahf:getOutputClass($prmElem)"/>

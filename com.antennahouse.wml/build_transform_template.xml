@@ -239,7 +239,8 @@
             <param name="PRM_DEBUG_NO_TEXT_MAP"                        expression="${debug.no.text.map}"                        if="debug.no.text.map"/>
             
             <param name="PRM_PAPER_SIZE"                               expression="${paper.size}"                               if="paper.size"/>
-
+            <param name="PRM_BASE_PAPER_SIZE"                          expression="${base.paper.size}"                          if="base.paper.size"/>
+            
             <!--
             <param name="PRM_USE_I18N_INDEX_LIB"                       expression="${use.i18n.index.lib}"                       if="use.i18n.index.lib"/>
             <param name="PRM_OUTPUT_DIR_URL" expression="${output.dir.url}" if="output.dir.url"/>
@@ -296,6 +297,7 @@
             <param name="PRM_DEBUG_NO_TEXT_MAP"                        expression="${debug.no.text.map}"                        if="debug.no.text.map"/>
             
             <param name="PRM_PAPER_SIZE"                               expression="${paper.size}"                               if="paper.size"/>
+            <param name="PRM_BASE_PAPER_SIZE"                          expression="${base.paper.size}"                          if="base.paper.size"/>
             
             <!--
             <param name="PRM_USE_I18N_INDEX_LIB"                       expression="${use.i18n.index.lib}"                       if="use.i18n.index.lib"/>
@@ -362,6 +364,7 @@
             <param name="PRM_DEBUG_NO_TEXT_MAP"                        expression="${debug.no.text.map}"                        if="debug.no.text.map"/>
             
             <param name="PRM_PAPER_SIZE"                               expression="${paper.size}"                               if="paper.size"/>
+            <param name="PRM_BASE_PAPER_SIZE"                          expression="${base.paper.size}"                          if="base.paper.size"/>
             
             <!--
             <param name="PRM_USE_I18N_INDEX_LIB"                       expression="${use.i18n.index.lib}"                       if="use.i18n.index.lib"/>
