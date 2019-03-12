@@ -83,7 +83,7 @@ E-mail : info@antennahouse.com
                         <xsl:otherwise>
                             <!-- inline elements -->
                             <xsl:choose>
-                                <xsl:when test="(count(current-group()) eq 1) and not(current-group()/self::*) and (not(string(normalize-space(current-group()[1]))))">
+                                <xsl:when test="(count(current-group()) eq 1) and not(current-group()/self::*) and (not(string(normalize-space(current-group()[1])))) and empty(current-group()[1]/self::element())">
                                     <!-- ignore redundant text node! -->
                                 </xsl:when>
                                 <xsl:otherwise>
