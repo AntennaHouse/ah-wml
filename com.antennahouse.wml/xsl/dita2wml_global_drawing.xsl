@@ -47,6 +47,27 @@ E-mail : info@antennahouse.com
             <!-- floatfig -->
             <xsl:sequence select="/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]/ahf:generateId(.)"/>
             <xsl:sequence select="/descendant::*[contains(@class,' floatfig-d/floatfig-group ')][string(@float) = ('left','right')]/ahf:generateId(.)"/>
+            <!-- cover bodydiv -->
+            <xsl:choose>
+                <xsl:when test="$isBookMap">
+                    <xsl:for-each select="$map/*[ahf:seqContains(@class, (' bookmap/frontmatter ',' bookmap/backmatter '))]/*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)]">
+                        <xsl:variable name="topicRef" as="element()" select="."/>
+                        <xsl:variable name="topicContent"  as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
+                        <xsl:if test="exists($topicContent)">
+                            <xsl:sequence select="$topicContent/*[contains(@class,' topic/body ')]/*[contains(@class,' topic/bodydiv ')]/ahf:generateId(.)"/>
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:for-each select="$map/*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)]">
+                        <xsl:variable name="topicRef" as="element()" select="."/>                        
+                        <xsl:variable name="topicContent"  as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
+                        <xsl:if test="exists($topicContent)">
+                            <xsl:sequence select="$topicContent/*[contains(@class,' topic/body ')]/*[contains(@class,' topic/bodydiv ')]/ahf:generateId(.)"/>
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <xsl:map>
             <xsl:for-each select="$drawingIds">

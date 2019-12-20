@@ -60,9 +60,53 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[contains(@class,' topic/data ')][string(@name) eq 'qrcode'][string(@href)]" as="element(w:r)*" priority="5">
         <xsl:variable name="href" as="xs:string" select="concat('&quot;',string(@href),'&quot;')"/>
         <xsl:variable name="barcodeType" as="xs:string" select="'QR'"/>
+        <xsl:variable name="qrCodeHeightDefault" as="xs:string">
+            <xsl:variable name="qrCodeHeightDefaultStr" as="xs:string">
+                <xsl:call-template name="getVarValue">
+                    <xsl:with-param name="prmVarName" select="'QrCodeHeightDefault'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:sequence select="ahf:toTwipStr($qrCodeHeightDefaultStr)"/>
+        </xsl:variable>
+        <xsl:variable name="qrCodeFoContentSpec" as="xs:string?">
+            <xsl:variable name="foProp" as="attribute()*" select="ahf:getFoProperty(.)"/>
+            <xsl:choose>
+                <xsl:when test="$foProp[name(.) eq 'content-height']">
+                    <xsl:sequence select="ahf:toTwipStr($foProp[name(.) eq 'content-height'])"/>
+                </xsl:when>
+                <xsl:when test="$foProp[name(.) eq 'content-width']">
+                    <xsl:sequence select="ahf:toTwipStr($foProp[name(.) eq 'content-width'])"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="qrCodeScaleDefault" as="xs:string">
+            <xsl:variable name="qrCodeScaleDefaultStr" as="xs:string">
+                <xsl:call-template name="getVarValue">
+                    <xsl:with-param name="prmVarName" select="'QrCodeScaleDefault'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:sequence select="$qrCodeScaleDefaultStr"/>
+        </xsl:variable>
+        <xsl:variable name="qrCodeScaleSpec" as="xs:string?">
+            <xsl:variable name="foProp" as="attribute()*" select="ahf:getFoProperty(.)"/>
+            <xsl:choose>
+                <xsl:when test="$foProp[name(.) eq 'ahs:scale']">
+                    <xsl:sequence select="string($foProp[name(.) eq 'ahs:scale'])"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!--xsl:message select="'$qrCodeFoContentSpec=',$qrCodeFoContentSpec"/-->
         <xsl:variable name="fieldOpt" as="xs:string">
-            <xsl:call-template name="getVarValue">
+            <xsl:call-template name="getVarValueReplacing">
                 <xsl:with-param name="prmVarName" select="'QrCodeOpt'"/>
+                <xsl:with-param name="prmSrc" select="('%height','%scale')"/>
+                <xsl:with-param name="prmDst" select="(if (exists($qrCodeFoContentSpec)) then $qrCodeFoContentSpec else $qrCodeHeightDefault,if (exists($qrCodeScaleSpec)) then $qrCodeScaleSpec else $qrCodeScaleDefault)"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:call-template name="getWmlObjectReplacing">

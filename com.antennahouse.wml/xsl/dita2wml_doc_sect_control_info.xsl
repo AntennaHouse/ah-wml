@@ -65,6 +65,11 @@ URL : http://www.antenna.co.jp/
     <xsl:template match="*[contains(@class,' bookmap/booklists ')]" mode="MODE_MAKE_SECT_INFO" priority="5">
         <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="#current"/>
     </xsl:template>
+
+    <!-- Ignore cover
+         Cover topicref is supposed to exist at the child of frontmatter/backmatter
+     -->
+    <xsl:template match="*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)]" mode="MODE_MAKE_SECT_INFO" priority="5"/>
     
     <xsl:template match="*[contains(@class,' map/topicref ')]" mode="MODE_MAKE_SECT_INFO">
         <xsl:param name="prmIsInFrontMatter" tunnel="yes" required="false" select="false()"/>
@@ -208,7 +213,7 @@ URL : http://www.antenna.co.jp/
      -->
     <xsl:function name="ahf:isSpannedImage" as="xs:boolean">
         <xsl:param name="prmImage" as="element()"/>
-        <xsl:sequence select="ahf:hasOutputclassValue($prmImage,'span-all')"/>
+        <xsl:sequence select="ahf:hasOutputClassValue($prmImage,'span-all')"/>
     </xsl:function>    
 
     <!--General image-->
@@ -635,7 +640,7 @@ URL : http://www.antenna.co.jp/
                 This grouping is needed to construct two column layout in Word.
     -->
     <xsl:variable name="sectMap" as="map(xs:string,xs:integer+)">
-        <xsl:variable name="sectMapElems" as="element()+" select="$columnMapTreeWithAdjacentInfo/*"/>
+        <xsl:variable name="sectMapElems" as="element()*" select="$columnMapTreeWithAdjacentInfo/*"/>
         <xsl:variable name="sectMapElemsTree" as="document-node()">
             <xsl:document>
                 <xsl:for-each select="$sectMapElems">
@@ -776,7 +781,7 @@ URL : http://www.antenna.co.jp/
                 Used to get column information from any element.
     -->
     <xsl:variable name="columnMap" as="map(xs:string,xs:integer+)">
-        <xsl:variable name="columnMapElems" as="element()+" select="$columnMapTreeWithAdjacentInfo/*"/>
+        <xsl:variable name="columnMapElems" as="element()*" select="$columnMapTreeWithAdjacentInfo/*"/>
         <xsl:map>
             <xsl:for-each select="$columnMapElems">
                 <xsl:variable name="columnMapElem" as="element()" select="."/>

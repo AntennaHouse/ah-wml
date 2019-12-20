@@ -38,21 +38,39 @@ URL : http://www.antennahouse.com/
         <w:document>
             <w:body>
                 <!-- Make cover -->
-                <!--xsl:call-template name="genCover"/-->
+                <xsl:choose>
+                    <xsl:when test="ahf:hasCover12($map) and $pSupportCover">
+                        <xsl:call-template name="genCoverN">
+                            <xsl:with-param name="prmMap" select="$map"/>
+                            <xsl:with-param name="prmCoverN" select="($cCover1,$cCover2)"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!--xsl:call-template name="genNormalCover"/-->
+                    </xsl:otherwise>
+                </xsl:choose>
                 
                 <!-- Process main contents -->
                 <xsl:choose>
                     <xsl:when test="$isBookMap">
-                        <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')]"/>
+                        <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:isNotCoverTopicRef(.)]"/>
                         <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/part ') or contains(@class, ' bookmap/chapter ')]"/>
                         <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/appendices ')]/*[contains(@class, ' bookmap/appendix ')]"/>
                         <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/appendix ')]"/>
-                        <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')]"/>
+                        <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:isNotCoverTopicRef(.)]"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')]"/>
+                        <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')][ahf:isNotCoverTopicRef(.)]"/>
                     </xsl:otherwise>
                 </xsl:choose>
+
+                <!-- Make cover -->
+                <xsl:if test="ahf:hasCover34($map) and $pSupportCover">
+                    <xsl:call-template name="genCoverN">
+                        <xsl:with-param name="prmMap" select="$map"/>
+                        <xsl:with-param name="prmCoverN" select="($cCover3,$cCover4)"/>
+                    </xsl:call-template>
+                </xsl:if>
             </w:body>
         </w:document>        
     </xsl:template>

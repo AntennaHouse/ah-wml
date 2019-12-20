@@ -17,12 +17,13 @@ URL : http://www.antennahouse.com/
     version="3.0">
     
     <xsl:include href="dita2wml_constants.xsl"/>
+    <xsl:include href="dita2wml_const_cover.xsl"/>
     <xsl:include href="dita2wml_util_error.xsl"/>
     <xsl:include href="dita2wml_util.xsl"/>
     <xsl:include href="dita2wml_util_dita.xsl"/>
+    <xsl:include href="dita2wml_util_cover.xsl"/>
     <xsl:include href="dita2wml_util_doc.xsl"/>
     <xsl:include href="dita2wml_util_related_links.xsl"/>
-    <xsl:include href="dita2wml_util_fo.xsl"/>
     <xsl:include href="dita2wml_message.xsl"/>
     <xsl:include href="dita2wml_history_id.xsl"/>
     
@@ -77,6 +78,7 @@ URL : http://www.antennahouse.com/
     <xsl:include href="dita2wml_doc_task.xsl"/>
     
     <xsl:include href="dita2wml_doc_fo_property.xsl"/>
+    <xsl:include href="dita2wml_doc_fo_property_to_wml.xsl"/>
     <xsl:include href="dita2wml_dita_class.xsl"/>
 
 </xsl:stylesheet>

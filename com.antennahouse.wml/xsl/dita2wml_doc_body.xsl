@@ -621,6 +621,16 @@ URL : http://www.antennahouse.com/
     </xsl:template>
 
     <!-- 
+     function:  term template
+     param:     none
+     return:    under-laying result
+     note:		
+     -->
+    <xsl:template match="*[@class => contains-token('topic/term')]">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    <!-- 
      function:	text template
      param:		none
      return:	under-laying result
