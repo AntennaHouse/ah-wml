@@ -24,7 +24,7 @@ URL : http://www.antennahouse.com/
     return:     w:r
     note:       
     -->
-    <xsl:template match="*[contains(@class,' topic/boolean ')]" as="element(w:r)">
+    <xsl:template match="*[@class => contains-token('topic/boolean')]" as="element(w:r)">
         <xsl:call-template name="processText">
             <xsl:with-param name="prmText">
                 <xsl:call-template name="getVarValueWithLang">
@@ -49,7 +49,7 @@ URL : http://www.antennahouse.com/
     return:     empty
     note:       
     -->
-    <xsl:template match="*[contains(@class,' topic/data ')]" as="empty-sequence()"/>
+    <xsl:template match="*[@class => contains-token('topic/data')]" as="empty-sequence()"/>
 
     <!--
     function:   data template for QR code
@@ -57,7 +57,7 @@ URL : http://www.antennahouse.com/
     return:     DISPLAYBARCODE field
     note:       
     -->
-    <xsl:template match="*[contains(@class,' topic/data ')][string(@name) eq 'qrcode'][string(@href)]" as="element(w:r)*" priority="5">
+    <xsl:template match="*[@class => contains-token('topic/data')][string(@name) eq 'qrcode'][string(@href)]" as="element(w:r)*" priority="5">
         <xsl:variable name="href" as="xs:string" select="concat('&quot;',string(@href),'&quot;')"/>
         <xsl:variable name="barcodeType" as="xs:string" select="'QR'"/>
         <xsl:variable name="qrCodeHeightDefault" as="xs:string">
@@ -122,7 +122,7 @@ URL : http://www.antennahouse.com/
     return:     empty
     note:       
     -->
-    <xsl:template match="*[contains(@class,' topic/data-about ')]" as="empty-sequence()"/>
+    <xsl:template match="*[@class => contains-token('topic/data-about')]" as="empty-sequence()"/>
     
     <!--
     function:   foreign template
@@ -130,7 +130,7 @@ URL : http://www.antennahouse.com/
     return:     empty
     note:       
     -->
-    <xsl:template match="*[contains(@class,' topic/foreign ')]" as="empty-sequence()"/>
+    <xsl:template match="*[@class => contains-token('topic/foreign')]" as="empty-sequence()"/>
     
     <!--
     function:   indexbase template
@@ -138,7 +138,7 @@ URL : http://www.antennahouse.com/
     return:     empty
     note:       
     -->
-    <xsl:template match="*[contains(@class,' topic/indexbase ')]" as="empty-sequence()"/>
+    <xsl:template match="*[@class => contains-token('topic/indexbase')]" as="empty-sequence()"/>
 
     <!--
     function:   state template
@@ -146,7 +146,7 @@ URL : http://www.antennahouse.com/
     return:     w:r
     note:       @name, @value is defined as required.
     -->
-    <xsl:template match="*[contains(@class,' topic/state ')]" as="element(w:r)">
+    <xsl:template match="*[@class => contains-token('topic/state')]" as="element(w:r)">
         <xsl:call-template name="processText">
             <xsl:with-param name="prmText" select="concat(string(@name),'=',string(@value))">
             </xsl:with-param>
@@ -159,7 +159,7 @@ URL : http://www.antennahouse.com/
     return:     empty
     note:       
     -->
-    <xsl:template match="*[contains(@class,' topic/unknown ')]" as="empty-sequence()"/>
+    <xsl:template match="*[@class => contains-token('topic/unknown')]" as="empty-sequence()"/>
 
     <!-- 
      function:	itemgroup
@@ -167,7 +167,7 @@ URL : http://www.antennahouse.com/
      return:	under-laying result
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/itemgroup ')]">
+    <xsl:template match="*[@class => contains-token('topic/itemgroup')]">
         <xsl:apply-templates/>
     </xsl:template>
     

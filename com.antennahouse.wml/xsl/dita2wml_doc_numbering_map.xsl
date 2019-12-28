@@ -231,9 +231,9 @@ URL : http://www.antennahouse.com/
     <xsl:template name="getTopicTable" as="element()*">
         <xsl:param name="prmTopic" as="element()" required="yes"/>
         <xsl:variable name="tableElem" as="element()*">
-            <xsl:sequence select="$prmTopic//*[contains(@class,' topic/table ')]
-                                               [not(ancestor::*[contains(@class,' topic/table ')])]
-                                               [exists(*[contains(@class,' topic/title ')])]"/>
+            <xsl:sequence select="$prmTopic//*[@class => contains-token('topic/table')]
+                                               [not(ancestor::*[@class => contains-token('topic/table')])]
+                                               [exists(*[@class => contains-token('topic/title')])]"/>
         </xsl:variable> 
         <xsl:sequence select="$tableElem"/>
     </xsl:template>
@@ -241,8 +241,8 @@ URL : http://www.antennahouse.com/
     <xsl:template name="getTopicFig" as="element()*">
         <xsl:param name="prmTopic" as="element()" required="yes"/>
         <xsl:variable name="figElem" as="element()*">
-            <xsl:sequence select="$prmTopic//*[contains(@class,' topic/fig ')]
-                                               [exists(*[contains(@class,' topic/title ')])]"/>
+            <xsl:sequence select="$prmTopic//*[@class => contains-token('topic/fig')]
+                                               [exists(*[@class => contains-token('topic/title')])]"/>
         </xsl:variable> 
         <xsl:sequence select="$figElem"/>
     </xsl:template>
@@ -250,9 +250,9 @@ URL : http://www.antennahouse.com/
     <xsl:template name="getTopicFn" as="element()*">
         <xsl:param name="prmTopic" as="element()" required="yes"/>
         <xsl:variable name="fnElem" as="element()*">
-            <xsl:sequence select="$prmTopic//*[contains(@class,' topic/fn ')]
-                                               [exists(*[contains(@class,' topic/title ')])]
-                                               [not(contains(@class,' pr-d/synnote '))]
+            <xsl:sequence select="$prmTopic//*[@class => contains-token('topic/fn')]
+                                               [exists(*[@class => contains-token('topic/title')])]
+                                               [not(@class => contains-token('pr-d/synnote'))]
                                                [empty(@callout)]"/>
         </xsl:variable> 
         <xsl:sequence select="$fnElem"/>

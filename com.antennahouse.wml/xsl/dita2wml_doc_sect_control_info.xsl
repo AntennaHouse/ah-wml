@@ -48,30 +48,30 @@ URL : http://www.antenna.co.jp/
     
     <xsl:variable name="columnMapTreeOrg" as="document-node()">
         <xsl:document>
-           <xsl:apply-templates select="$map/*[contains(@class,' map/topicref ')]" mode="MODE_MAKE_SECT_INFO"/>
+           <xsl:apply-templates select="$map/*[@class => contains-token('map/topicref')]" mode="MODE_MAKE_SECT_INFO"/>
         </xsl:document>
     </xsl:variable>
 
-    <xsl:template match="*[contains(@class,' bookmap/frontmatter ')]" mode="MODE_MAKE_SECT_INFO" priority="5">
-        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="#current">
+    <xsl:template match="*[@class => contains-token('bookmap/frontmatter')]" mode="MODE_MAKE_SECT_INFO" priority="5">
+        <xsl:apply-templates select="*[@class => contains-token('map/topicref')]" mode="#current">
             <xsl:with-param name="prmIsInFrontMatter" tunnel="yes" select="true()"/>
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' bookmap/backmatter ')]" mode="MODE_MAKE_SECT_INFO" priority="5">
-        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="#current"/>
+    <xsl:template match="*[@class => contains-token('bookmap/backmatter')]" mode="MODE_MAKE_SECT_INFO" priority="5">
+        <xsl:apply-templates select="*[@class => contains-token('map/topicref')]" mode="#current"/>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' bookmap/booklists ')]" mode="MODE_MAKE_SECT_INFO" priority="5">
-        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="#current"/>
+    <xsl:template match="*[@class => contains-token('bookmap/booklists')]" mode="MODE_MAKE_SECT_INFO" priority="5">
+        <xsl:apply-templates select="*[@class => contains-token('map/topicref')]" mode="#current"/>
     </xsl:template>
 
     <!-- Ignore cover
          Cover topicref is supposed to exist at the child of frontmatter/backmatter
      -->
-    <xsl:template match="*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)]" mode="MODE_MAKE_SECT_INFO" priority="5"/>
+    <xsl:template match="*[@class => contains-token('map/topicref')][ahf:isCoverTopicRef(.)]" mode="MODE_MAKE_SECT_INFO" priority="5"/>
     
-    <xsl:template match="*[contains(@class,' map/topicref ')]" mode="MODE_MAKE_SECT_INFO">
+    <xsl:template match="*[@class => contains-token('map/topicref')]" mode="MODE_MAKE_SECT_INFO">
         <xsl:param name="prmIsInFrontMatter" tunnel="yes" required="false" select="false()"/>
         <xsl:variable name="columnInfo" as="item()+" select="ahf:getColumnInfo(.)"/>
         <xsl:variable name="breakInfo" as="xs:integer" select="ahf:getBreakInfo(.)"/>
@@ -86,7 +86,7 @@ URL : http://www.antenna.co.jp/
                     <xsl:attribute name="navtitle" select="string(@navtitle)"/>
                     <xsl:attribute name="colsep" select="$columnInfo[4]"/>
                 </topichead>
-                <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="#current"/>
+                <xsl:apply-templates select="*[@class => contains-token('map/topicref')]" mode="#current"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:variable name="topic" as="element()?" select="$columnInfo[5]"/>
@@ -108,8 +108,8 @@ URL : http://www.antenna.co.jp/
                     <xsl:attribute name="contentkey" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
                     <xsl:attribute name="navtitle">
                         <xsl:choose>
-                            <xsl:when test="exists(*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')])">
-                                <xsl:value-of select="string(*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')])"/>
+                            <xsl:when test="exists(*[@class => contains-token('map/topicmeta ')]/*[contains(@class,' topic/navtitle')])">
+                                <xsl:value-of select="string(*[@class => contains-token('map/topicmeta ')]/*[contains(@class,' topic/navtitle')])"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:value-of select="@navtitle"/>
@@ -121,20 +121,20 @@ URL : http://www.antenna.co.jp/
                 </topicref>
                 <!-- body & related-links -->
                 <xsl:if test="ahf:shouldProcessBody(.)">
-                    <xsl:apply-templates select="$topic/*[contains(@class,' topic/body ')]" mode="#current">
+                    <xsl:apply-templates select="$topic/*[@class => contains-token('topic/body')]" mode="#current">
                         <xsl:with-param name="prmTopicRef" select="."/>
                     </xsl:apply-templates>
                 </xsl:if>
                 <xsl:if test="ahf:shouldProcessRelatdLinks(.)">
-                    <xsl:apply-templates select="$topic/*[contains(@class,' topic/related-links ')]" mode="#current">
+                    <xsl:apply-templates select="$topic/*[@class => contains-token('topic/related-links')]" mode="#current">
                         <xsl:with-param name="prmTopicRef" select="."/>
                     </xsl:apply-templates>
                 </xsl:if>
                 <!-- nested topic-->
-                <xsl:apply-templates select="$topic/*[contains(@class,' topic/topic ')]" mode="#current">
+                <xsl:apply-templates select="$topic/*[@class => contains-token('topic/topic')]" mode="#current">
                     <xsl:with-param name="prmTopicRef" select="."/>
                 </xsl:apply-templates>
-                <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="#current"/>
+                <xsl:apply-templates select="*[@class => contains-token('map/topicref')]" mode="#current"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -156,12 +156,12 @@ URL : http://www.antenna.co.jp/
     </xsl:function>    
     
     <!-- topic/body -->
-    <xsl:template match="*[contains(@class,' topic/body ')]" mode="MODE_MAKE_SECT_INFO">
+    <xsl:template match="*[@class => contains-token('topic/body')]" mode="MODE_MAKE_SECT_INFO">
         <xsl:param name="prmTopicRef" as="element()" required="yes"/>
         <xsl:param name="prmIsInFrontMatter" tunnel="yes" required="false" select="false()"/>
         <xsl:variable name="body" as="element()" select="."/>
         <xsl:variable name="columnInfo3" as="item()+" select="ahf:getColumnInfo3($prmTopicRef,$body)"/>
-        <xsl:variable name="spanImage" as="element()*" select="$body/descendant::*[contains(@class,' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]"/>
+        <xsl:variable name="spanImage" as="element()*" select="$body/descendant::*[@class => contains-token('topic/image')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]"/>
         <body>
             <xsl:attribute name="column" select="$columnInfo3[1]"/>
             <xsl:attribute name="id" select="$columnInfo3[2]"/>
@@ -176,7 +176,7 @@ URL : http://www.antenna.co.jp/
     </xsl:template>
 
     <!-- topic/related-links -->
-    <xsl:template match="*[contains(@class,' topic/related-links ')]" mode="MODE_MAKE_SECT_INFO">
+    <xsl:template match="*[@class => contains-token('topic/related-links')]" mode="MODE_MAKE_SECT_INFO">
         <xsl:param name="prmTopicRef" as="element()" required="yes"/>
         <xsl:param name="prmIsInFrontMatter" tunnel="yes" required="false" select="false()"/>
         <xsl:variable name="relatedLinks" as="element()" select="."/>
@@ -192,7 +192,7 @@ URL : http://www.antenna.co.jp/
     </xsl:template>
     
     <!-- Image that span columns -->
-    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]" mode="MODE_MAKE_SECT_INFO" priority="5">
+    <xsl:template match="*[@class => contains-token('topic/image')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]" mode="MODE_MAKE_SECT_INFO" priority="5">
         <xsl:param name="prmIsInFrontMatter" tunnel="yes" required="false" select="false()"/>
         <xsl:param name="prmTopicRef" as="element()" required="yes"/>
         <image>
@@ -217,7 +217,7 @@ URL : http://www.antenna.co.jp/
     </xsl:function>    
 
     <!--General image-->
-    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break'][empty(ancestor::*[ahf:seqContains(string(@class),(' floatfig-d/floatfig ',' floatfig-d/floatfig-group '))][string(@float) = ('left','right')])]" mode="MODE_MAKE_SECT_INFO">
+    <xsl:template match="*[@class => contains-token('topic/image ')][string(@placement) eq 'break'][empty(ancestor::*[ahf:seqContains(string(@class),(' floatfig-d/floatfig ',' floatfig-d/floatfig-group'))][string(@float) = ('left','right')])]" mode="MODE_MAKE_SECT_INFO">
         <xsl:param name="prmIsInFrontMatter" tunnel="yes" required="false" select="false()"/>
         <xsl:param name="prmTopicRef" as="element()" required="yes"/>
         <image>
@@ -231,7 +231,7 @@ URL : http://www.antenna.co.jp/
     </xsl:template>
 
     <!-- Nested topic -->
-    <xsl:template match="*[contains(@class,' topic/topic ')]" mode="MODE_MAKE_SECT_INFO">
+    <xsl:template match="*[@class => contains-token('topic/topic')]" mode="MODE_MAKE_SECT_INFO">
         <xsl:param name="prmIsInFrontMatter" tunnel="yes" required="false" select="false()"/>
         <xsl:param name="prmTopicRef" as="element()" required="yes"/>
         <xsl:variable name="topic" as="element()" select="."/>
@@ -239,12 +239,12 @@ URL : http://www.antenna.co.jp/
         <xsl:variable name="columnInfo2" as="item()+" select="ahf:getColumnInfo2($prmTopicRef,$topic)"/>
         <topic>
             <xsl:attribute name="column" select="$columnInfo2[1]"/>
-            <xsl:attribute name="title" select="string(*[contains(@class,' topic/title ')])"/>
+            <xsl:attribute name="title" select="string(*[@class => contains-token('topic/title')])"/>
             <xsl:attribute name="id" select="$columnInfo2[2]"/>
             <xsl:attribute name="oid" select="$columnInfo2[3]"/>
             <xsl:attribute name="break">
                 <xsl:choose>
-                    <xsl:when test="$topic/ancestor::*[contains(@class,' topic/topic ')]">
+                    <xsl:when test="$topic/ancestor::*[@class => contains-token('topic/topic')]">
                         <xsl:value-of select="ahf:getBreakInfo($topic)"/>
                     </xsl:when>
                     <xsl:when test="($topicRefBreakInfo eq $cBreakAuto)">
@@ -261,17 +261,17 @@ URL : http://www.antenna.co.jp/
         </topic>
         <!-- body & related-links -->
         <xsl:if test="ahf:shouldProcessBody($prmTopicRef)">
-            <xsl:apply-templates select="$topic/*[contains(@class,' topic/body ')]" mode="#current">
+            <xsl:apply-templates select="$topic/*[@class => contains-token('topic/body')]" mode="#current">
                 <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
             </xsl:apply-templates>
         </xsl:if>
         <xsl:if test="ahf:shouldProcessRelatdLinks($prmTopicRef)">
-            <xsl:apply-templates select="$topic/*[contains(@class,' topic/related-links ')]" mode="#current">
+            <xsl:apply-templates select="$topic/*[@class => contains-token('topic/related-links')]" mode="#current">
                 <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
             </xsl:apply-templates>
         </xsl:if>
         <!-- More nested topic -->
-        <xsl:apply-templates select="*[contains(@class,' topic/topic ')]" mode="#current">
+        <xsl:apply-templates select="*[@class => contains-token('topic/topic')]" mode="#current">
             <xsl:with-param name="prmTopicRef" select="$prmTopicRef"/>
         </xsl:apply-templates>
     </xsl:template>
@@ -297,10 +297,10 @@ URL : http://www.antenna.co.jp/
         <xsl:choose>
             <xsl:when test="exists($prmTopicRef/@href) and exists($topic)">
                 <xsl:choose>
-                    <xsl:when test="$prmTopicRef[contains(@class,' bookmap/chapter ')]">
+                    <xsl:when test="$prmTopicRef[@class => contains-token('bookmap/chapter')]">
                         <xsl:sequence select="(1,ahf:generateId($topic),string($topic/@oid),$topicRefColSepSpec,$topic)"/>
                     </xsl:when>
-                    <xsl:when test="$prmTopicRef/ancestor::*[contains(@class,' bookmap/glossarylist ')]">
+                    <xsl:when test="$prmTopicRef/ancestor::*[@class => contains-token('bookmap/glossarylist')]">
                         <xsl:sequence select="(2,ahf:generateId($topic),string($topic/@oid),$topicRefColSepSpec,$topic)"/>
                     </xsl:when>
                     <xsl:when test="$topicRefColSpec ne ''">
@@ -321,16 +321,16 @@ URL : http://www.antenna.co.jp/
             </xsl:when>
             <xsl:otherwise>
                 <xsl:choose>
-                    <xsl:when test="$prmTopicRef[contains(@class,' bookmap/chapter ')]">
+                    <xsl:when test="$prmTopicRef[@class => contains-token('bookmap/chapter')]">
                         <xsl:sequence select="(1,ahf:generateId($prmTopicRef),'',$topicRefColSepSpec,())"/>
                     </xsl:when>
-                    <xsl:when test="$prmTopicRef[contains(@class,' bookmap/indexlist ')]">
+                    <xsl:when test="$prmTopicRef[@class => contains-token('bookmap/indexlist')]">
                         <xsl:sequence select="(1,ahf:generateId($prmTopicRef),'',$topicRefColSepSpec,())"/>
                     </xsl:when>
-                    <xsl:when test="$prmTopicRef[contains(@class,' bookmap/toc ')]">
+                    <xsl:when test="$prmTopicRef[@class => contains-token('bookmap/toc')]">
                         <xsl:sequence select="(1,ahf:generateId($prmTopicRef),'',$topicRefColSepSpec,())"/>
                     </xsl:when>
-                    <xsl:when test="$prmTopicRef[contains(@class,' bookmap/glossarylist ')]">
+                    <xsl:when test="$prmTopicRef[@class => contains-token('bookmap/glossarylist')]">
                         <xsl:sequence select="(1,ahf:generateId($prmTopicRef),'',$topicRefColSepSpec,())"/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -380,7 +380,7 @@ URL : http://www.antenna.co.jp/
         <xsl:variable name="bodyColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmBody)"/>
         <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopicRef)"/>
         <xsl:variable name="topicRefColSepSpec" as="xs:integer" select="ahf:getColSepSpecFromTopicRef($prmTopicRef)"/>
-        <xsl:variable name="topic" as="element()" select="$prmBody/parent::*[contains(@class,' topic/topic ')]"/>
+        <xsl:variable name="topic" as="element()" select="$prmBody/parent::*[@class => contains-token('topic/topic')]"/>
         <xsl:variable name="topicColSpec" as="xs:string" select="ahf:getColSpecFromElem($topic)"/>
         <xsl:choose>
             <xsl:when test="$bodyColSpec ne ''">
@@ -409,11 +409,11 @@ URL : http://www.antenna.co.jp/
     <xsl:function name="ahf:getColumnInfo4" as="item()*">
         <xsl:param name="prmTopicRef" as="element()"/>
         <xsl:param name="prmRelatedLinks" as="element()"/>
-        <xsl:variable name="body" as="element()?" select="$prmRelatedLinks/preceding-sibling::*[contains(@class,' topic/body ')][1]"/>
+        <xsl:variable name="body" as="element()?" select="$prmRelatedLinks/preceding-sibling::*[@class => contains-token('topic/body')][1]"/>
         <xsl:variable name="bodyColSpec" as="xs:string" select="if (exists($body)) then ahf:getColSpecFromElem($body) else ''"/>
         <xsl:variable name="topicRefColSpec" as="xs:string" select="ahf:getColSpecFromElem($prmTopicRef)"/>
         <xsl:variable name="topicRefColSepSpec" as="xs:integer" select="ahf:getColSepSpecFromTopicRef($prmTopicRef)"/>
-        <xsl:variable name="topic" as="element()" select="$prmRelatedLinks/parent::*[contains(@class,' topic/topic ')]"/>
+        <xsl:variable name="topic" as="element()" select="$prmRelatedLinks/parent::*[@class => contains-token('topic/topic')]"/>
         <xsl:variable name="topicColSpec" as="xs:string" select="ahf:getColSpecFromElem($topic)"/>
         <xsl:choose>
             <xsl:when test="$bodyColSpec ne ''">
@@ -451,7 +451,7 @@ URL : http://www.antenna.co.jp/
     -->
     <xsl:function name="ahf:getColSepSpecFromTopicRef" as="xs:integer">
         <xsl:param name="prmTopicRef" as="element()"/>
-        <xsl:sequence select="if ($prmTopicRef/ancestor::*[contains(@class,' bookmap/glossarylist ')]) then 0 else 1"/>
+        <xsl:sequence select="if ($prmTopicRef/ancestor::*[@class => contains-token('bookmap/glossarylist')]) then 0 else 1"/>
     </xsl:function>
     
     <!--
@@ -468,7 +468,7 @@ URL : http://www.antenna.co.jp/
                 <xsl:variable name="break" as="xs:string" select="ahf:getOutputClassRegx($prmElem,'(break-)(auto|page|col)','$2')"/>
                 <xsl:variable name="breakIndex" as="xs:integer?" select="index-of($cBreakSpecSeq,$break)"/>
                 <xsl:choose>
-                    <xsl:when test="$prmElem[ahf:seqContains(@class,(' bookmap/part ',' bookmap/chapter ',' bookmap/appendix ',' bookmap/toc ',' bookmap/indexlist',' bookmap/glossarylist '))][empty(parent::*[contains(@class,' bookmap/part ')])]">
+                    <xsl:when test="$prmElem[ahf:seqContains(@class,(' bookmap/part ',' bookmap/chapter ',' bookmap/appendix ',' bookmap/toc ',' bookmap/indexlist',' bookmap/glossarylist '))][empty(parent::*[@class => contains-token('bookmap/part')])]">
                         <xsl:sequence select="ahf:getPageSpecInfo($prmElem)"/>
                     </xsl:when>
                     <xsl:when test="exists($breakIndex)">

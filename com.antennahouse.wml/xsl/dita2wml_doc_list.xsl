@@ -25,13 +25,13 @@ URL : http://www.antennahouse.com/
      return:	
      note:      Pass list occurence number and list nesting level to li template
      -->
-    <xsl:template match="*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')]">
+    <xsl:template match="*[@class => contains-token('topic/ol ') or contains(@class,' topic/ul')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:variable name="id" as="xs:string" select="ahf:generateId(.)"/>
         <xsl:variable name="occurenceNumber" as="xs:integer?" select="map:get($listNumberMap,$id)"/>
         <xsl:assert test="exists($occurenceNumber)" select="'[ol/ul] id=',$id,' does not exits in $listNumberMap'"/>
-        <xsl:variable name="isOl" as="xs:boolean" select="contains(@class,' topic/ol ')"/>
+        <xsl:variable name="isOl" as="xs:boolean" select="@class => contains-token('topic/ol')"/>
         <xsl:variable name="listStyle" as="xs:string">
             <xsl:choose>
                 <xsl:when test="$isOl">
@@ -89,7 +89,7 @@ URL : http://www.antennahouse.com/
                 But it cannot be expressed in WordprocessingML.
                 For this reason, this template inserts dummy w:p if li/*[1] is not a <p> element.
      -->
-    <xsl:template match="*[contains(@class,' topic/li ')]">
+    <xsl:template match="*[@class => contains-token('topic/li')]">
         <xsl:param name="prmListOccurenceNumber" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmListLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmListStyle" tunnel="yes" required="no" as="xs:string?"/>
@@ -97,7 +97,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
         <xsl:assert test="exists($prmListStyle)" select="'[topic/li] $prmListStyle is empty. current=',ahf:generateId(.)"/>
-        <xsl:if test="empty(child::*[1][contains(@class,' topic/p ')])">
+        <xsl:if test="empty(child::*[1][@class => contains-token('topic/p')])">
             <!-- generate dummmy w:p -->
             <xsl:variable name="listLevelBreakElem" as="element()?">
                 <xsl:choose>
@@ -137,26 +137,26 @@ URL : http://www.antennahouse.com/
      return:	dt returns w:p. dd returns block elements (like w:p or w:table)
      note:      dd is indented one more deeper level.
      -->
-    <xsl:template match="*[contains(@class,' topic/dl ')]">
+    <xsl:template match="*[@class => contains-token('topic/dl')]">
         <xsl:apply-templates select="*"/>
     </xsl:template>
         
-    <xsl:template match="*[contains(@class,' topic/dlhead ')]">
+    <xsl:template match="*[@class => contains-token('topic/dlhead')]">
         <xsl:call-template name="warningContinue">
             <xsl:with-param name="prmMes" select="ahf:replace($stMes2024,('%pos'),(ahf:genHistoryId(.)))"/>
         </xsl:call-template>
-        <xsl:apply-templates select="*[contains(@class,' topic/dlentry ')]"/>
+        <xsl:apply-templates select="*[@class => contains-token('topic/dlentry')]"/>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class,' topic/dlentry ')]">
+    <xsl:template match="*[@class => contains-token('topic/dlentry')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
-        <xsl:apply-templates select="*[contains(@class,' topic/dt ')]"/>
-        <xsl:apply-templates select="*[contains(@class,' topic/dd ')]">
+        <xsl:apply-templates select="*[@class => contains-token('topic/dt')]"/>
+        <xsl:apply-templates select="*[@class => contains-token('topic/dd')]">
             <xsl:with-param name="prmIndentLevel" tunnel="yes" select="$prmIndentLevel + 1"/>
         </xsl:apply-templates>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class,' topic/dt ')]">
+    <xsl:template match="*[@class => contains-token('topic/dt')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
@@ -170,7 +170,7 @@ URL : http://www.antennahouse.com/
         </w:p>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' topic/dd ')]/*[contains(@class,' topic/p ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('topic/dd ')]/*[contains(@class,' topic/p')]" priority="5">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
@@ -190,14 +190,14 @@ URL : http://www.antennahouse.com/
      return:	sli returns w:p.
      note:      sli is indented one more deeper level.
      -->
-    <xsl:template match="*[contains(@class,' topic/sl ')]">
+    <xsl:template match="*[@class => contains-token('topic/sl')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
-        <xsl:apply-templates select="*[contains(@class,' topic/sli ')]">
+        <xsl:apply-templates select="*[@class => contains-token('topic/sli')]">
             <xsl:with-param name="prmIndentLevel" tunnel="yes" select="$prmIndentLevel + 1"/>
         </xsl:apply-templates>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class,' topic/sli ')]">
+    <xsl:template match="*[@class => contains-token('topic/sli')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>

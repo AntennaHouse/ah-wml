@@ -46,7 +46,7 @@ URL : http://www.antennahouse.com/
                 <xsl:choose>
                     <xsl:when test="$prmElem/self::*[contains(@class, ' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]">
                         <!-- generate N column section property-->
-                        <xsl:variable name="colInfo" as="xs:integer*" select="map:get($columnMap,ahf:generateId($prmElem/ancestor::*[contains(@class,' topic/body ')]))"/>
+                        <xsl:variable name="colInfo" as="xs:integer*" select="map:get($columnMap,ahf:generateId($prmElem/ancestor::*[@class => contains-token('topic/body')]))"/>
                         <xsl:variable name="currentCol" as="xs:integer" select="$colInfo[2]"/>
                         <w:p>
                             <w:pPr>
@@ -266,7 +266,7 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="isColumnBreak" as="xs:boolean">
             <xsl:choose>
                 <xsl:when test="exists($prmTopic)">
-                    <xsl:variable name="isNestedTopic" as="xs:boolean" select="exists($prmTopic/ancestor::*[contains(@class,' topic/topic ')])"/>
+                    <xsl:variable name="isNestedTopic" as="xs:boolean" select="exists($prmTopic/ancestor::*[@class => contains-token('topic/topic')])"/>
                     <xsl:choose>
                         <xsl:when test="$isNestedTopic">
                             <xsl:sequence select="ahf:isColumnBreak($prmTopic)"/>

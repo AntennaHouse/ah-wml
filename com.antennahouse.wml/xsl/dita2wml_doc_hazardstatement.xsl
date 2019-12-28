@@ -45,7 +45,7 @@ URL : http://www.antennahouse.com/
         </xsl:map>
     </xsl:variable>
     
-    <xsl:template match="*[contains(@class,' hazard-d/hazardstatement ')]" as="element()+" priority="5">
+    <xsl:template match="*[@class => contains-token('hazard-d/hazardstatement')]" as="element()+" priority="5">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
 
@@ -169,7 +169,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:template name="genHsRows" as="element(w:tr)+">
         <xsl:param name="prmHsElem" as="element()" required="yes"/>
-        <xsl:for-each select="$prmHsElem/*[contains(@class,' hazard-d/messagepanel ')]">
+        <xsl:for-each select="$prmHsElem/*[@class => contains-token('hazard-d/messagepanel')]">
             <xsl:variable name="hsRowContent" as="element(w:tr)">
                 <xsl:call-template name="genHsRow">
                     <xsl:with-param name="prmMessagePanel" select="."/>
@@ -189,7 +189,7 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="hazardSymbol" as="element(w:r)?">
             <xsl:variable name="hazardSymbolWml" as="element(w:drawing)?">
                 <xsl:call-template name="genHazardSymbol">
-                    <xsl:with-param name="prmHazardSymbol" select="$prmHsElem/*[contains(@class,' hazard-d/hazardsymbol ')][$prmPosition]"/>
+                    <xsl:with-param name="prmHazardSymbol" select="$prmHsElem/*[@class => contains-token('hazard-d/hazardsymbol')][$prmPosition]"/>
                 </xsl:call-template>            
             </xsl:variable>
             <xsl:choose>
@@ -246,7 +246,7 @@ URL : http://www.antennahouse.com/
         </xsl:variable>
         
         <xsl:choose>
-            <xsl:when test="exists($prmHsElem/*[contains(@class,' hazard-d/hazardsymbol ')])">
+            <xsl:when test="exists($prmHsElem/*[@class => contains-token('hazard-d/hazardsymbol')])">
                 <xsl:call-template name="getWmlObjectReplacing">
                     <xsl:with-param name="prmObjName" select="'wmlHazardStatementRow'"/>
                     <xsl:with-param name="prmSrc" select="('node:icon-image','node:messagepanel')"/>

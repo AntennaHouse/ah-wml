@@ -25,7 +25,7 @@ URL : http://www.antennahouse.com/
      return:	
      note:		FIX-ME: Need to generate bookmark for title/descendant[1] and title/descendant[last()] 
      -->
-    <!--xsl:template match="*[contains(@class,' topic/title ')][parent::*[ahf:seqContains(@class,(' topic/fig ',' topic/table ',' topic/section ',' topic/example '))]]" priority="20">
+    <!--xsl:template match="*[@class => contains-token('topic/title ')][parent::*[ahf:seqContains(@class,(' topic/fig ',' topic/table ',' topic/section ',' topic/example'))]]" priority="20">
         <xsl:call-template name="genBookmarkStart">
             <xsl:with-param name="prmElem" select="parent::*"/>
         </xsl:call-template>

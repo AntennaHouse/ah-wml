@@ -41,20 +41,20 @@ E-mail : info@antennahouse.com
             <dc:subject/>
             <dc:creator>
                 <xsl:choose>
-                    <xsl:when test="$topicmeta/*[contains(@class,' topic/author ')]">
+                    <xsl:when test="$topicmeta/*[@class => contains-token('topic/author')]">
                         <xsl:variable name="author" as="xs:string*">
-                            <xsl:apply-templates select="$topicmeta/*[contains(@class,' topic/author ')]" mode="MODE_TEXT_ONLY"/>
+                            <xsl:apply-templates select="$topicmeta/*[@class => contains-token('topic/author')]" mode="MODE_TEXT_ONLY"/>
                         </xsl:variable>
                         <xsl:value-of select="normalize-space(string-join($author,''))"/>
                     </xsl:when>
-                    <xsl:when test="$topicmeta/*[contains(@class,' xnal-d/authorinformation ')]/*[contains(@class,' xnal-d/personinfo ')]/*[contains(@class,' xnal-d/namedetails ')]/*[contains(@class,' xnal-d/personname ')]">
-                        <xsl:variable name="personName" as="element()" select="$topicmeta/*[contains(@class,' xnal-d/authorinformation ')]/*[contains(@class,' xnal-d/personinfo ')]/*[contains(@class,' xnal-d/namedetails ')]/*[contains(@class,' xnal-d/personname ')]"/>
+                    <xsl:when test="$topicmeta/*[@class => contains-token('xnal-d/authorinformation ')]/*[@class => contains-token('xnal-d/personinfo ')]/*[contains(@class,' xnal-d/namedetails')]/*[contains(@class,' xnal-d/personname')]">
+                        <xsl:variable name="personName" as="element()" select="$topicmeta/*[@class => contains-token('xnal-d/authorinformation ')]/*[@class => contains-token('xnal-d/personinfo ')]/*[contains(@class,' xnal-d/namedetails')]/*[contains(@class,' xnal-d/personname')]"/>
                         <xsl:variable name="author" as="xs:string*">
-                            <xsl:apply-templates select="$personName/*[contains(@class,' xnal-d/firstname ')]" mode="MODE_TEXT_ONLY"/>
+                            <xsl:apply-templates select="$personName/*[@class => contains-token('xnal-d/firstname')]" mode="MODE_TEXT_ONLY"/>
                             <xsl:text> </xsl:text>
-                            <xsl:apply-templates select="$personName/*[contains(@class,' xnal-d/xnal-d/middlename ')]" mode="MODE_TEXT_ONLY"/>
+                            <xsl:apply-templates select="$personName/*[@class => contains-token('xnal-d/xnal-d/middlename')]" mode="MODE_TEXT_ONLY"/>
                             <xsl:text> </xsl:text>
-                            <xsl:apply-templates select="$personName/*[contains(@class,' xnal-d/xnal-d/xnal-d/lastname ')]" mode="MODE_TEXT_ONLY"/>
+                            <xsl:apply-templates select="$personName/*[@class => contains-token('xnal-d/xnal-d/xnal-d/lastname')]" mode="MODE_TEXT_ONLY"/>
                         </xsl:variable>
                         <xsl:value-of select="normalize-space(string-join($author,''))"/>
                     </xsl:when>

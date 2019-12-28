@@ -21,8 +21,8 @@ E-mail : info@antennahouse.com
      -->
     <!-- List instances: All ol,ul,related-links -->
     <xsl:variable name="listInstances" as="element()*">
-        <xsl:sequence select="doc($pMergedFinalOutputUrl)/*/*[contains(@class,' topic/topic ')]/descendant::*[contains(@class, ' topic/ol ') or contains(@class, ' topic/ul ')]"/>
-        <xsl:sequence select="doc($pMergedFinalOutputUrl)/*/*[contains(@class,' topic/topic ')]/descendant::*[contains(@class, ' topic/related-links ')][ahf:isEffectiveRelatedLinks(.)]"/>
+        <xsl:sequence select="doc($pMergedFinalOutputUrl)/*/*[@class => contains-token('topic/topic ')]/descendant::*[contains(@class, ' topic/ol ') or contains(@class, ' topic/ul')]"/>
+        <xsl:sequence select="doc($pMergedFinalOutputUrl)/*/*[@class => contains-token('topic/topic ')]/descendant::*[contains(@class, ' topic/related-links')][ahf:isEffectiveRelatedLinks(.)]"/>
     </xsl:variable>
     
     <!-- Unique list instances

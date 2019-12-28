@@ -29,7 +29,7 @@ URL : http://www.antennahouse.com/
      return:	w:r*
      note:      If uicontrol is child of menucascade, insert ">" between as needed.
      -->
-    <xsl:template match="*[contains(@class,' ui-d/uicontrol ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('ui-d/uicontrol')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="uiControlRunProp" as="element()*">
             <xsl:call-template name="getWmlObject">

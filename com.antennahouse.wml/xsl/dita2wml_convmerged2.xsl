@@ -52,7 +52,7 @@ E-mail : info@antennahouse.com
      return:	sorted or copied result
      note:		
      -->
-    <xsl:template match="*[contains(@class,' bookmap/glossarylist ')]">
+    <xsl:template match="*[@class => contains-token('bookmap/glossarylist')]">
         <xsl:choose>
             <xsl:when test="$pSortGlossaryList">
                 <xsl:copy>
@@ -77,7 +77,7 @@ E-mail : info@antennahouse.com
         
         <xsl:variable name="glossEntryTopicRefs" as="document-node()">
             <xsl:document>
-                <xsl:apply-templates select="$prmGlossaryList/*[contains(@class,' map/topicref ')]" mode="MODE_MAKE_SORT_KEY"/>    
+                <xsl:apply-templates select="$prmGlossaryList/*[@class => contains-token('map/topicref')]" mode="MODE_MAKE_SORT_KEY"/>    
             </xsl:document>
         </xsl:variable>
         
@@ -103,34 +103,34 @@ E-mail : info@antennahouse.com
      return:	topicref adding sort-key and auto generated topicref from glossgroup
      note:		
      -->
-    <xsl:template match="*[contains(@class,' map/topicref ')][exists(@href)]" mode="MODE_MAKE_SORT_KEY">
+    <xsl:template match="*[@class => contains-token('map/topicref')][exists(@href)]" mode="MODE_MAKE_SORT_KEY">
         <xsl:variable name="topicRef" as="element()" select="."/>
         <xsl:variable name="topic" as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
         <xsl:choose>
             <xsl:when test="exists($topic)">
                 <xsl:choose>
-                    <xsl:when test="$topic[contains(@class,' glossenrty/glossentry ')]">
+                    <xsl:when test="$topic[@class => contains-token('glossenrty/glossentry')]">
                         <xsl:variable name="sortKey" as="xs:string">
                             <xsl:variable name="sortKeyTexts" as="xs:string*">
-                                <xsl:apply-templates select="$topic/*[contains(@class,' glossentry/glossterm ')]" mode="TEXT_ONLY"/>
+                                <xsl:apply-templates select="$topic/*[@class => contains-token('glossentry/glossterm')]" mode="TEXT_ONLY"/>
                             </xsl:variable>
                             <xsl:sequence select="normalize-space(string-join($sortKeyTexts,''))"/>
                         </xsl:variable>
                         <xsl:copy>
                             <xsl:copy-of select="@*"/>
                             <xsl:attribute name="sort-key" select="$sortKey"/>
-                            <xsl:copy-of select="* except *[contains(@class,' map/topicref ')]"/>
+                            <xsl:copy-of select="* except *[@class => contains-token('map/topicref')]"/>
                         </xsl:copy>
                     </xsl:when>
-                    <xsl:when test="$topic[contains(@class,' glossgroup/glossgroup ')]">
+                    <xsl:when test="$topic[@class => contains-token('glossgroup/glossgroup')]">
                         <xsl:variable name="glossGroup" as="element()" select="$topic"/>
-                        <xsl:variable name="glossEntry" as="element()+" select="$glossGroup/descendant::*[contains(@class,' glossentry/glossentry ')]"/>
+                        <xsl:variable name="glossEntry" as="element()+" select="$glossGroup/descendant::*[@class => contains-token('glossentry/glossentry')]"/>
                         <xsl:for-each select="$glossEntry">
                             <xsl:variable name="glossEntry" as="element()" select="."/>
                             <xsl:variable name="href" as="xs:string" select="concat('#',string($glossEntry/@id))"/>
                             <xsl:variable name="sortKey" as="xs:string">
                                 <xsl:variable name="sortKeyTexts" as="xs:string*">
-                                    <xsl:apply-templates select="$glossEntry/*[contains(@class,' glossentry/glossterm ')]" mode="TEXT_ONLY"/>
+                                    <xsl:apply-templates select="$glossEntry/*[@class => contains-token('glossentry/glossterm')]" mode="TEXT_ONLY"/>
                                 </xsl:variable>
                                 <xsl:sequence select="normalize-space(string-join($sortKeyTexts,''))"/>
                             </xsl:variable>
@@ -141,7 +141,7 @@ E-mail : info@antennahouse.com
                                     <xsl:attribute name="first_topic_id" select="$href"/>
                                     <xsl:attribute name="type" select="'glossentry'"/>
                                     <xsl:attribute name="sort-key" select="$sortKey"/>
-                                    <xsl:copy-of select="*[contains(@class,' map/topicmeta ')]"/>
+                                    <xsl:copy-of select="*[@class => contains-token('map/topicmeta')]"/>
                                 </xsl:copy>
                             </xsl:for-each>
                         </xsl:for-each>
@@ -149,18 +149,18 @@ E-mail : info@antennahouse.com
                     <xsl:otherwise>
                         <xsl:variable name="sortKey" as="xs:string">
                             <xsl:variable name="sortKeyTexts" as="xs:string*">
-                                <xsl:apply-templates select="$topic/*[contains(@class,' topic/title ')]" mode="TEXT_ONLY"/>
+                                <xsl:apply-templates select="$topic/*[@class => contains-token('topic/title')]" mode="TEXT_ONLY"/>
                             </xsl:variable>
                             <xsl:sequence select="normalize-space(string-join($sortKeyTexts,''))"/>
                         </xsl:variable>
                         <xsl:copy>
                             <xsl:copy-of select="@*"/>
                             <xsl:attribute name="sort-key" select="$sortKey"/>
-                            <xsl:copy-of select="* except *[contains(@class,' map/topicref ')]"/>
+                            <xsl:copy-of select="* except *[@class => contains-token('map/topicref')]"/>
                         </xsl:copy>
                     </xsl:otherwise>
                 </xsl:choose>
-                <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="#current"/>
+                <xsl:apply-templates select="*[@class => contains-token('map/topicref')]" mode="#current"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="warningContinue">
@@ -170,8 +170,8 @@ E-mail : info@antennahouse.com
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' map/topicref ')][empty(@href)]" mode="MODE_MAKE_SORT_KEY">
-        <xsl:apply-templates select="*[contains(@class,' map/topicref ')]" mode="#current"/>
+    <xsl:template match="*[@class => contains-token('map/topicref')][empty(@href)]" mode="MODE_MAKE_SORT_KEY">
+        <xsl:apply-templates select="*[@class => contains-token('map/topicref')]" mode="#current"/>
     </xsl:template>
 
     <!-- 
@@ -180,9 +180,9 @@ E-mail : info@antennahouse.com
      return:	Extract glossentry as the dependent entry
      note:		
      -->
-    <xsl:template match="$topics/descendant-or-self::*[contains(@class,' glossgroup/glossgroup ')]">
+    <xsl:template match="$topics/descendant-or-self::*[@class => contains-token('glossgroup/glossgroup')]">
         <xsl:variable name="glossGroup" as="element()" select="."/>
-        <xsl:variable name="glossEntries" as="element()+" select="$glossGroup/descendant::*[contains(@class,' glossentry/glossentry ')]"/>
+        <xsl:variable name="glossEntries" as="element()+" select="$glossGroup/descendant::*[@class => contains-token('glossentry/glossentry')]"/>
         <xsl:for-each select="$glossEntries">
             <xsl:apply-templates select="."/>
         </xsl:for-each>

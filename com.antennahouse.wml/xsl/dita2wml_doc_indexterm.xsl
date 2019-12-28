@@ -24,7 +24,7 @@ URL : http://www.antennahouse.com/
      return:	XE field
      note:      still temporary. @start/@end is not implemented.
      -->
-    <xsl:template match="*[contains(@class,' topic/indexterm ')]" as="element(w:r)*">
+    <xsl:template match="*[@class => contains-token('topic/indexterm')]" as="element(w:r)*">
         <xsl:param name="prmSkipIndexTerm" as="xs:boolean" tunnel="yes" required="false" select="false()"/>
         <xsl:if test="not($prmSkipIndexTerm)">
             <xsl:variable name="text" as="xs:string">
@@ -35,9 +35,9 @@ URL : http://www.antennahouse.com/
                 </xsl:variable>
                 <xsl:sequence select="string-join($textSeq,'')"/>
             </xsl:variable>
-            <xsl:variable name="see" as="xs:string" select="string(*[contains(@class,' indexing-d/index-see ')])"/>
-            <xsl:variable name="seeAlso" as="xs:string" select="string(*[contains(@class,' indexing-d/index-see-also ')])"/>
-            <xsl:variable name="indexSortAs" as="xs:string" select="string(*[contains(@class,' indexing-d/index-sort-as ')])"/>
+            <xsl:variable name="see" as="xs:string" select="string(*[@class => contains-token('indexing-d/index-see')])"/>
+            <xsl:variable name="seeAlso" as="xs:string" select="string(*[@class => contains-token('indexing-d/index-see-also')])"/>
+            <xsl:variable name="indexSortAs" as="xs:string" select="string(*[@class => contains-token('indexing-d/index-sort-as')])"/>
             
             <xsl:variable name="option" as="xs:string*">
                 <xsl:choose>

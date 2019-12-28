@@ -28,12 +28,12 @@ URL : http://www.antennahouse.com/
                 - XE field from indexterm should be generated outside the bookmark
                   because bookmark is referenced from toc, related-links/link and xref.
      -->
-    <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" as="element(w:p)">
+    <xsl:template match="*[@class => contains-token('topic/topic ')]/*[contains(@class,' topic/title')]" as="element(w:p)">
         <xsl:param name="prmTopicRef"       tunnel="yes" required="yes" as="element()"/>
         <xsl:param name="prmTopicRefLevel"  tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmTopic"          tunnel="yes" required="yes" as="element()"/>
         <xsl:variable name="title" as="element()" select="."/>
-        <xsl:variable name="topicLevel" as="xs:integer" select="count($title/parent::*/ancestor::*[contains(@class,' topic/topic ')])"/>
+        <xsl:variable name="topicLevel" as="xs:integer" select="count($title/parent::*/ancestor::*[@class => contains-token('topic/topic')])"/>
         <xsl:variable name="isInFrontmatterOrBackmatter" as="xs:boolean" select="exists($prmTopicRef/ancestor-or-self::*[ahf:seqContains(@class,(' bookmap/frontmatter',' bookmap/backmatter '))])"/>
         <w:p>
             <w:pPr>
@@ -47,7 +47,7 @@ URL : http://www.antennahouse.com/
                     </w:numPr>
                 </xsl:if>
             </w:pPr>
-            <xsl:apply-templates select="$prmTopic/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/*[contains(@class,' topic/indexterm ')]"/>
+            <xsl:apply-templates select="$prmTopic/*[@class => contains-token('topic/prolog ')]/*[@class => contains-token('topic/metadata ')]/*[contains(@class,' topic/keywords')]/*[contains(@class,' topic/indexterm')]"/>
             <xsl:call-template name="genBookmarkStart">
                 <xsl:with-param name="prmElem" select="parent::*"/>
             </xsl:call-template>
@@ -88,8 +88,8 @@ URL : http://www.antennahouse.com/
                         <w:t xml:space="preserve"><xsl:value-of select="$prmDefaultTitle"/></w:t>
                     </w:r>
                 </xsl:when>
-                <xsl:when test="$prmTopicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]">
-                    <xsl:apply-templates select="$prmTopicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/node()">
+                <xsl:when test="$prmTopicRef/*[@class => contains-token('map/topicmeta ')]/*[contains(@class,' topic/navtitle')]">
+                    <xsl:apply-templates select="$prmTopicRef/*[@class => contains-token('map/topicmeta ')]/*[contains(@class,' topic/navtitle')]/node()">
                         <xsl:with-param name="prmTopicRef" tunnel="yes" select="$prmTopicRef"/>
                     </xsl:apply-templates>
                 </xsl:when>
@@ -132,8 +132,8 @@ URL : http://www.antennahouse.com/
                         <w:t xml:space="preserve"><xsl:value-of select="$prmTitle"/></w:t>
                     </w:r>
                 </xsl:when>
-                <xsl:when test="$prmTopicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]">
-                    <xsl:apply-templates select="$prmTopicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/node()">
+                <xsl:when test="$prmTopicRef/*[@class => contains-token('map/topicmeta ')]/*[contains(@class,' topic/navtitle')]">
+                    <xsl:apply-templates select="$prmTopicRef/*[@class => contains-token('map/topicmeta ')]/*[contains(@class,' topic/navtitle')]/node()">
                         <xsl:with-param name="prmTopicRef" tunnel="yes" select="$prmTopicRef"/>
                     </xsl:apply-templates>
                 </xsl:when>
@@ -197,7 +197,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:function name="ahf:hasTopTopicrefNumber" as="xs:boolean">
         <xsl:param name="prmTopicRef" as="element()"/>
-        <xsl:variable name="topTopicRef" as="element()" select="$prmTopicRef/ancestor-or-self::*[contains(@class,' map/topicref ')][not(contains(@class,' bookmap/appendices '))][last()]"/>
+        <xsl:variable name="topTopicRef" as="element()" select="$prmTopicRef/ancestor-or-self::*[@class => contains-token('map/topicref ')][not(contains(@class,' bookmap/appendices'))][last()]"/>
         <xsl:choose>
             <xsl:when test="$isBookMap">
                 <xsl:choose>
@@ -237,7 +237,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:template name="getTopTopicrefNumber" as="xs:integer">
         <xsl:param name="prmTopicRef" required="yes" as="element()"/>
-        <xsl:variable name="topTopicRef" as="element()" select="$prmTopicRef/ancestor-or-self::*[contains(@class,' map/topicref ')][not(contains(@class,' bookmap/appendices '))][last()]"/>
+        <xsl:variable name="topTopicRef" as="element()" select="$prmTopicRef/ancestor-or-self::*[@class => contains-token('map/topicref ')][not(contains(@class,' bookmap/appendices'))][last()]"/>
         <xsl:choose>
             <xsl:when test="$isBookMap">
                 <xsl:choose>
@@ -277,7 +277,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:function name="ahf:genLevelTitlePrefix" as="xs:string">
         <xsl:param name="prmTopicRef" as="element()"/>
-        <xsl:variable name="ancestorOrSelfTopicRef" as="element()*" select="$prmTopicRef/ancestor-or-self::*[contains(@class,' map/topicref ')][not(contains(@class,' bookmap/appendices '))]"/>
+        <xsl:variable name="ancestorOrSelfTopicRef" as="element()*" select="$prmTopicRef/ancestor-or-self::*[@class => contains-token('map/topicref ')][not(contains(@class,' bookmap/appendices'))]"/>
         <xsl:variable name="levelString" as="xs:string*" select="ahf:getSibilingTopicrefCount($ancestorOrSelfTopicRef)"/>
         <xsl:sequence select="string-join($levelString,'')"/>
     </xsl:function>
@@ -293,7 +293,7 @@ URL : http://www.antennahouse.com/
     <xsl:function name="ahf:genLevelTitlePrefixByCount" as="xs:string">
         <xsl:param name="prmTopicRef" as="element()"/>
         <xsl:param name="prmCutLimit" as="xs:integer"/>
-        <xsl:variable name="ancestorOrSelfTopicRef" as="element()*" select="($prmTopicRef/ancestor-or-self::*[contains(@class,' map/topicref ')][not(contains(@class,' bookmap/appendices '))])[position() le $prmCutLimit]"/>
+        <xsl:variable name="ancestorOrSelfTopicRef" as="element()*" select="($prmTopicRef/ancestor-or-self::*[@class => contains-token('map/topicref ')][not(contains(@class,' bookmap/appendices'))])[position() le $prmCutLimit]"/>
         <xsl:variable name="levelString" as="xs:string*" select="ahf:getSibilingTopicrefCount($ancestorOrSelfTopicRef)"/>
         <xsl:sequence select="string-join($levelString,'')"/>
     </xsl:function>

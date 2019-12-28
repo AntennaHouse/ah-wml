@@ -25,7 +25,7 @@ URL : http://www.antennahouse.com/
      return:	
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/related-links ')]">
+    <xsl:template match="*[@class => contains-token('topic/related-links')]">
         <xsl:param name="prmTopicRef" tunnel="yes" required="yes" as="element()"/>
         <!-- Generate section property -->
         <xsl:call-template name="getSectionPropertyElemBefore"/>
@@ -127,7 +127,7 @@ URL : http://www.antennahouse.com/
             </xsl:call-template>
         </xsl:variable>
         
-        <xsl:for-each select="$prmRelatedLinks/descendant::*[contains(@class,' topic/link ')][ahf:isTargetLink(.)]">
+        <xsl:for-each select="$prmRelatedLinks/descendant::*[@class => contains-token('topic/link')][ahf:isTargetLink(.)]">
             <xsl:variable name="link" select="." as="element()"/>
             <xsl:variable name="href" select="string($link/@href)" as="xs:string"/>
             <xsl:variable name="ohref" select="string($link/@ohref)" as="xs:string"/>
@@ -135,7 +135,7 @@ URL : http://www.antennahouse.com/
             <xsl:variable name="isLinkInside" as="xs:boolean" select="starts-with($href,'#')"/>
             <xsl:variable name="topic" as="element()?" select="if ($isLinkInside) then ahf:getTopicFromLink($link) else ()"/>
             <xsl:variable name="topicRef" as="element()?" select="if (exists($topic)) then ahf:getTopicRef($topic) else ()"/>
-            <xsl:variable name="topicTitle" as="element()?" select="if (exists($topic)) then $topic/child::*[contains(@class,' topic/title ')][1] else ()"/>
+            <xsl:variable name="topicTitle" as="element()?" select="if (exists($topic)) then $topic/child::*[@class => contains-token('topic/title')][1] else ()"/>
 
             <xsl:choose>
                 <xsl:when test="$isLinkInside">
@@ -204,7 +204,7 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="titleResult" as="document-node()">
             <xsl:document>
                 <xsl:call-template name="getContentsRestricted">
-                    <xsl:with-param name="prmElem" select="$prmTopic/*[contains(@class,' topic/title ')][1]"/> 
+                    <xsl:with-param name="prmElem" select="$prmTopic/*[@class => contains-token('topic/title')][1]"/> 
                     <xsl:with-param name="prmRunProps" tunnel="yes" select="()"/>
                 </xsl:call-template>
             </xsl:document>

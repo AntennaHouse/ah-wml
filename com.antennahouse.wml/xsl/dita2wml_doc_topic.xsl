@@ -27,10 +27,10 @@ URL : http://www.antennahouse.com/
                 is very vague when should the template treat shortdesc as inline or block.
                 This template assumes the shortdesc as block that should generate w:p element.
      -->
-    <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/shortdesc ')][empty(child::node())]" priority="5"/>
-    <xsl:template match="*[contains(@class,' topic/abstract ')]/*[contains(@class,' topic/shortdesc ')][empty(child::node())]" priority="5"/>
+    <xsl:template match="*[@class => contains-token('topic/topic ')]/*[contains(@class,' topic/shortdesc')][empty(child::node())]" priority="5"/>
+    <xsl:template match="*[@class => contains-token('topic/abstract ')]/*[contains(@class,' topic/shortdesc')][empty(child::node())]" priority="5"/>
     
-    <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/shortdesc ')]|*[contains(@class,' topic/abstract ')]/*[contains(@class,' topic/shortdesc ')]">
+    <xsl:template match="*[@class => contains-token('topic/topic ')]/*[@class => contains-token('topic/shortdesc ')]|*[contains(@class,' topic/abstract')]/*[contains(@class,' topic/shortdesc')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
@@ -58,9 +58,9 @@ URL : http://www.antennahouse.com/
                 The merged file preprocessing converts text or inline elements into <p> element.
                 So only <xsl:apply-templates> is needed to process contents.
      -->
-    <xsl:template match="*[contains(@class,' topic/abstract ')][empty(child::node())]" priority="5"/>
+    <xsl:template match="*[@class => contains-token('topic/abstract')][empty(child::node())]" priority="5"/>
     
-    <xsl:template match="*[contains(@class,' topic/abstract ')]">
+    <xsl:template match="*[@class => contains-token('topic/abstract')]">
         <xsl:apply-templates>
             <xsl:with-param name="prmListOccurenceNumber" tunnel="yes" select="0"/>
             <xsl:with-param name="prmListLevel" tunnel="yes" select="0"/>
@@ -76,7 +76,7 @@ URL : http://www.antennahouse.com/
                 So only <xsl:apply-templates> selecting element is needed to process contents.
                 Also as body may have section break opportunity, check section break before and after this element.
      -->
-    <xsl:template match="*[contains(@class,' topic/body ')]">
+    <xsl:template match="*[@class => contains-token('topic/body')]">
         <xsl:variable name="body" as="element()" select="."/>
 
         <!-- Generate section property -->
@@ -100,7 +100,7 @@ URL : http://www.antennahouse.com/
                 The merged file preprocessing converts text or inline elements into <p> element.
                 So only <xsl:apply-templates> is needed to process contents.
      -->
-    <xsl:template match="*[contains(@class,' topic/bodydiv ')]">
+    <xsl:template match="*[@class => contains-token('topic/bodydiv')]">
         <xsl:apply-templates/>
     </xsl:template>
 

@@ -45,25 +45,25 @@ E-mail : info@antennahouse.com
             <!-- image & note -->
             <xsl:sequence select="/descendant::*[ahf:seqContains(@class, (' topic/image ',' topic/note '))]/ahf:generateId(.)"/>
             <!-- floatfig -->
-            <xsl:sequence select="/descendant::*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')]/ahf:generateId(.)"/>
-            <xsl:sequence select="/descendant::*[contains(@class,' floatfig-d/floatfig-group ')][string(@float) = ('left','right')]/ahf:generateId(.)"/>
+            <xsl:sequence select="/descendant::*[@class => contains-token('floatfig-d/floatfig')][string(@float) = ('left','right')]/ahf:generateId(.)"/>
+            <xsl:sequence select="/descendant::*[@class => contains-token('floatfig-d/floatfig-group')][string(@float) = ('left','right')]/ahf:generateId(.)"/>
             <!-- cover bodydiv -->
             <xsl:choose>
                 <xsl:when test="$isBookMap">
-                    <xsl:for-each select="$map/*[ahf:seqContains(@class, (' bookmap/frontmatter ',' bookmap/backmatter '))]/*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)]">
+                    <xsl:for-each select="$map/*[ahf:seqContains(@class, (' bookmap/frontmatter ',' bookmap/backmatter '))]/*[@class => contains-token('map/topicref')][ahf:isCoverTopicRef(.)]">
                         <xsl:variable name="topicRef" as="element()" select="."/>
                         <xsl:variable name="topicContent"  as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
                         <xsl:if test="exists($topicContent)">
-                            <xsl:sequence select="$topicContent/*[contains(@class,' topic/body ')]/*[contains(@class,' topic/bodydiv ')]/ahf:generateId(.)"/>
+                            <xsl:sequence select="$topicContent/*[@class => contains-token('topic/body ')]/*[contains(@class,' topic/bodydiv')]/ahf:generateId(.)"/>
                         </xsl:if>
                     </xsl:for-each>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:for-each select="$map/*[contains(@class,' map/topicref ')][ahf:isCoverTopicRef(.)]">
+                    <xsl:for-each select="$map/*[@class => contains-token('map/topicref')][ahf:isCoverTopicRef(.)]">
                         <xsl:variable name="topicRef" as="element()" select="."/>                        
                         <xsl:variable name="topicContent"  as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
                         <xsl:if test="exists($topicContent)">
-                            <xsl:sequence select="$topicContent/*[contains(@class,' topic/body ')]/*[contains(@class,' topic/bodydiv ')]/ahf:generateId(.)"/>
+                            <xsl:sequence select="$topicContent/*[@class => contains-token('topic/body ')]/*[contains(@class,' topic/bodydiv')]/ahf:generateId(.)"/>
                         </xsl:if>
                     </xsl:for-each>
                 </xsl:otherwise>

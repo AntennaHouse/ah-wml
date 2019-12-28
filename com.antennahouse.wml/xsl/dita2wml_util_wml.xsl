@@ -149,7 +149,7 @@ URL : http://www.antennahouse.com/
   <xsl:function name="ahf:getNumIdFromLi" as="xs:string">
     <xsl:param name="prmLi" as="element()"/>
     <xsl:choose>
-      <xsl:when test="$prmLi/parent::*[contains(@class,' topic/ol ')]">
+      <xsl:when test="$prmLi/parent::*[@class => contains-token('topic/ol')]">
         <xsl:sequence select="$olAbstractNumId"/>
       </xsl:when>
       <xsl:otherwise>
@@ -167,7 +167,7 @@ URL : http://www.antennahouse.com/
   <xsl:function name="ahf:getStyleNameFromLi" as="xs:string">
     <xsl:param name="prmLi" as="element()"/>
     <xsl:choose>
-      <xsl:when test="$prmLi/parent::*[contains(@class,' topic/ol ')]">
+      <xsl:when test="$prmLi/parent::*[@class => contains-token('topic/ol')]">
         <xsl:sequence select="$cOlStyleName"/>
       </xsl:when>
       <xsl:otherwise>

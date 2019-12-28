@@ -40,7 +40,7 @@ URL : http://www.antennahouse.com/
      return:	w:p
      note:		 
      -->
-    <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class,' topic/title ')]">
+    <xsl:template match="*[contains(@class, ' topic/table ')]/*[@class => contains-token('topic/title')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
@@ -97,10 +97,10 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         
         <xsl:variable name="tgroupAttr"  as="element()" select="ahf:getTgroupAttr(.,$prmTableAttr)"/>
-        <xsl:variable name="colspec" as="element()+" select="*[contains(@class,' topic/colspec ')]"/>
+        <xsl:variable name="colspec" as="element()+" select="*[@class => contains-token('topic/colspec')]"/>
         <xsl:variable name="tblGrid" as="element()+">
             <xsl:call-template name="genGridCol">
-                <xsl:with-param name="prmColSpec" select="*[contains(@class,' topic/colspec ')]"/>
+                <xsl:with-param name="prmColSpec" select="*[@class => contains-token('topic/colspec')]"/>
                 <xsl:with-param name="prmTgroupAttr" select="$tgroupAttr"/>
             </xsl:call-template>
         </xsl:variable>
@@ -352,7 +352,7 @@ URL : http://www.antennahouse.com/
     <xsl:template name="genGridCol" as="element()+">
         <xsl:param name="prmColSpec" as="element()+" required="yes"/>
         <xsl:param name="prmTgroupAttr" as="element()" required="yes"/>
-        <xsl:variable name="ancestorColElem" as="element()" select="if (exists($prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')])) then $prmColSpec[1]/ancestor::*[contains(@class,' topic/body ')] else $prmColSpec[1]/ancestor::*[contains(@class,' topic/topic ')][1]"/>
+        <xsl:variable name="ancestorColElem" as="element()" select="if (exists($prmColSpec[1]/ancestor::*[@class => contains-token('topic/body ')])) then $prmColSpec[1]/ancestor::*[@class => contains-token('topic/body')] else $prmColSpec[1]/ancestor::*[contains(@class,' topic/topic')][1]"/>
         <xsl:variable name="colInfo" as="item()*" select="map:get($columnMap,ahf:generateId($ancestorColElem))"/>
         <xsl:variable name="columnCount" as="xs:integer" select="if (exists($colInfo)) then xs:integer($colInfo[2]) else 1"/>
         <xsl:variable name="tblWidth" as="xs:integer?">
@@ -435,16 +435,16 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmColSpec" as="element()+" required="yes"/>
         <xsl:param name="prmTableHeadOrBodyPart" as="element()" required="yes"/>
         <xsl:variable name="cols" as="xs:integer" select="xs:integer($prmTheadOrTbodyAttr/@cols)"/>
-        <xsl:variable name="isThead" as="xs:boolean" select="exists($prmTableHeadOrBodyPart[contains(@class,' topic/thead ')])"/>
+        <xsl:variable name="isThead" as="xs:boolean" select="exists($prmTableHeadOrBodyPart[@class => contains-token('topic/thead')])"/>
 
-        <xsl:for-each select="$prmTableHeadOrBodyPart/*[contains(@class,' topic/row ')]">
+        <xsl:for-each select="$prmTableHeadOrBodyPart/*[@class => contains-token('topic/row')]">
             <xsl:variable name="row" as="element()" select="."/>
             <xsl:variable name="rowAttr" as="element()" select="ahf:getRowAttr($row,$prmTheadOrTbodyAttr)"/>
             <w:tr>
                 <w:trPr>
                     <xsl:copy-of select="ahf:getWmlObject(if ($isThead) then 'wmlTrPrHead' else 'wmlTrPrBody')"/>
                 </w:trPr>
-                <xsl:apply-templates select="*[contains(@class,' topic/entry ')]">
+                <xsl:apply-templates select="*[@class => contains-token('topic/entry')]">
                     <xsl:with-param name="prmRowAttr" select="$rowAttr"/>
                     <xsl:with-param name="prmColSpec" select="$prmColSpec"/>
                 </xsl:apply-templates>
@@ -476,9 +476,9 @@ URL : http://www.antennahouse.com/
                 Pass $prmWidthConstraintInEmu to image element template to adjust the image size.
      -->
     <!-- Ignore column spanned entry -->
-    <xsl:template match="*[contains(@class,' topic/entry ')][string(@ahf:col-spanned) eq $cYes]" priority="5"/>
+    <xsl:template match="*[@class => contains-token('topic/entry')][string(@ahf:col-spanned) eq $cYes]" priority="5"/>
     
-    <xsl:template match="*[contains(@class,' topic/entry ')]">
+    <xsl:template match="*[@class => contains-token('topic/entry')]">
         <xsl:param name="prmRowAttr" as="element()"  required="yes"/>
         <xsl:param name="prmColSpec" as="element()+" required="yes"/>
         <xsl:param name="prmTblGrid" as="element()+" required="yes" tunnel="yes"/>
@@ -500,7 +500,7 @@ URL : http://www.antennahouse.com/
                         <xsl:with-param name="prmTcAttr" tunnel="yes" select="$entryAttr"/>
                         <xsl:with-param name="prmWidthConstraintInEmu" as="xs:integer?" tunnel="yes">
                             <xsl:choose>
-                                <xsl:when test="empty($entry/descendant::*[contains(@class,' topic/image ')][string(@placement) eq 'break'])">
+                                <xsl:when test="empty($entry/descendant::*[@class => contains-token('topic/image')][string(@placement) eq 'break'])">
                                     <xsl:sequence select="()"/>
                                 </xsl:when>
                                 <xsl:when test="(string($entryAttr/@pgwide) eq '1') or exists($entryAttr/@ahf:width)">
@@ -599,7 +599,7 @@ URL : http://www.antennahouse.com/
     <xsl:template name="genTcPr">
         <xsl:param name="prmEntry" as="element()" required="yes"/>
         <xsl:param name="prmEntryAttr" as="element()" required="yes"/>
-        <xsl:variable name="isThead" as="xs:boolean" select="exists($prmEntry/ancestor::*/ancestor::*[contains(@class,' topic/thead ')])"/>
+        <xsl:variable name="isThead" as="xs:boolean" select="exists($prmEntry/ancestor::*/ancestor::*[@class => contains-token('topic/thead')])"/>
         
         <!-- w:tcW -->
         <w:tcW>
@@ -775,8 +775,8 @@ URL : http://www.antennahouse.com/
         </xsl:variable>
         
         <xsl:variable name="tableCurrentAmount"  as="xs:integer">
-            <xsl:variable name="topic" as="element()" select="$prmTable/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
-            <xsl:sequence select="count($topic//*[contains(@class,' topic/table ')][child::*[contains(@class, ' topic/title ')]][. &lt;&lt; $prmTable]|$prmTable)"/>
+            <xsl:variable name="topic" as="element()" select="$prmTable/ancestor::*[@class => contains-token('topic/topic')][last()]"/>
+            <xsl:sequence select="count($topic//*[@class => contains-token('topic/table ')][child::*[contains(@class, ' topic/title')]][. &lt;&lt; $prmTable]|$prmTable)"/>
         </xsl:variable>
         
         <xsl:variable name="tableNumber" select="$tablePreviousAmount + $tableCurrentAmount" as="xs:integer"/>
@@ -904,7 +904,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:template name="buildStColWidthSeq" as="xs:double+">
         <xsl:param name="prmSimpleTable" as="element()" required="yes"/>
-        <xsl:variable name="colCount" as="xs:integer" select="count($prmSimpleTable/*[contains(@class,' topic/strow ')][1]/*[contains(@class,' topic/stentry ')])"/>
+        <xsl:variable name="colCount" as="xs:integer" select="count($prmSimpleTable/*[@class => contains-token('topic/strow ')][1]/*[contains(@class,' topic/stentry')])"/>
         <xsl:variable name="relColWidth" as="xs:double+">
             <xsl:choose>
                 <xsl:when test="string($prmSimpleTable/@relcolwidth)">
@@ -969,7 +969,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmSimpleTable" as="element()" required="yes"/>
         <xsl:param name="prmSimpleTableAttr" as="element()" required="yes"/>
         <xsl:param name="prmColWidthSeq" as="xs:double+" required="yes"/>
-        <xsl:variable name="ancestorColElem" as="element()" select="if (exists($prmSimpleTable/ancestor::*[contains(@class,' topic/body ')])) then $prmSimpleTable/ancestor::*[contains(@class,' topic/body ')] else $prmSimpleTable/ancestor::*[contains(@class,' topic/topic ')][1]"/>
+        <xsl:variable name="ancestorColElem" as="element()" select="if (exists($prmSimpleTable/ancestor::*[@class => contains-token('topic/body ')])) then $prmSimpleTable/ancestor::*[@class => contains-token('topic/body')] else $prmSimpleTable/ancestor::*[contains(@class,' topic/topic')][1]"/>
         <xsl:variable name="colInfo" as="item()+" select="map:get($columnMap,ahf:generateId($ancestorColElem))"/>
         <xsl:variable name="columnCount" as="xs:integer" select="xs:integer($colInfo[2])"/>
         <xsl:variable name="tblWidth" as="xs:integer?">
@@ -1018,12 +1018,12 @@ URL : http://www.antennahouse.com/
      return:	none
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/sthead ')]">
+    <xsl:template match="*[@class => contains-token('topic/sthead')]">
         <w:tr>
             <w:trPr>
                 <xsl:copy-of select="ahf:getWmlObject('wmlTrPrHead')"/>
             </w:trPr>
-            <xsl:apply-templates select="*[contains(@class,' topic/stentry ')]"/>
+            <xsl:apply-templates select="*[@class => contains-token('topic/stentry')]"/>
         </w:tr>
     </xsl:template>
 
@@ -1033,12 +1033,12 @@ URL : http://www.antennahouse.com/
      return:	none
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/strow ')]">
+    <xsl:template match="*[@class => contains-token('topic/strow')]">
         <w:tr>
             <w:trPr>
                 <xsl:copy-of select="ahf:getWmlObject('wmlTrPrBody')"/>
             </w:trPr>
-            <xsl:apply-templates select="*[contains(@class,' topic/stentry ')]"/>
+            <xsl:apply-templates select="*[@class => contains-token('topic/stentry')]"/>
         </w:tr>
     </xsl:template>
     
@@ -1048,7 +1048,7 @@ URL : http://www.antennahouse.com/
      return:	w:tc
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/stentry ')]">
+    <xsl:template match="*[@class => contains-token('topic/stentry')]">
         <xsl:param name="prmSimpleTableAttr" as="element()" required="yes" tunnel="yes"/>
         <xsl:param name="prmTblGrid" as="element()+" required="yes" tunnel="yes"/>
         <xsl:variable name="stentry" as="element()" select="."/>
@@ -1068,7 +1068,7 @@ URL : http://www.antennahouse.com/
                     <xsl:apply-templates>
                         <xsl:with-param name="prmWidthConstraintInEmu" as="xs:integer?" tunnel="yes">
                             <xsl:choose>
-                                <xsl:when test="empty($stentry/descendant::*[contains(@class,' topic/image ')][string(@placement) eq 'break'])">
+                                <xsl:when test="empty($stentry/descendant::*[@class => contains-token('topic/image')][string(@placement) eq 'break'])">
                                     <xsl:sequence select="()"/>
                                 </xsl:when>
                                 <xsl:when test="(string($prmSimpleTableAttr/@pgwide) eq '1') or exists($prmSimpleTableAttr/@ahf:width)">
@@ -1126,7 +1126,7 @@ URL : http://www.antennahouse.com/
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="isThead" as="xs:boolean" select="exists($prmStEntry/ancestor::*[contains(@class,' topic/sthead ')]) or ($colNum eq $keyColNum)"/>
+        <xsl:variable name="isThead" as="xs:boolean" select="exists($prmStEntry/ancestor::*[@class => contains-token('topic/sthead')]) or ($colNum eq $keyColNum)"/>
         
         <!-- w:tcW -->
         <w:tcW>

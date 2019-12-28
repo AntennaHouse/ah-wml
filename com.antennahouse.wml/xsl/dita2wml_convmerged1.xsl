@@ -22,15 +22,15 @@ E-mail : info@antennahouse.com
       -->
 
     <xsl:variable name="root"  as="element()" select="/*[1]"/>
-    <xsl:variable name="map"  as="element()" select="$root/*[contains(@class,' map/map ')][1]"/>
-    <xsl:variable name="isBookMap" as="xs:boolean" select="exists($map[contains(@class,' bookmap/bookmap ')])"/>
+    <xsl:variable name="map"  as="element()" select="$root/*[@class => contains-token('map/map')][1]"/>
+    <xsl:variable name="isBookMap" as="xs:boolean" select="exists($map[@class => contains-token('bookmap/bookmap')])"/>
     <xsl:variable name="isMap" as="xs:boolean" select="not($isBookMap)"/>
     
     <!-- Debug -->
     <xsl:param name="PRM_OMIT_ATT" as="xs:boolean" select="false()"/>
     
     <!-- All topiref-->
-    <xsl:variable name="allTopicRefs" as="element()*" select="$map//*[contains(@class,' map/topicref ')][not(ancestor::*[contains(@class,' map/reltable ')])]"/>
+    <xsl:variable name="allTopicRefs" as="element()*" select="$map//*[@class => contains-token('map/topicref ')][not(ancestor::*[contains(@class,' map/reltable')])]"/>
     
     <!-- topicref that has @print="no"-->
     <xsl:variable name="noPrintTopicRefs" as="element()*" select="$allTopicRefs[ancestor-or-self::*[string(@print) eq 'no']]"/>
@@ -58,7 +58,7 @@ E-mail : info@antennahouse.com
 
     <!-- topicrefs that references same topic -->
     <xsl:variable name="duplicateTopicRefs" as="element()*">
-        <xsl:for-each select="$map//*[contains(@class,' map/topicref ')][exists(@href)][empty(ancestor::*[contains(@class,' map/reltable ')])]">
+        <xsl:for-each select="$map//*[@class => contains-token('map/topicref ')][exists(@href)][empty(ancestor::*[contains(@class,' map/reltable')])]">
             <xsl:variable name="topicRef" as="element()" select="."/>
             <xsl:variable name="href" as="xs:string" select="string(@href)"/>
             <xsl:if test="$allTopicRefs[. &lt;&lt; $topicRef][exists(@href)][string(@href) eq $href][empty($noPrintTopicRefs[. is $topicRef])]">
@@ -94,7 +94,7 @@ E-mail : info@antennahouse.com
      return:	copied result
      note:		Generate frontmatter/booklists/toc, backmatter/booklists/indexlist if needed.
      -->
-    <xsl:template match="*[contains(@class,' map/map ')]">
+    <xsl:template match="*[@class => contains-token('map/map')]">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:if test="$isMap and $pMakeTocForMap">
@@ -162,11 +162,11 @@ E-mail : info@antennahouse.com
      return:	self and descendant element or none
      note:		if @print="no", ignore it.
      -->
-    <xsl:template match="*[contains(@class,' map/topicref ')]">
+    <xsl:template match="*[@class => contains-token('map/topicref')]">
         <xsl:variable name="topicRef" as="element()" select="."/>
     	<xsl:choose>
     		<xsl:when test="string(@print) eq 'no'" >
-    		    <xsl:for-each select="descendant-or-self::*[contains(@class,' map/topicref ')]">
+    		    <xsl:for-each select="descendant-or-self::*[@class => contains-token('map/topicref')]">
     		        <xsl:if test="exists(@href)">
     		            <xsl:call-template name="warningContinue">
     		                <xsl:with-param name="prmMes" select="ahf:replace($stMes1001,('%href','%ohref'),(string(@href),string(@ohref)))"/>
@@ -174,7 +174,7 @@ E-mail : info@antennahouse.com
     		        </xsl:if>
     		    </xsl:for-each>
     		</xsl:when>
-    	    <xsl:when test="empty(ancestor::*[contains(@class,' map/reltable ')]) and $duplicateTopicRefs[. is $topicRef]">
+    	    <xsl:when test="empty(ancestor::*[@class => contains-token('map/reltable')]) and $duplicateTopicRefs[. is $topicRef]">
     	        <xsl:variable name="href" as="xs:string" select="string(@href)"/>
     	        <xsl:variable name="duplicateCount" as="xs:integer" select="count($topicRef|$allTopicRefs[. &lt;&lt; $topicRef][string(@href) eq $href])"/>
     	        <xsl:copy>
@@ -194,7 +194,7 @@ E-mail : info@antennahouse.com
     </xsl:template>
     
     <!-- template for topicref/@href is limited for create new value -->
-    <xsl:template match="*[contains(@class,' map/topicref ')]/@href" priority="5">
+    <xsl:template match="*[@class => contains-token('map/topicref')]/@href" priority="5">
         <xsl:param name="prmTopicRefNo" required="no" as="xs:integer" select="0"/>
         <xsl:variable name="href" as="xs:string" select="string(.)"/>
         <xsl:attribute name="href" select="if ($prmTopicRefNo gt 0) then concat($href,'_',string($prmTopicRefNo)) else $href"/>
@@ -247,7 +247,7 @@ E-mail : info@antennahouse.com
      return:	self and descendant element or none
      note:		if @id is pointed from the topicref that has print="no", ignore it.
      -->
-    <xsl:template match="*[contains(@class,' topic/topic ')]">
+    <xsl:template match="*[@class => contains-token('topic/topic')]">
         <xsl:param name="prmTopicRefNo" required="no" tunnel="yes" as="xs:integer" select="0"/>
         <xsl:variable name="id" as="xs:string" select="concat('#',string(@id))"/>
         <xsl:choose>
@@ -274,13 +274,13 @@ E-mail : info@antennahouse.com
     </xsl:template>
 
     <!-- template for topic/@id is limited for create new value -->
-    <xsl:template match="*[contains(@class,' topic/topic ')]/@id">
+    <xsl:template match="*[@class => contains-token('topic/topic')]/@id">
         <xsl:param name="prmTopicRefNo" required="no" as="xs:integer" select="0"/>
         <xsl:variable name="id" as="xs:string" select="string(.)"/>
         <xsl:attribute name="id" select="if ($prmTopicRefNo gt 0) then concat($id,'_',string($prmTopicRefNo)) else $id"/>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class,' topic/topic ')]/@oid">
+    <xsl:template match="*[@class => contains-token('topic/topic')]/@oid">
         <xsl:param name="prmTopicRefNo" required="no" as="xs:integer" select="0"/>
         <xsl:variable name="oid" as="xs:string" select="string(.)"/>
         <xsl:attribute name="oid" select="if ($prmTopicRefNo gt 0) then concat($oid,'_',string($prmTopicRefNo)) else $oid"/>
@@ -292,7 +292,7 @@ E-mail : info@antennahouse.com
      return:	self and descendant element or none
      note:		if link@href points to the topicref that has print="no", ignore it.
      -->
-    <xsl:template match="*[contains(@class,' topic/link ')]">
+    <xsl:template match="*[@class => contains-token('topic/link')]">
         <xsl:param name="prmDitaValFlagStyle" tunnel="yes" required="no" select="''"/>
         <xsl:variable name="href" as="xs:string" select="string(@href)"/>
         <xsl:choose>
@@ -316,7 +316,7 @@ E-mail : info@antennahouse.com
      return:	self and descendant element or none
      note:		if xref@href points to the topic that has print="no", ignore it.
      -->
-    <xsl:template match="*[contains(@class,' topic/xref ')][string(@format) eq 'dita']">
+    <xsl:template match="*[@class => contains-token('topic/xref')][string(@format) eq 'dita']">
         <xsl:param name="prmTopicRefNo" required="no" tunnel="yes" as="xs:integer" select="0"/>
         <xsl:variable name="xref" as="element()" select="."/>
         <xsl:variable name="href" as="xs:string" select="string(@href)"/>
@@ -345,7 +345,7 @@ E-mail : info@antennahouse.com
             <xsl:when test="$isLocalHref and ($prmTopicRefNo gt 0)">
                 <xsl:variable name="refTopicId" as="xs:string" select="substring-after($refTopicHref,'#')"/>
                 <xsl:variable name="refElemId" as="xs:string" select="if (contains($href,'/')) then substring-after($href,'/') else ''"/>
-                <xsl:variable name="topIds" as="xs:string+" select="for $id in $xref/ancestor::*[contains(@class,' topic/topic ')][last()]/descendant-or-self::*[contains(@class,' topic/topic ')]/@id return string($id)"/>
+                <xsl:variable name="topIds" as="xs:string+" select="for $id in $xref/ancestor::*[@class => contains-token('topic/topic ')][last()]/descendant-or-self::*[contains(@class,' topic/topic')]/@id return string($id)"/>
                 <xsl:choose>
                     <xsl:when test="exists($topIds[. eq $refTopicId])">
                         <xsl:copy>
@@ -381,7 +381,7 @@ E-mail : info@antennahouse.com
         </xsl:choose>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class,' topic/xref ')]/@href">
+    <xsl:template match="*[@class => contains-token('topic/xref')]/@href">
         <xsl:param name="prmNewXrefHref" required="no" as="xs:string" select="''"/>
         <xsl:choose>
             <xsl:when test="string($prmNewXrefHref)">
@@ -399,7 +399,7 @@ E-mail : info@antennahouse.com
      return:	empty
      note:		DITA DTD allows empty strow, but it influences wrong in convmerged step 4.
      -->
-    <xsl:template match="*[contains(@class,' topic/strow ')][empty(*[contains(@class,' topic/stentry ')])]"/>
+    <xsl:template match="*[@class => contains-token('topic/strow ')][empty(*[contains(@class,' topic/stentry')])]"/>
     
     <!-- 
      function:	comment template
@@ -407,7 +407,7 @@ E-mail : info@antennahouse.com
      return:	comment or empty
      note:		none
      -->
-    <xsl:template match="comment()[ancestor::*[contains(@class,' topic/topic ')]]"/>
+    <xsl:template match="comment()[ancestor::*[@class => contains-token('topic/topic')]]"/>
 
     <xsl:template match="comment()">
         <xsl:copy/>
@@ -419,7 +419,7 @@ E-mail : info@antennahouse.com
      return:	processing-instruction or empty
      note:		
      -->
-    <xsl:template match="processing-instruction()[ancestor::*[contains(@class,' topic/topic ')]]"/>
+    <xsl:template match="processing-instruction()[ancestor::*[@class => contains-token('topic/topic')]]"/>
     
     <xsl:template match="processing-instruction()">
         <xsl:copy/>
@@ -431,7 +431,7 @@ E-mail : info@antennahouse.com
      return:	none or itself 
      note:		If not output required-cleanup, remove it at this template.
      -->
-    <xsl:template match="*[contains(@class,' topic/required-cleanup ')][not($pOutputRequiredCleanup)]"/>
+    <xsl:template match="*[@class => contains-token('topic/required-cleanup')][not($pOutputRequiredCleanup)]"/>
     
     <!-- 
      function:	draft-comment template
@@ -439,6 +439,6 @@ E-mail : info@antennahouse.com
      return:	none or itself 
      note:		If not output draft-comment, remove it at this template.
      -->
-    <xsl:template match="*[contains(@class,' topic/draft-comment ')][not($pOutputDraftComment)]"/>
+    <xsl:template match="*[@class => contains-token('topic/draft-comment')][not($pOutputDraftComment)]"/>
 
 </xsl:stylesheet>

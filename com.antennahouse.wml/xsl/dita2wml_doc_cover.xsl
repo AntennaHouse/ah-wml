@@ -42,8 +42,8 @@ URL : http://www.antennahouse.com/
                     <xsl:variable name="coverN" as="xs:string" select="."/>
                     <xsl:choose>
                         <xsl:when test="ahf:hasCoverN($prmMap,$coverN)">
-                            <xsl:apply-templates select="$prmMap/*[contains(@class, ' bookmap/frontmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
-                            <xsl:apply-templates select="$prmMap/*[contains(@class, ' bookmap/backmatter ')]/*[contains(@class,' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                            <xsl:apply-templates select="$prmMap/*[contains(@class, ' bookmap/frontmatter ')]/*[@class => contains-token('map/topicref')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                            <xsl:apply-templates select="$prmMap/*[contains(@class, ' bookmap/backmatter ')]/*[@class => contains-token('map/topicref')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
                             <xsl:call-template name="genSectprForCover">
                                 <xsl:with-param name="prmCoverN" select="$coverN"/>
                             </xsl:call-template>
@@ -120,12 +120,12 @@ URL : http://www.antennahouse.com/
         return:	    none
         note:		Call cover generation template
     -->
-    <xsl:template match="*[contains(@class,' map/topicref ')]" mode="MODE_MAKE_COVER">
+    <xsl:template match="*[@class => contains-token('map/topicref')]" mode="MODE_MAKE_COVER">
         <xsl:variable name="topicRef" select="."/>
         <xsl:variable name="topicContent"  as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
         <xsl:choose>
             <xsl:when test="exists($topicContent)">
-                <xsl:apply-templates select="$topicContent/*[contains(@class,' topic/body ')]" mode="#current">
+                <xsl:apply-templates select="$topicContent/*[@class => contains-token('topic/body')]" mode="#current">
                     <xsl:with-param name="prmTopicRef" tunnel="yes" select="$topicRef"/>
                 </xsl:apply-templates>
             </xsl:when>
@@ -146,9 +146,9 @@ URL : http://www.antennahouse.com/
                 Generate w:p for each position="auto" bodydiv because the text-tbox is generated as inline.
                 The left indentation of inline text-box is expressed w:ind element in w:pPr element in WML.
      -->
-    <xsl:template match="*[contains(@class,' topic/body ')]" mode="MODE_MAKE_COVER">
+    <xsl:template match="*[@class => contains-token('topic/body')]" mode="MODE_MAKE_COVER">
         <xsl:param name="prmTopicRef" as="element()" tunnel="yes" required="yes"/>
-        <xsl:for-each-group select="*[contains(@class,' topic/bodydiv ')]" group-adjacent="ahf:genGroupKeyForCoverBodydiv(.)">
+        <xsl:for-each-group select="*[@class => contains-token('topic/bodydiv')]" group-adjacent="ahf:genGroupKeyForCoverBodydiv(.)">
             <w:p>
                 <xsl:variable name="lastStackBodyDiv" as="element()?" select="current-group()[last()][not(ahf:hasFoProperty(.,'absolute-position','absolute'))]"/>
                 <xsl:variable name="startIndent" as="xs:string?" select="if (exists($lastStackBodyDiv)) then ahf:getFoPropertyValue($lastStackBodyDiv,'start-indent') else ()"/>
@@ -198,7 +198,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:function name="ahf:genGroupKeyForCoverBodydiv" as="xs:integer">
         <xsl:param name="prmBodyDiv" as="element()"/>
-        <xsl:sequence select="xs:integer(sum((ahf:stackBodyDivCount($prmBodyDiv), $prmBodyDiv/following-sibling::*[contains(@class,' topic/bodydiv ')]/ahf:stackBodyDivCount(.))))"/>
+        <xsl:sequence select="xs:integer(sum((ahf:stackBodyDivCount($prmBodyDiv), $prmBodyDiv/following-sibling::*[@class => contains-token('topic/bodydiv')]/ahf:stackBodyDivCount(.))))"/>
     </xsl:function>
     
     <!-- 

@@ -69,7 +69,7 @@ URL : http://www.antennahouse.com/
     <xsl:function name="ahf:isNestedTopic" as="xs:boolean">
         <xsl:param name="prmTopic" as="element()"/>
         <xsl:choose>
-            <xsl:when test="exists($prmTopic/ancestor::*[contains(@class,' topic/topic ')])">
+            <xsl:when test="exists($prmTopic/ancestor::*[@class => contains-token('topic/topic')])">
                 <xsl:sequence select="true()"/>
             </xsl:when>
             <xsl:otherwise>
@@ -175,8 +175,8 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="topicRefCount" as="xs:integer">
             <xsl:number select="$prmTopicRef"
                 level="any"
-                count="*[contains(@class,' map/topicref ')][string(@href) eq $href]"
-                from="*[contains(@class,' map/map ')]"
+                count="*[@class => contains-token('map/topicref')][string(@href) eq $href]"
+                from="*[@class => contains-token('map/map')]"
                 format="1"/>
         </xsl:variable>
         <xsl:sequence select="$topicRefCount"/>
@@ -196,7 +196,7 @@ URL : http://www.antennahouse.com/
             <xsl:when test="ahf:isInternalLink($href)">
                 <xsl:sequence select="true()"/>
             </xsl:when>
-            <xsl:when test="$prmTopicRef/@navtitle or $prmTopicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]">
+            <xsl:when test="$prmTopicRef/@navtitle or $prmTopicRef/*[@class => contains-token('map/topicmeta ')]/*[contains(@class,' topic/navtitle')]">
                 <xsl:sequence select="true()"/>
             </xsl:when>
             <xsl:otherwise>
@@ -213,7 +213,7 @@ URL : http://www.antennahouse.com/
     -->
     <xsl:function name="ahf:getTopicRefLevel" as="xs:integer">
         <xsl:param name="prmTopicRef" as="element()"/>
-        <xsl:variable name="ancestorTopicRef" as="element()+" select="$prmTopicRef/ancestor-or-self::*[contains(@class,' map/topicref ')][not(ahf:seqContains(string(@class),(' bookmap/frontmatter ',' bookmap/appendices ',' bookmap/backmatter ')))]"/>
+        <xsl:variable name="ancestorTopicRef" as="element()+" select="$prmTopicRef/ancestor-or-self::*[@class => contains-token('map/topicref ')][not(ahf:seqContains(string(@class),(' bookmap/frontmatter ',' bookmap/appendices ',' bookmap/backmatter')))]"/>
         <xsl:sequence select="count($ancestorTopicRef)"/>
     </xsl:function>
 
@@ -226,7 +226,7 @@ URL : http://www.antennahouse.com/
     -->
     <xsl:function name="ahf:getListLevel" as="xs:integer">
         <xsl:param name="prmElem" as="element()"/>
-        <xsl:variable name="isOl" as="xs:boolean" select="exists($prmElem[contains(@class,' topic/ol ')])"/>
+        <xsl:variable name="isOl" as="xs:boolean" select="exists($prmElem[@class => contains-token('topic/ol')])"/>
         <xsl:variable name="startElem" as="element()?" select="$prmElem/ancestor-or-self::*[ahf:seqContains(@class,(' topic/entry ',' topic/stentry ',' topic/body ',' topic/abstract ', ' topic/note '))][1]"/>
         <xsl:assert test="exists($startElem)" select="'[getListStartLevel] start element not found $prmElem=',ahf:genHistoryId($prmElem)"/>
         <xsl:variable name="ancestorList" as="element()+" select="$prmElem/ancestor-or-self::*[contains(@class, if ($isOl) then ' topic/ol ' else ' topic/ul ')][. &gt;&gt; $startElem]"/>

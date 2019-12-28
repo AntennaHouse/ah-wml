@@ -25,8 +25,8 @@ E-mail : info@antennahouse.com
     <!-- Temporary define map and documentLang for dita2wml_style_get.xsl -->
     <!-- Top level element -->
     <xsl:variable name="root" select="$docMergedMiddleFile/*[1]" as="element()"/>
-    <xsl:variable name="map" select="$root/*[contains(@class,' map/map ')][1]" as="element()"/>
-    <xsl:variable name="topic" select="$root/*[contains(@class,' topic/topic ')]" as="element()*"/>
+    <xsl:variable name="map" select="$root/*[@class => contains-token('map/map')][1]" as="element()"/>
+    <xsl:variable name="topic" select="$root/*[@class => contains-token('topic/topic')]" as="element()*"/>
     
     <!-- Document language -->
     <xsl:variable name="documentLang" as="xs:string">

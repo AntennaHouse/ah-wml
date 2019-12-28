@@ -28,7 +28,7 @@ URL : http://www.antennahouse.com/
      return:	
      note:      handle column break
      -->
-    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break'][empty(ancestor::*[ahf:seqContains(string(@class),(' floatfig-d/floatfig ',' floatfig-d/floatfig-group '))][string(@float) = ('left','right')])]" priority="20">
+    <xsl:template match="*[@class => contains-token('topic/image ')][string(@placement) eq 'break'][empty(ancestor::*[ahf:seqContains(string(@class),(' floatfig-d/floatfig ',' floatfig-d/floatfig-group'))][string(@float) = ('left','right')])]" priority="20">
         <xsl:call-template name="getSectionPropertyElemBefore"/>
         <xsl:next-match/>
         <xsl:call-template name="getSectionPropertyElemAfter"/>
@@ -40,7 +40,7 @@ URL : http://www.antennahouse.com/
      return:	w:p
      note:      
      -->
-    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break']" name="processBlockImage" as="element(w:p)+" priority="5">
+    <xsl:template match="*[@class => contains-token('topic/image')][string(@placement) eq 'break']" name="processBlockImage" as="element(w:p)+" priority="5">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
@@ -66,7 +66,7 @@ URL : http://www.antennahouse.com/
      note:      This template also called form block image processing.
                 Adjust the image size to fit the body domain.
      -->
-    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'break']" name="processBlockImageGenaral" as="element(w:r)?">
+    <xsl:template match="*[@class => contains-token('topic/image')][string(@placement) eq 'break']" name="processBlockImageGenaral" as="element(w:r)?">
         <xsl:variable name="imageSize" as="xs:integer+">
             <xsl:call-template name="ahf:getImageSizeInEmu">
                 <xsl:with-param name="prmImage" select="."/>
@@ -78,7 +78,7 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="imageId" as="xs:string" select="xs:string(map:get($imageIdMap,$imageIdKey))"/>
         <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId(.)"/>
         <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
-        <xsl:variable name="isFloatFigImage" as="xs:boolean" select="exists(self::*[ancestor::*[contains(@class,' floatfig-d/floatfig ')]][following-sibling::*[1][contains(@class,' topic/image ')][string(@placement) eq 'break']])"/>
+        <xsl:variable name="isFloatFigImage" as="xs:boolean" select="exists(self::*[ancestor::*[@class => contains-token('floatfig-d/floatfig ')]][following-sibling::*[1][contains(@class,' topic/image')][string(@placement) eq 'break']])"/>
         <xsl:variable name="vMargin" as="xs:integer">
             <xsl:choose>
                 <xsl:when test="$isFloatFigImage">
@@ -125,7 +125,7 @@ URL : http://www.antennahouse.com/
      return:	w:r
      note:      Call general templates by passing implicit inline image size constraint by EMU size.   
      -->
-    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'inline']" as="element(w:r)?" priority="5">
+    <xsl:template match="*[@class => contains-token('topic/image')][string(@placement) eq 'inline']" as="element(w:r)?" priority="5">
         <xsl:next-match>
             <xsl:with-param name="prmInlineImageWidthConstraint" as="xs:integer?">
                 <xsl:variable name="inlineImageWidthConstraint" as="xs:integer">
@@ -152,7 +152,7 @@ URL : http://www.antennahouse.com/
      return:	w:r
      note:      This template is for inline image only.
      -->
-    <xsl:template match="*[contains(@class,' topic/image ')][string(@placement) eq 'inline']"  as="element(w:r)?">
+    <xsl:template match="*[@class => contains-token('topic/image')][string(@placement) eq 'inline']"  as="element(w:r)?">
         <xsl:param name="prmInlineImageWidthConstraint" as="xs:integer?" required="yes"/>
         <xsl:param name="prmInlineImageHeightConstraint" as="xs:integer?" required="yes"/>
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
@@ -418,7 +418,7 @@ URL : http://www.antennahouse.com/
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:variable name="columnCount" as="xs:integer">
-                        <xsl:variable name="bodyOrTopic" as="element()" select="if (exists($prmImage/ancestor::*[contains(@class,' topic/body ')])) then $prmImage/ancestor::*[contains(@class,' topic/body ')] else $prmImage/ancestor::*[contains(@class,' topic/topic ')][1]"/>
+                        <xsl:variable name="bodyOrTopic" as="element()" select="if (exists($prmImage/ancestor::*[@class => contains-token('topic/body ')])) then $prmImage/ancestor::*[@class => contains-token('topic/body')] else $prmImage/ancestor::*[contains(@class,' topic/topic')][1]"/>
                         <xsl:choose>
                             <xsl:when test="ahf:isSpannedImage($prmImage)">
                                 <xsl:sequence select="1"/>

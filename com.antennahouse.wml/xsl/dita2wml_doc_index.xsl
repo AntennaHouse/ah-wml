@@ -25,7 +25,7 @@ URL : http://www.antennahouse.com/
      note:      Only generate INDEX field.
                 Generating index is done by Word.
      -->
-    <xsl:template match="*[contains(@class,' bookmap/indexlist ')]" name="genIndexField" as="node()+" priority="5">
+    <xsl:template match="*[@class => contains-token('bookmap/indexlist')]" name="genIndexField" as="node()+" priority="5">
         
         <xsl:variable name="option" as="xs:string*">
             <xsl:call-template name="getVarValue">

@@ -62,7 +62,7 @@ E-mail : info@antennahouse.com
         
         <!-- debug -->
         <!--
-        <xsl:for-each select="$tGroup/descendant::*[contains(@class,' topic/entry ')]">
+        <xsl:for-each select="$tGroup/descendant::*[@class => contains-token('topic/entry')]">
             <xsl:variable name="entry" as="element()" select="."/>
             <xsl:variable name="colname" as="xs:string" select="string($entry/@colname)"/>
             <xsl:if test="string($colname)">

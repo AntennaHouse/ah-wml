@@ -70,7 +70,7 @@ E-mail : info@antennahouse.com
      -->
     <xsl:template match="*[ahf:isMixedContentElement(.)]" name="processBlocAndInlineContentElements" priority="5">
         <xsl:variable name="elem" as="element()" select="."/>
-        <xsl:variable name="isP" as="xs:boolean" select="contains(@class,' topic/p ')"/>
+        <xsl:variable name="isP" as="xs:boolean" select="@class => contains-token('topic/p')"/>
         <xsl:choose>
             <xsl:when test="$isP">
                 <!-- Matched <p> element. The <p> itself is removed from output.-->
@@ -164,7 +164,7 @@ E-mail : info@antennahouse.com
      return:	and inline nodes
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/shortdesc ')][parent::*[contains(@class,' topic/topic ')]][exists(child::node())]" priority="5">
+    <xsl:template match="*[@class => contains-token('topic/shortdesc ')][parent::*[contains(@class,' topic/topic')]][exists(child::node())]" priority="5">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
             <xsl:call-template name="ahf:processInline">
@@ -179,7 +179,7 @@ E-mail : info@antennahouse.com
      return:	inline & block nodes
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/fn ')]" priority="10">
+    <xsl:template match="*[@class => contains-token('topic/fn')]" priority="10">
         <xsl:call-template name="processBlocAndInlineContentElements">
             <xsl:with-param name="prmTextMap" tunnel="yes" select="()"/>
         </xsl:call-template>
@@ -191,7 +191,7 @@ E-mail : info@antennahouse.com
      return:	Edited indexterm
      note:		This template will be called in prolog processing
      -->
-    <xsl:template match="*[contains(@class,' topic/indexterm ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('topic/indexterm')]" priority="5">
         <xsl:call-template name="ahf:processIndexterm"/>
     </xsl:template>
     
@@ -237,13 +237,13 @@ E-mail : info@antennahouse.com
                 <xsl:otherwise>
                     <!-- inline element or other -->
                     <xsl:choose>
-                        <xsl:when test="$inlineNode/self::*[contains(@class,' topic/fn ')]">
+                        <xsl:when test="$inlineNode/self::*[@class => contains-token('topic/fn')]">
                             <xsl:call-template name="processBlocAndInlineContentElements">
                                 <xsl:with-param name="prmTextMap" tunnel="yes" select="()"/>
                                 <xsl:with-param name="prmInFn" tunnel="yes" select="true()"/>
                             </xsl:call-template>
                         </xsl:when>
-                        <xsl:when test="$inlineNode/self::*[contains(@class,' floatfig-d/floatfig ')]">
+                        <xsl:when test="$inlineNode/self::*[@class => contains-token('floatfig-d/floatfig')]">
                             <xsl:call-template name="processBlocAndInlineContentElements">
                                 <xsl:with-param name="prmTextMap" tunnel="yes" select="()"/>
                                 <xsl:with-param name="prmInFloatFig" tunnel="yes" select="true()"/>
@@ -255,7 +255,7 @@ E-mail : info@antennahouse.com
                         <xsl:when test="$inlineNode/self::*[ahf:seqContains(string(@class),(' topic/data ',' topic/data-about ',' topic/unknown ',' topic/foreign '))]">
                             <xsl:call-template name="generalElementProcessing"/>
                         </xsl:when>
-                        <xsl:when test="$inlineNode/self::*[contains(@class,' topic/indexterm ')]">
+                        <xsl:when test="$inlineNode/self::*[@class => contains-token('topic/indexterm')]">
                             <xsl:call-template name="ahf:processIndexterm"/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -366,7 +366,7 @@ E-mail : info@antennahouse.com
             <xsl:apply-templates select="node() except *[ahf:seqContains(@class,$indextermClassGroupWithSortAs)]" mode="MODE_TEXT_ONLY"/>
         </xsl:variable>
         <xsl:variable name="indextermStringVal" as="xs:string" select="normalize-space(string-join($indextermTextVal,''))"/>
-        <xsl:if test="parent::*[contains(@class,' topic/indexterm ')] and string($indextermStringVal)">
+        <xsl:if test="parent::*[@class => contains-token('topic/indexterm')] and string($indextermStringVal)">
             <xsl:value-of select="':'"/>
         </xsl:if>
         <xsl:value-of select="$indextermStringVal"/>

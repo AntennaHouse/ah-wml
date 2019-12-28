@@ -116,9 +116,9 @@ E-mail : info@antennahouse.com
          ***************************************-->
     <!-- Top level element -->
     <xsl:variable name="root" select="/*[1]" as="element()"/>
-    <xsl:variable name="map" select="$root/*[contains(@class,' map/map ')][1]" as="element()"/>
-    <xsl:variable name="topics" select="$root/*[contains(@class,' topic/topic ')]" as="element()*"/>
-    <xsl:variable name="indexList" as="element()?" select="$map//*[contains(@class,' bookmap/indexlist ')][empty(@href)][1]"/>
+    <xsl:variable name="map" select="$root/*[@class => contains-token('map/map')][1]" as="element()"/>
+    <xsl:variable name="topics" select="$root/*[@class => contains-token('topic/topic')]" as="element()*"/>
+    <xsl:variable name="indexList" as="element()?" select="$map//*[@class => contains-token('bookmap/indexlist')][empty(@href)][1]"/>
     
     <!-- Map class -->
     <xsl:variable name="classMap" select="'map'" as="xs:string"/>
@@ -126,7 +126,7 @@ E-mail : info@antennahouse.com
     <xsl:variable name="classUnknown" select="'unknown'" as="xs:string"/>
     <xsl:variable name="ditamapClass" as="xs:string">
         <xsl:choose>
-            <xsl:when test="$root/*[1][contains(@class,' map/map ')][contains(@class,' bookmap/bookmap ')]">
+            <xsl:when test="$root/*[1][@class => contains-token('map/map ')][contains(@class,' bookmap/bookmap')]">
                 <xsl:sequence select="$classBookMap"/>
             </xsl:when>
             <xsl:otherwise>
@@ -184,7 +184,7 @@ E-mail : info@antennahouse.com
     <!-- topicref by key 
          Added 2010/01/05
      -->
-    <xsl:key name="topicrefByKey" match="/*/*[contains(@class,' map/map ')]
+    <xsl:key name="topicrefByKey" match="/*/*[@class => contains-token('map/map')]
                                           //*[contains(@class, ' map/topicref ')]" 
                                   use="tokenize(@keys, '[\s]+')"/>
     

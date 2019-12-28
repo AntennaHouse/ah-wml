@@ -32,11 +32,11 @@ E-mail : info@antennahouse.com
     </xsl:template>
     
     <!-- fn -->
-    <xsl:template match="*[contains(@class,' topic/fn ')]" mode="MODE_TEXT_ONLY" as="empty-sequence()">
+    <xsl:template match="*[@class => contains-token('topic/fn')]" mode="MODE_TEXT_ONLY" as="empty-sequence()">
     </xsl:template>
     
     <!-- tm -->
-    <xsl:template match="*[contains(@class,' topic/tm ')]" mode="MODE_TEXT_ONLY" as="text()*">
+    <xsl:template match="*[@class => contains-token('topic/tm')]" mode="MODE_TEXT_ONLY" as="text()*">
         <xsl:apply-templates mode="#current"/>
         <xsl:variable name="tmType" as="xs:string" select="string(@tmtype)"/>
         <xsl:choose>
@@ -68,39 +68,39 @@ E-mail : info@antennahouse.com
     </xsl:template>
     
     <!-- data-about -->
-    <xsl:template match="*[contains(@class,' topic/data-about ')]" mode="MODE_TEXT_ONLY" as="empty-sequence()">
+    <xsl:template match="*[@class => contains-token('topic/data-about')]" mode="MODE_TEXT_ONLY" as="empty-sequence()">
     </xsl:template>
     
     <!-- data -->
-    <xsl:template match="*[contains(@class,' topic/data ')]" mode="MODE_TEXT_ONLY" as="empty-sequence()">
+    <xsl:template match="*[@class => contains-token('topic/data')]" mode="MODE_TEXT_ONLY" as="empty-sequence()">
     </xsl:template>
     
     <!-- foreign -->
-    <xsl:template match="*[contains(@class,' topic/foreign ')]" mode="MODE_TEXT_ONLY" as="empty-sequence()">
+    <xsl:template match="*[@class => contains-token('topic/foreign')]" mode="MODE_TEXT_ONLY" as="empty-sequence()">
     </xsl:template>
     
     <!-- unknown -->
-    <xsl:template match="*[contains(@class,' topic/unknown ')]" mode="MODE_TEXT_ONLY" as="empty-sequence()">
+    <xsl:template match="*[@class => contains-token('topic/unknown')]" mode="MODE_TEXT_ONLY" as="empty-sequence()">
     </xsl:template>
     
     <!-- no-topic-nesting -->
-    <xsl:template match="*[contains(@class,' topic/no-topic-nesting ')]" mode="MODE_TEXT_ONLY" as="empty-sequence()">
+    <xsl:template match="*[@class => contains-token('topic/no-topic-nesting')]" mode="MODE_TEXT_ONLY" as="empty-sequence()">
     </xsl:template>
     
     <!-- indexterm is coded in dita2fo_indexcommon.xsl -->
     
     <!-- required-cleanup -->
-    <xsl:template match="*[contains(@class,' topic/required-cleanup ')]" mode="MODE_TEXT_ONLY" as="empty-sequence()"/>
+    <xsl:template match="*[@class => contains-token('topic/required-cleanup')]" mode="MODE_TEXT_ONLY" as="empty-sequence()"/>
     
     <!-- state -->
-    <xsl:template match="*[contains(@class,' topic/state ')]" mode="MODE_TEXT_ONLY" as="text()*">
+    <xsl:template match="*[@class => contains-token('topic/state')]" mode="MODE_TEXT_ONLY" as="text()*">
         <xsl:value-of select="@name"/>
         <xsl:text>=</xsl:text>
         <xsl:value-of select="@value"/>
     </xsl:template>
     
     <!-- boolean -->
-    <xsl:template match="*[contains(@class,' topic/boolean ')]" mode="MODE_TEXT_ONLY" as="text()">
+    <xsl:template match="*[@class => contains-token('topic/boolean')]" mode="MODE_TEXT_ONLY" as="text()">
         <xsl:value-of select="@state"/>
     </xsl:template>
     
