@@ -108,8 +108,8 @@ URL : http://www.antenna.co.jp/
                     <xsl:attribute name="contentkey" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
                     <xsl:attribute name="navtitle">
                         <xsl:choose>
-                            <xsl:when test="exists(*[@class => contains-token('map/topicmeta ')]/*[contains(@class,' topic/navtitle')])">
-                                <xsl:value-of select="string(*[@class => contains-token('map/topicmeta ')]/*[contains(@class,' topic/navtitle')])"/>
+                            <xsl:when test="exists(*[@class => contains-token('map/topicmeta ')]/*[@class => contains-token('topic/navtitle')])">
+                                <xsl:value-of select="string(*[@class => contains-token('map/topicmeta ')]/*[@class => contains-token('topic/navtitle')])"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:value-of select="@navtitle"/>
@@ -217,7 +217,7 @@ URL : http://www.antenna.co.jp/
     </xsl:function>    
 
     <!--General image-->
-    <xsl:template match="*[@class => contains-token('topic/image ')][string(@placement) eq 'break'][empty(ancestor::*[ahf:seqContains(string(@class),(' floatfig-d/floatfig ',' floatfig-d/floatfig-group'))][string(@float) = ('left','right')])]" mode="MODE_MAKE_SECT_INFO">
+    <xsl:template match="*[@class => contains-token('topic/image ')][string(@placement) eq 'break'][ancestor::*[@class => ahf:seqContainsToken(('floatfig-d/floatfig','floatfig-d/floatfig-group'))][string(@float) = ('left','right')] => empty()]" mode="MODE_MAKE_SECT_INFO">
         <xsl:param name="prmIsInFrontMatter" tunnel="yes" required="false" select="false()"/>
         <xsl:param name="prmTopicRef" as="element()" required="yes"/>
         <image>
@@ -468,7 +468,7 @@ URL : http://www.antenna.co.jp/
                 <xsl:variable name="break" as="xs:string" select="ahf:getOutputClassRegx($prmElem,'(break-)(auto|page|col)','$2')"/>
                 <xsl:variable name="breakIndex" as="xs:integer?" select="index-of($cBreakSpecSeq,$break)"/>
                 <xsl:choose>
-                    <xsl:when test="$prmElem[ahf:seqContains(@class,(' bookmap/part ',' bookmap/chapter ',' bookmap/appendix ',' bookmap/toc ',' bookmap/indexlist',' bookmap/glossarylist '))][empty(parent::*[@class => contains-token('bookmap/part')])]">
+                    <xsl:when test="$prmElem[@class => ahf:seqContainsToken(('bookmap/part','bookmap/chapter','bookmap/appendix','bookmap/toc','bookmap/indexlist','bookmap/glossarylist'))][parent::*[@class => contains-token('bookmap/part')] => empty()]">
                         <xsl:sequence select="ahf:getPageSpecInfo($prmElem)"/>
                     </xsl:when>
                     <xsl:when test="exists($breakIndex)">

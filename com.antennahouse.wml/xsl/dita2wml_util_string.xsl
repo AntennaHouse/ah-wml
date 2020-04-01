@@ -247,6 +247,19 @@ URL : http://www.antennahouse.com/
     </xsl:function>
     
     <!--
+         function: Return true() if $prmStr contains one of the given $prmDstStrSeq[N] as token.
+         param:    prmStr, prmDstTokenSeq
+         return:   xs:boolean
+         note:		
+    -->
+    <xsl:function name="ahf:seqContainsToken" as="xs:boolean">
+        <xsl:param name="prmStr" as="xs:string?"/>
+        <xsl:param name="prmDstTokenSeq" as="xs:string*"/>
+        <xsl:variable name="inputStrToken" as="xs:string*" select="$prmStr => tokenize('[\s]+')"/>
+        <xsl:sequence select="$inputStrToken = $prmDstTokenSeq"/>
+    </xsl:function>
+    
+    <!--
      function: containsAnyOf
      param:    prmSrcString,prmSearchString
      return:   Return true() if $prmSrcString contains any of $prmSrcString

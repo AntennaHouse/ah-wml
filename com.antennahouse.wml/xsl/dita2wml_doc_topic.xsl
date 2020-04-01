@@ -27,10 +27,10 @@ URL : http://www.antennahouse.com/
                 is very vague when should the template treat shortdesc as inline or block.
                 This template assumes the shortdesc as block that should generate w:p element.
      -->
-    <xsl:template match="*[@class => contains-token('topic/topic ')]/*[contains(@class,' topic/shortdesc')][empty(child::node())]" priority="5"/>
-    <xsl:template match="*[@class => contains-token('topic/abstract ')]/*[contains(@class,' topic/shortdesc')][empty(child::node())]" priority="5"/>
+    <xsl:template match="*[@class => contains-token('topic/topic ')]/*[@class => contains-token('topic/shortdesc')][child::node() => empty()]" priority="5"/>
+    <xsl:template match="*[@class => contains-token('topic/abstract ')]/*[@class => contains-token('topic/shortdesc')][child::node() => empty()]" priority="5"/>
     
-    <xsl:template match="*[@class => contains-token('topic/topic ')]/*[@class => contains-token('topic/shortdesc ')]|*[contains(@class,' topic/abstract')]/*[contains(@class,' topic/shortdesc')]">
+    <xsl:template match="*[@class => contains-token('topic/topic ')]/*[@class => contains-token('topic/shortdesc ')]|*[@class => contains-token('topic/abstract')]/*[@class => contains-token('topic/shortdesc')]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>

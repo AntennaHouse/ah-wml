@@ -28,7 +28,7 @@ URL : http://www.antennahouse.com/
      return:	
      note:      handle column break
      -->
-    <xsl:template match="*[@class => contains-token('topic/image ')][string(@placement) eq 'break'][empty(ancestor::*[ahf:seqContains(string(@class),(' floatfig-d/floatfig ',' floatfig-d/floatfig-group'))][string(@float) = ('left','right')])]" priority="20">
+    <xsl:template match="*[@class => contains-token('topic/image ')][string(@placement) eq 'break'][ancestor::*[@class => ahf:seqContainsToken(('floatfig-d/floatfig','floatfig-d/floatfig-group'))][string(@float) = ('left','right')] => empty()]" priority="20">
         <xsl:call-template name="getSectionPropertyElemBefore"/>
         <xsl:next-match/>
         <xsl:call-template name="getSectionPropertyElemAfter"/>
@@ -78,7 +78,7 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="imageId" as="xs:string" select="xs:string(map:get($imageIdMap,$imageIdKey))"/>
         <xsl:variable name="drawingIdKey" as="xs:string" select="ahf:generateId(.)"/>
         <xsl:variable name="drawingId" as="xs:string" select="xs:string(map:get($drawingIdMap,$drawingIdKey))"/>
-        <xsl:variable name="isFloatFigImage" as="xs:boolean" select="exists(self::*[ancestor::*[@class => contains-token('floatfig-d/floatfig ')]][following-sibling::*[1][contains(@class,' topic/image')][string(@placement) eq 'break']])"/>
+        <xsl:variable name="isFloatFigImage" as="xs:boolean" select="exists(self::*[ancestor::*[@class => contains-token('floatfig-d/floatfig ')]][following-sibling::*[1][@class => contains-token('topic/image')][string(@placement) eq 'break']])"/>
         <xsl:variable name="vMargin" as="xs:integer">
             <xsl:choose>
                 <xsl:when test="$isFloatFigImage">
@@ -418,7 +418,7 @@ URL : http://www.antennahouse.com/
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:variable name="columnCount" as="xs:integer">
-                        <xsl:variable name="bodyOrTopic" as="element()" select="if (exists($prmImage/ancestor::*[@class => contains-token('topic/body ')])) then $prmImage/ancestor::*[@class => contains-token('topic/body')] else $prmImage/ancestor::*[contains(@class,' topic/topic')][1]"/>
+                        <xsl:variable name="bodyOrTopic" as="element()" select="if (exists($prmImage/ancestor::*[@class => contains-token('topic/body ')])) then $prmImage/ancestor::*[@class => contains-token('topic/body')] else $prmImage/ancestor::*[@class => contains-token('topic/topic')][1]"/>
                         <xsl:choose>
                             <xsl:when test="ahf:isSpannedImage($prmImage)">
                                 <xsl:sequence select="1"/>

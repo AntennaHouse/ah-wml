@@ -25,7 +25,7 @@ URL : http://www.antennahouse.com/
      return:	
      note:      Pass list occurence number and list nesting level to li template
      -->
-    <xsl:template match="*[@class => contains-token('topic/ol ') or contains(@class,' topic/ul')]">
+    <xsl:template match="*[@class => ahf:seqContainsToken(('topic/ol','topic/ul'))]">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:variable name="id" as="xs:string" select="ahf:generateId(.)"/>
@@ -170,7 +170,7 @@ URL : http://www.antennahouse.com/
         </w:p>
     </xsl:template>
 
-    <xsl:template match="*[@class => contains-token('topic/dd ')]/*[contains(@class,' topic/p')]" priority="5">
+    <xsl:template match="*[@class => contains-token('topic/dd ')]/*[@class => contains-token('topic/p')]" priority="5">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>

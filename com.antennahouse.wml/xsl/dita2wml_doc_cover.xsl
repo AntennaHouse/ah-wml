@@ -42,8 +42,8 @@ URL : http://www.antennahouse.com/
                     <xsl:variable name="coverN" as="xs:string" select="."/>
                     <xsl:choose>
                         <xsl:when test="ahf:hasCoverN($prmMap,$coverN)">
-                            <xsl:apply-templates select="$prmMap/*[contains(@class, ' bookmap/frontmatter ')]/*[@class => contains-token('map/topicref')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
-                            <xsl:apply-templates select="$prmMap/*[contains(@class, ' bookmap/backmatter ')]/*[@class => contains-token('map/topicref')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                            <xsl:apply-templates select="$prmMap/*[@class => contains-token('bookmap/frontmatter')]/*[@class => contains-token('map/topicref')][. => ahf:hasOutputClassValue($coverN)]" mode="MODE_MAKE_COVER"/>
+                            <xsl:apply-templates select="$prmMap/*[@class => contains-token('bookmap/backmatter')]/*[@class => contains-token('map/topicref')][. => ahf:hasOutputClassValue($coverN)]" mode="MODE_MAKE_COVER"/>
                             <xsl:call-template name="genSectprForCover">
                                 <xsl:with-param name="prmCoverN" select="$coverN"/>
                             </xsl:call-template>
@@ -59,7 +59,7 @@ URL : http://www.antennahouse.com/
                     <xsl:variable name="coverN" as="xs:string" select="."/>
                     <xsl:choose>
                         <xsl:when test="ahf:hasCoverN($prmMap,$coverN)">
-                            <xsl:apply-templates select="$prmMap/*[contains(@class, ' map/topicref ')][ahf:hasOutputClassValue(.,$coverN)]" mode="MODE_MAKE_COVER"/>
+                            <xsl:apply-templates select="$prmMap/*[@class => contains-token('map/topicref')][. => ahf:hasOutputClassValue($coverN)]" mode="MODE_MAKE_COVER"/>
                             <xsl:call-template name="genSectprForCover">
                                 <xsl:with-param name="prmCoverN" select="$coverN"/>
                             </xsl:call-template>

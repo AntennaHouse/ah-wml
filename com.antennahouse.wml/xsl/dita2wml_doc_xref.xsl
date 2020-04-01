@@ -103,7 +103,7 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>                    
             </xsl:when>
             <!-- Reference to example, section -->
-            <xsl:when test="$targetElem[ahf:seqContains(@class,(' topic/section ',' topic/example '))][exists(*[@class => contains-token('topic/title')])]">
+            <xsl:when test="$targetElem[@class => ahf:seqContainsToken(('topic/section','topic/example'))][*[@class => contains-token('topic/title')] => exists()]">
                 <xsl:call-template name="xrefToSection">
                     <xsl:with-param name="prmXref"     select="$prmXref"/>
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
@@ -112,7 +112,7 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>                    
             </xsl:when>
             <!-- Reference to table -->
-            <xsl:when test="$targetElem[contains(@class,(' topic/table '))][exists(*[@class => contains-token('topic/title')])]">
+            <xsl:when test="$targetElem[@class => contains-token('topic/table')][*[@class => contains-token('topic/title')] => exists()]">
                 <xsl:call-template name="xrefToTable">
                     <xsl:with-param name="prmXref"     select="$prmXref"/>
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
@@ -121,7 +121,7 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>                    
             </xsl:when>
             <!-- Reference to fig -->
-            <xsl:when test="$targetElem[@class => contains-token('topic/fig ')][exists(*[contains(@class,' topic/title')])]">
+            <xsl:when test="$targetElem[@class => contains-token('topic/fig')][*[@class => contains-token('topic/title')] => exists()]">
                 <xsl:call-template name="xrefToFig">
                     <xsl:with-param name="prmXref"     select="$prmXref"/>
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
@@ -130,7 +130,7 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>                    
             </xsl:when>
             <!-- Reference to ol/li -->
-            <xsl:when test="$targetElem[@class => contains-token('topic/li ')][parent::*[contains(@class,' topic/ol')]]">
+            <xsl:when test="$targetElem[@class => contains-token('topic/li')][parent::*[@class => contains-token('topic/ol')]]">
                 <xsl:call-template name="xrefToOlLi">
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
                     <xsl:with-param name="prmTargetElem"  select="$targetElem"/>
@@ -792,7 +792,7 @@ URL : http://www.antennahouse.com/
      return:	
      note:		Don't generate <p>. This is inline element.
      -->
-    <xsl:template match="*[@class => contains-token('topic/xref ')]/*[contains(@class,' topic/desc')]">
+    <xsl:template match="*[@class => contains-token('topic/xref')]/*[@class => contains-token('topic/desc')]">
         <xsl:apply-templates/>
     </xsl:template>
     

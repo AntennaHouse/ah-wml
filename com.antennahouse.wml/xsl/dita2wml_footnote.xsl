@@ -37,7 +37,7 @@ URL : http://www.antennahouse.com/
             </xsl:call-template>
             
             <xsl:variable name="fns" as="element()*">
-                <xsl:for-each select="$map/*[not(@class => contains-token('map/reltable '))]/descendant-or-self::*[contains(@class,' map/topicref')][starts-with(@href,'#')]">
+                <xsl:for-each select="$map/*[@class => contains-token('map/reltable') => not()]/descendant-or-self::*[@class => contains-token('map/topicref')][@href => starts-with('#')]">
                     <xsl:variable name="topicRef" as="element()" select="."/>
                     <xsl:variable name="topic" as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
                     <xsl:if test="exists($topic)">

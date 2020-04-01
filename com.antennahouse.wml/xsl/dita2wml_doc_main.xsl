@@ -53,14 +53,14 @@ URL : http://www.antennahouse.com/
                 <!-- Process main contents -->
                 <xsl:choose>
                     <xsl:when test="$isBookMap">
-                        <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/frontmatter ')]/*[@class => contains-token('map/topicref')][ahf:isNotCoverTopicRef(.)]"/>
-                        <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/part ') or contains(@class, ' bookmap/chapter ')]"/>
-                        <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/appendices ')]/*[contains(@class, ' bookmap/appendix ')]"/>
-                        <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/appendix ')]"/>
-                        <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/backmatter ')]/*[@class => contains-token('map/topicref')][ahf:isNotCoverTopicRef(.)]"/>
+                        <xsl:apply-templates select="$map/*[@class => contains-token('bookmap/frontmatter')]/*[@class => contains-token('map/topicref')][. => ahf:isNotCoverTopicRef()]"/>
+                        <xsl:apply-templates select="$map/*[@class => contains-token('bookmap/part') or @class => contains-token('bookmap/chapter')]"/>
+                        <xsl:apply-templates select="$map/*[@class => contains-token('bookmap/appendices')]/*[@class => contains-token('bookmap/appendix')]"/>
+                        <xsl:apply-templates select="$map/*[@class => contains-token('bookmap/appendix')]"/>
+                        <xsl:apply-templates select="$map/*[@class => contains-token('bookmap/backmatter')]/*[@class => contains-token('map/topicref')][. => ahf:isNotCoverTopicRef()]"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')][ahf:isNotCoverTopicRef(.)]"/>
+                        <xsl:apply-templates select="$map/*[@class => contains-token('map/topicref ')][ahf:isNotCoverTopicRef(.)]"/>
                     </xsl:otherwise>
                 </xsl:choose>
 

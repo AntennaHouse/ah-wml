@@ -32,7 +32,7 @@ E-mail : info@antennahouse.com
          value: occurrence number (used w:footnote/@id & 
      -->
     <xsl:variable name="fnIdMap" as="map(xs:string,xs:integer)">
-        <xsl:variable name="fnIds" as="xs:string*" select="/descendant::*[contains(@class, ' topic/fn ')]/ahf:generateId(.)"/>
+        <xsl:variable name="fnIds" as="xs:string*" select="/descendant::*[@class => contains-token('topic/fn')]/ahf:generateId(.)"/>
         <xsl:map>
             <xsl:for-each select="$fnIds">
                 <xsl:variable name="key" as="xs:string" select="."/>

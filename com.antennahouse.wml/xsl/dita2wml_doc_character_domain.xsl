@@ -25,7 +25,7 @@ URL : http://www.antennahouse.com/
      note:      <br/> is introduced in ah-dita specialization:
                 https://github.com/AntennaHouse/ah-dita
      -->
-    <xsl:template match="*[contains(@class, ' ch-d/br ')]" priority="5" as="element(w:r)">
+    <xsl:template match="*[@class => contains-token('ch-d/br')]" priority="5" as="element(w:r)">
         <w:r>
             <w:br/>
         </w:r>

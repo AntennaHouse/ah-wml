@@ -37,9 +37,9 @@ URL : http://www.antennahouse.com/
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="runProps" select="ahf:mergeRunProps($prmRunProps,$uiControlRunProp)"/>
-        <xsl:if test="parent::*[contains(@class, ' ui-d/menucascade ')]">
+        <xsl:if test="parent::*[@class => contains-token('ui-d/menucascade')]">
             <!-- Child of menucascade -->
-            <xsl:if test="preceding-sibling::*[contains(@class, ' ui-d/uicontrol ')]">
+            <xsl:if test="preceding-sibling::*[@class => contains-token('ui-d/uicontrol')]">
                 <!-- preceding uicontrol -->
                 <w:r>
                     <xsl:if test="exists($prmRunProps)">
