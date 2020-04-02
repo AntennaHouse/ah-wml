@@ -102,10 +102,10 @@ URL : http://www.antennahouse.com/
      note:		
      -->
     <xsl:template name="makeTableCount" as="element()*">
-        <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')]" mode="MODE_TABLE_COUNT"/>
+        <xsl:apply-templates select="$map/*[@class => contains-token('map/topicref')]" mode="MODE_TABLE_COUNT"/>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="MODE_TABLE_COUNT" as="element()">
+    <xsl:template match="*[@class => contains-token('map/topicref')]" mode="MODE_TABLE_COUNT" as="element()">
         <xsl:variable name="topicRef" as="element()" select="."/>
         <xsl:variable name="targetTopic" as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
         <xsl:variable name="tableCount" as="xs:integer">
@@ -140,15 +140,15 @@ URL : http://www.antennahouse.com/
         <xsl:element name="table-count">
             <xsl:attribute name="id" select="$topicId"/>
             <xsl:attribute name="count" select="$tableCount"/>
-            <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current"/>
+            <xsl:apply-templates select="*[@class => contains-token('map/topicref')]" mode="#current"/>
         </xsl:element>
     </xsl:template>
 
     <xsl:template name="makeFigCount" as="element()*">
-        <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')]" mode="MODE_FIG_COUNT"/>
+        <xsl:apply-templates select="$map/*[@class => contains-token('map/topicref')]" mode="MODE_FIG_COUNT"/>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="MODE_FIG_COUNT" as="element()">
+    <xsl:template match="*[@class => contains-token('map/topicref')]" mode="MODE_FIG_COUNT" as="element()">
         <xsl:variable name="topicRef" as="element()" select="."/>
         <xsl:variable name="targetTopic" as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
         <xsl:variable name="figCount" as="xs:integer">
@@ -179,15 +179,15 @@ URL : http://www.antennahouse.com/
         <xsl:element name="fig-count">
             <xsl:attribute name="id" select="$topicId"/>
             <xsl:attribute name="count" select="$figCount"/>
-            <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current"/>
+            <xsl:apply-templates select="*[@class => contains-token('map/topicref')]" mode="#current"/>
         </xsl:element>
     </xsl:template>
     
     <xsl:template name="makeFnCount" as="element()*">
-        <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')]" mode="MODE_FN_COUNT"/>
+        <xsl:apply-templates select="$map/*[@class => contains-token('map/topicref')]" mode="MODE_FN_COUNT"/>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="MODE_FN_COUNT" as="element()">
+    <xsl:template match="*[@class => contains-token('map/topicref')]" mode="MODE_FN_COUNT" as="element()">
         <xsl:variable name="topicRef" as="element()" select="."/>
         <xsl:variable name="targetTopic" as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
         <xsl:variable name="fnCount" as="xs:integer">
@@ -218,7 +218,7 @@ URL : http://www.antennahouse.com/
         <xsl:element name="fn-count">
             <xsl:attribute name="id" select="$topicId"/>
             <xsl:attribute name="count" select="$fnCount"/>
-            <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current"/>
+            <xsl:apply-templates select="*[@class => contains-token('map/topicref')]" mode="#current"/>
         </xsl:element>
     </xsl:template>
 

@@ -303,7 +303,7 @@ URL : http://www.antennahouse.com/
     <xsl:template match="*[@class => contains-token('topic/entry')][string(@ahf:row-spanned) eq $cYes]" as="element()" mode="MODE_COMPLEMENT_COL_SPAN">
         <xsl:variable name="colnum" as="xs:integer" select="xs:integer(@ahf:colnum)"/>
         <xsl:variable name="theadOrTbody" as="element()" select="parent::*/parent::*"/>
-        <xsl:variable name="prevRowSpanStartEntry" as="element()?" select="($theadOrTbody/*[contains(@class, ' topic/row ')][. &lt;&lt; current()/parent::*]/*[contains(@class, ' topic/entry ')][xs:integer(@ahf:colnum) eq $colnum][string(@ahf:row-span-count)])[last()]"/>
+        <xsl:variable name="prevRowSpanStartEntry" as="element()?" select="($theadOrTbody/*[@class => contains-token('topic/row')][. &lt;&lt; current()/parent::*]/*[@class => contains-token('topic/entry')][xs:integer(@ahf:colnum) eq $colnum][string(@ahf:row-span-count)])[last()]"/>
         <!--xsl:message select="'$prevRowSpanStartEntry=',if (exists($prevRowSpanStartEntry)) then ahf:genHistoryId($prevRowSpanStartEntry) else ''"/>
         <xsl:message select="'$prevRowSpanStartEntry/@ahf:col-span-count=',string($prevRowSpanStartEntry/@ahf:col-span-count)"/>
         <xsl:message select="'$prevRowSpanStartEntry/@ahf:col-spanned=',string($prevRowSpanStartEntry/@ahf:col-spanned)"/-->
@@ -335,7 +335,7 @@ URL : http://www.antennahouse.com/
         <xsl:for-each select="$prmSimpleTable">
             <xsl:copy>
                 <xsl:copy-of select="@*"/>
-                <xsl:for-each select="*[@class => contains-token('topic/sthead ') or contains(@class,' topic/strow')]">
+                <xsl:for-each select="*[@class => ahf:seqContainsToken(('topic/sthead','topic/strow'))]">
                     <xsl:variable name="isLastRow" as="xs:boolean" select="position() eq last()"/>
                     <xsl:copy>
                         <xsl:copy-of select="@*"/>

@@ -38,7 +38,7 @@ E-mail : info@antennahouse.com
          value: occurrence number
      -->
     <xsl:variable name="imageIdMap" as="map(xs:string,xs:integer)">
-        <xsl:variable name="imageHrefs" as="xs:string*" select="//*[contains(@class, ' topic/image ')]/@href/string(.)"/>
+        <xsl:variable name="imageHrefs" as="xs:string*" select="//*[@class => contains-token('topic/image')]/@href/string(.)"/>
         <xsl:variable name="uniqueImageHrefs" as="xs:string*" select="distinct-values($imageHrefs)"/>
         <xsl:map>
             <xsl:for-each select="$uniqueImageHrefs">

@@ -45,7 +45,7 @@ E-mail : info@antennahouse.com
      -->
     <xsl:variable name="cmClearCandidateElements" as="element()*">
         <xsl:sequence select="$root/descendant::*[string(@clear) = ('both','right','left')][ahf:isBlockElement(.)]/preceding-sibling::*[1]"/>
-        <xsl:for-each select="$root/descendant::*[@class => contains-token('task/step ')][*[contains(@class,'task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig')][string(@float) = ('left','right')]]">
+        <xsl:for-each select="$root/descendant::*[@class => contains-token('task/step ')][*[@class => contains-token('task/info ')][1]/descendant::*[@class => contains-token('floatfig-d/floatfig')][string(@float) = ('left','right')]]">
             <xsl:variable name="step" as="element()" select="."/>
             <xsl:choose>
                 <!-- preceding-sibling::*[1] is step -->
@@ -53,11 +53,11 @@ E-mail : info@antennahouse.com
                     <xsl:sequence select="$step/preceding-sibling::*[1]"/>
                 </xsl:when>
                 <!-- preceding-sibling::*[1] is stepsection that have floatfig -->
-                <xsl:when test="$step/preceding-sibling::*[1][@class => contains-token('task/stepsection ')][descendant::*[contains(@class,' floatfig-d/floatfig')][string(@float) = ('left','right')]]">
+                <xsl:when test="$step/preceding-sibling::*[1][@class => contains-token('task/stepsection')][descendant::*[@class => contains-token('floatfig-d/floatfig')][string(@float) = ('left','right')]]">
                     <xsl:sequence select="$step/preceding-sibling::*[1]"/>
                 </xsl:when>
                 <!-- preceding-sibling::*[1] is stepsection that does not have floatfig and preceding-sibling::*[2] is step -->
-                <xsl:when test="$step[preceding-sibling::*[1][@class => contains-token('task/stepsection ')][empty(descendant::*[contains(@class,' floatfig-d/floatfig')])]][preceding-sibling::*[2]]">
+                <xsl:when test="$step[preceding-sibling::*[1][@class => contains-token('task/stepsection')][descendant::*[@class => contains-token('floatfig-d/floatfig')] => empty()]][preceding-sibling::*[2]]">
                     <xsl:sequence select="$step/preceding-sibling::*[2]"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -66,17 +66,17 @@ E-mail : info@antennahouse.com
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
-        <xsl:sequence select="$root/descendant::*[@class => contains-token('topic/li ')][not(@class => contains-token('task/step'))][descendant::*[contains(@class,' floatfig-d/floatfig')][string(@float) = ('left','right')]]/preceding-sibling::*[1]"/>
-        <xsl:for-each select="$root/descendant::*[@class => contains-token('topic/dd ')][descendant::*[contains(@class,' floatfig-d/floatfig')][string(@float) = ('left','right')]]">
+        <xsl:sequence select="$root/descendant::*[@class => contains-token('topic/li')][@class => contains-token('task/step') => not()][descendant::*[@class => contains-token('floatfig-d/floatfig')][string(@float) = ('left','right')]]/preceding-sibling::*[1]"/>
+        <xsl:for-each select="$root/descendant::*[@class => contains-token('topic/dd')][descendant::*[@class => contains-token('floatfig-d/floatfig')][string(@float) = ('left','right')]]">
             <xsl:variable name="dd" select="."/>
             <xsl:if test="$dd/preceding-sibling::*[1][@class => contains-token('topic/dt')]">
                 <!-- select dlentry -->
                 <xsl:sequence select="$dd/parent::*/preceding-sibling::*[1]"/>
             </xsl:if>
         </xsl:for-each>
-        <xsl:variable name="targetClass" as="xs:string*" select="(' topic/topic ',' topic/section ',' topic/example ',' task/stepsection ', ' topic/related-links ')"/>
+        <xsl:variable name="targetClass" as="xs:string*" select="('topic/topic','topic/section','topic/example','task/stepsection', 'topic/related-links')"/>
         <xsl:variable name="targetElements" as="element()*">
-            <xsl:variable name="clearCandidates" as="element()*" select="$root/descendant::*[ahf:seqContains(@class,$targetClass)]"/>
+            <xsl:variable name="clearCandidates" as="element()*" select="$root/descendant::*[@class => ahf:seqContainsToken($targetClass)]"/>
             <xsl:for-each select="$clearCandidates">
                 <xsl:variable name="clearCandidate" as="element()" select="."/>
                 <xsl:variable name="targetElem" select="if ($clearCandidate[@class => contains-token('topic/topic')]) then $clearCandidate else $clearCandidate/preceding-sibling::*[1]"/>

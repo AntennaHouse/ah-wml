@@ -33,7 +33,7 @@ URL : http://www.antennahouse.com/
                 In this template the height is calculated using provisional method counting w:p has fixed height. 
                 (based on the assumption that w:p fits the text-box width.)
      -->
-    <xsl:template match="*[@class => contains-token('task/step ')]/*[@class => contains-token('task/info')][1]//*[contains(@class,' floatfig-d/floatfig')]" priority="10"/>
+    <xsl:template match="*[@class => contains-token('task/step ')]/*[@class => contains-token('task/info')][1]//*[@class => contains-token('floatfig-d/floatfig')]" priority="10"/>
 
     <xsl:template match="*[@class => contains-token('floatfig-d/floatfig')][string(@float) eq 'none']" priority="5">
         <xsl:for-each select="*[@class => contains-token('floatfig-d/floatfig-group')][string(@float) = ('left','right')][ahf:isNotEmptyElement(.)]">

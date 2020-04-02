@@ -49,7 +49,7 @@ E-mail : info@antennahouse.com
      note:      DEBUG: There is tgroup/@cols that is not match the actual column count.
                        2019-01-08 t.makita
      -->
-    <xsl:template match="*[contains(@class, ' topic/tgroup ')]">
+    <xsl:template match="*[@class => contains-token('topic/tgroup')]">
         <xsl:variable name="tGroup" as="element()" select="."/>
         <xsl:variable name="cols" as="xs:integer" select="xs:integer($tGroup/@cols)"/>
 
@@ -92,18 +92,18 @@ E-mail : info@antennahouse.com
             <xsl:apply-templates select="@*"/>
             <xsl:copy-of select="$colspecNormalized/*"/>
             
-            <xsl:if test="$tGroup/*[contains(@class, ' topic/thead ')]">
+            <xsl:if test="$tGroup/*[@class => contains-token('topic/thead')]">
                 <xsl:call-template name="expandTheadOrTbodyWithSpanInfo">
                     <xsl:with-param name="prmColNumber" select="$cols"/>
                     <xsl:with-param name="prmColSpec" select="$colspecNormalized"/>
-                    <xsl:with-param name="prmTableHeadOrBodyPart" select="$tGroup/*[contains(@class, ' topic/thead ')]"/>
+                    <xsl:with-param name="prmTableHeadOrBodyPart" select="$tGroup/*[@class => contains-token('topic/thead')]"/>
                 </xsl:call-template>
             </xsl:if>
 
             <xsl:call-template name="expandTheadOrTbodyWithSpanInfo">
                 <xsl:with-param name="prmColNumber" select="$cols"/>
                 <xsl:with-param name="prmColSpec" select="$colspecNormalized"/>
-                <xsl:with-param name="prmTableHeadOrBodyPart" select="$tGroup/*[contains(@class, ' topic/tbody ')]"/>
+                <xsl:with-param name="prmTableHeadOrBodyPart" select="$tGroup/*[@class => contains-token('topic/tbody')]"/>
             </xsl:call-template>
         </xsl:copy>
     </xsl:template>
@@ -114,7 +114,7 @@ E-mail : info@antennahouse.com
      return:	<simpletable>
      note:		
      -->
-    <xsl:template match="*[contains(@class, ' topic/simpletable ')]" as="element()">
+    <xsl:template match="*[@class => contains-token('topic/simpletable')]" as="element()">
         <xsl:call-template name="expandSimpleTableWithSpanInfo">
             <xsl:with-param name="prmSimpleTable" select="."/>
         </xsl:call-template>

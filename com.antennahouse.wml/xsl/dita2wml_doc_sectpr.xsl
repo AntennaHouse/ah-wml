@@ -44,7 +44,7 @@ URL : http://www.antennahouse.com/
         <xsl:choose>
             <xsl:when test="exists($sectInfo)">
                 <xsl:choose>
-                    <xsl:when test="$prmElem/self::*[contains(@class, ' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]">
+                    <xsl:when test="$prmElem/self::*[@class => contains-token('topic/image')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]">
                         <!-- generate N column section property-->
                         <xsl:variable name="colInfo" as="xs:integer*" select="map:get($columnMap,ahf:generateId($prmElem/ancestor::*[@class => contains-token('topic/body')]))"/>
                         <xsl:variable name="currentCol" as="xs:integer" select="$colInfo[2]"/>
@@ -92,7 +92,7 @@ URL : http://www.antennahouse.com/
                 <xsl:variable name="isLast" as="xs:boolean" select="$nextCol eq 0"/>
                 <xsl:variable name="sectType" as="xs:string" select="ahf:getSectTypeFromBreakAndPosition($break,$isFirst)"/>
                 <xsl:choose>
-                    <xsl:when test="$prmElem/self::*[contains(@class, ' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]">
+                    <xsl:when test="$prmElem/self::*[@class => contains-token('topic/image')][string(@placement) eq 'break'][ahf:isSpannedImage(.)]">
                         <!-- Restore sect info -->
                         <w:p>
                             <w:pPr>
@@ -104,7 +104,7 @@ URL : http://www.antennahouse.com/
                             </w:pPr>
                         </w:p>
                     </xsl:when>
-                    <xsl:when test="$prmElem/self::*[contains(@class, ' topic/body ')][$currentCol gt 1][exists(descendant::*[contains(@class, ' topic/image ')][string(@placement) eq 'break'][ahf:isSpannedImage(.)])][exists(following-sibling::*[contains(@class, ' topic/related-links ')][ahf:isEffectiveRelatedLinks(.)])]"/>
+                    <xsl:when test="$prmElem/self::*[@class => contains-token('topic/body')][$currentCol gt 1][exists(descendant::*[@class => contains-token('topic/image')][string(@placement) eq 'break'][ahf:isSpannedImage(.)])][following-sibling::*[@class => contains-token('topic/related-links')][ahf:isEffectiveRelatedLinks(.)] => exists()]"/>
                     <xsl:otherwise>
                         <xsl:variable name="hdrFtrReference" as="node()" select="ahf:genHdrFtrReference($isFirst,$content)"/>
                         <xsl:variable name="pgNumType" as="node()" select="ahf:genPgNumType($isFirst,$content)"/>

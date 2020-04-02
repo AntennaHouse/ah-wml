@@ -164,7 +164,7 @@ E-mail : info@antennahouse.com
      return:	and inline nodes
      note:		
      -->
-    <xsl:template match="*[@class => contains-token('topic/shortdesc ')][parent::*[contains(@class,' topic/topic')]][exists(child::node())]" priority="5">
+    <xsl:template match="*[@class => contains-token('topic/shortdesc ')][parent::*[@class => contains-token('topic/topic')]][exists(child::node())]" priority="5">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
             <xsl:call-template name="ahf:processInline">
@@ -249,10 +249,10 @@ E-mail : info@antennahouse.com
                                 <xsl:with-param name="prmInFloatFig" tunnel="yes" select="true()"/>
                             </xsl:call-template>
                         </xsl:when>
-                        <xsl:when test="$inlineNode/self::*[contains(string(@class),' topic/image ')]">
+                        <xsl:when test="$inlineNode/self::*[@class => contains-token('topic/image')]">
                             <xsl:call-template name="generalElementProcessing"/>
                         </xsl:when>
-                        <xsl:when test="$inlineNode/self::*[ahf:seqContains(string(@class),(' topic/data ',' topic/data-about ',' topic/unknown ',' topic/foreign '))]">
+                        <xsl:when test="$inlineNode/self::*[@class => ahf:seqContainsToken(('topic/data','topic/data-about','topic/unknown','topic/foreign'))]">
                             <xsl:call-template name="generalElementProcessing"/>
                         </xsl:when>
                         <xsl:when test="$inlineNode/self::*[@class => contains-token('topic/indexterm')]">
@@ -313,39 +313,39 @@ E-mail : info@antennahouse.com
                    only when one of index-sort-as element has effective text.
                 2. Generated indexterm may have <index-see>, <index-see-also> element as a child.
      -->
-    <xsl:variable name="indextermClass" as="xs:string" select="' topic/indexterm '"/>
-    <xsl:variable name="indextermClassGroup" as="xs:string+" select="(' topic/indexterm ',' indexing-d/index-see ',' indexing-d/index-see-also ')"/>
-    <xsl:variable name="indextermClassSortAs" as="xs:string+" select="(' indexing-d/index-sort-as ')"/>
+    <xsl:variable name="indextermClass" as="xs:string" select="'topic/indexterm'"/>
+    <xsl:variable name="indextermClassGroup" as="xs:string+" select="('topic/indexterm','indexing-d/index-see','indexing-d/index-see-also')"/>
+    <xsl:variable name="indextermClassSortAs" as="xs:string+" select="('indexing-d/index-sort-as')"/>
     <xsl:variable name="indextermClassGroupWithSortAs" as="xs:string+" select="($indextermClassGroup,$indextermClassSortAs)"/>
-    <xsl:variable name="indextermSeeSeeAlsoClassGroup" as="xs:string+" select="(' indexing-d/index-see ',' indexing-d/index-see-also ')"/>
+    <xsl:variable name="indextermSeeSeeAlsoClassGroup" as="xs:string+" select="('indexing-d/index-see','indexing-d/index-see-also')"/>
 
     <xsl:template name="ahf:processIndexterm" as="element()*">
         <xsl:variable name="indexterm" as="element()" select="."/>
         <xsl:variable name="nestedLastIndextermSeq" as="element()*" 
-            select="$indexterm/descendant-or-self::*[self::*[contains(@class,$indextermClass)] and empty(*[ahf:seqContains(@class,$indextermClassGroup)]) and empty(ancestor::*[ahf:seqContains(@class,$indextermSeeSeeAlsoClassGroup)])]
-                  | $indexterm/descendant::*[self::*[ahf:seqContains(@class,$indextermSeeSeeAlsoClassGroup)]]"/>
+            select="$indexterm/descendant-or-self::*[self::*[@class => contains-token($indextermClass)] and empty(*[@class => ahf:seqContainsToken($indextermClassGroup)]) and empty(ancestor::*[@class => ahf:seqContainsToken($indextermSeeSeeAlsoClassGroup)])]
+            | $indexterm/descendant::*[self::*[@class => ahf:seqContainsToken($indextermSeeSeeAlsoClassGroup)]]"/>
         <xsl:for-each select="$nestedLastIndextermSeq">
             <xsl:variable name="last" as="element()" select="."/>
-            <xsl:variable name="indextermSeq" as="element()+" select="$last/ancestor-or-self::*[ahf:seqContains(string(@class),$indextermClassGroup)]"/>
+            <xsl:variable name="indextermSeq" as="element()+" select="$last/ancestor-or-self::*[@class => ahf:seqContainsToken($indextermClassGroup)]"/>
             <xsl:for-each select="$indextermSeq[1]">
                 <xsl:copy>
                     <xsl:copy-of select="@*"/>
                     <xsl:text>"</xsl:text>
-                    <xsl:for-each select="$indextermSeq[contains(@class,$indextermClass)]">
+                    <xsl:for-each select="$indextermSeq[@class => contains-token($indextermClass)]">
                         <xsl:apply-templates select="." mode="MODE_BUILD_INDEXTERM_TEXT"/>
                     </xsl:for-each>
                     <xsl:text>"</xsl:text>
-                    <xsl:for-each select="$indextermSeq[ahf:seqContains(@class,$indextermSeeSeeAlsoClassGroup)]">
+                    <xsl:for-each select="$indextermSeq[@class => ahf:seqContainsToken($indextermSeeSeeAlsoClassGroup)]">
                         <xsl:apply-templates select="." mode="MODE_BUILD_INDEXTERM_TEXT"/>
                     </xsl:for-each>
-                    <xsl:if test="$indextermSeq[exists(*[contains(@class,$indextermClassSortAs)])]">
+                    <xsl:if test="$indextermSeq[exists(*[@class => contains-token($indextermClassSortAs)])]">
                         <xsl:variable name="sortAsSeq" as="xs:string*">
-                            <xsl:for-each select="$indextermSeq[contains(@class,$indextermClass)]">
+                            <xsl:for-each select="$indextermSeq[@class => contains-token($indextermClass)]">
                                 <xsl:apply-templates select="." mode="MODE_BUILD_SORT_AS"/>
                             </xsl:for-each>
                         </xsl:variable>
                         <xsl:if test="some $sortAs in $sortAsSeq satisfies string($sortAs)">
-                            <xsl:for-each select="($indextermSeq/*[contains(@class,$indextermClassSortAs)])[1]">
+                            <xsl:for-each select="($indextermSeq/*[@class => contains-token($indextermClassSortAs)])[1]">
                                 <xsl:copy>
                                     <xsl:copy-of select="@*"/>
                                     <xsl:text>"</xsl:text>
@@ -361,9 +361,9 @@ E-mail : info@antennahouse.com
     </xsl:template>
 
     <!-- generate text() from indexterm -->
-    <xsl:template match="*[contains(@class,$indextermClass)]" mode="MODE_BUILD_INDEXTERM_TEXT">
+    <xsl:template match="*[@class => contains-token($indextermClass)]" mode="MODE_BUILD_INDEXTERM_TEXT">
         <xsl:variable name="indextermTextVal" as="xs:string*">
-            <xsl:apply-templates select="node() except *[ahf:seqContains(@class,$indextermClassGroupWithSortAs)]" mode="MODE_TEXT_ONLY"/>
+            <xsl:apply-templates select="node() except *[@class => ahf:seqContainsToken($indextermClassGroupWithSortAs)]" mode="MODE_TEXT_ONLY"/>
         </xsl:variable>
         <xsl:variable name="indextermStringVal" as="xs:string" select="normalize-space(string-join($indextermTextVal,''))"/>
         <xsl:if test="parent::*[@class => contains-token('topic/indexterm')] and string($indextermStringVal)">
@@ -373,7 +373,7 @@ E-mail : info@antennahouse.com
     </xsl:template>
 
     <!-- index-see, index-see-also element -->
-    <xsl:template match="*[ahf:seqContains(@class,$indextermSeeSeeAlsoClassGroup)]" mode="MODE_BUILD_INDEXTERM_TEXT">
+    <xsl:template match="*[@class => ahf:seqContainsToken($indextermSeeSeeAlsoClassGroup)]" mode="MODE_BUILD_INDEXTERM_TEXT">
         <xsl:variable name="indextermSeeOrSeeAlsoTextVal" as="xs:string*">
             <xsl:apply-templates select="node()" mode="MODE_TEXT_ONLY"/>
         </xsl:variable>
@@ -385,9 +385,9 @@ E-mail : info@antennahouse.com
     </xsl:template>
 
     <!-- index-sort-as element -->
-    <xsl:template match="*[contains(@class,$indextermClass)]" mode="MODE_BUILD_SORT_AS" as="xs:string">
+    <xsl:template match="*[@class => contains-token($indextermClass)]" mode="MODE_BUILD_SORT_AS" as="xs:string">
         <xsl:variable name="sortAsTextVal" as="xs:string*">
-            <xsl:apply-templates select="child::*[contains(@class,$indextermClassSortAs)]/node()" mode="MODE_TEXT_ONLY"/>
+            <xsl:apply-templates select="child::*[@class => contains-token($indextermClassSortAs)]/node()" mode="MODE_TEXT_ONLY"/>
         </xsl:variable>
         <xsl:variable name="indextermStringVal" as="xs:string" select="string(normalize-space(string-join($sortAsTextVal,'')))"/>
         <xsl:sequence select="$indextermStringVal"/>
