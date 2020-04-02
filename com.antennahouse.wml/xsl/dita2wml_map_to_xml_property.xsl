@@ -37,7 +37,7 @@ URL    : http://www.antennahouse.com/
      return:	<map> element.
      note:		
      -->
-    <xsl:template match="*[contains(@class, ' map/map ')]">
+    <xsl:template match="*[@class => contains-token('map/map')]">
         <xsl:message select="'$PRM_MAP_DIR=',$PRM_MAP_DIR"/>
         <xsl:message select="'$PRM_TEMP_DIR=',$PRM_TEMP_DIR"/>
         <xsl:element name="map">

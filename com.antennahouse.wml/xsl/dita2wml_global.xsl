@@ -116,9 +116,9 @@ E-mail : info@antennahouse.com
          ***************************************-->
     <!-- Top level element -->
     <xsl:variable name="root" select="/*[1]" as="element()"/>
-    <xsl:variable name="map" select="$root/*[contains(@class,' map/map ')][1]" as="element()"/>
-    <xsl:variable name="topics" select="$root/*[contains(@class,' topic/topic ')]" as="element()*"/>
-    <xsl:variable name="indexList" as="element()?" select="$map//*[contains(@class,' bookmap/indexlist ')][empty(@href)][1]"/>
+    <xsl:variable name="map" select="$root/*[@class => contains-token('map/map')][1]" as="element()"/>
+    <xsl:variable name="topics" select="$root/*[@class => contains-token('topic/topic')]" as="element()*"/>
+    <xsl:variable name="indexList" as="element()?" select="$map//*[@class => contains-token('bookmap/indexlist')][empty(@href)][1]"/>
     
     <!-- Map class -->
     <xsl:variable name="classMap" select="'map'" as="xs:string"/>
@@ -126,7 +126,7 @@ E-mail : info@antennahouse.com
     <xsl:variable name="classUnknown" select="'unknown'" as="xs:string"/>
     <xsl:variable name="ditamapClass" as="xs:string">
         <xsl:choose>
-            <xsl:when test="$root/*[1][contains(@class,' map/map ')][contains(@class,' bookmap/bookmap ')]">
+            <xsl:when test="$root/*[1][@class => contains-token('map/map')][@class => contains-token('bookmap/bookmap')]">
                 <xsl:sequence select="$classBookMap"/>
             </xsl:when>
             <xsl:otherwise>
@@ -160,19 +160,19 @@ E-mail : info@antennahouse.com
     </xsl:variable>
     
     <!-- Part existence (bookmap only) -->
-    <xsl:variable name="isPartExist" as="xs:boolean" select="exists($root/*[1][contains(@class, ' bookmap/bookmap ')]/*[contains(@class, ' bookmap/part ')])"/>
+    <xsl:variable name="isPartExist" as="xs:boolean" select="exists($root/*[1][@class => contains-token('bookmap/bookmap')]/*[@class => contains-token('bookmap/part')])"/>
     
     <!-- Chapter existence (bookmap only) -->
-    <xsl:variable name="isChapterExist" as="xs:boolean" select="exists($root/*[1][contains(@class, ' bookmap/bookmap ')]/*[contains(@class, ' bookmap/chapter ')])"/>
+    <xsl:variable name="isChapterExist" as="xs:boolean" select="exists($root/*[1][@class => contains-token('bookmap/bookmap')]/*[@class => contains-token('bookmap/chapter')])"/>
 
     <!-- Keys -->
     <!-- topic content by id (topics that is referenced from topicref only)-->
-    <xsl:key name="topicById"  match="/*//*[contains(@class, ' topic/topic')]" use="@id"/>
-    <xsl:key name="topicByOid" match="/*//*[contains(@class, ' topic/topic')]" use="@oid"/>
+    <xsl:key name="topicById"  match="/*//*[@class => contains-token('topic/topic')]" use="@id"/>
+    <xsl:key name="topicByOid" match="/*//*[@class => contains-token('topic/topic')]" use="@oid"/>
     <!--topicref by href -->
-    <xsl:key name="topicrefByHref" match="/*/*[contains(@class, ' map/map ')]
-                                          //*[contains(@class, ' map/topicref ')]
-                                             [not(ancestor::*[contains(@class, ' map/reltable ')])]"
+    <xsl:key name="topicrefByHref" match="/*/*[@class => contains-token('map/map')]
+                                           //*[@class => contains-token('map/topicref')]
+                                           [ancestor::*[@class => contains-token('map/reltable')] => empty()]"
                                    use="@href"/>
     
     <!-- Elements by id -->
@@ -184,8 +184,8 @@ E-mail : info@antennahouse.com
     <!-- topicref by key 
          Added 2010/01/05
      -->
-    <xsl:key name="topicrefByKey" match="/*/*[contains(@class,' map/map ')]
-                                          //*[contains(@class, ' map/topicref ')]" 
+    <xsl:key name="topicrefByKey" match="/*/*[@class => contains-token('map/map')]
+                                          //*[@class => contains-token('map/topicref')]" 
                                   use="tokenize(@keys, '[\s]+')"/>
     
     <!-- *************************************** 
@@ -198,7 +198,7 @@ E-mail : info@antennahouse.com
                 <xsl:sequence select="()"/>
             </xsl:when>
             <xsl:when test="$isBookMap">
-                <xsl:apply-templates select="$root/*[contains(@class, ' bookmap/bookmap ')]/*[contains(@class, ' bookmap/booktitle ')]/*[contains(@class, ' bookmap/booklibrary ')]">
+                <xsl:apply-templates select="$root/*[@class => contains-token('bookmap/bookmap')]/*[@class => contains-token('bookmap/booktitle')]/*[@class => contains-token('bookmap/booklibrary')]">
                     <xsl:with-param name="prmTopicRef" tunnel="yes" select="()"/>
                     <xsl:with-param name="prmNeedId"   tunnel="yes" select="false()"/>
                     <xsl:with-param name="prmMakeCover" tunnel="yes" select="true()"/>
@@ -215,16 +215,16 @@ E-mail : info@antennahouse.com
         <xsl:choose>
             <xsl:when test="$isMap">
                 <xsl:choose>
-                    <xsl:when test="$root/*[contains(@class, ' map/map ')]/*[contains(@class, ' topic/title ')]">
-                        <xsl:apply-templates select="$root/*[contains(@class, ' map/map ')]/*[contains(@class, ' topic/title ')]" >
+                    <xsl:when test="$root/*[@class => contains-token('map/map')]/*[@class => contains-token('topic/title')]">
+                        <xsl:apply-templates select="$root/*[@class => contains-token('map/map')]/*[@class => contains-token('topic/title')]" >
                             <xsl:with-param name="prmTopicRef" tunnel="yes" select="()"/>
                             <xsl:with-param name="prmNeedId"   tunnel="yes" select="false()"/>
                             <xsl:with-param name="prmMakeCover" tunnel="yes" select="true()"/>
                         </xsl:apply-templates>
                     </xsl:when>
-                    <xsl:when test="$root/*[contains(@class, ' map/map ')]/@title">
+                    <xsl:when test="$root/*[@class => contains-token('map/map')]/@title">
                         <fo:inline>
-                            <xsl:value-of select="$root/*[contains(@class, ' map/map ')]/@title"/>
+                            <xsl:value-of select="$root/*[@class => contains-token('map/map')]/@title"/>
                         </fo:inline>
                     </xsl:when>
                     <xsl:otherwise>
@@ -234,15 +234,15 @@ E-mail : info@antennahouse.com
             </xsl:when>
             <xsl:when test="$isBookMap">
                 <xsl:choose>
-                    <xsl:when test="$root/*[contains(@class, ' bookmap/bookmap ')]/*[contains(@class, ' bookmap/booktitle ')]">
-                        <xsl:apply-templates select="$root/*[contains(@class, ' bookmap/bookmap ')]/*[contains(@class, ' bookmap/booktitle ')]/*[contains(@class, ' bookmap/mainbooktitle ')]">
+                    <xsl:when test="$root/*[@class => contains-token('bookmap/bookmap')]/*[@class => contains-token('bookmap/booktitle')]">
+                        <xsl:apply-templates select="$root/*[@class => contains-token('bookmap/bookmap')]/*[@class => contains-token('bookmap/booktitle')]/*[@class => contains-token('bookmap/mainbooktitle')]">
                             <xsl:with-param name="prmTopicRef" tunnel="yes" select="()"/>
                             <xsl:with-param name="prmNeedId"   tunnel="yes" select="false()"/>
                             <xsl:with-param name="prmMakeCover" tunnel="yes" select="true()"/>
                         </xsl:apply-templates>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:apply-templates select="$root/*[contains(@class, ' bookmap/bookmap ')]/*[contains(@class, ' topic/title ')]">
+                        <xsl:apply-templates select="$root/*[@class => contains-token('bookmap/bookmap')]/*[@class => contains-token('topic/title')]">
                             <xsl:with-param name="prmTopicRef" tunnel="yes" select="()"/>
                             <xsl:with-param name="prmNeedId"   tunnel="yes" select="false()"/>
                             <xsl:with-param name="prmMakeCover" tunnel="yes" select="true()"/>
@@ -265,7 +265,7 @@ E-mail : info@antennahouse.com
                 <xsl:sequence select="()"/>
             </xsl:when>
             <xsl:when test="$isBookMap">
-                <xsl:apply-templates select="$root/*[contains(@class, ' bookmap/bookmap ')]/*[contains(@class, ' bookmap/booktitle ')]/*[contains(@class, ' bookmap/booktitlealt ')]">
+                <xsl:apply-templates select="$root/*[@class => contains-token('bookmap/bookmap')]/*[@class => contains-token('bookmap/booktitle')]/*[@class => contains-token('bookmap/booktitlealt')]">
                     <xsl:with-param name="prmTopicRef" tunnel="yes" select="()"/>
                     <xsl:with-param name="prmNeedId"   tunnel="yes" select="false()"/>
                     <xsl:with-param name="prmMakeCover" tunnel="yes" select="true()"/>

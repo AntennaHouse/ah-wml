@@ -128,12 +128,12 @@
     </xsl:template>
 
     <!-- We cannot decide topic/title or topiref/topicmeta/navtitle style in normal way. -->
-    <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" mode="MODE_GET_STYLE" as="xs:string*">
+    <xsl:template match="*[@class => contains-token('topic/topic')]/*[@class => contains-token('topic/title')]" mode="MODE_GET_STYLE" as="xs:string*">
         <xsl:param name="prmTopicTitleStyle" tunnel="yes" as="xs:string?" required="no" select="()"/>
         <xsl:sequence select="$prmTopicTitleStyle"/>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' map/topicref ')]/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]" mode="MODE_GET_STYLE" as="xs:string*">
+    <xsl:template match="*[@class => contains-token('map/topicref')]/*[@class => contains-token('map/topicmeta')]/*[@class => contains-token('topic/navtitle')]" mode="MODE_GET_STYLE" as="xs:string*">
         <xsl:param name="prmNavTitleStyle" tunnel="yes" as="xs:string?" required="no" select="()"/>
         <xsl:sequence select="$prmNavTitleStyle"/>
     </xsl:template>
@@ -266,7 +266,7 @@
         <xsl:param name="prmElem" as="element()"/>
         <xsl:variable name="tempXmlLangSeq" as="xs:string+">
             <xsl:choose>
-                <xsl:when test="$prmElem/ancestor-or-self::*[contains(@class,' topic/topic ')]">
+                <xsl:when test="$prmElem/ancestor-or-self::*[@class => contains-token('topic/topic')]">
                     <xsl:sequence select="$rootXmlLang"/>
                 </xsl:when>
                 <xsl:when test="empty($map/@xml:lang)">
@@ -292,7 +292,7 @@
         <!--xsl:variable name="curXmlLang" as="xs:string?" select="if (exists($prmElem/@xml:lang)) then ahf:nomalizeXmlLang(string($prmElem/@xml:lang)) else ()"/-->
         <xsl:variable name="ancestorOrSelfXmlLang" as="xs:string+">
             <xsl:choose>
-                <xsl:when test="$prmElem/ancestor-or-self::*[contains(@class,' topic/topic ')]">
+                <xsl:when test="$prmElem/ancestor-or-self::*[@class => contains-token('topic/topic')]">
                     <xsl:sequence select="$rootXmlLang"/>
                 </xsl:when>
                 <xsl:when test="empty($map/@xml:lang)">

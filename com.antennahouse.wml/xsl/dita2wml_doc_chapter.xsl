@@ -24,7 +24,7 @@ URL : http://www.antennahouse.com/
      note:		If topicref/@href points to topic, an section break should be detected at topic level.
                 Otherwise it should be detected at topicref level.
      -->
-    <xsl:template match="*[contains(@class,' map/topicref ')][exists(@href)]">
+    <xsl:template match="*[@class => contains-token('map/topicref')][exists(@href)]">
         <xsl:variable name="topicRef" select="."/>
         
         <!-- get topic from @href -->
@@ -51,11 +51,11 @@ URL : http://www.antennahouse.com/
         </xsl:choose>
         
         <!-- Nested topicref processing -->
-        <xsl:apply-templates select="child::*[contains(@class,' map/topicref ')]"/>
+        <xsl:apply-templates select="child::*[@class => contains-token('map/topicref')]"/>
         
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' map/topicref ')][empty(@href)]">
+    <xsl:template match="*[@class => contains-token('map/topicref')][empty(@href)]">
         <xsl:variable name="topicRef" select="."/>
         
         <!-- Generate section property -->
@@ -68,7 +68,7 @@ URL : http://www.antennahouse.com/
         </xsl:call-template>
 
         <xsl:choose>
-            <xsl:when test="$topicRef/*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')] or exists(@navtitle) or $topicRef[contains(@class,' bookmap/glossarylist ')]">
+            <xsl:when test="$topicRef/*[@class => contains-token('map/topicmeta')]/*[@class => contains-token('topic/navtitle')] or exists(@navtitle) or $topicRef[@class => contains-token('bookmap/glossarylist')]">
                 <!-- Process title -->
                 <xsl:call-template name="genTopicHeadTitle">
                     <xsl:with-param name="prmTopicRef"       select="$topicRef"/>
@@ -76,7 +76,7 @@ URL : http://www.antennahouse.com/
                     <xsl:with-param name="prmExtraIndent"    tunnel="yes" select="0"/>
                     <xsl:with-param name="prmDefaultTitle">
                         <xsl:choose>
-                            <xsl:when test="$topicRef[contains(@class,' bookmap/glossarylist ')]">
+                            <xsl:when test="$topicRef[@class => contains-token('bookmap/glossarylist')]">
                                 <xsl:call-template name="getVarValue">
                                     <xsl:with-param name="prmVarName" select="'Glossary_List_Title'"/>
                                 </xsl:call-template>
@@ -94,7 +94,7 @@ URL : http://www.antennahouse.com/
         <xsl:call-template name="getSectionPropertyElemAfter"/>
         
         <!-- Nested topicref processing -->
-        <xsl:apply-templates select="child::*[contains(@class,' map/topicref ')]"/>
+        <xsl:apply-templates select="child::*[@class => contains-token('map/topicref')]"/>
         
     </xsl:template>
     
@@ -107,7 +107,7 @@ URL : http://www.antennahouse.com/
                 Section break must be detected after shortdesc/abstract processing.
                 An boy may have another section property.
      -->
-    <xsl:template match="*[contains(@class, ' topic/topic ')]">
+    <xsl:template match="*[@class => contains-token('topic/topic')]">
         <xsl:param name="prmTopicRef" as="element()" tunnel="yes" required="yes"/>
         <xsl:comment> topic @id="<xsl:value-of select="ahf:generateId(.)"/>"</xsl:comment>
         
@@ -120,17 +120,17 @@ URL : http://www.antennahouse.com/
             <xsl:with-param name="prmTopic" select="."/>
         </xsl:call-template>
         
-        <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>    
-        <xsl:apply-templates select="*[contains(@class, ' topic/shortdesc ')] | *[contains(@class, ' topic/abstract ')]"/>
+        <xsl:apply-templates select="*[@class => contains-token('topic/title')]"/>    
+        <xsl:apply-templates select="*[@class => contains-token('topic/shortdesc')] | *[@class => contains-token('topic/abstract')]"/>
 
         <!-- Generate section property -->
         <xsl:call-template name="getSectionPropertyElemAfter"/>
 
-        <xsl:apply-templates select="*[contains(@class, ' topic/body ')]"/>
-        <xsl:apply-templates select="*[contains(@class, ' topic/related-links ')]"/>
+        <xsl:apply-templates select="*[@class => contains-token('topic/body')]"/>
+        <xsl:apply-templates select="*[@class => contains-token('topic/related-links')]"/>
 
         <!-- Nested topic processing -->
-        <xsl:apply-templates select="*[contains(@class, ' topic/topic ')]"/>
+        <xsl:apply-templates select="*[@class => contains-token('topic/topic')]"/>
     </xsl:template>
 
     <!-- ==== END OF STYLESHEET === -->

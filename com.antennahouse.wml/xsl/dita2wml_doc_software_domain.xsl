@@ -28,7 +28,7 @@ URL : http://www.antennahouse.com/
      return:	w:r
      note:      Apply mono-space font.
      -->
-    <xsl:template match="*[contains(@class,' sw-d/msgph ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('sw-d/msgph')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="msgPhRunProp" as="element()*">
             <xsl:call-template name="getWmlObject">
@@ -47,7 +47,7 @@ URL : http://www.antennahouse.com/
      return:	w:r
      note:      Apply mono-space font.
      -->
-    <xsl:template match="*[contains(@class,' sw-d/msgnum ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('sw-d/msgnum')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="msgNumRunProp" as="element()*">
             <xsl:call-template name="getWmlObject">
@@ -66,7 +66,7 @@ URL : http://www.antennahouse.com/
      return:	w:r
      note:      Apply mono-space font.
      -->
-    <xsl:template match="*[contains(@class,' sw-d/cmdname ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('sw-d/cmdname')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="cmdNameRunProp" as="element()*">
             <xsl:call-template name="getWmlObject">
@@ -85,7 +85,7 @@ URL : http://www.antennahouse.com/
      return:	w:r
      note:      Apply italic style.
      -->
-    <xsl:template match="*[contains(@class,' sw-d/varname ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('sw-d/varname')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="varNameRunProp" as="element()*">
             <xsl:call-template name="getWmlObject">
@@ -104,7 +104,7 @@ URL : http://www.antennahouse.com/
      return:	w:r
      note:      Apply italic style.
      -->
-    <xsl:template match="*[contains(@class,' sw-d/filepath ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('sw-d/filepath')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="filePathRunProp" as="element()*">
             <xsl:call-template name="getWmlObject">
@@ -123,7 +123,7 @@ URL : http://www.antennahouse.com/
      return:	w:r
      note:      Apply italic style.
      -->
-    <xsl:template match="*[contains(@class,' sw-d/userinput ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('sw-d/userinput')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="userInputRunProp" as="element()*">
             <xsl:call-template name="getWmlObject">
@@ -142,7 +142,7 @@ URL : http://www.antennahouse.com/
      return:	w:r
      note:      Apply italic style.
      -->
-    <xsl:template match="*[contains(@class,' sw-d/systemoutput ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('sw-d/systemoutput')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="systemOutputRunProp" as="element()*">
             <xsl:call-template name="getWmlObject">

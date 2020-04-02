@@ -48,7 +48,7 @@ URL : http://www.antennahouse.com/
         </xsl:call-template>
     </xsl:variable>
     
-    <xsl:template match="*[contains(@class,' topic/xref ')]">
+    <xsl:template match="*[@class => contains-token('topic/xref')]">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="xref" as="element()" select="."/>
         <xsl:variable name="href" as="xs:string" select="string(@href)"/>
@@ -84,7 +84,7 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="targetElemInfo" as="item()*" select="map:get($bookmarkTargetMap,$prmHref)"/>
         <xsl:variable name="targetId" as="xs:string?" select="$targetElemInfo[1]"/>
         <xsl:variable name="targetElem" as="node()?" select="$targetElemInfo[2]"/>
-        <xsl:variable name="targetTopic" as="element()?" select="$targetElem/ancestor-or-self::*[contains(@class,' topic/topic ')][last()]"/>
+        <xsl:variable name="targetTopic" as="element()?" select="$targetElem/ancestor-or-self::*[@class => contains-token('topic/topic')][last()]"/>
         <xsl:variable name="topicRef" as="element()?" select="ahf:getTopicRef($targetTopic)"/>
         <xsl:variable name="targetElemNumber" as="xs:integer?" select="map:get($targetElemIdAndNumberMap,$targetId)"/>
         <xsl:choose>
@@ -94,7 +94,7 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>
             </xsl:when>
             <!-- Reference to topic -->
-            <xsl:when test="$targetElem[contains(@class,' topic/topic ')]">
+            <xsl:when test="$targetElem[@class => contains-token('topic/topic')]">
                 <xsl:call-template name="xrefToTopic">
                     <xsl:with-param name="prmXref"     select="$prmXref"/>
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
@@ -103,7 +103,7 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>                    
             </xsl:when>
             <!-- Reference to example, section -->
-            <xsl:when test="$targetElem[ahf:seqContains(@class,(' topic/section ',' topic/example '))][exists(*[contains(@class,' topic/title ')])]">
+            <xsl:when test="$targetElem[@class => ahf:seqContainsToken(('topic/section','topic/example'))][*[@class => contains-token('topic/title')] => exists()]">
                 <xsl:call-template name="xrefToSection">
                     <xsl:with-param name="prmXref"     select="$prmXref"/>
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
@@ -112,7 +112,7 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>                    
             </xsl:when>
             <!-- Reference to table -->
-            <xsl:when test="$targetElem[contains(@class,(' topic/table '))][exists(*[contains(@class,' topic/title ')])]">
+            <xsl:when test="$targetElem[@class => contains-token('topic/table')][*[@class => contains-token('topic/title')] => exists()]">
                 <xsl:call-template name="xrefToTable">
                     <xsl:with-param name="prmXref"     select="$prmXref"/>
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
@@ -121,7 +121,7 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>                    
             </xsl:when>
             <!-- Reference to fig -->
-            <xsl:when test="$targetElem[contains(@class,' topic/fig ')][exists(*[contains(@class,' topic/title ')])]">
+            <xsl:when test="$targetElem[@class => contains-token('topic/fig')][*[@class => contains-token('topic/title')] => exists()]">
                 <xsl:call-template name="xrefToFig">
                     <xsl:with-param name="prmXref"     select="$prmXref"/>
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
@@ -130,7 +130,7 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>                    
             </xsl:when>
             <!-- Reference to ol/li -->
-            <xsl:when test="$targetElem[contains(@class,' topic/li ')][parent::*[contains(@class,' topic/ol ')]]">
+            <xsl:when test="$targetElem[@class => contains-token('topic/li')][parent::*[@class => contains-token('topic/ol')]]">
                 <xsl:call-template name="xrefToOlLi">
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
                     <xsl:with-param name="prmTargetElem"  select="$targetElem"/>
@@ -138,7 +138,7 @@ URL : http://www.antennahouse.com/
                 </xsl:call-template>                    
             </xsl:when>
             <!-- Reference to fn -->
-            <xsl:when test="$targetElem[contains(@class,' topic/fn ')]">
+            <xsl:when test="$targetElem[@class => contains-token('topic/fn')]">
                 <xsl:call-template name="xrefToFn">
                     <xsl:with-param name="prmXref" select="$prmXref"/>
                     <xsl:with-param name="prmTopicRef" select="$topicRef"/>
@@ -220,7 +220,7 @@ URL : http://www.antennahouse.com/
         <xsl:if test="$outputTitle">
             <xsl:variable name="title" as="document-node()">
                 <xsl:document>
-                    <xsl:apply-templates select="$prmTopic/*[contains(@class,' topic/title ')]/node()">
+                    <xsl:apply-templates select="$prmTopic/*[@class => contains-token('topic/title')]/node()">
                         <xsl:with-param name="prmSkipBookmark" tunnel="yes" select="true()"/>
                         <xsl:with-param name="prmSkipFn"       tunnel="yes" select="true()"/>
                     </xsl:apply-templates>
@@ -386,7 +386,7 @@ URL : http://www.antennahouse.com/
         <xsl:variable name="outputPage"  as="xs:boolean" select="ahf:outputSectionPageForXref($prmXref)"/>
         <xsl:if test="$outputTitle">
             <xsl:variable name="title" as="node()*">
-                <xsl:apply-templates select="$prmTargetElem/*[contains(@class,' topic/title ')]/node()">
+                <xsl:apply-templates select="$prmTargetElem/*[@class => contains-token('topic/title')]/node()">
                     <xsl:with-param name="prmSkipBookmark" tunnel="yes" select="true()"/>
                     <xsl:with-param name="prmSkipFn"       tunnel="yes" select="true()"/>
                 </xsl:apply-templates>
@@ -449,7 +449,7 @@ URL : http://www.antennahouse.com/
                         <xsl:with-param name="prmTable" select="$prmTargetElem/parent::*"/>
                         <xsl:with-param name="prmTopicRef" tunnel="yes" select="$prmTopicRef"/>
                     </xsl:call-template>
-                    <xsl:apply-templates select="$prmTargetElem/*[contains(@class,' topic/title ')]/node()">
+                    <xsl:apply-templates select="$prmTargetElem/*[@class => contains-token('topic/title')]/node()">
                         <xsl:with-param name="prmTopicRef" tunnel="yes" select="$prmTopicRef"/>
                         <xsl:with-param name="prmSkipBookmark" tunnel="yes" select="true()"/>
                         <xsl:with-param name="prmSkipFn"       tunnel="yes" select="true()"/>
@@ -494,7 +494,7 @@ URL : http://www.antennahouse.com/
                         <xsl:with-param name="prmFig" select="$prmTargetElem/parent::*"/>
                         <xsl:with-param name="prmTopicRef" tunnel="yes" select="$prmTopicRef"/>
                     </xsl:call-template>
-                    <xsl:apply-templates select="$prmTargetElem/*[contains(@class,' topic/title ')]/node()">
+                    <xsl:apply-templates select="$prmTargetElem/*[@class => contains-token('topic/title')]/node()">
                         <xsl:with-param name="prmTopicRef" tunnel="yes" select="$prmTopicRef"/>
                         <xsl:with-param name="prmSkipBookmark" tunnel="yes" select="true()"/>
                         <xsl:with-param name="prmSkipFn"       tunnel="yes" select="true()"/>
@@ -545,7 +545,7 @@ URL : http://www.antennahouse.com/
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="olFormat" as="xs:string" select="ahf:getOlNumberFormat($prmTargetElem/parent::*,$olNumberFormat)"/>
-        <xsl:variable name="liNumber" as="xs:integer" select="count($prmTargetElem|$prmTargetElem/preceding-sibling::*[not(contains(@class,' task/stepsection '))])"/>
+        <xsl:variable name="liNumber" as="xs:integer" select="count($prmTargetElem|$prmTargetElem/preceding-sibling::*[not(@class => contains-token('task/stepsection'))])"/>
         <xsl:variable name="targetLi" as="element(w:r)">
             <w:r>
                 <xsl:if test="exists($prmRunProps)">
@@ -576,12 +576,12 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmTopicRef"            as="element()" required="yes"/>
         <xsl:param name="prmTargetElem"          as="element()" required="yes"/>
         <xsl:param name="prmTargetElemNumber"    as="xs:integer" required="yes"/>
-        <xsl:variable name="topic" as="element()" select="$prmXref/ancestor-or-self::*[contains(@class,' topic/topic ')][last()]"/>
+        <xsl:variable name="topic" as="element()" select="$prmXref/ancestor-or-self::*[@class => contains-token('topic/topic')][last()]"/>
         <xsl:variable name="key" as="xs:string" select="ahf:generateId($prmTargetElem)"/>
         <xsl:variable name="fnId" as="xs:integer?" select="map:get($fnIdMap,$key)[1]"/>
         <xsl:assert test="exists($fnId)" select="'[fn] key=',$key,' does not exists is $fnIdMap key=',ahf:mapKeyDump($fnIdMap)"/>
         <xsl:variable name="isFirstXrefToFn" as="xs:boolean">
-            <xsl:variable name="sameXrefs" as="element()+" select="$topic/descendant::*[contains(@class,' topic/xref ')][string(@href) eq string($prmXref/@href)]"/>
+            <xsl:variable name="sameXrefs" as="element()+" select="$topic/descendant::*[@class => contains-token('topic/xref')][string(@href) eq string($prmXref/@href)]"/>
             <xsl:sequence select="$sameXrefs[1] is $prmXref"/> 
         </xsl:variable>
         <xsl:choose>
@@ -627,7 +627,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmXref" as="element()" required="yes"/>
         <xsl:param name="prmHref" as="xs:string" required="yes"/>
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
-        <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get(if ($prmXref/ancestor::*[contains(@class,' topic/fn ')]) then $externalFootnotesLinkIdMap else $externalDocumentLinkIdMap,$prmHref))"/>
+        <xsl:variable name="rId" as="xs:string" select="concat('rId',map:get(if ($prmXref/ancestor::*[@class => contains-token('topic/fn')]) then $externalFootnotesLinkIdMap else $externalDocumentLinkIdMap,$prmHref))"/>
         <w:hyperlink r:id="{$rId}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
             <xsl:apply-templates>
                 <xsl:with-param name="prmRunProps" tunnel="yes" as="element()*">
@@ -792,7 +792,7 @@ URL : http://www.antennahouse.com/
      return:	
      note:		Don't generate <p>. This is inline element.
      -->
-    <xsl:template match="*[contains(@class,' topic/xref ')]/*[contains(@class,' topic/desc ')]">
+    <xsl:template match="*[@class => contains-token('topic/xref')]/*[@class => contains-token('topic/desc')]">
         <xsl:apply-templates/>
     </xsl:template>
     

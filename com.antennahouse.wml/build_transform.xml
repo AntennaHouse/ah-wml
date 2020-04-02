@@ -207,6 +207,8 @@
         <xslt processor="trax" in="${prmInputFile}" out="${prmOutputFile}" style="${prmStylesheetFile}" classpathref="project.class.path" force="true">
             <factory name="net.sf.saxon.TransformerFactoryImpl">
                 <attribute name="http://saxon.sf.net/feature/timing" value="true"/>
+                <!-- Suppress namespace warning -->
+                <attribute name="http://saxon.sf.net/feature/suppressXsltNamespaceCheck" value="true"/>
                 <!--Assert-->
                 <attribute name="http://saxon.sf.net/feature/enableAssertions" value="true"/>
                 <!-- Trace -->
@@ -218,22 +220,24 @@
             <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_FIG_TITLE" expression="${add.chapter.number.prefix.to.fig.title}" if="add.chapter.numbering.title.prefix.to.fig.title"/>
             <param name="PRM_LANG" expression="${xml.lang}" if="xml.lang"/>
             <param name="PRM_MAP_DIR_URL" expression="${user.input.dir.url}" if="user.input.dir.url"/>
-            <param name="PRM_DEBUG" expression="${debug}" if="debug"/>
             <param name="PRM_DEBUG_STYLE" expression="${debug.style}" if="debug.style"/>
             <param name="PRM_OUTPUT_TYPE" expression="${output.type}" if="output.type"/>
             <param name="PRM_TEMPLATE_DIR_URL" expression="${template.dir.url}" if="template.dir.url"/>
             <param name="PRM_DEBUG_MERGED" expression="${debug.merged}" if="debug.merged"/>
-            <param name="PRM_DEBUG_TABLE" expression="${debug.table}" if="debug.table"/>
             <param name="PRM_LIST_INDENT_SIZE" expression="${list.indent.size}" if="list.indent.size"/>
-            <param name="PRM_LIST_BASE_INDENT_SIZE" expression="${list.base.indent.size}" if="list.base.indent.size"/>
+            <param name="PRM_OL_BASE_INDENT_SIZE" expression="${ol.base.indent.size}" if="ol.base.indent.size"/>
+            <param name="PRM_UL_BASE_INDENT_SIZE" expression="${ul.base.indent.size}" if="ul.base.indent.size"/>
             <param name="PRM_ADOPT_FIXED_LIST_INDENT" expression="${adopt.fixed.list.indent}" if="adopt.fixed.list.indent"/>
             <param name="PRM_MERGED_FINAL_OUTPUT_URL" expression="${merged.final.output.url}" if="merged.final.output.url"/>
             <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
             <param name="PRM_OUTPUT_FOLIO_PREFIX" expression="${output.folio.prefix}" if="output.folio.prefix"/>
+            <param name="PRM_DEBUG_SECT" expression="${debug.sect}" if="debug.sect"/>
+            <param name="PRM_DEBUG_NO_TEXT_MAP" expression="${debug.no.text.map}" if="debug.no.text.map"/>
             
             <param name="PRM_PAPER_SIZE" expression="${paper.size}" if="paper.size"/>
-
+            <param name="PRM_BASE_PAPER_SIZE" expression="${base.paper.size}" if="base.paper.size"/>
+            
             <!--
             <param name="PRM_USE_I18N_INDEX_LIB"                       expression="${use.i18n.index.lib}"                       if="use.i18n.index.lib"/>
             <param name="PRM_OUTPUT_DIR_URL" expression="${output.dir.url}" if="output.dir.url"/>
@@ -247,10 +251,6 @@
             <param name="PRM_MAKE_INDEX_FOR_MAP" expression="${make.index.for.map}" if="make.index.for.map"/>
             
             
-    <param name="PRM_RESOURCE_FILE" expression="${bookmap.resource-file}" if="bookmap.resource-file"/>
-    <param name="PRM_OL_FORMAT" expression="${bookmap.olformat}" if="bookmap.olformat"/>
-    <param name="PRM_ASSUME_SORTAS_PINYIN" expression="${assume.sortas.pinyin}" if="assume.sortas.pinyin"/>
-
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
@@ -264,6 +264,10 @@
         <xslt processor="trax" in="${prmInputFile}" out="${prmOutputFile}" style="${prmStylesheetFile}" classpathref="project.class.path" force="true">
             <factory name="net.sf.saxon.TransformerFactoryImpl">
                 <attribute name="http://saxon.sf.net/feature/timing" value="true"/>
+                <!-- Suppress namespace warning -->
+                <attribute name="http://saxon.sf.net/feature/suppressXsltNamespaceCheck" value="true"/>
+                <!--Assert-->
+                <attribute name="http://saxon.sf.net/feature/enableAssertions" value="true"/>
                 <!-- Trace -->
                 <attribute name="http://saxon.sf.net/feature/traceListenerClass" value="net.sf.saxon.trace.XSLTTraceListener"/>
             </factory>
@@ -273,21 +277,23 @@
             <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_FIG_TITLE" expression="${add.chapter.number.prefix.to.fig.title}" if="add.chapter.numbering.title.prefix.to.fig.title"/>
             <param name="PRM_LANG" expression="${xml.lang}" if="xml.lang"/>
             <param name="PRM_MAP_DIR_URL" expression="${user.input.dir.url}" if="user.input.dir.url"/>
-            <param name="PRM_DEBUG" expression="${debug}" if="debug"/>
             <param name="PRM_DEBUG_STYLE" expression="${debug.style}" if="debug.style"/>
             <param name="PRM_OUTPUT_TYPE" expression="${output.type}" if="output.type"/>
             <param name="PRM_TEMPLATE_DIR_URL" expression="${template.dir.url}" if="template.dir.url"/>
             <param name="PRM_DEBUG_MERGED" expression="${debug.merged}" if="debug.merged"/>
-            <param name="PRM_DEBUG_TABLE" expression="${debug.table}" if="debug.table"/>
             <param name="PRM_LIST_INDENT_SIZE" expression="${list.indent.size}" if="list.indent.size"/>
-            <param name="PRM_LIST_BASE_INDENT_SIZE" expression="${list.base.indent.size}" if="list.base.indent.size"/>
+            <param name="PRM_OL_BASE_INDENT_SIZE" expression="${ol.base.indent.size}" if="ol.base.indent.size"/>
+            <param name="PRM_UL_BASE_INDENT_SIZE" expression="${ul.base.indent.size}" if="ul.base.indent.size"/>
             <param name="PRM_ADOPT_FIXED_LIST_INDENT" expression="${adopt.fixed.list.indent}" if="adopt.fixed.list.indent"/>
             <param name="PRM_MERGED_FINAL_OUTPUT_URL" expression="${merged.final.output.url}" if="merged.final.output.url"/>
             <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
             <param name="PRM_OUTPUT_FOLIO_PREFIX" expression="${output.folio.prefix}" if="output.folio.prefix"/>
+            <param name="PRM_DEBUG_SECT" expression="${debug.sect}" if="debug.sect"/>
+            <param name="PRM_DEBUG_NO_TEXT_MAP" expression="${debug.no.text.map}" if="debug.no.text.map"/>
             
             <param name="PRM_PAPER_SIZE" expression="${paper.size}" if="paper.size"/>
+            <param name="PRM_BASE_PAPER_SIZE" expression="${base.paper.size}" if="base.paper.size"/>
             
             <!--
             <param name="PRM_USE_I18N_INDEX_LIB"                       expression="${use.i18n.index.lib}"                       if="use.i18n.index.lib"/>
@@ -302,10 +308,6 @@
             <param name="PRM_MAKE_INDEX_FOR_MAP" expression="${make.index.for.map}" if="make.index.for.map"/>
             
             
-    <param name="PRM_RESOURCE_FILE" expression="${bookmap.resource-file}" if="bookmap.resource-file"/>
-    <param name="PRM_OL_FORMAT" expression="${bookmap.olformat}" if="bookmap.olformat"/>
-    <param name="PRM_ASSUME_SORTAS_PINYIN" expression="${assume.sortas.pinyin}" if="assume.sortas.pinyin"/>
-
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
@@ -327,6 +329,8 @@
         <xslt processor="trax" basedir="${prmInputDir}" destdir="${prmOutputDir}" style="${prmStylesheetFile}" includes="*.xml" extension=".xml" classpathref="project.class.path" force="true" filenameparameter="PRM_FILE_NAME" filedirparameter="PRM_FILE_DIR">
             <factory name="net.sf.saxon.TransformerFactoryImpl">
                 <attribute name="http://saxon.sf.net/feature/timing" value="true"/>
+                <!-- Suppress namespace warning -->
+                <attribute name="http://saxon.sf.net/feature/suppressXsltNamespaceCheck" value="true"/>
                 <!--Assert-->
                 <attribute name="http://saxon.sf.net/feature/enableAssertions" value="true"/>
                 <!-- Trace -->
@@ -338,21 +342,23 @@
             <param name="PRM_ADD_CHAPTER_NUMBER_PREFIX_TO_FIG_TITLE" expression="${add.chapter.number.prefix.to.fig.title}" if="add.chapter.numbering.title.prefix.to.fig.title"/>
             <param name="PRM_LANG" expression="${xml.lang}" if="xml.lang"/>
             <param name="PRM_MAP_DIR_URL" expression="${user.input.dir.url}" if="user.input.dir.url"/>
-            <param name="PRM_DEBUG" expression="${debug}" if="debug"/>
             <param name="PRM_DEBUG_STYLE" expression="${debug.style}" if="debug.style"/>
             <param name="PRM_OUTPUT_TYPE" expression="${output.type}" if="output.type"/>
             <param name="PRM_TEMPLATE_DIR_URL" expression="${template.dir.url}" if="template.dir.url"/>
             <param name="PRM_DEBUG_MERGED" expression="${debug.merged}" if="debug.merged"/>
-            <param name="PRM_DEBUG_TABLE" expression="${debug.table}" if="debug.table"/>
             <param name="PRM_LIST_INDENT_SIZE" expression="${list.indent.size}" if="list.indent.size"/>
-            <param name="PRM_LIST_BASE_INDENT_SIZE" expression="${list.base.indent.size}" if="list.base.indent.size"/>
+            <param name="PRM_OL_BASE_INDENT_SIZE" expression="${ol.base.indent.size}" if="ol.base.indent.size"/>
+            <param name="PRM_UL_BASE_INDENT_SIZE" expression="${ul.base.indent.size}" if="ul.base.indent.size"/>
             <param name="PRM_ADOPT_FIXED_LIST_INDENT" expression="${adopt.fixed.list.indent}" if="adopt.fixed.list.indent"/>
             <param name="PRM_MERGED_FINAL_OUTPUT_URL" expression="${merged.final.output.url}" if="merged.final.output.url"/>
             <param name="PRM_PLUGIN_DIR_URL" expression="${plugin.dir.url}" if="plugin.dir.url"/>
             <param name="PRM_TEMP_DIR_URL" expression="${dita.temp.dir.url}" if="dita.temp.dir.url"/>
             <param name="PRM_OUTPUT_FOLIO_PREFIX" expression="${output.folio.prefix}" if="output.folio.prefix"/>
+            <param name="PRM_DEBUG_SECT" expression="${debug.sect}" if="debug.sect"/>
+            <param name="PRM_DEBUG_NO_TEXT_MAP" expression="${debug.no.text.map}" if="debug.no.text.map"/>
             
             <param name="PRM_PAPER_SIZE" expression="${paper.size}" if="paper.size"/>
+            <param name="PRM_BASE_PAPER_SIZE" expression="${base.paper.size}" if="base.paper.size"/>
             
             <!--
             <param name="PRM_USE_I18N_INDEX_LIB"                       expression="${use.i18n.index.lib}"                       if="use.i18n.index.lib"/>
@@ -367,10 +373,6 @@
             <param name="PRM_MAKE_INDEX_FOR_MAP" expression="${make.index.for.map}" if="make.index.for.map"/>
             
             
-    <param name="PRM_RESOURCE_FILE" expression="${bookmap.resource-file}" if="bookmap.resource-file"/>
-    <param name="PRM_OL_FORMAT" expression="${bookmap.olformat}" if="bookmap.olformat"/>
-    <param name="PRM_ASSUME_SORTAS_PINYIN" expression="${assume.sortas.pinyin}" if="assume.sortas.pinyin"/>
-
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>

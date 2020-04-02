@@ -25,7 +25,7 @@ URL : http://www.antennahouse.com/
      note:		Only apply templates to child elements.
                 Set high priority than li element template.
      -->
-    <xsl:template match="*[contains(@class,' task/stepsection ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('task/stepsection')]" priority="5">
         <xsl:apply-templates/>
     </xsl:template>
 

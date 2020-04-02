@@ -37,11 +37,11 @@ URL : http://www.antennahouse.com/
             </xsl:call-template>
             
             <xsl:variable name="fns" as="element()*">
-                <xsl:for-each select="$map/*[not(contains(@class,' map/reltable '))]/descendant-or-self::*[contains(@class,' map/topicref ')][starts-with(@href,'#')]">
+                <xsl:for-each select="$map/*[@class => contains-token('map/reltable') => not()]/descendant-or-self::*[@class => contains-token('map/topicref')][@href => starts-with('#')]">
                     <xsl:variable name="topicRef" as="element()" select="."/>
                     <xsl:variable name="topic" as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
                     <xsl:if test="exists($topic)">
-                        <xsl:sequence select="$topic/descendant::*[contains(@class,' topic/fn ')]"/>
+                        <xsl:sequence select="$topic/descendant::*[@class => contains-token('topic/fn')]"/>
                     </xsl:if>
                 </xsl:for-each>
             </xsl:variable>
@@ -50,9 +50,9 @@ URL : http://www.antennahouse.com/
             <xsl:for-each select="$fns">
                 <xsl:variable name="fn" as="element()" select="."/>
                 <xsl:variable name="child" as="element()*" select="$fn/*"/>
-                <xsl:variable name="topic" as="element()" select="$fn/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
+                <xsl:variable name="topic" as="element()" select="$fn/ancestor::*[@class => contains-token('topic/topic')][last()]"/>
                 <xsl:variable name="topicRef" as="element()?" select="ahf:getTopicRef($topic)"/>
-                <xsl:assert test="exists($topicRef)" select="'[footnote] Failed to get topicref from topic. topic=',string($topic/@id),' title=',string($topic/*[contains(@class,' topic/title ')])"/>
+                <xsl:assert test="exists($topicRef)" select="'[footnote] Failed to get topicref from topic. topic=',string($topic/@id),' title=',string($topic/*[@class => contains-token('topic/title')])"/>
                 <xsl:variable name="fnId" as="xs:integer" select="map:get($fnIdMap,ahf:generateId($fn))"/>
                 <w:footnote w:id="{string($fnId)}">
                     <!-- First element must be p -->

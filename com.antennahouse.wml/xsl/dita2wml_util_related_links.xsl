@@ -38,7 +38,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:function name="ahf:isEffectiveRelatedLinks" as="xs:boolean">
         <xsl:param name="prmRelatedLinks" as="element()"/>
-        <xsl:variable name="linkCount" select="count($prmRelatedLinks/descendant::*[contains(@class,' topic/link ')][ahf:isTargetLink(.)])" as="xs:integer"/>
+        <xsl:variable name="linkCount" select="count($prmRelatedLinks/descendant::*[@class => contains-token('topic/link')][ahf:isTargetLink(.)])" as="xs:integer"/>
         <xsl:sequence select="$linkCount gt 0"/>
     </xsl:function>
     

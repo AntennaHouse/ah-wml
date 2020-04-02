@@ -32,7 +32,7 @@ E-mail : info@antennahouse.com
          value: occurrence number
      -->
     <xsl:variable name="externalDocumentLinkIdMap" as="map(xs:string,xs:integer)">
-        <xsl:variable name="externalLinkHrefs" as="xs:string*" select="/descendant::*[ahf:seqContains(@class, (' topic/xref ',' topic/link '))]/@href[ahf:isExternalLink(string(.))]/string(.)"/>
+        <xsl:variable name="externalLinkHrefs" as="xs:string*" select="/descendant::*[@class => ahf:seqContainsToken(('topic/xref','topic/link'))]/@href[string(.) => ahf:isExternalLink()]/string(.)"/>
         <xsl:variable name="uniqueExternalHrefs" as="xs:string*" select="distinct-values($externalLinkHrefs)"/>
         <xsl:map>
             <xsl:for-each select="$uniqueExternalHrefs">
@@ -48,7 +48,7 @@ E-mail : info@antennahouse.com
          value: occurrence number
      -->
     <xsl:variable name="externalFootnotesLinkIdMap" as="map(xs:string,xs:integer)">
-        <xsl:variable name="externalLinkHrefs" as="xs:string*" select="/descendant::*[contains(@class, ' topic/xref ')][ancestor::*[contains(@class,' topic/fn ')]]/@href[ahf:isExternalLink(string(.))]/string(.)"/>
+        <xsl:variable name="externalLinkHrefs" as="xs:string*" select="/descendant::*[@class => contains-token('topic/xref')][ancestor::*[@class => contains-token('topic/fn')]]/@href[string(.) => ahf:isExternalLink()]/string(.)"/>
         <xsl:variable name="uniqueExternalHrefs" as="xs:string*" select="distinct-values($externalLinkHrefs)"/>
         <xsl:map>
             <xsl:for-each select="$uniqueExternalHrefs">

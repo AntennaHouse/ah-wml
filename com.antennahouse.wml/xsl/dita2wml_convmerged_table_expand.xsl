@@ -41,11 +41,11 @@ URL : http://www.antennahouse.com/
             <xsl:for-each select="$prmTableHeadOrBodyPart">
                 <xsl:copy>
                     <xsl:copy-of select="@*"/>
-                    <xsl:for-each select="*[contains(@class,' topic/row ')]">
+                    <xsl:for-each select="*[@class => contains-token('topic/row')]">
                         <xsl:variable name="isLastRow" as="xs:boolean" select="position() eq last()"/>
                         <xsl:copy>
                             <xsl:copy-of select="@*"/>
-                            <xsl:apply-templates select="*[contains(@class,' topic/entry ')][1]" mode="MODE_EXPAND_COLUMN_SPAN">
+                            <xsl:apply-templates select="*[@class => contains-token('topic/entry')][1]" mode="MODE_EXPAND_COLUMN_SPAN">
                                 <xsl:with-param name="prmColSpec" tunnel="yes" select="$prmColSpec"/>
                                 <xsl:with-param name="prmIsLastRow" tunnel="yes" select="$isLastRow"/>
                                 <xsl:with-param name="prmColNumber" tunnel="yes" select="$prmColNumber"/>
@@ -62,7 +62,7 @@ URL : http://www.antennahouse.com/
             <xsl:for-each select="$colExpandedTableHeadOrBodyPart">
                 <xsl:copy>
                     <xsl:copy-of select="@*"/>
-                    <xsl:apply-templates select="*[contains(@class,' topic/row ')][1]" mode="MODE_EXPAND_ROW_SPAN">
+                    <xsl:apply-templates select="*[@class => contains-token('topic/row')][1]" mode="MODE_EXPAND_ROW_SPAN">
                         <xsl:with-param name="prmRowSpanInfo" as="xs:integer+">
                             <xsl:call-template name="genInitialRowSpanInf">
                                 <xsl:with-param name="prmColNumber" select="$prmColNumber"/>
@@ -78,7 +78,7 @@ URL : http://www.antennahouse.com/
             <xsl:for-each select="$rowExpandedTableHeadOrBodyPart">
                 <xsl:copy>
                     <xsl:copy-of select="@*"/>
-                    <xsl:apply-templates select="*[contains(@class,' topic/row ')]" mode="MODE_COMPLEMENT_COL_SPAN"/>
+                    <xsl:apply-templates select="*[@class => contains-token('topic/row')]" mode="MODE_COMPLEMENT_COL_SPAN"/>
                 </xsl:copy>
             </xsl:for-each>
         </xsl:variable>
@@ -94,7 +94,7 @@ URL : http://www.antennahouse.com/
      return:	entry
      note:		set own namespace attribute 
      -->
-    <xsl:template match="*[contains(@class,' topic/entry ')]" mode="MODE_EXPAND_COLUMN_SPAN">
+    <xsl:template match="*[@class => contains-token('topic/entry')]" mode="MODE_EXPAND_COLUMN_SPAN">
         <xsl:param name="prmColSpec" tunnel="yes" required="yes" as="document-node()"/>
         <xsl:param name="prmIsLastRow" tunnel="yes" required="yes" as="xs:boolean"/>
         <xsl:param name="prmColNumber" tunnel="yes" required="yes" as="xs:integer"/>
@@ -150,10 +150,10 @@ URL : http://www.antennahouse.com/
                 If the value is greater than 0, the relevant entry does not exists.
                 In this case this template generates dummy entry element.
      -->
-    <xsl:template match="*[contains(@class,' topic/row ')]" mode="MODE_EXPAND_ROW_SPAN">
+    <xsl:template match="*[@class => contains-token('topic/row')]" mode="MODE_EXPAND_ROW_SPAN">
         <xsl:param name="prmRowSpanInfo" required="yes" as="xs:integer+"/>
         <xsl:variable name="row" as="element()" select="."/>
-        <xsl:variable name="isLastRow" as="xs:boolean" select="empty($row/following-sibling::*[contains(@class,' topic/row ')])"/>
+        <xsl:variable name="isLastRow" as="xs:boolean" select="empty($row/following-sibling::*[@class => contains-token('topic/row')])"/>
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:for-each select="$prmRowSpanInfo">
@@ -173,7 +173,7 @@ URL : http://www.antennahouse.com/
                         </entry>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:apply-templates select="$row/*[contains(@class,' topic/entry ')][position() eq ($colnum - $emptyColnum)]" mode="MODE_COPY_ENTRY"/>
+                        <xsl:apply-templates select="$row/*[@class => contains-token('topic/entry')][position() eq ($colnum - $emptyColnum)]" mode="MODE_COPY_ENTRY"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>
@@ -188,12 +188,12 @@ URL : http://www.antennahouse.com/
                         <xsl:sequence select="$rowSpanInfo - 1"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:apply-templates select="$row/*[contains(@class,' topic/entry ')][position() eq ($colnum - $emptyColnum)]" mode="MODE_UPDATE_ROW_SPAN_INFO"/>
+                        <xsl:apply-templates select="$row/*[@class => contains-token('topic/entry')][position() eq ($colnum - $emptyColnum)]" mode="MODE_UPDATE_ROW_SPAN_INFO"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>
         </xsl:variable>
-        <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/row ')][1]" mode="MODE_EXPAND_ROW_SPAN">
+        <xsl:apply-templates select="following-sibling::*[@class => contains-token('topic/row')][1]" mode="MODE_EXPAND_ROW_SPAN">
             <xsl:with-param name="prmRowSpanInfo" select="$updatedRowSpanInfo"/>
         </xsl:apply-templates>
     </xsl:template>
@@ -204,7 +204,7 @@ URL : http://www.antennahouse.com/
      return:	row 
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/entry ')]" mode="MODE_COPY_ENTRY">
+    <xsl:template match="*[@class => contains-token('topic/entry')]" mode="MODE_COPY_ENTRY">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:copy-of select="node()"/>
@@ -217,7 +217,7 @@ URL : http://www.antennahouse.com/
      return:	xs:integer
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/entry ')]" mode="MODE_UPDATE_ROW_SPAN_INFO" as="xs:integer">
+    <xsl:template match="*[@class => contains-token('topic/entry')]" mode="MODE_UPDATE_ROW_SPAN_INFO" as="xs:integer">
         <xsl:choose>
             <xsl:when test="exists(@ahf:row-span-count)">
                 <xsl:sequence select="xs:integer(@ahf:row-span-count)"/>
@@ -280,10 +280,10 @@ URL : http://www.antennahouse.com/
      return:	row
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/row ')]" as="element()" mode="MODE_COMPLEMENT_COL_SPAN">
+    <xsl:template match="*[@class => contains-token('topic/row')]" as="element()" mode="MODE_COMPLEMENT_COL_SPAN">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
-            <xsl:apply-templates select="*[contains(@class,' topic/entry ')]" mode="#current"/>
+            <xsl:apply-templates select="*[@class => contains-token('topic/entry')]" mode="#current"/>
         </xsl:copy>
     </xsl:template>
     
@@ -293,17 +293,17 @@ URL : http://www.antennahouse.com/
      return:	entry
      note:		Complement the column-span information.
      -->
-    <xsl:template match="*[contains(@class,' topic/entry ')][string(@ahf:row-spanned) ne $cYes]" as="element()" mode="MODE_COMPLEMENT_COL_SPAN">
+    <xsl:template match="*[@class => contains-token('topic/entry')][string(@ahf:row-spanned) ne $cYes]" as="element()" mode="MODE_COMPLEMENT_COL_SPAN">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:copy-of select="node()"/>
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class,' topic/entry ')][string(@ahf:row-spanned) eq $cYes]" as="element()" mode="MODE_COMPLEMENT_COL_SPAN">
+    <xsl:template match="*[@class => contains-token('topic/entry')][string(@ahf:row-spanned) eq $cYes]" as="element()" mode="MODE_COMPLEMENT_COL_SPAN">
         <xsl:variable name="colnum" as="xs:integer" select="xs:integer(@ahf:colnum)"/>
         <xsl:variable name="theadOrTbody" as="element()" select="parent::*/parent::*"/>
-        <xsl:variable name="prevRowSpanStartEntry" as="element()?" select="($theadOrTbody/*[contains(@class, ' topic/row ')][. &lt;&lt; current()/parent::*]/*[contains(@class, ' topic/entry ')][xs:integer(@ahf:colnum) eq $colnum][string(@ahf:row-span-count)])[last()]"/>
+        <xsl:variable name="prevRowSpanStartEntry" as="element()?" select="($theadOrTbody/*[@class => contains-token('topic/row')][. &lt;&lt; current()/parent::*]/*[@class => contains-token('topic/entry')][xs:integer(@ahf:colnum) eq $colnum][string(@ahf:row-span-count)])[last()]"/>
         <!--xsl:message select="'$prevRowSpanStartEntry=',if (exists($prevRowSpanStartEntry)) then ahf:genHistoryId($prevRowSpanStartEntry) else ''"/>
         <xsl:message select="'$prevRowSpanStartEntry/@ahf:col-span-count=',string($prevRowSpanStartEntry/@ahf:col-span-count)"/>
         <xsl:message select="'$prevRowSpanStartEntry/@ahf:col-spanned=',string($prevRowSpanStartEntry/@ahf:col-spanned)"/-->
@@ -335,11 +335,11 @@ URL : http://www.antennahouse.com/
         <xsl:for-each select="$prmSimpleTable">
             <xsl:copy>
                 <xsl:copy-of select="@*"/>
-                <xsl:for-each select="*[contains(@class,' topic/sthead ') or contains(@class,' topic/strow ')]">
+                <xsl:for-each select="*[@class => ahf:seqContainsToken(('topic/sthead','topic/strow'))]">
                     <xsl:variable name="isLastRow" as="xs:boolean" select="position() eq last()"/>
                     <xsl:copy>
                         <xsl:copy-of select="@*"/>
-                        <xsl:apply-templates select="*[contains(@class,' topic/stentry ')]" mode="MODE_ADD_COLNUM">
+                        <xsl:apply-templates select="*[@class => contains-token('topic/stentry')]" mode="MODE_ADD_COLNUM">
                             <xsl:with-param name="prmIsLastRow" tunnel="yes" select="$isLastRow"/>
                         </xsl:apply-templates>
                     </xsl:copy>
@@ -354,7 +354,7 @@ URL : http://www.antennahouse.com/
      return:	stentry
      note:		set own namespace attribute 
      -->
-    <xsl:template match="*[contains(@class,' topic/stentry ')]" mode="MODE_ADD_COLNUM">
+    <xsl:template match="*[@class => contains-token('topic/stentry')]" mode="MODE_ADD_COLNUM">
         <xsl:param name="prmIsLastRow" tunnel="yes" required="yes" as="xs:boolean"/>
         <xsl:copy>
             <xsl:copy-of select="@* except @dita-ot:*"/>

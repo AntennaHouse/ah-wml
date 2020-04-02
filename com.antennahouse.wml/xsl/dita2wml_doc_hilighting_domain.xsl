@@ -26,7 +26,7 @@ URL : http://www.antennahouse.com/
                 Microsoft Word does not allow same w:rPr child elements.
                 Thus x = y<sup>2<sup>3</sup></sup> will be correctly formatted in XSL-FO but Word cannot do it.
      -->
-    <xsl:template match="*[contains(@class, ' hi-d/u ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('hi-d/u')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="uProp" as="element()">
            <xsl:call-template name="getWmlObject">
@@ -38,7 +38,7 @@ URL : http://www.antennahouse.com/
         </xsl:apply-templates>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class, ' hi-d/b ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('hi-d/b')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="bProp" as="element()">
             <xsl:call-template name="getWmlObject">
@@ -50,7 +50,7 @@ URL : http://www.antennahouse.com/
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' hi-d/i ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('hi-d/i')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="iProp" as="element()">
             <xsl:call-template name="getWmlObject">
@@ -62,7 +62,7 @@ URL : http://www.antennahouse.com/
         </xsl:apply-templates>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class, ' hi-d/sup ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('hi-d/sup')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="supProp" as="element()">
             <xsl:call-template name="getWmlObject">
@@ -74,7 +74,7 @@ URL : http://www.antennahouse.com/
         </xsl:apply-templates>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class, ' hi-d/sub ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('hi-d/sub')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="subProp" as="element()">
             <xsl:call-template name="getWmlObject">
@@ -86,7 +86,7 @@ URL : http://www.antennahouse.com/
         </xsl:apply-templates>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class, ' hi-d/line-through ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('hi-d/line-through')]" priority="5">
         <xsl:param name="prmRunProps" tunnel="yes" required="no" as="element()*" select="()"/>
         <xsl:variable name="lsProp" as="element()">
             <xsl:call-template name="getWmlObject">
@@ -98,7 +98,7 @@ URL : http://www.antennahouse.com/
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' hi-d/overline ')]" priority="5">
+    <xsl:template match="*[@class => contains-token('hi-d/overline')]" priority="5">
         <xsl:call-template name="warningContinue">
             <xsl:with-param name="prmMes" select="ahf:replace($stMes2022,('%pos'),(ahf:genHistoryId(.)))"/>
         </xsl:call-template>

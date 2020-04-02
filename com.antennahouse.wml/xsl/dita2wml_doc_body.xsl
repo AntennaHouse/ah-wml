@@ -29,9 +29,9 @@ URL : http://www.antennahouse.com/
                 prmTcAttr is used to control alignment in table cell.
                 - If <p> is first child of <step> and <step> contains info/floatfig, it is pulled at the start of w:p.
      -->
-    <xsl:template match="*[contains(@class,' task/info ')]/*[contains(@class,' topic/p ')][empty(child::text())][every $e in child::* satisfies exists($e[contains(@class,' floatfig-d/floatfig ')])]" priority="5"/>
+    <xsl:template match="*[@class => contains-token('task/info')]/*[@class => contains-token('topic/p')][empty(child::text())][every $e in child::* satisfies exists($e[@class => contains-token('floatfig-d/floatfig')])]" priority="5"/>
     
-    <xsl:template match="*[contains(@class,' topic/p ')]" as="element(w:p)+">
+    <xsl:template match="*[@class => contains-token('topic/p')]" as="element(w:p)+">
         <xsl:param name="prmListOccurenceNumber" tunnel="yes" required="no" as="xs:integer?" select="()"/>
         <xsl:param name="prmListLevel" tunnel="yes" required="no" as="xs:integer?" select="()"/>
         <xsl:param name="prmListStyle" tunnel="yes" required="no" as="xs:string?" select="()"/>
@@ -42,11 +42,11 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmFrameId" tunnel="yes" as="xs:integer?" select="()"/>
         
         <xsl:variable name="p" as="element()" select="."/>
-        <xsl:variable name="isChildOfStepSection" as="xs:boolean" select="exists(parent::*[contains(@class,' task/stepsection ')])"/>
-        <xsl:variable name="isFirstChildOfLi" as="xs:boolean" select="exists(parent::*[contains(@class,' topic/li ')]/*[1][. is current()])"/>
-        <xsl:variable name="isChildOfEntry" as="xs:boolean" select="exists(parent::*[ahf:seqContains(@class,(' topic/entry ',' topic/stentry '))])"/>
-        <xsl:variable name="isInThead" as="xs:boolean" select="$isChildOfEntry and (exists(parent::*/parent::*[contains(@class,' topic/sthead ')]) or exists(parent::*/parent::*/parent::*[contains(@class,' topic/thead ')]))"/>
-        <xsl:variable name="floatFigs" as="element()*" select="parent::*[contains(@class,' task/step ')]/*[contains(@class,' task/info ')][1]/descendant::*[contains(@class,' floatfig-d/floatfig ')][ahf:isNotEmptyElement(.)]"/>
+        <xsl:variable name="isChildOfStepSection" as="xs:boolean" select="exists(parent::*[@class => contains-token('task/stepsection')])"/>
+        <xsl:variable name="isFirstChildOfLi" as="xs:boolean" select="exists(parent::*[@class => contains-token('topic/li')]/*[1][. is current()])"/>
+        <xsl:variable name="isChildOfEntry" as="xs:boolean" select="exists(parent::*[@class => ahf:seqContainsToken(('topic/entry','topic/stentry'))])"/>
+        <xsl:variable name="isInThead" as="xs:boolean" select="$isChildOfEntry and (exists(parent::*/parent::*[@class => contains-token('topic/sthead')]) or exists(parent::*/parent::*/parent::*[@class => contains-token('topic/thead')]))"/>
+        <xsl:variable name="floatFigs" as="element()*" select="parent::*[@class => contains-token('task/step')]/*[@class => contains-token('task/info')][1]/descendant::*[@class => contains-token('floatfig-d/floatfig')][ahf:isNotEmptyElement(.)]"/>
         <xsl:variable name="pStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
                 <xsl:with-param name="prmVarName" select="'PStyle'"/>
@@ -204,9 +204,9 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:function name="ahf:getKeepNextAttrElem" as="element(w:keepNext)?">
         <xsl:param name="prmElem" as="element()"/>
-        <xsl:variable name="isP" as="xs:boolean" select="exists($prmElem/self::*[contains(@class,' topic/p ')])"/>
-        <xsl:variable name="hasCmdOfStep" as="xs:boolean" select="exists($prmElem/child::*[contains(@class,' task/cmd ')])"/>
-        <xsl:variable name="hasFollowingItemGroup" as="xs:boolean" select="exists($prmElem/following-sibling::*[contains(@class,' topic/itemgroup ')])"/>
+        <xsl:variable name="isP" as="xs:boolean" select="exists($prmElem/self::*[@class => contains-token('topic/p')])"/>
+        <xsl:variable name="hasCmdOfStep" as="xs:boolean" select="exists($prmElem/child::*[@class => contains-token('task/cmd')])"/>
+        <xsl:variable name="hasFollowingItemGroup" as="xs:boolean" select="exists($prmElem/following-sibling::*[@class => contains-token('topic/itemgroup')])"/>
         <xsl:choose>
             <xsl:when test="ahf:hasFoProperty($prmElem,'keep-with-next.within-column','always') or ahf:hasFoProperty($prmElem,'keep-with-next.within-page','always')">
                 <w:keepNext w:val="true"/>
@@ -228,7 +228,7 @@ URL : http://www.antennahouse.com/
                 The merged file preprocessing converts text or inline elements into <p> element.
                 So only <xsl:apply-templates> is needed to process contents.
      -->
-    <xsl:template match="*[contains(@class,' topic/div ')]">
+    <xsl:template match="*[@class => contains-token('topic/div')]">
         <xsl:apply-templates/>
     </xsl:template>
 
@@ -238,7 +238,7 @@ URL : http://www.antennahouse.com/
      return:	w:p
      note:		
      -->
-    <xsl:template match="*[ahf:seqContains(@class,(' topic/table ',' topic/fig '))]/*[contains(@class,' topic/desc ')]">
+    <xsl:template match="*[@class => ahf:seqContainsToken(('topic/table','topic/fig'))]/*[@class => contains-token('topic/desc')]">
         <xsl:variable name="descStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
                 <xsl:with-param name="prmVarName" select="'DescStyle'"/>
@@ -258,7 +258,7 @@ URL : http://www.antennahouse.com/
      return:	
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
+    <xsl:template match="*[@class => contains-token('topic/section')]/*[@class => contains-token('topic/title')]">
         <xsl:variable name="sectionStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
                 <xsl:with-param name="prmVarName" select="'SectionStyle'"/>
@@ -284,7 +284,7 @@ URL : http://www.antennahouse.com/
      return:	
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/example ')]/*[contains(@class,' topic/title ')]">
+    <xsl:template match="*[@class => contains-token('topic/example')]/*[@class => contains-token('topic/title')]">
         <xsl:variable name="exampleStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
                 <xsl:with-param name="prmVarName" select="'ExampleStyle'"/>
@@ -310,7 +310,7 @@ URL : http://www.antennahouse.com/
      return:	w:p
      note:		 
      -->
-    <xsl:template match="*[contains(@class, ' topic/fig ')]/*[contains(@class,' topic/title ')]">
+    <xsl:template match="*[@class => contains-token('topic/fig')]/*[@class => contains-token('topic/title')]">
         <xsl:variable name="figStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
                 <xsl:with-param name="prmVarName" select="'FigStyle'"/>
@@ -344,7 +344,7 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmTopicRef" tunnel="yes" required="yes" as="element()"/>
         <xsl:param name="prmFig" required="no" as="element()" select="."/>
         
-        <xsl:variable name="topicNode" select="$prmFig/ancestor::*[contains(@class, ' topic/topic ')][position()=last()]"/>
+        <xsl:variable name="topicNode" select="$prmFig/ancestor::*[@class => contains-token('topic/topic')][position() eq last()]"/>
         
         <xsl:variable name="figPreviousAmount" as="xs:integer">
             <xsl:variable name="topicNodeId" select="ahf:generateId($topicNode)"/>
@@ -354,8 +354,8 @@ URL : http://www.antennahouse.com/
         </xsl:variable>
         
         <xsl:variable name="figCurrentAmount"  as="xs:integer">
-            <xsl:variable name="topic" as="element()" select="$prmFig/ancestor::*[contains(@class,' topic/topic ')][last()]"/>
-            <xsl:sequence select="count($topic//*[contains(@class,' topic/fig ')][child::*[contains(@class, ' topic/title ')]][. &lt;&lt; $prmFig]|$prmFig)"/>
+            <xsl:variable name="topic" as="element()" select="$prmFig/ancestor::*[@class => contains-token('topic/topic')][last()]"/>
+            <xsl:sequence select="($topic//*[@class => contains-token('topic/fig')][child::*[@class => contains-token('topic/title')]][. &lt;&lt; $prmFig]|$prmFig) => count()"/>
         </xsl:variable>
         
         <xsl:variable name="tableNumber" select="$figPreviousAmount + $figCurrentAmount" as="xs:integer"/>
@@ -404,7 +404,7 @@ URL : http://www.antennahouse.com/
      return:	w:p
      note:		use 'HTML Preformatted' style
      -->
-    <xsl:template match="*[contains(@class,' topic/pre ')]">
+    <xsl:template match="*[@class => contains-token('topic/pre')]">
         <xsl:variable name="preStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
                 <xsl:with-param name="prmVarName" select="'PreStyle'"/>
@@ -426,7 +426,7 @@ URL : http://www.antennahouse.com/
      return:	w:p
      note:		use 'Body Text' style
      -->
-    <xsl:template match="*[contains(@class,' topic/lines ')]">
+    <xsl:template match="*[@class => contains-token('topic/lines')]">
         <xsl:variable name="linesStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
                 <xsl:with-param name="prmVarName" select="'LinesStyle'"/>
@@ -449,14 +449,14 @@ URL : http://www.antennahouse.com/
      return:	w:p, etc
      note:		use 'Body Text' style
      -->
-    <xsl:template match="*[contains(@class,' topic/draft-comment ')]">
+    <xsl:template match="*[@class => contains-token('topic/draft-comment')]">
         <xsl:variable name="pStyle" as="xs:string">
             <xsl:call-template name="getVarValueWithLang">
                 <xsl:with-param name="prmVarName" select="'PStyle'"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:choose>
-            <xsl:when test="*[1][contains(@class,' topic/p ')] and (*[1] is *[last()])">
+            <xsl:when test="*[1][@class => contains-token('topic/p')] and (*[1] is *[last()])">
                 <w:p>
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>                
@@ -473,7 +473,7 @@ URL : http://www.antennahouse.com/
                     </xsl:call-template>
                 </w:p>
             </xsl:when>
-            <xsl:when test="*[1][contains(@class,' topic/p ')] and *[last()][contains(@class,' topic/p ')]">
+            <xsl:when test="*[1][@class => contains-token('topic/p')] => exists() and *[last()][@class => contains-token('topic/p')] => exists()">
                 <w:p>
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>                
@@ -503,7 +503,7 @@ URL : http://www.antennahouse.com/
                     </xsl:call-template>
                 </w:p>
             </xsl:when>
-            <xsl:when test="*[1][contains(@class,' topic/p ')] and empty(*[last()][contains(@class,' topic/p ')])">
+            <xsl:when test="*[1][@class => contains-token('topic/p')] => exists() and *[last()][@class => contains-token('topic/p')] => empty()">
                 <w:p>
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>                
@@ -529,7 +529,7 @@ URL : http://www.antennahouse.com/
                     </xsl:call-template>
                 </w:p>
             </xsl:when>
-            <xsl:when test="empty(*[1][contains(@class,' topic/p ')]) and exists(*[last()][contains(@class,' topic/p ')])">
+            <xsl:when test="*[1][@class => contains-token('topic/p')] => empty() and *[last()][@class => contains-token('topic/p')] => exists()">
                 <w:p>
                     <w:pPr>
                         <w:pStyle w:val="{ahf:getStyleIdFromName($pStyle)}"/>                
@@ -586,7 +586,7 @@ URL : http://www.antennahouse.com/
      return:	under-laying result
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/ph ')]">
+    <xsl:template match="*[@class => contains-token('topic/ph')]">
         <xsl:apply-templates/>
     </xsl:template>
     
@@ -596,7 +596,7 @@ URL : http://www.antennahouse.com/
      return:	under-laying result
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/fig ')]">
+    <xsl:template match="*[@class => contains-token('topic/fig')]">
         <xsl:apply-templates/>
     </xsl:template>
 
@@ -606,7 +606,7 @@ URL : http://www.antennahouse.com/
      return:	under-laying result
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/dd ')]">
+    <xsl:template match="*[@class => contains-token('topic/dd')]">
         <xsl:apply-templates/>
     </xsl:template>
     
@@ -616,7 +616,7 @@ URL : http://www.antennahouse.com/
      return:	under-laying result
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/keyword ')]">
+    <xsl:template match="*[@class => contains-token('topic/keyword')]">
         <xsl:apply-templates/>
     </xsl:template>
 
@@ -636,7 +636,7 @@ URL : http://www.antennahouse.com/
      return:	under-laying result
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/text ')]">
+    <xsl:template match="*[@class => contains-token('topic/text')]">
         <xsl:apply-templates/>
     </xsl:template>
     
@@ -646,7 +646,7 @@ URL : http://www.antennahouse.com/
      return:	under-laying result
      note:		
      -->
-    <xsl:template match="*[contains(@class,' topic/section ')]">
+    <xsl:template match="*[@class => contains-token('topic/section')]">
         <xsl:apply-templates/>
     </xsl:template>
     

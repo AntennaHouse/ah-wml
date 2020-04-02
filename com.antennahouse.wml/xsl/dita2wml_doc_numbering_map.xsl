@@ -102,10 +102,10 @@ URL : http://www.antennahouse.com/
      note:		
      -->
     <xsl:template name="makeTableCount" as="element()*">
-        <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')]" mode="MODE_TABLE_COUNT"/>
+        <xsl:apply-templates select="$map/*[@class => contains-token('map/topicref')]" mode="MODE_TABLE_COUNT"/>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="MODE_TABLE_COUNT" as="element()">
+    <xsl:template match="*[@class => contains-token('map/topicref')]" mode="MODE_TABLE_COUNT" as="element()">
         <xsl:variable name="topicRef" as="element()" select="."/>
         <xsl:variable name="targetTopic" as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
         <xsl:variable name="tableCount" as="xs:integer">
@@ -140,15 +140,15 @@ URL : http://www.antennahouse.com/
         <xsl:element name="table-count">
             <xsl:attribute name="id" select="$topicId"/>
             <xsl:attribute name="count" select="$tableCount"/>
-            <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current"/>
+            <xsl:apply-templates select="*[@class => contains-token('map/topicref')]" mode="#current"/>
         </xsl:element>
     </xsl:template>
 
     <xsl:template name="makeFigCount" as="element()*">
-        <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')]" mode="MODE_FIG_COUNT"/>
+        <xsl:apply-templates select="$map/*[@class => contains-token('map/topicref')]" mode="MODE_FIG_COUNT"/>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="MODE_FIG_COUNT" as="element()">
+    <xsl:template match="*[@class => contains-token('map/topicref')]" mode="MODE_FIG_COUNT" as="element()">
         <xsl:variable name="topicRef" as="element()" select="."/>
         <xsl:variable name="targetTopic" as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
         <xsl:variable name="figCount" as="xs:integer">
@@ -179,15 +179,15 @@ URL : http://www.antennahouse.com/
         <xsl:element name="fig-count">
             <xsl:attribute name="id" select="$topicId"/>
             <xsl:attribute name="count" select="$figCount"/>
-            <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current"/>
+            <xsl:apply-templates select="*[@class => contains-token('map/topicref')]" mode="#current"/>
         </xsl:element>
     </xsl:template>
     
     <xsl:template name="makeFnCount" as="element()*">
-        <xsl:apply-templates select="$map/*[contains(@class, ' map/topicref ')]" mode="MODE_FN_COUNT"/>
+        <xsl:apply-templates select="$map/*[@class => contains-token('map/topicref')]" mode="MODE_FN_COUNT"/>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="MODE_FN_COUNT" as="element()">
+    <xsl:template match="*[@class => contains-token('map/topicref')]" mode="MODE_FN_COUNT" as="element()">
         <xsl:variable name="topicRef" as="element()" select="."/>
         <xsl:variable name="targetTopic" as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
         <xsl:variable name="fnCount" as="xs:integer">
@@ -218,7 +218,7 @@ URL : http://www.antennahouse.com/
         <xsl:element name="fn-count">
             <xsl:attribute name="id" select="$topicId"/>
             <xsl:attribute name="count" select="$fnCount"/>
-            <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="#current"/>
+            <xsl:apply-templates select="*[@class => contains-token('map/topicref')]" mode="#current"/>
         </xsl:element>
     </xsl:template>
 
@@ -231,9 +231,9 @@ URL : http://www.antennahouse.com/
     <xsl:template name="getTopicTable" as="element()*">
         <xsl:param name="prmTopic" as="element()" required="yes"/>
         <xsl:variable name="tableElem" as="element()*">
-            <xsl:sequence select="$prmTopic//*[contains(@class,' topic/table ')]
-                                               [not(ancestor::*[contains(@class,' topic/table ')])]
-                                               [exists(*[contains(@class,' topic/title ')])]"/>
+            <xsl:sequence select="$prmTopic//*[@class => contains-token('topic/table')]
+                                               [not(ancestor::*[@class => contains-token('topic/table')])]
+                                               [exists(*[@class => contains-token('topic/title')])]"/>
         </xsl:variable> 
         <xsl:sequence select="$tableElem"/>
     </xsl:template>
@@ -241,8 +241,8 @@ URL : http://www.antennahouse.com/
     <xsl:template name="getTopicFig" as="element()*">
         <xsl:param name="prmTopic" as="element()" required="yes"/>
         <xsl:variable name="figElem" as="element()*">
-            <xsl:sequence select="$prmTopic//*[contains(@class,' topic/fig ')]
-                                               [exists(*[contains(@class,' topic/title ')])]"/>
+            <xsl:sequence select="$prmTopic//*[@class => contains-token('topic/fig')]
+                                               [exists(*[@class => contains-token('topic/title')])]"/>
         </xsl:variable> 
         <xsl:sequence select="$figElem"/>
     </xsl:template>
@@ -250,9 +250,9 @@ URL : http://www.antennahouse.com/
     <xsl:template name="getTopicFn" as="element()*">
         <xsl:param name="prmTopic" as="element()" required="yes"/>
         <xsl:variable name="fnElem" as="element()*">
-            <xsl:sequence select="$prmTopic//*[contains(@class,' topic/fn ')]
-                                               [exists(*[contains(@class,' topic/title ')])]
-                                               [not(contains(@class,' pr-d/synnote '))]
+            <xsl:sequence select="$prmTopic//*[@class => contains-token('topic/fn')]
+                                               [exists(*[@class => contains-token('topic/title')])]
+                                               [not(@class => contains-token('pr-d/synnote'))]
                                                [empty(@callout)]"/>
         </xsl:variable> 
         <xsl:sequence select="$fnElem"/>

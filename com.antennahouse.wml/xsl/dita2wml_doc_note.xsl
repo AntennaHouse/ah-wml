@@ -25,7 +25,7 @@ URL : http://www.antennahouse.com/
      return:	mainly w:p+
      note:      
      -->
-    <xsl:template match="*[contains(@class,' topic/note ')]" as="node()*">
+    <xsl:template match="*[@class => contains-token('topic/note')]" as="node()*">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         
@@ -94,7 +94,7 @@ URL : http://www.antennahouse.com/
         </xsl:variable>
         
         <!-- Is in table -->
-        <xsl:variable name="isNotInTable" as="xs:boolean" select="empty(ancestor::*[ahf:seqContains(@class,(' topic/entry',' topic/stentry '))])"/>
+        <xsl:variable name="isNotInTable" as="xs:boolean" select="ancestor::*[@class => ahf:seqContainsToken(('topic/entry','topic/stentry'))] => empty()"/>
         
         <!-- w:tabs for note rule -->
         <xsl:variable name="bodyRightEdgeInTwip" as="xs:integer" select="ahf:toTwip($pPaperWidth) - ahf:toTwip($pPaperMarginInner) - ahf:toTwip($pPaperMarginOuter)"/>

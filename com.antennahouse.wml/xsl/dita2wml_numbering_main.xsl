@@ -129,7 +129,7 @@ URL : http://www.antennahouse.com/
                 <w:abstractNumId>
                     <xsl:attribute name="w:val">
                         <xsl:choose>
-                            <xsl:when test="contains(@class,' topic/ol ')">
+                            <xsl:when test="@class => contains-token('topic/ol')">
                                 <xsl:value-of select="$olAbstractNumId"/>
                             </xsl:when>
                             <xsl:otherwise>
@@ -138,7 +138,7 @@ URL : http://www.antennahouse.com/
                         </xsl:choose>
                     </xsl:attribute>
                 </w:abstractNumId>
-                <xsl:if test="contains(@class,' topic/ol ')">
+                <xsl:if test="@class => contains-token('topic/ol')">
                     <w:lvlOverride w:ilvl="0">
                         <w:startOverride w:val = "1"/>
                     </w:lvlOverride>

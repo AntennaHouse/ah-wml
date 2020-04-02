@@ -31,7 +31,7 @@ E-mail : info@antennahouse.com
         <!-- Complement colwidth -->
         <xsl:variable name="colspecComplemented" as="document-node()">
             <xsl:document>
-                <xsl:for-each select="$prmTgroup/*[contains(@class,' topic/colspec ')]">
+                <xsl:for-each select="$prmTgroup/*[@class => contains-token('topic/colspec')]">
                     <xsl:copy>
                         <xsl:copy-of select="@*"/>
                         <xsl:choose>
@@ -58,13 +58,13 @@ E-mail : info@antennahouse.com
         </xsl:variable>
         
         <!-- Calculate column width sum -->
-        <xsl:variable name="colWidthSum" as="xs:double" select="sum($colspecComplemented/*[contains(@class,' topic/colspec ')]/@ahf:colwidth-normalized/xs:double(string(.)))"/>
+        <xsl:variable name="colWidthSum" as="xs:double" select="sum($colspecComplemented/*[@class => contains-token('topic/colspec')]/@ahf:colwidth-normalized/xs:double(string(.)))"/>
         <xsl:assert test="$colWidthSum gt 0" select="'[buildColSpecTree] Invalid colwidth table=', ahf:getHistoryStr($prmTgroup/parent::*),' $colspecComplemented=',$colspecComplemented"/>
 
         <!-- Calculate column width ratio --> 
         <xsl:variable name="colspecCalculated" as="document-node()">
             <xsl:document>
-                <xsl:for-each select="$colspecComplemented/*[contains(@class,' topic/colspec ')]">
+                <xsl:for-each select="$colspecComplemented/*[@class => contains-token('topic/colspec')]">
                     <xsl:copy>
                         <xsl:copy-of select="@*"/>
                         <xsl:attribute name="ahf:colwidth-ratio" select="string(xs:double(xs:double(@ahf:colwidth-normalized) div $colWidthSum * 100))"/>

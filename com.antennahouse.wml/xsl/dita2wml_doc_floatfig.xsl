@@ -33,15 +33,15 @@ URL : http://www.antennahouse.com/
                 In this template the height is calculated using provisional method counting w:p has fixed height. 
                 (based on the assumption that w:p fits the text-box width.)
      -->
-    <xsl:template match="*[contains(@class,' task/step ')]/*[contains(@class,' task/info ')][1]//*[contains(@class,' floatfig-d/floatfig ')]" priority="10"/>
+    <xsl:template match="*[@class => contains-token('task/step')]/*[@class => contains-token('task/info')][1]//*[@class => contains-token('floatfig-d/floatfig')]" priority="10"/>
 
-    <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')][string(@float) eq 'none']" priority="5">
-        <xsl:for-each select="*[contains(@class,' floatfig-d/floatfig-group ')][string(@float) = ('left','right')][ahf:isNotEmptyElement(.)]">
+    <xsl:template match="*[@class => contains-token('floatfig-d/floatfig')][string(@float) eq 'none']" priority="5">
+        <xsl:for-each select="*[@class => contains-token('floatfig-d/floatfig-group')][string(@float) = ('left','right')][ahf:isNotEmptyElement(.)]">
             <xsl:call-template name="processFloatFigInline"/>
         </xsl:for-each>    
     </xsl:template>
     
-    <xsl:template match="*[contains(@class,' floatfig-d/floatfig ')][string(@float) = ('left','right')][ahf:isNotEmptyElement(.)]" name="processFloatFigInline" as="element(w:r)?" priority="5">
+    <xsl:template match="*[@class => contains-token('floatfig-d/floatfig')][string(@float) = ('left','right')][ahf:isNotEmptyElement(.)]" name="processFloatFigInline" as="element(w:r)?" priority="5">
         <xsl:param name="prmFloatFig" as="element()" required="no" select="."/>
         <xsl:param name="prmSpaceBefore" as="xs:string" tunnel="yes" required="no" select="'0pt'"/>
         <xsl:assert test="ahf:isNotEmptyElement($prmFloatFig)" select="'[floatfig] this assertion should not be invoked because non-emptiness is checked in matching pattern. position=',ahf:getNodeXPathStr($prmFloatFig),'floatfig=',$prmFloatFig"/>

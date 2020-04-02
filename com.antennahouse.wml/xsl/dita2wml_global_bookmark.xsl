@@ -24,13 +24,13 @@ E-mail : info@antennahouse.com
                  2019-01-08 t.makita
       -->
     <xsl:variable name="bookmarkTargets" as="xs:string*">
-        <xsl:for-each select="$map/*[not(contains(@class,' map/reltable '))]/descendant-or-self::*[contains(@class,' map/topicref ')][starts-with(@href,'#')]">
+        <xsl:for-each select="$map/*[@class => contains-token('map/reltable') => not()]/descendant-or-self::*[@class => contains-token('map/topicref')][@href => starts-with('#')]">
             <xsl:variable name="topicRef" as="element()" select="."/>
             <xsl:sequence select="string($topicRef/@href)"/>
             <xsl:variable name="topic" as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
             <xsl:if test="exists($topic)">
-                <xsl:sequence select="$topic/descendant::*[contains(@class,' topic/xref ')][starts-with(@href,'#')]/string(@href)"/>
-                <xsl:sequence select="$topic/descendant::*[contains(@class,' topic/link ')][starts-with(@href,'#')]/string(@href)"/>
+                <xsl:sequence select="$topic/descendant::*[@class => contains-token('topic/xref')][starts-with(@href,'#')]/string(@href)"/>
+                <xsl:sequence select="$topic/descendant::*[@class => contains-token('topic/link')][starts-with(@href,'#')]/string(@href)"/>
             </xsl:if>
         </xsl:for-each>
     </xsl:variable>
@@ -81,7 +81,7 @@ E-mail : info@antennahouse.com
      -->
     <xsl:variable name="targetIdsWithNoHref" as="xs:string*">
         <xsl:sequence select="$targetIds"/>
-        <xsl:sequence select="$map/*[not(contains(@class,' map/reltable '))]/descendant-or-self::*[contains(@class,' map/topicref ')][empty(@href)]/ahf:generateId(.)"/>
+        <xsl:sequence select="$map/*[not(@class => contains-token('map/reltable'))]/descendant-or-self::*[@class => contains-token('map/topicref')][@href => empty()]/ahf:generateId(.)"/>
     </xsl:variable>
     
     <xsl:variable name="targetElemsDocSeq" as="element()*" select="$root/descendant::*[ahf:generateId(.) = $targetIdsWithNoHref]"/>
