@@ -14,7 +14,7 @@
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>dita2wml_convmerged3_shell</String>
+                                        <String>dita2wml_doc_shell</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -34,7 +34,7 @@
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>dita2wml_doc_shell</String>
+                                        <String>dita2wml_convmerged3_shell</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
