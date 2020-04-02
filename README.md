@@ -4,8 +4,8 @@ AH-WML is the [DITA-OT](http://dita-ot.org) plug-in that generates Microsoft Wor
 
 ## Requirements ##
 
-* DITA-OT 2.3 or later.
-* Saxon-PE or EE 9.8
+* DITA-OT 2.3 or later
+* Saxon-PE/EE 9.8 or later
 * JRE 9.0 or later
 
 ## Features ##
@@ -20,6 +20,12 @@ AH-WML is the [DITA-OT](http://dita-ot.org) plug-in that generates Microsoft Wor
 
 ## How to run this plug-in ##
 
+Fork or clone this repository and copy com.antennahouse.wml folder to your \[DITA-OT\]/plugins folder.
+
+From the command-line window at your \[DITA-OT\] folder, run `bin/dita --install` command.
+
+## How to run this plug-in ##
+
 Refer to mHowToRunAhWmlPlugInWithSaxonPeEe.docx for details.
 
 ## Notes ##
@@ -28,7 +34,7 @@ This project is still work in progress. Many DITA features are not implemented. 
 
 ## Copyright ##
 
-Copyright (C) 2009-2018 Antenna House, Inc. All rights reserved.
+Copyright (C) 2009-2020 Antenna House, Inc. All rights reserved.
 Antenna House is a trademark of [Antenna House, Inc.](http://www.antennahouse.com)
 
 ## License ##
