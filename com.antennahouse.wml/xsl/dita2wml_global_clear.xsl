@@ -45,7 +45,7 @@ E-mail : info@antennahouse.com
      -->
     <xsl:variable name="cmClearCandidateElements" as="element()*">
         <xsl:sequence select="$root/descendant::*[string(@clear) = ('both','right','left')][ahf:isBlockElement(.)]/preceding-sibling::*[1]"/>
-        <xsl:for-each select="$root/descendant::*[@class => contains-token('task/step ')][*[@class => contains-token('task/info ')][1]/descendant::*[@class => contains-token('floatfig-d/floatfig')][string(@float) = ('left','right')]]">
+        <xsl:for-each select="$root/descendant::*[@class => contains-token('task/step')][*[@class => contains-token('task/info')][1]/descendant::*[@class => contains-token('floatfig-d/floatfig')][string(@float) = ('left','right')]]">
             <xsl:variable name="step" as="element()" select="."/>
             <xsl:choose>
                 <!-- preceding-sibling::*[1] is step -->

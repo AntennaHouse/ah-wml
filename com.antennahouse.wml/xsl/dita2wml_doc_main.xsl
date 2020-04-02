@@ -60,7 +60,7 @@ URL : http://www.antennahouse.com/
                         <xsl:apply-templates select="$map/*[@class => contains-token('bookmap/backmatter')]/*[@class => contains-token('map/topicref')][. => ahf:isNotCoverTopicRef()]"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:apply-templates select="$map/*[@class => contains-token('map/topicref ')][ahf:isNotCoverTopicRef(.)]"/>
+                        <xsl:apply-templates select="$map/*[@class => contains-token('map/topicref')][. => ahf:isNotCoverTopicRef()]"/>
                     </xsl:otherwise>
                 </xsl:choose>
 

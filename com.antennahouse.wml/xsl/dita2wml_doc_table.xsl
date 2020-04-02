@@ -904,7 +904,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:template name="buildStColWidthSeq" as="xs:double+">
         <xsl:param name="prmSimpleTable" as="element()" required="yes"/>
-        <xsl:variable name="colCount" as="xs:integer" select="count($prmSimpleTable/*[@class => contains-token('topic/strow ')][1]/*[@class => contains-token('topic/stentry')])"/>
+        <xsl:variable name="colCount" as="xs:integer" select="$prmSimpleTable/*[@class => contains-token('topic/strow')][1]/*[@class => contains-token('topic/stentry')] => count()"/>
         <xsl:variable name="relColWidth" as="xs:double+">
             <xsl:choose>
                 <xsl:when test="string($prmSimpleTable/@relcolwidth)">

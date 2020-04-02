@@ -68,7 +68,7 @@ URL : http://www.antennahouse.com/
         </xsl:call-template>
 
         <xsl:choose>
-            <xsl:when test="$topicRef/*[@class => contains-token('map/topicmeta ')]/*[@class => contains-token('topic/navtitle')] or exists(@navtitle) or $topicRef[@class => contains-token('bookmap/glossarylist')]">
+            <xsl:when test="$topicRef/*[@class => contains-token('map/topicmeta')]/*[@class => contains-token('topic/navtitle')] or exists(@navtitle) or $topicRef[@class => contains-token('bookmap/glossarylist')]">
                 <!-- Process title -->
                 <xsl:call-template name="genTopicHeadTitle">
                     <xsl:with-param name="prmTopicRef"       select="$topicRef"/>

@@ -108,8 +108,8 @@ URL : http://www.antenna.co.jp/
                     <xsl:attribute name="contentkey" select="if ($prmIsInFrontMatter) then '0' else '1'"/>
                     <xsl:attribute name="navtitle">
                         <xsl:choose>
-                            <xsl:when test="exists(*[@class => contains-token('map/topicmeta ')]/*[@class => contains-token('topic/navtitle')])">
-                                <xsl:value-of select="string(*[@class => contains-token('map/topicmeta ')]/*[@class => contains-token('topic/navtitle')])"/>
+                            <xsl:when test="exists(*[@class => contains-token('map/topicmeta')]/*[@class => contains-token('topic/navtitle')])">
+                                <xsl:value-of select="string(*[@class => contains-token('map/topicmeta')]/*[@class => contains-token('topic/navtitle')])"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:value-of select="@navtitle"/>
@@ -217,7 +217,7 @@ URL : http://www.antenna.co.jp/
     </xsl:function>    
 
     <!--General image-->
-    <xsl:template match="*[@class => contains-token('topic/image ')][string(@placement) eq 'break'][ancestor::*[@class => ahf:seqContainsToken(('floatfig-d/floatfig','floatfig-d/floatfig-group'))][string(@float) = ('left','right')] => empty()]" mode="MODE_MAKE_SECT_INFO">
+    <xsl:template match="*[@class => contains-token('topic/image')][string(@placement) eq 'break'][ancestor::*[@class => ahf:seqContainsToken(('floatfig-d/floatfig','floatfig-d/floatfig-group'))][string(@float) = ('left','right')] => empty()]" mode="MODE_MAKE_SECT_INFO">
         <xsl:param name="prmIsInFrontMatter" tunnel="yes" required="false" select="false()"/>
         <xsl:param name="prmTopicRef" as="element()" required="yes"/>
         <image>

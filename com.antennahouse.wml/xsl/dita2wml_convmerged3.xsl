@@ -164,7 +164,7 @@ E-mail : info@antennahouse.com
      return:	and inline nodes
      note:		
      -->
-    <xsl:template match="*[@class => contains-token('topic/shortdesc ')][parent::*[@class => contains-token('topic/topic')]][exists(child::node())]" priority="5">
+    <xsl:template match="*[@class => contains-token('topic/shortdesc')][parent::*[@class => contains-token('topic/topic')]][exists(child::node())]" priority="5">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
             <xsl:call-template name="ahf:processInline">

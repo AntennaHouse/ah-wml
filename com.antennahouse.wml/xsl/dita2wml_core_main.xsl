@@ -47,8 +47,8 @@ E-mail : info@antennahouse.com
                         </xsl:variable>
                         <xsl:value-of select="normalize-space(string-join($author,''))"/>
                     </xsl:when>
-                    <xsl:when test="$topicmeta/*[@class => contains-token('xnal-d/authorinformation ')]/*[@class => contains-token('xnal-d/personinfo ')]/*[@class => contains-token('xnal-d/namedetails')]/*[@class => contains-token(' xnal-d/personname')]">
-                        <xsl:variable name="personName" as="element()" select="$topicmeta/*[@class => contains-token('xnal-d/authorinformation ')]/*[@class => contains-token('xnal-d/personinfo ')]/*[@class => contains-token(' xnal-d/namedetails')]/*[@class => contains-token('xnal-d/personname')]"/>
+                    <xsl:when test="$topicmeta/*[@class => contains-token('xnal-d/authorinformation')]/*[@class => contains-token('xnal-d/personinfo')]/*[@class => contains-token('xnal-d/namedetails')]/*[@class => contains-token('xnal-d/personname')]">
+                        <xsl:variable name="personName" as="element()" select="$topicmeta/*[@class => contains-token('xnal-d/authorinformation')]/*[@class => contains-token('xnal-d/personinfo')]/*[@class => contains-token('xnal-d/namedetails')]/*[@class => contains-token('xnal-d/personname')]"/>
                         <xsl:variable name="author" as="xs:string*">
                             <xsl:apply-templates select="$personName/*[@class => contains-token('xnal-d/firstname')]" mode="MODE_TEXT_ONLY"/>
                             <xsl:text> </xsl:text>

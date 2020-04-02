@@ -30,7 +30,7 @@ E-mail : info@antennahouse.com
     <xsl:param name="PRM_OMIT_ATT" as="xs:boolean" select="false()"/>
     
     <!-- All topiref-->
-    <xsl:variable name="allTopicRefs" as="element()*" select="$map//*[@class => contains-token('map/topicref ')][ancestor::*[@class => contains-token('map/reltable')] => empty()]"/>
+    <xsl:variable name="allTopicRefs" as="element()*" select="$map//*[@class => contains-token('map/topicref')][ancestor::*[@class => contains-token('map/reltable')] => empty()]"/>
     
     <!-- topicref that has @print="no"-->
     <xsl:variable name="noPrintTopicRefs" as="element()*" select="$allTopicRefs[ancestor-or-self::*[string(@print) eq 'no']]"/>
@@ -58,7 +58,7 @@ E-mail : info@antennahouse.com
 
     <!-- topicrefs that references same topic -->
     <xsl:variable name="duplicateTopicRefs" as="element()*">
-        <xsl:for-each select="$map//*[@class => contains-token('map/topicref ')][exists(@href)][ancestor::*[@class => contains-token('map/reltable')] => empty()]">
+        <xsl:for-each select="$map//*[@class => contains-token('map/topicref')][exists(@href)][ancestor::*[@class => contains-token('map/reltable')] => empty()]">
             <xsl:variable name="topicRef" as="element()" select="."/>
             <xsl:variable name="href" as="xs:string" select="string(@href)"/>
             <xsl:if test="$allTopicRefs[. &lt;&lt; $topicRef][exists(@href)][string(@href) eq $href][empty($noPrintTopicRefs[. is $topicRef])]">
@@ -345,7 +345,7 @@ E-mail : info@antennahouse.com
             <xsl:when test="$isLocalHref and ($prmTopicRefNo gt 0)">
                 <xsl:variable name="refTopicId" as="xs:string" select="substring-after($refTopicHref,'#')"/>
                 <xsl:variable name="refElemId" as="xs:string" select="if (contains($href,'/')) then substring-after($href,'/') else ''"/>
-                <xsl:variable name="topIds" as="xs:string+" select="for $id in $xref/ancestor::*[@class => contains-token('topic/topic ')][last()]/descendant-or-self::*[@class => contains-token('topic/topic')]/@id return string($id)"/>
+                <xsl:variable name="topIds" as="xs:string+" select="for $id in $xref/ancestor::*[@class => contains-token('topic/topic')][last()]/descendant-or-self::*[@class => contains-token('topic/topic')]/@id return string($id)"/>
                 <xsl:choose>
                     <xsl:when test="exists($topIds[. eq $refTopicId])">
                         <xsl:copy>
@@ -399,7 +399,7 @@ E-mail : info@antennahouse.com
      return:	empty
      note:		DITA DTD allows empty strow, but it influences wrong in convmerged step 4.
      -->
-    <xsl:template match="*[@class => contains-token('topic/strow ')][*[@class => contains-token('topic/stentry')] => empty()]"/>
+    <xsl:template match="*[@class => contains-token('topic/strow')][*[@class => contains-token('topic/stentry')] => empty()]"/>
     
     <!-- 
      function:	comment template

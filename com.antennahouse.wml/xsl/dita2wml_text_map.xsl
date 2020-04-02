@@ -52,8 +52,8 @@ E-mail : info@antennahouse.com
     </xsl:template>
 
     <xsl:template match="*[@class => contains-token('floatfig-d/floatfig')]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
-    <xsl:template match="*[ahf:seqContains(string(@class),(' topic/data ',' topic/data-about ',' topic/unknown '))]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
-    <xsl:template match="*[ahf:seqContains(string(@class),(' topic/indexterm ',' indexing-d/index-see ',' indexing-d/index-see-also '))]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
+    <xsl:template match="*[@class => ahf:seqContainsToken(('topic/data','topic/data-about','topic/unknown'))]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
+    <xsl:template match="*[@class => ahf:seqContainsToken(('topic/indexterm','indexing-d/index-see','indexing-d/index-see-also'))]" priority="5" mode="MODE_GEN_TEXT_MAP"/>
     
     <xsl:template match="*[@class => contains-token('topic/image')]" priority="5" mode="MODE_GEN_TEXT_MAP">
         <xsl:call-template name="ahf:genInlineElement"/>
@@ -61,7 +61,7 @@ E-mail : info@antennahouse.com
     <xsl:template match="*[@class => contains-token('topic/foreign')]" priority="5" mode="MODE_GEN_TEXT_MAP">
         <xsl:call-template name="ahf:genInlineElement"/>
     </xsl:template>
-    <xsl:template match="*[contains(string(@class),' topic/xref ')][ahf:isInternalLink(string(@href))]" priority="5" mode="MODE_GEN_TEXT_MAP">
+    <xsl:template match="*[@class => contains-token('topic/xref')][@href => ahf:isInternalLink()]" priority="5" mode="MODE_GEN_TEXT_MAP">
         <xsl:call-template name="ahf:genInlineElement"/>
     </xsl:template>
     

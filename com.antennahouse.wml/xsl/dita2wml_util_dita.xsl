@@ -122,7 +122,7 @@ URL : http://www.antennahouse.com/
                 <!-- invalid parameter -->
                 <xsl:sequence select="()"/>
             </xsl:when>
-            <xsl:when test="not(contains($prmTopic/@class, ' topic/topic '))">
+            <xsl:when test="$prmTopic/@class => contains-token('topic/topic') => not()">
                 <!-- It is not a topic! -->
                 <xsl:sequence select="()"/>
             </xsl:when>
@@ -196,7 +196,7 @@ URL : http://www.antennahouse.com/
             <xsl:when test="ahf:isInternalLink($href)">
                 <xsl:sequence select="true()"/>
             </xsl:when>
-            <xsl:when test="$prmTopicRef/@navtitle or $prmTopicRef/*[@class => contains-token('map/topicmeta ')]/*[@class => contains-token('topic/navtitle')]">
+            <xsl:when test="$prmTopicRef/@navtitle or $prmTopicRef/*[@class => contains-token('map/topicmeta')]/*[@class => contains-token('topic/navtitle')]">
                 <xsl:sequence select="true()"/>
             </xsl:when>
             <xsl:otherwise>
@@ -213,7 +213,7 @@ URL : http://www.antennahouse.com/
     -->
     <xsl:function name="ahf:getTopicRefLevel" as="xs:integer">
         <xsl:param name="prmTopicRef" as="element()"/>
-        <xsl:variable name="ancestorTopicRef" as="element()+" select="$prmTopicRef/ancestor-or-self::*[@class => contains-token('map/topicref ')][not(ahf:seqContains(string(@class),(' bookmap/frontmatter ',' bookmap/appendices ',' bookmap/backmatter')))]"/>
+        <xsl:variable name="ancestorTopicRef" as="element()+" select="$prmTopicRef/ancestor-or-self::*[@class => contains-token('map/topicref')][@class => ahf:seqContainsToken(('bookmap/frontmatter','bookmap/appendices','bookmap/backmatter')) => not()]"/>
         <xsl:sequence select="count($ancestorTopicRef)"/>
     </xsl:function>
 
@@ -286,7 +286,7 @@ URL : http://www.antennahouse.com/
     <xsl:function name="ahf:getOutputClass" as="xs:string*">
         <xsl:param name="prmElem" as="element()"/>
         <xsl:variable name="outputClass" as="xs:string" select="normalize-space(string($prmElem/@outputclass))"/>
-        <xsl:sequence select="tokenize($outputClass,' ')"/>
+        <xsl:sequence select="tokenize($outputClass,'[\s]+')"/>
     </xsl:function>
     
     <!-- 

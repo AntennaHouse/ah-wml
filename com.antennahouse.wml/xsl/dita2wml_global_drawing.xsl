@@ -63,7 +63,7 @@ E-mail : info@antennahouse.com
                         <xsl:variable name="topicRef" as="element()" select="."/>                        
                         <xsl:variable name="topicContent"  as="element()?" select="ahf:getTopicFromTopicRef($topicRef)"/>
                         <xsl:if test="exists($topicContent)">
-                            <xsl:sequence select="$topicContent/*[@class => contains-token('topic/body ')]/*[@class => contains-token('topic/bodydiv')]/ahf:generateId(.)"/>
+                            <xsl:sequence select="$topicContent/*[@class => contains-token('topic/body')]/*[@class => contains-token('topic/bodydiv')]/ahf:generateId(.)"/>
                         </xsl:if>
                     </xsl:for-each>
                 </xsl:otherwise>

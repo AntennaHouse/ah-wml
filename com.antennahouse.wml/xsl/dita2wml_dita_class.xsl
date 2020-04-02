@@ -20,30 +20,30 @@ E-mail : info@antennahouse.com
      -->
     <xsl:variable name="blockElementClasses" as="xs:string+" select="
         (
-        ' topic/abstract ',
-        ' topic/body ',
-        ' topic/bodydiv ',
-        ' topic/div ',
-        ' topic/dl ',
-        ' topic/draft-comment ',
-        ' topic/example ',
-        ' topic/fig ',
-        (:' topic/fn ',:)
-        ' topic/itemgroup ',
-        ' topic/lines ',
-        ' topic/note ',
-        ' topic/object ',
-        ' topic/ol ',
-        ' topic/ul ',
-        ' topic/p ',
-        ' topic/pre ',
-        ' topic/required-cleanup ',
-        ' topic/section ',
-        ' topic/sectiondiv ',
-        ' topic/simpletable ',
-        ' topic/sl ',
-        ' topic/table ',
-        ' topic/title '
+        'topic/abstract',
+        'topic/body',
+        'topic/bodydiv',
+        'topic/div',
+        'topic/dl',
+        'topic/draft-comment',
+        'topic/example',
+        'topic/fig',
+        (:'topic/fn',:)
+        'topic/itemgroup',
+        'topic/lines',
+        'topic/note',
+        'topic/object',
+        'topic/ol',
+        'topic/ul',
+        'topic/p',
+        'topic/pre',
+        'topic/required-cleanup',
+        'topic/section',
+        'topic/sectiondiv',
+        'topic/simpletable',
+        'topic/sl',
+        'topic/table',
+        'topic/title'
         )"/>
 
     <!-- 
@@ -58,11 +58,11 @@ E-mail : info@antennahouse.com
         <xsl:choose>
             <xsl:when test="$prmNode instance of element()">
                 <xsl:variable name="class" as="xs:string" select="string($prmNode/@class)"/>
-                <xsl:variable name="isOneOfBlockElement" as="xs:boolean" select="some $c in $blockElementClasses satisfies contains($class,$c)"/>
-                <xsl:variable name="isBlockImage" as="xs:boolean" select="contains($class,' topic/image ') and (string($prmNode/@placement) eq 'break')"/>
-                <xsl:variable name="isBlockLevelShortdesc" as="xs:boolean" select="exists($prmNode/self::*[@class => contains-token('topic/shortdesc ')][parent::*[@class => contains-token('topic/abstract')]])"/>
-                <xsl:variable name="isPContentDesc" as="xs:boolean" select="$prmNode[@class => contains-token('topic/desc ')] and $prmNode/ancestor::*/@class[string(.) => ahf:seqContainsToken(('topic/fig','topic/table','topic/object'))]"/>
-                <xsl:variable name="isNotFloatFig" as="xs:boolean" select="not($prmNode[@class => contains-token('floatfig-d/floatfig')])"/>
+                <xsl:variable name="isOneOfBlockElement" as="xs:boolean" select="some $c in $blockElementClasses satisfies contains-token($class,$c)"/>
+                <xsl:variable name="isBlockImage" as="xs:boolean" select="$class => contains-token('topic/image') and (string($prmNode/@placement) eq 'break')"/>
+                <xsl:variable name="isBlockLevelShortdesc" as="xs:boolean" select="$prmNode/self::*[@class => contains-token('topic/shortdesc')][parent::*[@class => contains-token('topic/abstract')]] => exists()"/>
+                <xsl:variable name="isPContentDesc" as="xs:boolean" select="$prmNode[@class => contains-token('topic/desc')] and $prmNode/ancestor::*/@class[string(.) => ahf:seqContainsToken(('topic/fig','topic/table','topic/object'))]"/>
+                <xsl:variable name="isNotFloatFig" as="xs:boolean" select="$prmNode[@class => contains-token('floatfig-d/floatfig')] => empty()"/>
                 <xsl:sequence select="($isOneOfBlockElement or $isBlockImage or $isBlockLevelShortdesc or $isPContentDesc) and $isNotFloatFig"/>
             </xsl:when>
             <xsl:otherwise>
@@ -78,34 +78,34 @@ E-mail : info@antennahouse.com
      -->
     <xsl:variable name="mixedContentElementClasses" as="xs:string+" select="
         (
-        ' topic/abstract ',
-        ' topic/bodydiv ',
-        ' topic/dd ',
-        ' topic/ddhd ',
-        ' topic/dthd ',
-        ' topic/div ',
-        ' topic/draft-comment ',
-        ' topic/entry ',
-        ' topic/example ',
-        ' topic/fn ',
-        ' topic/fig ',
-        ' topic/itemgroup ',
-        ' topic/li ',
-        ' topic/lq ',
-        ' topic/note ',
-        ' topic/p ',
-        ' topic/required-cleanup ',
-        ' topic/section ',
-        ' topic/sectiondiv ',
-        ' topic/stentry '
+        'topic/abstract',
+        'topic/bodydiv',
+        'topic/dd',
+        'topic/ddhd',
+        'topic/dthd',
+        'topic/div',
+        'topic/draft-comment',
+        'topic/entry',
+        'topic/example',
+        'topic/fn',
+        'topic/fig',
+        'topic/itemgroup',
+        'topic/li',
+        'topic/lq',
+        'topic/note',
+        'topic/p',
+        'topic/required-cleanup',
+        'topic/section',
+        'topic/sectiondiv',
+        'topic/stentry'
         )"/>
     
     <xsl:variable name="mixedContentElementClassesException" as="xs:string+" select="
         (
-        ' hazard-d/hazardstatement ',
-        ' hazard-d/typeofhazard ',
-        ' hazard-d/consequence ',
-        ' hazard-d/howtoavoid '
+        'hazard-d/hazardstatement',
+        'hazard-d/typeofhazard',
+        'hazard-d/consequence',
+        'hazard-d/howtoavoid'
         )"/>
     
     <!-- 
@@ -117,8 +117,8 @@ E-mail : info@antennahouse.com
     <xsl:function name="ahf:isMixedContentElement" as="xs:boolean">
         <xsl:param name="prmElem" as="element()"/>
         <xsl:variable name="class" as="xs:string" select="string($prmElem/@class)"/>
-        <xsl:variable name="isOneOfMixedContentElement" as="xs:boolean" select="some $c in $mixedContentElementClasses satisfies contains($class,$c)"/>
-        <xsl:variable name="isOneOfMixedContentElementException" as="xs:boolean" select="some $c in $mixedContentElementClassesException satisfies contains($class,$c)"/>
+        <xsl:variable name="isOneOfMixedContentElement" as="xs:boolean" select="some $c in $mixedContentElementClasses satisfies contains-token($class,$c)"/>
+        <xsl:variable name="isOneOfMixedContentElementException" as="xs:boolean" select="some $c in $mixedContentElementClassesException satisfies contains-token($class,$c)"/>
         <xsl:sequence select="$isOneOfMixedContentElement and not($isOneOfMixedContentElementException)"/>
     </xsl:function>
 
@@ -127,15 +127,15 @@ E-mail : info@antennahouse.com
      -->
     <xsl:variable name="pElementClasses" as="xs:string+" select="
         (
-        ' topic/title ',
-        (:' topic/desc ',:)
-        (:' topic/dd ',:)
-        ' topic/dt ',
-        ' topic/sli ',
-        ' hazard-d/typeofhazard ',
-        ' hazard-d/consequence ',
-        ' hazard-d/howtoavoid ',
-        ' topic/linktext '
+        'topic/title',
+        (:'topic/desc',:)
+        (:'topic/dd',:)
+        'topic/dt',
+        'topic/sli',
+        'hazard-d/typeofhazard',
+        'hazard-d/consequence',
+        'hazard-d/howtoavoid',
+        'topic/linktext'
         )"/>
     
     <!-- 
@@ -147,9 +147,9 @@ E-mail : info@antennahouse.com
     <xsl:function name="ahf:isPContentElement" as="xs:boolean">
         <xsl:param name="prmElem" as="element()"/>
         <xsl:variable name="class" as="xs:string" select="string($prmElem/@class)"/>
-        <xsl:variable name="isOneOfPElement" as="xs:boolean" select="some $c in $pElementClasses satisfies contains($class,$c)"/>
-        <xsl:variable name="isPContentDesc" as="xs:boolean" select="$prmElem[@class => contains-token('topic/desc ')] and ahf:seqContains($prmElem/parent::*/@class/string(.),(' topic/fig ',' topic/table ',' topic/object'))"/>
-        <xsl:variable name="isPContentShortDesc" as="xs:boolean" select="$prmElem[@class => contains-token('topic/shortdesc ')] and $prmElem/parent::*[@class => contains-token('topic/abstract')]"/>
+        <xsl:variable name="isOneOfPElement" as="xs:boolean" select="some $c in $pElementClasses satisfies contains-token($class,$c)"/>
+        <xsl:variable name="isPContentDesc" as="xs:boolean" select="$prmElem[@class => contains-token('topic/desc')] and $prmElem/parent::*/@class => ahf:seqContainsToken(('topic/fig','topic/table','topic/object'))"/>
+        <xsl:variable name="isPContentShortDesc" as="xs:boolean" select="$prmElem[@class => contains-token('topic/shortdesc')] and $prmElem/parent::*[@class => contains-token('topic/abstract')]"/>
         <xsl:sequence select="$isOneOfPElement or $isPContentDesc or $isPContentShortDesc"/>
     </xsl:function>
 

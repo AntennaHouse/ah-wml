@@ -33,8 +33,8 @@ URL : http://www.antennahouse.com/
         <xsl:param name="prmTopicRefLevel"  tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmTopic"          tunnel="yes" required="yes" as="element()"/>
         <xsl:variable name="title" as="element()" select="."/>
-        <xsl:variable name="topicLevel" as="xs:integer" select="count($title/parent::*/ancestor::*[@class => contains-token('topic/topic')])"/>
-        <xsl:variable name="isInFrontmatterOrBackmatter" as="xs:boolean" select="$prmTopicRef/ancestor-or-self::*[@class => ahf:seqContains(('bookmap/frontmatter','bookmap/backmatter'))] => exists()"/>
+        <xsl:variable name="topicLevel" as="xs:integer" select="$title/parent::*/ancestor::*[@class => contains-token('topic/topic')] => count()"/>
+        <xsl:variable name="isInFrontmatterOrBackmatter" as="xs:boolean" select="$prmTopicRef/ancestor-or-self::*[@class => ahf:seqContainsToken(('bookmap/frontmatter','bookmap/backmatter'))] => exists()"/>
         <w:p>
             <w:pPr>
                 <w:pStyle>
@@ -88,8 +88,8 @@ URL : http://www.antennahouse.com/
                         <w:t xml:space="preserve"><xsl:value-of select="$prmDefaultTitle"/></w:t>
                     </w:r>
                 </xsl:when>
-                <xsl:when test="$prmTopicRef/*[@class => contains-token('map/topicmeta ')]/*[@class => contains-token('topic/navtitle')]">
-                    <xsl:apply-templates select="$prmTopicRef/*[@class => contains-token('map/topicmeta ')]/*[@class => contains-token('topic/navtitle')]/node()">
+                <xsl:when test="$prmTopicRef/*[@class => contains-token('map/topicmeta')]/*[@class => contains-token('topic/navtitle')]">
+                    <xsl:apply-templates select="$prmTopicRef/*[@class => contains-token('map/topicmeta')]/*[@class => contains-token('topic/navtitle')]/node()">
                         <xsl:with-param name="prmTopicRef" tunnel="yes" select="$prmTopicRef"/>
                     </xsl:apply-templates>
                 </xsl:when>
@@ -132,8 +132,8 @@ URL : http://www.antennahouse.com/
                         <w:t xml:space="preserve"><xsl:value-of select="$prmTitle"/></w:t>
                     </w:r>
                 </xsl:when>
-                <xsl:when test="$prmTopicRef/*[@class => contains-token('map/topicmeta ')]/*[@class => contains-token('topic/navtitle')]">
-                    <xsl:apply-templates select="$prmTopicRef/*[@class => contains-token('map/topicmeta ')]/*[@class => contains-token('topic/navtitle')]/node()">
+                <xsl:when test="$prmTopicRef/*[@class => contains-token('map/topicmeta')]/*[@class => contains-token('topic/navtitle')]">
+                    <xsl:apply-templates select="$prmTopicRef/*[@class => contains-token('map/topicmeta')]/*[@class => contains-token('topic/navtitle')]/node()">
                         <xsl:with-param name="prmTopicRef" tunnel="yes" select="$prmTopicRef"/>
                     </xsl:apply-templates>
                 </xsl:when>
@@ -277,7 +277,7 @@ URL : http://www.antennahouse.com/
      -->
     <xsl:function name="ahf:genLevelTitlePrefix" as="xs:string">
         <xsl:param name="prmTopicRef" as="element()"/>
-        <xsl:variable name="ancestorOrSelfTopicRef" as="element()*" select="$prmTopicRef/ancestor-or-self::*[@class => contains-token('map/topicref ')][@class => contains-token('bookmap/appendices') => not()]"/>
+        <xsl:variable name="ancestorOrSelfTopicRef" as="element()*" select="$prmTopicRef/ancestor-or-self::*[@class => contains-token('map/topicref')][@class => contains-token('bookmap/appendices') => not()]"/>
         <xsl:variable name="levelString" as="xs:string*" select="ahf:getSibilingTopicrefCount($ancestorOrSelfTopicRef)"/>
         <xsl:sequence select="string-join($levelString,'')"/>
     </xsl:function>

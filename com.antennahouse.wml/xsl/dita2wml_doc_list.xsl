@@ -170,7 +170,7 @@ URL : http://www.antennahouse.com/
         </w:p>
     </xsl:template>
 
-    <xsl:template match="*[@class => contains-token('topic/dd ')]/*[@class => contains-token('topic/p')]" priority="5">
+    <xsl:template match="*[@class => contains-token('topic/dd')]/*[@class => contains-token('topic/p')]" priority="5">
         <xsl:param name="prmIndentLevel" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmExtraIndent" tunnel="yes" required="yes" as="xs:integer"/>
         <xsl:param name="prmEndIndent" tunnel="yes" required="no" as="xs:integer" select="0"/>
